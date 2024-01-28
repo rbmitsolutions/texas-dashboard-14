@@ -424,7 +424,7 @@ export default function CreateUpdateMenuForm({ form, sections, menu, addOns, isC
                                         return (
                                             <FormItem
                                                 key={item?.id}
-                                                className="flex flex-row items-start space-x-3 space-y-0"
+                                                className="flex flex-row items-center space-x-3 space-y-0"
                                             >
                                                 <FormControl>
                                                     <Checkbox
@@ -440,8 +440,11 @@ export default function CreateUpdateMenuForm({ form, sections, menu, addOns, isC
                                                         }}
                                                     />
                                                 </FormControl>
-                                                <FormLabel className="text-sm font-normal cursor-pointer">
+                                                <FormLabel className="flex flex-col text-sm font-normal cursor-pointer">
                                                     {item?.title}
+                                                    <small className='opacity-50'>
+                                                        {item?.description}
+                                                    </small>
                                                 </FormLabel>
                                             </FormItem>
                                         )

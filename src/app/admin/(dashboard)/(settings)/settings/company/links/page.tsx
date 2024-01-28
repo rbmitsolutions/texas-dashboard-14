@@ -1,8 +1,8 @@
 'use client'
 import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks";
-import CompanyDetailsForm from "@/components/common/forms/company/companyDetails";
+import CompanyLinkForm from "@/components/common/forms/company/companyLinks";
 
-export default function CompanyDetailsSettings() {
+export default function CompanyLinksSettings() {
     const {
         companyDetails,
         isCompanyDataFetching
@@ -11,7 +11,7 @@ export default function CompanyDetailsSettings() {
         defaultParams: {
             details: {
                 all: {
-                    details: '1',
+                    links: '1'
                 }
             }
         }
@@ -20,8 +20,8 @@ export default function CompanyDetailsSettings() {
     if (isCompanyDataFetching) return <div>Loading...</div>
 
     return (
-        <CompanyDetailsForm 
-            details={companyDetails?.details}
+        <CompanyLinkForm
+        links={companyDetails?.links}
         />
     )
 }
