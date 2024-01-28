@@ -7,6 +7,12 @@ export async function middleware(request: NextRequest) {
   const cookie = request.cookies.get(process.env.NEXT_PUBLIC_AUTH_COOKIE_KEY! as string)
   const token: IToken | null = cookie ? JSON.parse(cookie?.value) : null;
 
+  //redirect to /signin if page is not found
+
+
+  if(pathName === '/') {
+    return NextResponse.redirect(new URL("/signin", request.url));
+  }
   //todo: check if user is logged in and redirect to admin if not
   if (pathName.includes("/signin")) {
     if (token) {
