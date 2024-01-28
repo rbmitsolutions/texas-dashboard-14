@@ -3,11 +3,10 @@ import { icons } from "lucide-react"
 import { cn } from "@/common/libs/shadcn/utils";
 
 //components
-import SearchInput, { ISearchInput } from "../searchInput";
-import { DatePicker, DatePickerWithRange, IDatePicker, IDatePickerWithRange } from "../datePicker";
-import OptionsPopover, { IOptionsPopover } from "../optionsPopover";
-import Pagination, { IPagination } from "../pagination";
-
+import SearchInput, { SearchInputProps } from "../searchInput";
+import { DatePicker, DatePickerWithRange, IDatePicker, DatePickerWithRangeProps } from "../datePicker";
+import OptionsPopover, { OptionsPopoverProps } from "../optionsPopover";
+import Pagination, { PaginationProps } from "../pagination";
 
 interface IWrap {
     header?: {
@@ -15,36 +14,38 @@ interface IWrap {
             title: string
             icon: keyof typeof icons
         }
-        pagination?: IPagination
+        pagination?: PaginationProps
     }
     actions?: {
         dateChange?: {
-            datePickerWithRange?: IDatePickerWithRange
+            datePickerWithRange?: DatePickerWithRangeProps
             datePicker?: IDatePicker
         }
-        searchInput?: ISearchInput
-        optionsPopover?: IOptionsPopover['options']
+        searchInput?: SearchInputProps
+        optionsPopover?: OptionsPopoverProps
         toLeft?: React.ReactNode
         toRight?: React.ReactNode
         className?: string
     }
     footer?: React.ReactNode;
+    className?: string;
+    isLoading?: boolean;
     children: React.ReactNode;
 }
-export default function Wrap({ header, actions, footer, children }: IWrap) {
+export default function Wrap({ header, actions, footer, isLoading = false, className, children }: IWrap) {
     return (
-        <section className='flex-col-container gap-4'>
+        <section className={cn('flex-col-container gap-4', className)}>
             {header &&
-                <header className='flex-container justify-between'>
+                <header className='flex-col-container justify-between sm:flex-row'>
                     {header?.title &&
                         <div className='flex-container-center gap-2 min-w-40'>
-                            <Icon name={header?.title?.icon} size={18}/>
+                            <Icon name={header?.title?.icon} size={18} />
                             <h3 className='text-md'>{header?.title?.title}</h3>
                         </div>
                     }
                     {header?.pagination &&
 
-                        <div className='flex-container w-full justify-end gap-4'>
+                        <div className='flex-container w-full justify-start gap-4 sm:justify-end'>
                             <Pagination {...header.pagination} />
                         </div>
                     }
@@ -56,13 +57,13 @@ export default function Wrap({ header, actions, footer, children }: IWrap) {
                     {actions?.searchInput && <SearchInput {...actions.searchInput} />}
                     {actions?.dateChange?.datePickerWithRange && <DatePickerWithRange {...actions.dateChange.datePickerWithRange} />}
                     {actions?.dateChange?.datePicker && <DatePicker {...actions.dateChange.datePicker} />}
-                    {actions?.optionsPopover && <OptionsPopover options={actions.optionsPopover} />}
+                    {actions?.optionsPopover && <OptionsPopover {...actions.optionsPopover} />}
                     {actions?.toRight && <div>{actions.toRight}</div>}
 
                 </div>
             }
             <main>
-                {children}
+                {!isLoading && children}
             </main>
             {footer &&
                 <footer>

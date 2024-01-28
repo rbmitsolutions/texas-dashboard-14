@@ -1,3 +1,5 @@
+import { IRosterStatus } from "@/common/types/company/roster.interface";
+
 export interface IPUTHaccpReportsBody {
     title: string
     description?: string
@@ -19,10 +21,28 @@ export interface IPUTFormSectionBody {
     title?: string;
 }
 
+export interface IPUTRosterBody {
+    id: string;
+    duty?: string;
+    shift?: string;
+    hours?: number;
+    status?: IRosterStatus;
+    week_payment_preview?: number;
+    break_in?: Date;
+    break_out?: Date;
+    clock_in?: Date;
+    clock_out?: Date;
+    confirmed?: boolean;
+    roster_checked?: boolean;
+    week_payment_roster?: number;
+    availableBody?: boolean;
+    tasks_title?: string[];
+}
+
 export type IPUTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION"
 
 export interface IPUTCompanyBody {
-    roster?: any,
+    roster?: IPUTRosterBody,
     haccpReport?: IPUTHaccpReportsBody
     form?: IPUTFormBody
     formSection?: IPUTFormSectionBody

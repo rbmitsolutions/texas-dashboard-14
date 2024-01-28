@@ -39,9 +39,13 @@ export interface IRoles {
     id: string;
     title: string;
     permissions: IPermissions[];
+    
     users: IUser[];
     departament_id: string;
     departament: IDepartments;
+
+    created_at: Date;
+    updated_at: Date;
 }
 
 export interface IDepartments {

@@ -1,188 +1,218 @@
-// import { useState } from "react";
-// import { AxiosRequestConfig } from "axios";
-// import { UseMutationOptions, UseQueryOptions, useMutation, useQuery } from "react-query";
+import { UseMutationOptions, UseQueryOptions, useMutation, useQuery } from "react-query";
+import { IGETUserDataQuery, IGETUserDataResponse, IGetAllUserResponse, IUserDataQueryType } from "./IGetUserDataHooks.interface";
+import { useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { api } from "@/common/libs/axios/api";
+import { userEndPoint } from "./userDataEndPoint";
+import { IUser } from "@/common/types/user/user.interface";
+import { IPUTUserBody, IPUTUserDataQueryType } from "./IPutUserDataHooks.interface";
+import { AxiosRequestConfig } from "axios";
+import toast from "react-hot-toast";
+import { IGETCompanyRosterResponse, IRequestsGetAllResponse } from "../company/IGetCompanyDataHooks.interface";
+import { IPOSTUserBody, IPOSTUserDataQueryType, IPOSTUserDataRerturn } from "./IPostUserDataHooks.interface";
+import { IDELETEUserDataBody, IDELETEUserDataQueryType } from "./IDeleteUserDataHooks.interface";
 
-// //libs
-// import { api } from "@/common/libs/axios/api";
+export interface IUseGETUserDataHooks {
+    query: IUserDataQueryType
+    keepParmas?: boolean
+    defaultParams?: IGETUserDataQuery
+    UseQueryOptions?: UseQueryOptions<
+        IGETUserDataResponse,
+        unknown,
+        IGETUserDataResponse,
+        [string, IGETUserDataQuery]>
+}
 
-// //config
-// import { USER_ANALYTICS_ENDPOINT, USER_CONTRACT_ENDPOINT, USER_DOCUMENTS_ENDPOINT, USER_ENDPOINT, USER_HACCP_ENDPOINT, USER_PAYMENTS_ENDPOINT, USER_PERFORMANCE_ENDPOINT, USER_PROFILE_COMPLETED_ENDPOINT, USER_REQUEST_ENDPOINT, USER_REVIEWS_ENDPOINT, USER_ROSTER_ENDPOINT } from "@config/apiEndPoints";
+export function useGETUserDataHooks({
+    query,
+    keepParmas,
+    defaultParams,
+    UseQueryOptions,
+}: IUseGETUserDataHooks) {
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+    const { replace } = useRouter();
+    const queryParams = searchParams?.get('query')
 
-// //interface
-// import { IUser } from "@interfaces/user";
-// import { IDELETEUserBody, IDELETEUserDataQueryType, IGETUserCompletedProfileResponse, IGETUserDataQuery, IGETUserPaymentAnalyticsResponse, IGETUserPerformanceResponse, IGETUserRequestsResponse, IGETUserResponse, IGETUserReviewsResponse, IGETUserRosterAnalyticsResponse, IPOSTUserBody, IPOSTUserDataQueryType, IPUTUserBody, IPUTUserDataQueryType, IUserDataQueryType } from "./iuserDataHooks.interfaces";
-// import { IPayments } from "@interfaces/company";
-// import { IGETCompanyRosterResponse } from "@hooks/company/IGetCompanyDataHooks.interface";
+    const [GETUserDataParams, setGETUserDataParams] = useState<IGETUserDataQuery>(
+        (keepParmas && JSON.parse(queryParams as string)) || defaultParams || {}
+    );
 
+    const {
+        data,
+        error,
+        isLoading,
+        refetch,
+        isFetching
+    } = useQuery<
+        IGETUserDataResponse,
+        unknown,
+        IGETUserDataResponse,
+        [string, IGETUserDataQuery]
+    >(
+        ["UserData", GETUserDataParams],
+        async () => {
+            const response = await api.get<IGETUserDataResponse>(userEndPoint[query].url, {
+                params: GETUserDataParams,
+            });
 
-// export function useGETUserDataHooks(
-//   query: IUserDataQueryType,
-//   defaultParams?: IGETUserDataQuery,
-//   UseQueryOptions?: UseQueryOptions<
-//     IGETUserResponse,
-//     unknown,
-//     IGETUserResponse,
-//     [string, IGETUserDataQuery]
-//   >
-// ) {
-//   const [GETUserDataParams, setGETUserDataParams] = useState<IGETUserDataQuery>(
-//     defaultParams ?? {}
-//   );
-
-//   const endPoint = {
-//     USER: USER_ENDPOINT,
-//     PERFORMANCE: USER_PERFORMANCE_ENDPOINT,
-//     REVIEWS: USER_REVIEWS_ENDPOINT,
-//     REQUESTS: USER_REQUEST_ENDPOINT,
-//     PROFILE_COMPLETED: USER_PROFILE_COMPLETED_ENDPOINT,
-//     ANALYTICS: USER_ANALYTICS_ENDPOINT,
-//     ROSTER: USER_ROSTER_ENDPOINT,
-//     PAYMENTS: USER_PAYMENTS_ENDPOINT
-//   }
-
-
-//   const {
-//     data,
-//     error,
-//     isLoading,
-//     refetch,
-//   } = useQuery<
-//     IGETUserResponse,
-//     unknown,
-//     IGETUserResponse,
-//     [string, IGETUserDataQuery]
-//   >(
-//     ["UserData", GETUserDataParams],
-//     async () => {
-//       const response = await api.get<IGETUserResponse>(endPoint[query], {
-//         params: GETUserDataParams,
-//       });
-
-//       return response.data
-//     },
-//     {
-//       refetchOnWindowFocus: false,
-//       ...UseQueryOptions,
-//     }
-//   );
-
-//   return {
-//     user: data as IUser,
-//     userCompletedProfile: data as IGETUserCompletedProfileResponse,
-//     userPerformance: data as IGETUserPerformanceResponse,
-//     userReviews: data as IGETUserReviewsResponse,
-//     userRequests: data as IGETUserRequestsResponse,
-//     userPaymentsAnalytics: data as IGETUserPaymentAnalyticsResponse,
-//     userRosterAnalytics: data as IGETUserRosterAnalyticsResponse,
-//     userRoster: data as IGETCompanyRosterResponse,
-//     userTasks: data as IGETCompanyRosterResponse,
-//     userPayments: data as IPayments[],
-
-//     userDataError: error ? true : false,
-//     isUserDataLoading: isLoading,
-//     refetchUserData: refetch,
-//     GETUserDataParams,
-//     setGETUserDataParams,
-//   };
-// }
+            return response.data
+        },
+        {
+            refetchOnWindowFocus: false,
+            ...UseQueryOptions,
+        }
+    );
 
 
-// export function usePOSTUserDataHooks(
-//   query: IPOSTUserDataQueryType,
-//   AxiosRequestConfig?: AxiosRequestConfig,
-//   UseMutationOptions?: UseMutationOptions<IUser, unknown, IPOSTUserBody>
-// ) {
-
-//   const endPoint = {
-//     REQUEST: USER_REQUEST_ENDPOINT,
-//     DOCUMENT: USER_DOCUMENTS_ENDPOINT,
-//     HACCP: USER_HACCP_ENDPOINT
-//   }
-
-//   const { mutate, isLoading } = useMutation(
-//     async ({ data }: IPOSTUserBody) => {
-//       const response = await api.post<IUser>(`${endPoint[query]}`, {
-//         data,
-//         ...AxiosRequestConfig,
-//       });
-//       return response.data;
-//     },
-//     {
-//       ...UseMutationOptions,
-//     }
-//   );
-
-//   return {
-//     createUserData: mutate,
-//     isCreateUserDataLoading: isLoading,
-//   };
-// }
+    useEffect(() => {
+        if (keepParmas) {
+            replace(`${pathname}?query=${JSON.stringify(GETUserDataParams)}`);
+        }
+    }, [GETUserDataParams, keepParmas, pathname, replace]);
 
 
-// export function usePUTUserDataHooks(
-//   query: IPUTUserDataQueryType,
-//   AxiosRequestConfig?: AxiosRequestConfig,
-//   UseMutationOptions?: UseMutationOptions<IUser, unknown, IPUTUserBody>
-// ) {
+    return {
+        userDetails: data as IUser,
+        allUsers: data as IGetAllUserResponse,
+        userAllRoster: data as IGETCompanyRosterResponse,
+        userAllRequests: data as IRequestsGetAllResponse,
 
-//   const endPoint = {
-//     DETAILS: USER_ENDPOINT,
-//     ROSTER: USER_ROSTER_ENDPOINT,
-//     CONTRACT: USER_CONTRACT_ENDPOINT
-//   }
-
-//   const { mutate, isLoading } = useMutation(
-//     async ({ data }: IPUTUserBody) => {
-//       const response = await api.put<IUser>(`${endPoint[query]}`, {
-//         data,
-//         ...AxiosRequestConfig,
-//       });
-//       return response.data;
-//     },
-//     {
-//       ...UseMutationOptions,
-//     }
-//   );
-
-//   return {
-//     updateUserData: mutate,
-//     isUpdateUserDataLoading: isLoading,
-//   };
-// }
+        userDataError: error ? true : false,
+        isUserDataLoading: isLoading,
+        refetchUserData: refetch,
+        isUserDataFetching: isFetching,
+        GETUserDataParams,
+        setGETUserDataParams,
+    };
+}
 
 
+export interface IUsePOSTUserDataHooks {
+    query: IPOSTUserDataQueryType,
+    AxiosRequestConfig?: AxiosRequestConfig,
+    UseMutationOptions?: UseMutationOptions<any, unknown, IPOSTUserBody>
+    toToast?: boolean
+    toRefetch?: () => void
+}
 
-// export function useDELETEUserDataHooks(
-//   query: IDELETEUserDataQueryType,
-//   AxiosRequestConfig?: AxiosRequestConfig,
-//   UseMutationOptions?: UseMutationOptions<void, unknown, IDELETEUserBody>
-// ) {
+export function usePOSTUserDataHooks({
+    query,
+    AxiosRequestConfig,
+    UseMutationOptions,
+    toToast = true,
+    toRefetch
+}: IUsePOSTUserDataHooks) {
+    const { mutate, isLoading, data } = useMutation(
+        async (data: IPOSTUserBody) => {
+            const response = await api.post<IPOSTUserDataRerturn>(`${userEndPoint[query].url}`, {
+                data,
+                ...AxiosRequestConfig,
+            });
+            return response.data;
+        },
+        {
+            onSuccess: (data) => {
+                toRefetch && toRefetch()
+                toToast && toast.success(userEndPoint[query].createSucess)
+            },
+            onError: (error: any) => {
+                toast.error(error.response.data.message || userEndPoint[query].createError)
+            },
+            ...UseMutationOptions,
+        }
+    )
 
-//   const endPoint = {
-//     DETAILS: USER_ENDPOINT,
-//     REQUESTS: USER_REQUEST_ENDPOINT,
-//     DOCUMENT: USER_DOCUMENTS_ENDPOINT
-//   }
 
-//   const { mutate, isLoading } = useMutation(
-//     async (data: IDELETEUserBody) => {
-//       const response = await api.delete<void>(
-//         endPoint[query],
-//         {
-//           data,
-//           ...AxiosRequestConfig,
-//         }
-//       );
-//       return response.data;
-//     },
-//     {
-//       ...UseMutationOptions,
-//     }
-//   );
+    return {
+        createUserData: mutate,
+        isCreateUserDataLoading: isLoading,
+        createUserDataResponse: data
+    };
+}
 
-//   return {
-//     deleteUserData: mutate,
-//     isDeleteUserDataLoading: isLoading,
-//   };
-// }
+
+export interface IUsePutUserDataHooks {
+    query: IPUTUserDataQueryType,
+    AxiosRequestConfig?: AxiosRequestConfig,
+    UseMutationOptions?: UseMutationOptions<any, unknown, IPUTUserBody>
+    toRefetch?: () => void
+}
+
+export function usePUTUserDataHooks({
+    query,
+    AxiosRequestConfig,
+    UseMutationOptions,
+    toRefetch
+}: IUsePutUserDataHooks) {
+
+    const { mutate, isLoading } = useMutation(
+        async (data: IPUTUserBody) => {
+            const response = await api.put<any>(`${userEndPoint[query].url}`, {
+                data,
+                ...AxiosRequestConfig,
+            });
+            return response.data;
+        },
+        {
+            onSuccess: () => {
+                toRefetch && toRefetch()
+                toast.success(userEndPoint[query].updateSucess)
+            },
+            onError: (error: any) => {
+                toast.error(error.response.data.message || userEndPoint[query].updateError)
+            },
+            ...UseMutationOptions,
+        }
+    );
+
+    return {
+        updateuserData: mutate,
+        isUpdateuserDataLoading: isLoading,
+    };
+}
+
+export interface IUseDELETEUserDataHooks {
+    query: IDELETEUserDataQueryType
+    AxiosRequestConfig?: AxiosRequestConfig
+    UseMutationOptions?: UseMutationOptions<void, unknown, IDELETEUserDataBody>
+    toRefetch?: () => void
+}
+
+
+export function useDELETEUserDataHooks({
+    query,
+    AxiosRequestConfig,
+    UseMutationOptions,
+    toRefetch
+}: IUseDELETEUserDataHooks) {
+
+    const { mutate, isLoading } = useMutation(
+        async (data: IDELETEUserDataBody) => {
+            const response = await api.delete<void>(
+                userEndPoint[query].url,
+                {
+                    params: data,
+                    ...AxiosRequestConfig,
+                }
+            );
+            return response.data;
+        },
+        {
+            onSuccess: () => {
+                toRefetch && toRefetch()
+                toast.success(userEndPoint[query].deleteSucess)
+            },
+            onError: (error: any) => {
+                toast.error(error.response.data.message || userEndPoint[query].deleteError)
+            },
+            ...UseMutationOptions,
+        }
+    );
+
+    return {
+        deleteUserData: mutate,
+        isDeleteUserDataLoading: isLoading,
+    };
+}
 

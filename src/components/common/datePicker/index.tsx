@@ -1,5 +1,5 @@
 "use client"
-import * as React from "react"
+import React, { useEffect, useState } from "react"
 import { DateRange } from "react-day-picker"
 
 import { Button } from "@/components/ui/button"
@@ -11,16 +11,18 @@ import {
 } from "@/components/ui/popover"
 
 //libs
-import { addDaysToDate, formatDate } from "@/common/libs/date-fns/dateFormat"
+import { formatDate, subDaysToDate } from "@/common/libs/date-fns/dateFormat"
 import { cn } from "@/common/libs/shadcn/utils"
+import { Skeleton } from "@/components/ui/skeleton"
 import Icon from "@/common/libs/lucida-icon"
 
-export interface IDatePickerWithRange {
+export interface DatePickerWithRangeProps {
     className?: string
     onConfirm: (date: DateRange | undefined) => void
     fromDate?: Date
     toDate?: Date
     max?: number
+    value?: DateRange
 }
 
 export function DatePickerWithRange({
@@ -28,15 +30,25 @@ export function DatePickerWithRange({
     onConfirm,
     fromDate,
     toDate,
-    max
-}: IDatePickerWithRange) {
-    const [date, setDate] = React.useState<DateRange | undefined>({
-        from: new Date(),
-        to: addDaysToDate(new Date(), 20),
+    max,
+    value
+}: DatePickerWithRangeProps) {
+    const [preRendered, setPreRendered] = useState(false);
+    const [date, setDate] = React.useState<DateRange | undefined>(value || {
+        from: subDaysToDate(new Date(), 30),
+        to: new Date()
     })
 
     const handleConfirm = () => {
         onConfirm(date)
+    }
+
+    useEffect(() => {
+        setPreRendered(true);
+    }, [])
+
+    if (!preRendered) {
+        return <DatePickerWithRange.Skeleton />;
     }
 
     return (
@@ -107,6 +119,14 @@ export function DatePickerWithRange({
     )
 }
 
+DatePickerWithRange.Skeleton = function PaginationSkeleton() {
+    return (
+        <Skeleton
+            className='h-8 w-full'
+        />
+    )
+}
+
 export interface IDatePicker {
     className?: string
     onConfirm: (date: Date | undefined) => void
@@ -115,11 +135,20 @@ export interface IDatePicker {
 }
 
 export function DatePicker({ className, fromDate, toDate, onConfirm }: IDatePicker) {
-    const [date, setDate] = React.useState<Date>()
+    const [preRendered, setPreRendered] = useState(false);
+    const [date, setDate] = useState<Date>()
 
-    React.useEffect(() => {
+    useEffect(() => {
         onConfirm(date)
     }, [date, onConfirm])
+
+    useEffect(() => {
+        setPreRendered(true);
+    }, [])
+
+    if (!preRendered) {
+        return <DatePicker.Skeleton />;
+    }
 
     return (
         <Popover>
@@ -149,5 +178,14 @@ export function DatePicker({ className, fromDate, toDate, onConfirm }: IDatePick
                 />
             </PopoverContent>
         </Popover>
+    )
+}
+
+
+DatePicker.Skeleton = function PaginationSkeleton() {
+    return (
+        <Skeleton
+            className='h-8 w-full'
+        />
     )
 }

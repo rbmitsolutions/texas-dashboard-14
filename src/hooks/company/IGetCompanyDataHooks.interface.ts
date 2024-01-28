@@ -1,5 +1,9 @@
+import { ICompanyContacts, ICompanyDetails, ICompanyDocuments, ICompanyLinks, IRoles } from "@/common/types/company/companyDetails.interface";
+import { IDepartaments } from "@/common/types/company/departaments.interface";
+import { IFiles } from "@/common/types/company/files.interface";
 import { IForm, IFormData, IFormSection, IFormType } from "@/common/types/company/form.interface";
 import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
+import { IRequests, IRequestsStatus, IRequestsType } from "@/common/types/company/requests.interface";
 import { IRoster, IRosterStatus } from "@/common/types/company/roster.interface";
 import { IPaginationResponse, IQueryPagination } from "@/common/types/settings.interface";
 
@@ -127,10 +131,117 @@ export type ICompanyAllFormsDataReponse = {
   pagination: IPaginationResponse;
 };
 
+export interface IRequestsGetAllResponse {
+  data: IRequests[];
+  pagination: IPaginationResponse;
+}
 
-export type IGETCompanyResponse = IGETCompanyRosterResponse | IHaccpReportsResponse | IHaccpReports | IFormsGetAllResponse | IForm | IFormSectionGetAllResponse | IFormSection | IGETFormDataQuery | IFormData
+export interface IGETRequestsQuery {
+  all?: {
+    type?: IRequestsType
+    status?: IRequestsStatus
+    user?: {
+      name?: string;
+    };
+    include?: {
+      user?: "1";
+    };
+    user_id?: string;
+    pagination?: IQueryPagination;
+    orderBy?: {
+      key: keyof IRequests
+      order: "asc" | "desc";
+    };
+  };
+  byId?: {
+    id: string;
+    include?: {
+      user?: "1";
+    };
+  };
+}
 
-export type ICompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA"
+export interface IGETCompanyDetailsQuery {
+  all?: {
+    details?: '1',
+    contacts?: '1',
+    links?: '1',
+    documents?: '1',
+  }
+}
+
+export interface ICompanyDetailsResponse {
+  details: ICompanyDetails
+  contacts: ICompanyContacts[]
+  links: ICompanyLinks[]
+  documents: ICompanyDocuments[]
+}
+
+export interface IGETRolesResponse {
+  data: IRoles[];
+  pagination: IPaginationResponse
+}
+export interface IGETRolesQuery {
+  byId?: {
+    id: string;
+  };
+  all?: {
+    title?: string;
+    includes?: {
+      departament?: '1',
+      users?: '1'
+    }
+    pagination?: IQueryPagination
+    orderBy?: {
+      key: keyof IRoles
+      order: "asc" | "desc";
+    };
+  };
+}
+
+export interface IGETAllDepartamentsResponse {
+  data: IDepartaments[];
+  pagination: IPaginationResponse
+}
+export interface IGETDepartamentsQuery {
+  byId?: {
+    id: string;
+  };
+  all?: {
+    title?: string;
+    includes?: {
+      roles?: '1',
+      duties?: '1'
+    }
+    pagination?: IQueryPagination
+    orderBy?: {
+      key: keyof IDepartaments
+      order: "asc" | "desc";
+    };
+  };
+}
+
+export interface IGETCompanyAllFilesResponse {
+  data: IFiles[];
+  pagination: IPaginationResponse
+}
+export interface IGETFilesQuery {
+  byId?: {
+    id: string
+  };
+  all?: {
+    key?: string
+    in?: {
+      id?: string[]
+    }
+    pagination?: IQueryPagination
+  }
+}
+
+
+export type IGETCompanyResponse = IGETCompanyRosterResponse | IHaccpReportsResponse | IHaccpReports | IFormsGetAllResponse | IForm | IFormSectionGetAllResponse | IFormSection | IGETFormDataQuery | IFormData | IFiles | IRequests | IRequestsGetAllResponse | ICompanyDetailsResponse | IGETRolesResponse | IRoles | IGETAllDepartamentsResponse | IDepartaments | IGETCompanyAllFilesResponse
+
+export type ICompanyDataQueryType = 'ROSTER' | "ROLES" | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "FILES" | "REQUESTS" | 'DETAILS' | "DEPARTAMENTS"
 
 export interface IGETCompanyDataQuery {
   roster?: IGETCompanyRosterQuery
@@ -138,4 +249,9 @@ export interface IGETCompanyDataQuery {
   forms?: IGETFormsQuery
   formSections?: IGETFormSectionQuery
   formData?: IGETFormDataQuery
+  files?: IGETFilesQuery
+  requests?: IGETRequestsQuery
+  details?: IGETCompanyDetailsQuery
+  roles?: IGETRolesQuery
+  departments?: IGETDepartamentsQuery
 }

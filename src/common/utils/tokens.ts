@@ -1,4 +1,3 @@
-import { GetServerSidePropsContext } from "next";
 import { parseCookies } from "nookies";
 import { api } from "../libs/axios/api";
 

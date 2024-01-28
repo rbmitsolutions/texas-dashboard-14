@@ -3,17 +3,22 @@ import { AxiosRequestConfig } from "axios";
 import { UseMutationOptions, UseQueryOptions, useMutation, useQuery } from "react-query";
 import { companyEndPoint } from "./companyDataEndPoint";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 
 //libs
 import { api } from "@/common/libs/axios/api";
 
 //interface
-import { ICompanyAllFormsDataReponse, ICompanyDataQueryType, IFormSectionGetAllResponse, IFormsGetAllResponse, IGETCompanyDataQuery, IGETCompanyResponse, IGETCompanyRosterResponse, IHaccpReportsResponse } from "./IGetCompanyDataHooks.interface";
+import { ICompanyAllFormsDataReponse, ICompanyDataQueryType, ICompanyDetailsResponse, IFormSectionGetAllResponse, IFormsGetAllResponse, IGETAllDepartamentsResponse, IGETCompanyAllFilesResponse, IGETCompanyDataQuery, IGETCompanyResponse, IGETCompanyRosterResponse, IGETRolesResponse, IHaccpReportsResponse, IRequestsGetAllResponse } from "./IGetCompanyDataHooks.interface";
 import { IDELETECompanyDataBody, IDELETECompanyDataQueryType } from "./IDeleteCompanyDataHooks.interface";
-import { IPOSTCompanyBody, IPOSTCompanyDataQueryType } from "./IPostCompanyDataHooks.interface";
+import { IPOSTCompanyBody, IPOSTCompanyDataQueryType, IPOSTCompanyDataRerturn } from "./IPostCompanyDataHooks.interface";
 import { IPUTCompanyBody, IPUTCompanyDataQueryType } from "./IPutCompanyDataHooks.interface";
 import { IForm, IFormData, IFormSection } from "@/common/types/company/form.interface";
 import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
+import { IFiles } from "@/common/types/company/files.interface";
+import { IRequests } from "@/common/types/company/requests.interface";
+import { IRoles } from "@/common/types/company/companyDetails.interface";
+import { IDepartaments } from "@/common/types/company/departaments.interface";
 
 interface IUseGETCompanyDataHooks {
     query: ICompanyDataQueryType,
@@ -37,7 +42,6 @@ export function useGETCompanyDataHooks({
     const pathname = usePathname();
     const { replace } = useRouter();
     const queryParams = searchParams?.get('query')
-
 
     const [GETCompanyDataParams, setGETCompanyDataParams] = useState<IGETCompanyDataQuery>(
         (keepParmas && JSON.parse(queryParams as string)) || defaultParams || {}
@@ -76,7 +80,7 @@ export function useGETCompanyDataHooks({
     }, [GETCompanyDataParams, keepParmas, pathname, replace]);
 
     return {
-        companyRoster: data as IGETCompanyRosterResponse,
+        companyAllRoster: data as IGETCompanyRosterResponse,
         companyAllHaccpReports: data as IHaccpReportsResponse,
         companyHaccpReport: data as IHaccpReports,
         companyAllForms: data as IFormsGetAllResponse,
@@ -85,6 +89,15 @@ export function useGETCompanyDataHooks({
         companyFormSaction: data as IFormSection,
         companyAllFormData: data as ICompanyAllFormsDataReponse,
         companyFormData: data as IFormData,
+        companyAllFiles: data as IGETCompanyAllFilesResponse,
+        compnayFileData: data as IFiles,
+        companyAllRequests: data as IRequestsGetAllResponse,
+        companyRequest: data as IRequests,
+        companyDetails: data as ICompanyDetailsResponse,
+        companyAllRoles: data as IGETRolesResponse,
+        companyRole: data as IRoles,
+        companyAllDepartaments: data as IGETAllDepartamentsResponse,
+        companyDepartament: data as IDepartaments,
 
         isCompanyDataFetching: isFetching,
         companyDataError: error ? true : false,
@@ -95,46 +108,62 @@ export function useGETCompanyDataHooks({
     };
 }
 
-
-export function usePOSTCompanyDataHooks(
+export interface IUsePOSTCompanyDataHooks {
     query: IPOSTCompanyDataQueryType,
     AxiosRequestConfig?: AxiosRequestConfig,
     UseMutationOptions?: UseMutationOptions<any, unknown, IPOSTCompanyBody>
-) {
-    // const { errorToast, successToast } = useToastHooks()
+    toToast?: boolean
+    toRefetch?: () => void
+}
 
-    const { mutate, isLoading } = useMutation(
+export function usePOSTCompanyDataHooks({
+    query,
+    AxiosRequestConfig,
+    UseMutationOptions,
+    toToast = true,
+    toRefetch
+}: IUsePOSTCompanyDataHooks) {
+    const { mutate, isLoading, data } = useMutation(
         async (data: IPOSTCompanyBody) => {
-            const response = await api.post<any>(`${companyEndPoint[query].url}`, {
+            const response = await api.post<IPOSTCompanyDataRerturn>(`${companyEndPoint[query].url}`, {
                 data,
                 ...AxiosRequestConfig,
             });
             return response.data;
         },
         {
-            onSuccess: () => {
-                // successToast(companyEndPoint[query].createSucess)
+            onSuccess: (data) => {
+                toRefetch && toRefetch()
+                toToast && toast.success(companyEndPoint[query].createSucess)
             },
-            onError: (error) => {
-                // errorToast(error || companyEndPoint[query].createError)
+            onError: (error: any) => {
+                toast.error(error.response.data.message || companyEndPoint[query].createError)
             },
             ...UseMutationOptions,
         }
-    );
+    )
+
 
     return {
         createCompanyData: mutate,
         isCreateCompanyDataLoading: isLoading,
+        createCompanyDataResponse: data
     };
 }
 
-
-export function usePUTCompanyDataHooks(
+export interface IUsePutCompanyDataHooks {
     query: IPUTCompanyDataQueryType,
     AxiosRequestConfig?: AxiosRequestConfig,
     UseMutationOptions?: UseMutationOptions<any, unknown, IPUTCompanyBody>
-) {
-    // const { errorToast, successToast } = useToastHooks()
+    toRefetch?: () => void
+}
+
+export function usePUTCompanyDataHooks({
+    query,
+    AxiosRequestConfig,
+    UseMutationOptions,
+    toRefetch
+}: IUsePutCompanyDataHooks) {
 
     const { mutate, isLoading } = useMutation(
         async (data: IPUTCompanyBody) => {
@@ -145,11 +174,12 @@ export function usePUTCompanyDataHooks(
             return response.data;
         },
         {
-            onSuccess: () => {
-                // successToast(companyEndPoint[query].updateSucess)
+            onSuccess: (data) => {
+                toRefetch && toRefetch()
+                toast.success(companyEndPoint[query].updateSucess)
             },
-            onError: (error) => {
-                // errorToast(error || companyEndPoint[query].updateSucess)
+            onError: (error: any) => {
+                toast.error(error.response.data.message || companyEndPoint[query].updateError)
             },
             ...UseMutationOptions,
         }
@@ -161,13 +191,19 @@ export function usePUTCompanyDataHooks(
     };
 }
 
-
-export function useDELETECompanyDataHooks(
-    query: IDELETECompanyDataQueryType,
-    AxiosRequestConfig?: AxiosRequestConfig,
+export interface IUseDELETECompanyDataHooks {
+    query: IDELETECompanyDataQueryType
+    AxiosRequestConfig?: AxiosRequestConfig
     UseMutationOptions?: UseMutationOptions<void, unknown, IDELETECompanyDataBody>
-) {
-    // const { errorToast, successToast } = useToastHooks()
+    toRefetch?: () => void
+}
+
+export function useDELETECompanyDataHooks({
+    query,
+    AxiosRequestConfig,
+    UseMutationOptions,
+    toRefetch
+}: IUseDELETECompanyDataHooks) {
 
     const { mutate, isLoading } = useMutation(
         async (data: IDELETECompanyDataBody) => {
@@ -182,10 +218,11 @@ export function useDELETECompanyDataHooks(
         },
         {
             onSuccess: () => {
-                // successToast(companyEndPoint[query].deleteSucess)
+                toRefetch && toRefetch()
+                toast.success(companyEndPoint[query].deleteSucess)
             },
-            onError: (error) => {
-                // errorToast(error || companyEndPoint[query].deleteError)
+            onError: (error: any) => {
+                toast.error(error.response.data.message || companyEndPoint[query].deleteError)
             },
             ...UseMutationOptions,
         }

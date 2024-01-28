@@ -11,7 +11,8 @@ export interface IHaccpReports {
     signature: string
     secure_url: string
     url: string
-
+    file_id: string
+    
     created_at: Date
     updated_at: Date
 }

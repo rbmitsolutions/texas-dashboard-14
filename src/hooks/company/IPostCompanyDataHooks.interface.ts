@@ -1,3 +1,7 @@
+import { IForm, IFormData, IFormSection } from "@/common/types/company/form.interface";
+import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
+import { IRequestsType } from "@/common/types/company/requests.interface";
+import { IRoster } from "@/common/types/company/roster.interface";
 import { ITransactionsDirection, ITransactionsMethod, ITransactionsType } from "@/common/types/company/transactions.interface";
 
 export interface IPOSTTransactionsBody {
@@ -56,8 +60,10 @@ export interface IPOSTFormDataBody {
 }
 
 
-export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA"
 
+export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "REQUESTS" 
+
+export type IPOSTCompanyDataRerturn = IRoster | IHaccpReports | IForm | IFormSection | IFormData
 export interface IPOSTCompanyBody {
     roster?: any,
     haccpReport?: IPOSTHaccpReportsBody

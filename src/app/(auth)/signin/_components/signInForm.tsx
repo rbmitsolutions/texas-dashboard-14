@@ -5,7 +5,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 //libs
-import { SignInFormSchema, SignInFormSchemaType } from '@/common/libs/zod/forms/auth/signin';
+import { SignInFormSchema, SignInFormSchemaType } from '@/common/libs/zod/forms/auth/signinForm';
 
 //components
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
@@ -17,6 +17,8 @@ import Icon from '@/common/libs/lucida-icon';
 //hooks
 import { useAuthHooks } from '@/hooks/useAuthHooks';
 import { useRouter } from "next/navigation";
+
+//types
 import { EndPointsTypes } from '@/common/types/routers/endPoints.types';
 
 export function SignInForm() {
@@ -117,7 +119,7 @@ export function SignInForm() {
                     type="submit"
                     disabled={isLoading}
                     className='mb-4'
-                    leftIcon={<Icon name='LogIn' size={18} />}
+                    leftIcon='LogIn'
                     isLoading={isLoading}
                 >
                     Sign In

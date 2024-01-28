@@ -25,7 +25,8 @@ export enum EndPointsTypes {
     COMPANY_ROLES_ENDPOINT = '/company/roles',
     COMPANY_LINKS_ENDPOINT = '/company/links',
     COMPANY_FORMS_ENDPOINT = '/company/forms',
-    COMPANY_DETAILS_ENDPOINT = '/company',
+    COMPANY_FILES_ENDPOINT = '/company/files',
+    COMPANY_DETAILS_ENDPOINT = '/company/details',
 
     ANALYTICS_BOOKINGS_ENDPOINT = '/analytics/bookings',
 
@@ -40,9 +41,15 @@ export enum EndPointsTypes {
     RESTAURANT_BOOKING_ENDPOINT = '/restaurant/booking',
     RESTAURANT_TABLES_ENDPOINT = '/restaurant/tables',
     RESTAURANT_CLIENT_ENDPOINT = '/restaurant/clients',
-    RESTAURANT_MENU_ENDPOINT = '/restaurant/menu',
     RESTAURANT_REVIEWS_ENDPOINT = '/restaurant/reviews',
     RESTAURANT_ORDER_ENDPOINT = '/restaurant/order',
+    
+    RESTAURANT_MENU_ADD_ONS_OPTIONS_ENDPOINT = '/restaurant/menu-add-ons-options',
+    RESTAURANT_MENU_SECTION_ENDPOINT = '/restaurant/menu-sections',
+    RESTAURANT_MENU_ADD_ONS_ENDPOINT = '/restaurant/menu-add-ons',
+    RESTAURANT_MENU_TYPES_ENDPOINT = '/restaurant/menu-type',
+    RESTAURANT_PRINTERS_ENDPOINT = '/restaurant/printers',
+    RESTAURANT_MENU_ENDPOINT = '/restaurant/menu',
 
     APP_CLOCKIN_ENDPOINT = '/app/clockin',
     APP_DAYROSTER_ENDPOINT = '/app/dayroster',

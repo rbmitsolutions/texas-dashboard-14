@@ -1,4 +1,7 @@
 import { IRefreshToken, ITokens } from "../auth/auth.interface";
+import { IRoles } from "../company/companyDetails.interface";
+import { IRequests } from "../company/requests.interface";
+import { IRoster } from "../company/roster.interface";
 
 export type IUserStatus = "Working" | "Application" | "Filled";
 
@@ -31,6 +34,7 @@ export interface IUser {
     account_number?: string;
     bic?: string;
     notes?: string;
+
     payment_id?: string;
 
     emergency_name?: string;
@@ -48,19 +52,21 @@ export interface IUser {
 
     refresh_token?: IRefreshToken
     token?: ITokens[];
-    //   requests?: IRequests[];
-    //   roster?: IRoster[];
+    requests?: IRequests[];
+    roster?: IRoster[];
     //   documents?: IUserDocuments[];
     //   haccp?: IHaccp[];
-    //   performance: IPerformance[];
+    //   performance: IPerformanc[];
 
     //   contract?: IContract;
 
     //   job_application?: IJobApplication;
 
     role_id?: string;
-    //   role?: IRoles;
+    role?: IRoles
+
     created_at: Date;
+    updated_at: Date;
 }
 
 export interface IAvailableDays {

@@ -8,7 +8,7 @@ export type IRosterStatus =
     | "sickday";
 
 export interface IRoster {
-    id?: string;
+    id: string;
     date?: Date;
     duty?: string;
     shift?: string;
@@ -38,6 +38,9 @@ export interface IRoster {
 
     user?: IUser;
     user_id?: string;
+
+    created_at: Date;
+    updated_at: Date;
 }
 
 export interface IRosterDates {

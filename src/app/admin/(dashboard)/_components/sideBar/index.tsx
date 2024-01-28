@@ -29,8 +29,8 @@ export function Sidebar() {
 
     return (
         <>
-            <div className={cn('fixed top-0 h-screen w-full z-10 bg-[rgba(0,0,0,0.15)] duration-300 sm:hidden', isOpen ? "left-0" : 'left-[-100%]')} onClick={toggleSideBar} />
-            <nav className={cn('fixed flex-col-container top-0 z-20 h-screen w-[80%] gap-10 py-8 px-4 transition-[left] bg-background duration-500 sm:sticky sm:flex-col-container sm:w-full sm:gap-10', isOpen ? "left-0" : 'left-[-100%]')}>
+            <div className={cn('fixed top-0 h-screen w-full z-40 bg-[rgba(0,0,0,0.15)] duration-300 sm:hidden', isOpen ? "left-0" : 'left-[-100%]')} onClick={toggleSideBar} />
+            <nav className={cn('fixed flex-col-container top-0 z-50 h-screen w-[80%] gap-10 py-8 px-4 transition-[left] bg-background duration-500 sm:sticky sm:flex-col-container sm:w-full sm:gap-10', isOpen ? "left-0" : 'left-[-100%]')}>
                 <div className='flex-container-center'>
                     <Button size='icon' variant='outline' className='h-8 w-8 sm:hidden' onClick={toggleSideBar}>
                         <Icon name='List' size={14} />

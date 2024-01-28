@@ -3,6 +3,8 @@ import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/common/libs/shadcn/utils"
 import { ReloadIcon } from "@radix-ui/react-icons"
+import Icon from "@/common/libs/lucida-icon"
+import { icons } from "lucide-react"
 
 
 const buttonVariants = cva(
@@ -29,6 +31,7 @@ const buttonVariants = cva(
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8",
         icon: "h-9 w-9",
+        iconSm: "h-7 w-7",
       },
     },
     defaultVariants: {
@@ -43,7 +46,7 @@ export interface ButtonProps
   VariantProps<typeof buttonVariants> {
   asChild?: boolean,
   isLoading?: boolean,
-  leftIcon?: React.ReactNode,
+  leftIcon?: keyof typeof icons
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -56,13 +59,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {asChild ? (
-          <span className="flex items-center justify-center w-full h-full">
+          <>
             {isLoading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
             {props.children}
-          </span>
+          </>
         ) : (
           <>
-            {!isLoading && leftIcon && <span className="mr-2">{leftIcon}</span>}
+            {!isLoading && leftIcon && <Icon name={leftIcon} className='mr-2' size={14} />}
             {isLoading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
             {props.children}
           </>

@@ -6,6 +6,7 @@ import { setCookie } from "nookies";
 // import { cookies } from 'next/headers'
 
 export const handleSignResponse = async (response: IToken) => {
+  console.log(1)
   await setCookie(
     null,
     process.env.NEXT_PUBLIC_AUTH_COOKIE_KEY as string,
@@ -14,9 +15,9 @@ export const handleSignResponse = async (response: IToken) => {
       maxAge: 24 * 60 * 60, //1day
       path: "/",
     }
-  );
-  setAuthHeader(response.token);
-  //todo: redirect to admin
-  // redirectTo("/admin/roster");
+    );
+    console.log(2)
+    setAuthHeader(response.token);
+    console.log(3)
   return;
 };

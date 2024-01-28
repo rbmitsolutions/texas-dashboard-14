@@ -14,7 +14,10 @@ export interface IDELETECompanyDataBody {
   formSection?: {
     id: string;
   },
-  formData?:{
+  formData?: {
+    id: string;
+  }
+  request?: {
     id: string;
   }
 }

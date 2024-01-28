@@ -5,14 +5,13 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { cn } from '@/common/libs/shadcn/utils';
 
 //libs
-import { SignInFormSchema, SignInFormSchemaType } from '@/common/libs/zod/forms/auth/signin';
+import { SignInFormSchema, SignInFormSchemaType } from '@/common/libs/zod/forms/auth/signinForm';
 
 //components
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import Icon from '@/common/libs/lucida-icon';
 
 export function ForgotPasswordForm() {
     const [preRendered, setPreRendered] = useState(false);
@@ -77,7 +76,7 @@ export function ForgotPasswordForm() {
                     type="submit"
                     disabled={isLoading}
                     className={cn("mb-4", isLoading && "loading")}
-                    leftIcon={<Icon name='Lock' size={18} />}
+                    leftIcon='Lock'
                     isLoading={false}
                 >
                     Recover Password
