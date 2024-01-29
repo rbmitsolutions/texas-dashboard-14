@@ -19,7 +19,6 @@ export const metadata: Metadata = {
       url: "https://www.linkedin.com/in/raphael-mesquita-/",
     },
   ],
-  viewport: "minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover",
   icons: [
     { rel: "apple-touch-icon", url: "/icon-192x192.png" },
     { rel: "icon", url: "/icon-192x192.png" },

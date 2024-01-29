@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import AddOnsOptions from "./addOnsOptions";
-import { getUpdateInfo } from "./config";
+import { getUpdateAddOnsInfo } from "./config";
 
 //interface
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface";
@@ -82,7 +82,7 @@ export default function CreateUpdateMenuAddOnsForm({ menuAddOns, createAddOns, u
         }
 
         if (menuAddOns) {
-            const info = getUpdateInfo(formData, menuAddOns)
+            const info = getUpdateAddOnsInfo(formData, menuAddOns)
 
             await updateAddOns({
                 menu_add_ons: info

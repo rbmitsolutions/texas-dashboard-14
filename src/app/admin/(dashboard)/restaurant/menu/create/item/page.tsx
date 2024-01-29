@@ -151,11 +151,11 @@ export default function Create() {
                 options_priority: Number(OptionsPriority[formData.options_priority as keyof typeof OptionsPriority]),
             }
         }, {
-            onSuccess: () => {
-                localStorage.removeItem('createMenuForm')
+            onSuccess: async () => {
+                await localStorage.removeItem('createMenuForm')
+                form.reset()
             }
         })
-        form.reset()
 
     };
 
@@ -180,6 +180,8 @@ export default function Create() {
         getLocal()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    if (!menuTypes || !menu || !printers || !section || !addOns) return null
 
     return (
         <Form {...form}>

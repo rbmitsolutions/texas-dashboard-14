@@ -180,7 +180,10 @@ export default function CreateUpdateMenuForm({ form, sections, menu, addOns, isC
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Menu Type</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select onValueChange={field.onChange}
+                                defaultValue={field.value || ''}
+                                value={field.value || ''}
+                            >
                                 <FormControl>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Menu Type" />

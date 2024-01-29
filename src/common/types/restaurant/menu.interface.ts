@@ -85,7 +85,7 @@ export interface IMenu {
   go_with_ids: string[] // ids dos produtos que podem ser combinados com esse exemplo GIN + Tonic
   add_ons: IMenuAddOns[] // ids dos add_ons que podem ser adicionados a esse produto
 
-  img_ids?: string[] // ids das imagens que serao exibidas no site
+  img_ids: string[] // ids das imagens que serao exibidas no site
 
   f_options: IMenu[] // sao as opcoes do produto que aparece no segundo pop-up (f: fallowing)
   fby_options: IMenu[] // optcões que estao seguindo esse produto (fby: fallowed by)

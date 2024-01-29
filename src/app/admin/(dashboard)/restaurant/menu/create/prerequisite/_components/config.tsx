@@ -3,7 +3,7 @@ import { IMenuAddOns } from "@/common/types/restaurant/menu.interface"
 import { IPOSTMenuAddOnsBody } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface"
 import { IPUTMenuAddOnsBody, IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 
-export const getUpdateInfo = (data: CreateMenuAddOnsFormSchemaType, menuAddOns: IMenuAddOns): IPUTMenuAddOnsBody => {
+export const getUpdateAddOnsInfo = (data: CreateMenuAddOnsFormSchemaType, menuAddOns: IMenuAddOns): IPUTMenuAddOnsBody => {
     const menuIdsChanged = menuAddOns?.menu?.map(m => m.id).sort().join(',') !== data?.menu_ids?.sort().join(',')
     const optionsChanged = menuAddOns?.options?.map(o => o.title + o.value).sort().join(',') !== data?.options?.map(p => p.title + p.value).sort().join(',')
 

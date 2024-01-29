@@ -30,9 +30,10 @@ interface IWrap {
     footer?: React.ReactNode;
     className?: string;
     isLoading?: boolean;
+    error?: boolean
     children: React.ReactNode;
 }
-export default function Wrap({ header, actions, footer, isLoading = false, className, children }: IWrap) {
+export default function Wrap({ header, actions, footer, error = false, isLoading = false, className, children }: IWrap) {
     return (
         <section className={cn('flex-col-container gap-4', className)}>
             {header &&
@@ -63,7 +64,9 @@ export default function Wrap({ header, actions, footer, isLoading = false, class
                 </div>
             }
             <main>
-                {!isLoading && children}
+                {error ? <>Error</> :
+                    !isLoading && children
+                }
             </main>
             {footer &&
                 <footer>

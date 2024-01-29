@@ -55,7 +55,8 @@ export default function MenuPrerequisite() {
         refetchRestaurantData: toRefetchAddOns,
         isRestaurantDataLoading: isMenuAddOnsLoading,
         setGETRestaurantDataParams: setMenuAddOns,
-        GETRestaurantDataParams: GETMenuAddOns
+        GETRestaurantDataParams: GETMenuAddOns,
+        restaurantDataError: addOnsError
     } = useGETRestaurantDataHooks({
         query: 'MENU_ADD_ONS',
         defaultParams: {
@@ -135,6 +136,7 @@ export default function MenuPrerequisite() {
                         className: 'flex justify-between gap-4'
                     }}
                     isLoading={isMenuLoading || isMenuAddOnsLoading || isMenuTypesLoading}
+                    error={addOnsError}
                     className='rounded-xl border-2 p-4'
                 >
                     <MenuAddOnsTables columns={menuAddOnsColumnsTable({

@@ -11,11 +11,12 @@ import Icon from "@/common/libs/lucida-icon";
 
 //store
 import { useSideBarStore } from "@/store/sideBar";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Settings from "./settings";
 
 export function Header() {
+    const router = useRouter()
     const { toggleSideBar } = useSideBarStore()
     const { user } = useAuthHooks()
     const pathname = usePathname()
@@ -28,11 +29,15 @@ export function Header() {
                     <Icon name='List' size={14} />
                 </Button>
                 <div className='flex flex-col ml-2'>
-                    {splitPathname[splitPathname?.length - 1].length < 20 &&
+                    {splitPathname[splitPathname?.length - 1].length < 20 ?
                         <>
                             <span className='capitalize text-[10px]'>/{splitPathname[splitPathname?.length - 2]}/</span>
                             <span className='capitalize text-xs'>{splitPathname[splitPathname?.length - 1]}</span>
                         </>
+                        : 
+                        <Button size='iconSm' onClick={() => router.back()}>
+                            <Icon name='ChevronLeft' size={18} />
+                        </Button>
                     }
                 </div>
             </div>

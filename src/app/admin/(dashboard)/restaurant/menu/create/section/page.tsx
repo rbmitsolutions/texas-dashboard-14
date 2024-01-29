@@ -17,7 +17,8 @@ export default function MenuSectionsPage() {
         refetchRestaurantData: toRefetchSections,
         isRestaurantDataLoading: menuSectionsLoading,
         setGETRestaurantDataParams: setMenuSections,
-        GETRestaurantDataParams: GETMenuSections
+        GETRestaurantDataParams: GETMenuSections,
+        restaurantDataError: sectionsError
     } = useGETRestaurantDataHooks({
         query: 'MENU_SECTION',
         defaultParams: {
@@ -40,7 +41,8 @@ export default function MenuSectionsPage() {
         isRestaurantDataLoading: menuTypesLoading,
         refetchRestaurantData: toRefetchTypes,
         setGETRestaurantDataParams: setMenuTypes,
-        GETRestaurantDataParams: GETMenuTypes
+        GETRestaurantDataParams: GETMenuTypes,
+        restaurantDataError: typesError
     } = useGETRestaurantDataHooks({
         query: 'MENU_TYPE',
         defaultParams: {
@@ -112,6 +114,7 @@ export default function MenuSectionsPage() {
                         }
                     }}
                     isLoading={menuSectionsLoading}
+                    error={sectionsError}
                     className='rounded-xl border-2 p-4'
                 >
                     <MenuSectionTables columns={menuSectionColumnsTable({
@@ -186,6 +189,7 @@ export default function MenuSectionsPage() {
                         className: 'flex justify-between gap-4'
                     }}
                     isLoading={menuTypesLoading}
+                    error={typesError}
                     className='rounded-xl border-2 p-4'
                 >
                     <MenuTypesTables columns={menuTypesColumnsTable({

@@ -215,7 +215,8 @@ export interface IPUTMenuBody {
       to_print_ids?: string[]
       allergens?: string[]
   
-      thumbnail?: string // to create image
+      thumbnail?: string
+      
       images?: {
         add: string[]
         remove: string[]

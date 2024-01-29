@@ -1,21 +1,23 @@
 'use client'
-import { useGETRestaurantDataHooks, usePOSTRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
+import { useGETRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CreateMenuFormSchema, CreateMenuFormSchemaType } from "@/common/libs/zod/forms/restaurant/createMenuForm"
 import { Form } from "@/components/ui/form"
 import { OptionsPriority } from "@/common/types/restaurant/menu.interface"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import UploadMenuImages from "../../create/item/_components/uploadMenuImages"
 import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
 import CreateUpdateMenuForm from "../../create/_components/createUpdateMenuForm"
+import { getOptionsPriorityValueAsKeyString, getUpdateMenuInfo } from "../_components/config"
+import Wrap from "@/components/common/wrap"
 
 export default function MenuItemPage(params: { params: { id: string } }) {
     const {
         restaurantMenu: menu,
-        setGETRestaurantDataParams: setMenu,
-        GETRestaurantDataParams: GETMenu,
+        refetchRestaurantData: refetchMenu,
         isRestaurantDataFetching: isMenuLoading,
+        restaurantDataError: menuError,
     } = useGETRestaurantDataHooks({
         query: 'MENU',
         defaultParams: {
@@ -120,9 +122,9 @@ export default function MenuItemPage(params: { params: { id: string } }) {
 
     const {
         companyAllFiles: files,
-        setGETCompanyDataParams: setFiles,
-        GETCompanyDataParams: GETFiles,
         isCompanyDataFetching: isFilesLoading,
+        setGETCompanyDataParams: setFiles,
+        companyDataError: filesError,
     } = useGETCompanyDataHooks({
         query: 'FILES',
         defaultParams: {
@@ -171,16 +173,32 @@ export default function MenuItemPage(params: { params: { id: string } }) {
     });
 
     const onSubmitForm: SubmitHandler<CreateMenuFormSchemaType> = async (formData) => {
-        // await createMenu({
-        //     menu: {
-        //         ...formData,
-        //         value: Number(formData.value.toFixed(2)),
-        //         options_priority: Number(OptionsPriority[formData.options_priority as keyof typeof OptionsPriority]),
-        //     }
-        // })
-        form.reset()
+        const urls = files?.data?.filter(x => x.id !== menu?.thumbnail_file_id) || []
+        await updateMenu({
+            menu: {
+                ...getUpdateMenuInfo(formData, menu, urls)
+            }
+        }, {
+            onSuccess: async (data) => {
+                setFiles({
+                    files: {
+                        all: {
+                            key: params?.params?.id,
+                            pagination: {
+                                take: 5,
+                                skip: 0
+                            },
+                            in: {
+                                id: data?.img_ids
+                            }
+                        }
+                    }
+                })
+                refetchMenu()
+            }
+        })
     };
-
+   
 
     useEffect(() => {
         if (menu) {
@@ -197,7 +215,7 @@ export default function MenuItemPage(params: { params: { id: string } }) {
                 to_order: menu?.to_order,
                 allergens: menu?.allergens,
                 go_with_ids: menu?.go_with_ids,
-                options_priority: OptionsPriority[form?.getValues('options_priority') as keyof typeof OptionsPriority],
+                options_priority: getOptionsPriorityValueAsKeyString(String(menu?.options_priority)),
                 add_ons: menu?.add_ons?.map((item) => item?.id),
                 f_options: menu?.f_options?.map((item) => item?.id),
             })
@@ -211,46 +229,57 @@ export default function MenuItemPage(params: { params: { id: string } }) {
 
 
     return (
-        <Form {...form}>
-            <form
-                onSubmit={form.handleSubmit(onSubmitForm)}
-                className='flex flex-col gap-4 w-full'>
+        <Wrap
+            header={{
+                title: {
+                    title: 'Update Menu',
+                    icon: 'ChefHat'
+                }
+            }}
+            isLoading={isMenuLoading || isFilesLoading}
+            error={menuError || filesError}
+        >
+            <Form {...form}>
+                <form
+                    onSubmit={form.handleSubmit(onSubmitForm)}
+                    className='flex flex-col gap-4 w-full'>
 
-                <div className='grid-container grid-cols-1 xl:grid-cols-[1fr,500px]'>
-                    <div className='order-2 xl:order-1'>
-                        <CreateUpdateMenuForm
-                            form={form}
-                            sections={{
-                                data: section
-                            }}
-                            addOns={{
-                                data: addOns,
-                                setAddOns: setAddOns,
-                                GETAddOns: GETAddOns,
-                                isLoading: isAddOnsLoading
-                            }}
-                            printers={{
-                                data: printers
-                            }}
-                            menu={{
-                                data: allMenu,
-                                setGETMenu: setAllMenu,
-                                GETMenu: GETAllMenu,
-                                isLoading: isAllMenuLoading,
-                            }}
-                            menuTypes={{
-                                data: menuTypes?.data,
-                                isLoading: isMenuTypesLoading,
-                            }}
-                            isCreateUpdateLoading={isMenuUpdateLoading}
-                            type="update"
-                        />
+                    <div className='grid-container grid-cols-1 xl:grid-cols-[1fr,500px]'>
+                        <div className='order-2 xl:order-1'>
+                            <CreateUpdateMenuForm
+                                form={form}
+                                sections={{
+                                    data: section
+                                }}
+                                addOns={{
+                                    data: addOns,
+                                    setAddOns: setAddOns,
+                                    GETAddOns: GETAddOns,
+                                    isLoading: isAddOnsLoading
+                                }}
+                                printers={{
+                                    data: printers
+                                }}
+                                menu={{
+                                    data: allMenu,
+                                    setGETMenu: setAllMenu,
+                                    GETMenu: GETAllMenu,
+                                    isLoading: isAllMenuLoading,
+                                }}
+                                menuTypes={{
+                                    data: menuTypes?.data,
+                                    isLoading: isMenuTypesLoading,
+                                }}
+                                isCreateUpdateLoading={isMenuUpdateLoading}
+                                type="update"
+                            />
+                        </div>
+                        <div className='flex flex-col gap-4 xl:order-2'>
+                            <UploadMenuImages form={form} />
+                        </div>
                     </div>
-                    <div className='flex flex-col gap-4 xl:order-2'>
-                        <UploadMenuImages form={form} />
-                    </div>
-                </div>
-            </form>
-        </Form>
+                </form>
+            </Form>
+        </Wrap>
     )
 }

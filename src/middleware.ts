@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
   //redirect to /signin if page is not found
 
 
-  if(pathName === '/') {
+  if(pathName === '/' || pathName === '/admin') {
     return NextResponse.redirect(new URL("/signin", request.url));
   }
   //todo: check if user is logged in and redirect to admin if not
