@@ -16,6 +16,8 @@ export type IPermissions =
   | 'day_roster'
   | 'menu'
   | 'menu-create'
+  | 'menu-update'
+  | 'menu-delete'
 
 export interface IRoute {
   path: string;

@@ -46,17 +46,17 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
       }
       //todo change it to menu-create
-      if(pathName.includes('/admin/restaurant/menu/create')){
+      if (pathName.includes('/admin/restaurant/menu/create')) {
         const permission = isUserAuthorized(
           token?.permissions,
-          ['admin']
+          ['admin', 'admin-ghost', 'menu', 'menu-create']
         );
         if (!permission) {
           return NextResponse.redirect(new URL("/admin/roster", request.url));
         }
-      } 
+      }
 
-      if(pathName.includes('/admin/settings')){
+      if (pathName.includes('/admin/settings')) {
         const permission = isUserAuthorized(
           token?.permissions,
           ['admin']
