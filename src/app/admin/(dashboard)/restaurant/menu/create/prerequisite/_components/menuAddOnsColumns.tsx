@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
 import { Button } from "@/components/ui/button"
 import Icon from "@/common/libs/lucida-icon"
+import { Switch } from "@/components/ui/switch"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -46,18 +47,20 @@ export const menuAddOnsColumnsTable = ({
                 )
             }
         },
-
         {
-            accessorKey: "menu",
-            header: "Menus Linked",
+            id: "manadatory",
+            accessorKey: "Manadatory",
+            size: 40,
             cell: ({ row }) => {
                 return (
                     <div className="flex-container-center">
-                        <h2>{row?.original?.menu?.length} Menus</h2>
+                        <Switch
+                            disabled
+                            checked={row?.original?.is_mandatory}
+                        />
                     </div>
                 )
             },
-            size: 40,
         },
         {
             id: "Multiple Chouse",
@@ -66,7 +69,10 @@ export const menuAddOnsColumnsTable = ({
             cell: ({ row }) => {
                 return (
                     <div className="flex-container-center">
-                        <h2>{row?.original?.multiple ? 'Yes' : 'No'}</h2>
+                        <Switch
+                            disabled
+                            checked={row?.original?.multiple}
+                        />
                     </div>
                 )
             },
