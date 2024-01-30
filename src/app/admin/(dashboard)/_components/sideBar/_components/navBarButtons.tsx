@@ -1,8 +1,10 @@
 'use client'
 import Icon from "@/common/libs/lucida-icon";
 import { cn } from "@/common/libs/shadcn/utils";
+import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useAuthHooks } from "@/hooks/useAuthHooks";
 
 //interfaces
 import { IRoute } from "@/routes"
@@ -13,12 +15,15 @@ interface NavBarButtonsProps {
 }
 
 const NavbarButton = ({ router }: NavBarButtonsProps) => {
+    const { user } = useAuthHooks()
     const pathName = usePathname()
     const r = useRouter()
     
     if (router?.items) {
         return <NavbarButtonCollapsible router={router} />
     }
+
+    if(isUserAuthorized(user?.permissions, router?.authorization))
     return (
         <Button
             variant='link'

@@ -7,7 +7,6 @@ import Image from "next/image";
 //components
 import { NavbarButton } from "./_components/navBarButtons";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import Icon from "@/common/libs/lucida-icon";
@@ -40,9 +39,8 @@ export function Sidebar() {
                 </div>
                 <ScrollArea className='h-full pr-6 overflow-auto'>
                     {routers?.map(r => {
-                        return <div key={r.name}>
+                        return <div key={r.name} className='my-2'>
                             <NavbarButton key={r.name} router={r} />
-                            <Separator className="my-2" />
                         </div>
                     })}
                 </ScrollArea>
