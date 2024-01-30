@@ -59,7 +59,7 @@ export default function UploadMenuImages({ form }: UploadMenuImagesProps) {
                 <div className='flex-col-container gap-2'>
                     <h1 className='text-xl font-bold capitalize'>{form.watch('title')?.toLowerCase() || 'New menu Item'}
                     </h1>
-                    <p className='text-justify line-clamp-3'>{form.watch('description')}</p>
+                    <p className='text-justify line-clamp-3 break-all'>{form.watch('description')}</p>
                     <strong className='text-xl'>{convertCentsToEuro(form.watch('value') || 0)}</strong>
                 </div>
             </div>

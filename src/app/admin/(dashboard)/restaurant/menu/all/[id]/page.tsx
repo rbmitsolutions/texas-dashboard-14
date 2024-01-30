@@ -209,7 +209,6 @@ export default function MenuItemPage(params: { params: { id: string } }) {
                 value: menu?.value || 0,
                 profit: menu?.profit || 0,
                 to_print_ids: menu?.to_print_ids || [],
-                mn_type_id: menu?.mn_type_id || '',
                 website: menu?.website,
                 to_order: menu?.to_order,
                 allergens: menu?.allergens || [],
@@ -227,6 +226,9 @@ export default function MenuItemPage(params: { params: { id: string } }) {
         }
     }, [files, form, menu, params.params.id, section])
 
+    useEffect(() => {
+        form.setValue('mn_type_id', menu?.mn_type_id)
+    }, [form, menu?.mn_type_id, section])
     return (
         <Wrap
             header={{
@@ -235,8 +237,8 @@ export default function MenuItemPage(params: { params: { id: string } }) {
                     icon: 'ChefHat'
                 }
             }}
-            isLoading={isMenuLoading || isFilesLoading}
-            error={menuError || filesError}
+            isLoading={isFilesLoading}
+            error={filesError}
         >
             <Form {...form}>
                 <form

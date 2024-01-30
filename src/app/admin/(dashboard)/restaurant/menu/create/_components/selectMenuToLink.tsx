@@ -139,11 +139,12 @@ export default function SelectMenuToLink({ menu, menuTypes, handleUpdateMenuIds,
                         {menu_ids_linked?.length} Menu Linked</Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                        <DialogTitle>Select</DialogTitle>
-                    </DialogHeader>
                     <Wrap
                         header={{
+                            title: {
+                                title: 'Select',
+                                icon: 'CookingPot'
+                            },
                             pagination: {
                                 onPageChange: (pagination) => menu?.setGETMenu(prev => ({
                                     menu: {
@@ -199,6 +200,7 @@ export default function SelectMenuToLink({ menu, menuTypes, handleUpdateMenuIds,
                             },
                             className: 'grid grid-cols-[100px,1fr,40px] gap-2'
                         }}
+                        className='mt-6'
                     >
                         <div className='flex-container-center justify-between mb-2'>
                             <strong>Menu</strong>
@@ -207,7 +209,7 @@ export default function SelectMenuToLink({ menu, menuTypes, handleUpdateMenuIds,
                                 <small>Priority</small>
                             </div>
                         </div>
-                        <div className='flex-col-container min-h-80'>
+                        <div className='flex-col-container max-h-[450px] h-[450px] overflow-auto scrollbar-thin'>
                             {menu?.data?.data?.map(m => {
                                 return (
                                     <FormLabel className='flex-container-center justify-between cursor-pointer border-b-2 pb-2' htmlFor={m?.id} key={m?.id}>

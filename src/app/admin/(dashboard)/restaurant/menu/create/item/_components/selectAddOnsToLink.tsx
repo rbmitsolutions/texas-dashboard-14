@@ -53,6 +53,10 @@ export default function SelectAddOnsToLink({ addOns, add_ons_linked, handleUpdat
                         in: {
                             id: add_ons_linked
                         },
+                        pagination: {
+                            take: 5,
+                            skip:0
+                        }
                     }
                 }
             }))
@@ -64,7 +68,10 @@ export default function SelectAddOnsToLink({ addOns, add_ons_linked, handleUpdat
                         in: {
                             id: []
                         },
-
+                        pagination: {
+                            take: 5,
+                            skip:0
+                        }
                     }
                 }
             }))
@@ -84,11 +91,12 @@ export default function SelectAddOnsToLink({ addOns, add_ons_linked, handleUpdat
                         {add_ons_linked?.length} Prerequisite Linked</Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                        <DialogTitle>Select</DialogTitle>
-                    </DialogHeader>
                     <Wrap
                         header={{
+                            title: {
+                                title: 'Select',
+                                icon: 'ChefHat'
+                            },
                             pagination: {
                                 onPageChange: (pagination) => addOns?.setAddOns(prev => ({
                                     menu_add_ons: {
@@ -99,7 +107,7 @@ export default function SelectAddOnsToLink({ addOns, add_ons_linked, handleUpdat
                                     }
                                 })),
                                 pagination: addOns?.data?.pagination,
-                                queryPagination: addOns?.GETAddOns?.menu?.all?.pagination!
+                                queryPagination: addOns?.GETAddOns?.menu_add_ons?.all?.pagination!
                             }
                         }}
                         actions={{
@@ -126,8 +134,9 @@ export default function SelectAddOnsToLink({ addOns, add_ons_linked, handleUpdat
                             },
                             className: 'grid grid-cols-[100px,1fr] gap-2'
                         }}
+                        className='mt-6'
                     >
-                        <div className='flex-col-container min-h-80'>
+                        <div className='flex-col-container max-h-[450px] h-[450px] overflow-auto scrollbar-thin'>
                             {addOns?.data?.data?.map(addOns => {
                                 return (
                                     <FormLabel className='flex-col-center cursor-pointer bg-background-soft rounded-lg p-2' htmlFor={addOns?.id} key={addOns?.id}>

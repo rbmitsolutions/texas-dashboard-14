@@ -13,7 +13,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     return (
         <main>
             <main className={cn("relative min-h-screen")}>
-                <div className='grid grid-cols-1 max-w-screen-2xl m-auto sm:grid-cols-[200px,1fr]'>
+                <div className='grid grid-cols-1 max-w-screen-2xl m-auto md:grid-cols-[200px,1fr]'>
                     <Sidebar />
                     <div className='flex-col-container overflow-auto'>
                         <Header />
