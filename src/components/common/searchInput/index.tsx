@@ -1,10 +1,14 @@
-import Icon from "@/common/libs/lucida-icon";
-import { cn } from "@/common/libs/shadcn/utils";
-import { useDebounce } from "@/common/utils/useDebouce";
+import { useEffect, useState } from "react";
+
+//components
+import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useEffect, useRef, useState } from "react";
+
+//libs
+import { useDebounce } from "@/common/utils/useDebouce";
+import { cn } from "@/common/libs/shadcn/utils";
+import Icon from "@/common/libs/lucida-icon";
 
 export interface SearchInputProps {
     onSearchChange: (e: string) => void;
@@ -14,18 +18,6 @@ export interface SearchInputProps {
     placeholder?: string;
     isFetching?: boolean;
 }
-
-// const useDebounce = (fn: any, delay: number) => {
-//     const timeoutRef = useRef(null);
-//     function debouncedFn(...args: any) {
-//         window.clearTimeout(timeoutRef.current as any);
-//         timeoutRef.current = window.setTimeout(() => {
-//             fn(...args);
-//         }, delay) as any;
-//     }
-
-//     return debouncedFn;
-// }
 
 export default function SearchInput({ onSearchChange, value, isFetching, placeholder = 'Search ...', debounceDelay = 600, custom }: SearchInputProps) {
     const [preRendered, setPreRendered] = useState(false);

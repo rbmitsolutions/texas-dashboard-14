@@ -25,7 +25,8 @@ export default function Table({ params }: { params: { id: string } }) {
         sort: {
             options_priority: true
         },
-        short_title: ''
+        short_title: '',
+        to_order: true
     })
     const { menu, setMenu } = useOrderSystemMenuStore()
 

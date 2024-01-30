@@ -1,11 +1,9 @@
 "use client"
-
-import Icon from "@/common/libs/lucida-icon"
 import { IUser } from "@/common/types/user/user.interface"
+import LinkButton from "@/components/common/linkButton"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
-import Link from "next/link"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -78,11 +76,9 @@ export const userColumnsTable: ColumnDef<IUser>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex-container-center">
-                    <Link
-                        className='flex items-center justify-center bg-primary text-primary-foreground shadow hover:bg-primary/80 rounded-md h-7 w-7'
-                        href={`/admin/hrsystem/employees/all/${row?.original?.id}`}>
-                        <Icon name='ChevronRight' size={16} />
-                    </Link>
+                    <LinkButton 
+                        href={`/admin/hrsystem/employees/all/${row?.original?.id}`}
+                    />
                 </div>
             )
         },

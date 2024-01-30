@@ -9,6 +9,7 @@ export interface IMenuOrderSystemFilter {
         options_priority?: boolean
     },
     short_title?: string
+    to_order?: boolean
 }
 
 interface OrderSystemMenuState {
@@ -53,6 +54,10 @@ export const getFilteredOrderSystemMenu = ({ menuItems, menuFilter }: {
 
     if (menuFilter?.short_title) {
         menu = menu?.filter((item) => item?.short_title?.toLowerCase().includes(menuFilter?.short_title?.toLowerCase() || ''));
+    }
+
+    if (menuFilter?.to_order) {
+        menu = menu?.filter((item) => item?.to_order === menuFilter?.to_order);
     }
 
     return menu

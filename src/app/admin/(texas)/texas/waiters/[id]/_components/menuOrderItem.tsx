@@ -52,7 +52,7 @@ export function MenuOrderItem({ menu, bg, menuData }: MenuOrderItemProps) {
                 const options = getFilteredOrderSystemMenu({
                     menuItems: menuData,
                     menuFilter: {
-                        id: [menuItem?.id, ...menuItem?.f_options?.map((item) => item?.id)],
+                        id: [...menuItem?.f_options?.map((item) => item?.id)],
                         sort: {
                             options_priority: true
                         }

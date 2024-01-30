@@ -162,7 +162,7 @@ export default function CreateUpdateMenuForm({ form, sections, menu, addOns, isC
                             <div className="space-y-0.5 ">
                                 <FormLabel>Order System</FormLabel>
                                 <FormDescription>
-                                    To show on order system
+                                    To show on order system, if this item is only an option of another item, do not check it.
                                 </FormDescription>
                             </div>
                             <FormControl>
@@ -318,7 +318,7 @@ export default function CreateUpdateMenuForm({ form, sections, menu, addOns, isC
                                 <RadioGroup
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
-                                    className="flex flex-container-center gap-6"
+                                    className="grid grid-cols-1 md:grid-cols-4 gap-4"
                                 >
                                     {Object.keys(OptionsPriority).map((item) => {
                                         return (

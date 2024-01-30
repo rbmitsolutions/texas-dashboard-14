@@ -236,6 +236,7 @@ export type IGETMenuOrderSystemResponse = {
   id: string
   title: string
   short_title: string
+  to_order: boolean
   f_options: { id: string }[]
   go_with_ids: string[]
   mn_type_id: string
