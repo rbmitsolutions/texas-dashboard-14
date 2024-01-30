@@ -232,6 +232,20 @@ interface IGETSectionQuery {
   };
 }
 
+export type IGETMenuOrderSystemResponse = {
+  id: string
+  title: string
+  short_title: string
+  f_options: { id: string }[]
+  go_with_ids: string[]
+  mn_type_id: string
+  options_priority: number
+  to_print_ids: string[]
+  value: number //center
+  add_ons: IMenuAddOns[]
+  allergens: string[]
+}
+
 export type IGETMenuResponse = {
   data: IMenu[];
   pagination: IPaginationResponse
@@ -263,11 +277,14 @@ export interface IGETMenuQuery {
       mn_type?: '1',
     }
 
+    essential_only?: '1'
+
     orderBy?: {
       key: keyof IMenu;
       order: "asc" | "desc";
     };
   };
+  order_system?: '1'
   highlight?: '1'
 }
 
@@ -505,7 +522,7 @@ export interface IGETMenuAddOnsQuery {
   };
 }
 
-export type IGETRestaurantResponse = IGETAllBookingsResponse | IBookings | IGETTablesAllResponse | ITable | IAllOrdersResponse | IOrder | IAllOrderControllerResponse | IOrderController | IGetAllClientsResponse | IClient | IGETSectionResponse | ISection | IGETMenuResponse | IMenu | IFinishedTableAllResponse | IFinishedTable | IGETAllReviewsResponse | IReviews | IGiftCardReponse | IGiftCards | IGETAuthorizedQuery | IAllSpecialDaysResponse | ISpecialDays | IOpenDaysGetAllResponse | IDays | IGETPrintersResponse | IGETMenuSectionsResponse | IGETMenuTypesResponse | IGETMenuAddOnsResponse
+export type IGETRestaurantResponse = IGETAllBookingsResponse | IBookings | IGETTablesAllResponse | ITable | IAllOrdersResponse | IOrder | IAllOrderControllerResponse | IOrderController | IGetAllClientsResponse | IClient | IGETSectionResponse | ISection | IGETMenuResponse | IMenu | IFinishedTableAllResponse | IFinishedTable | IGETAllReviewsResponse | IReviews | IGiftCardReponse | IGiftCards | IGETAuthorizedQuery | IAllSpecialDaysResponse | ISpecialDays | IOpenDaysGetAllResponse | IDays | IGETPrintersResponse | IGETMenuSectionsResponse | IGETMenuTypesResponse | IGETMenuAddOnsResponse | IGETMenuOrderSystemResponse[]
 
 export type IRestaurantDataQueryType = 'BOOKINGS' | 'TABLES' | "ORDER" | "ORDER_CONTROLLER" | 'CLIENTS' | "SECTIONS" | "MENU" | "FINISHED_TABLE" | "REVIEWS" | "GIFTCARD" | "AUTHORIZED_DEVICES" | 'SPECIAL_DAYS' | 'OPEN_DAYS' | 'PRINTERS' | 'MENU_SECTION' | 'MENU_TYPE' | 'MENU_ADD_ONS'
 
