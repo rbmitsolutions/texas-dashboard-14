@@ -25,7 +25,7 @@ export function Header() {
     return (
         <header className='flex-container justify-between px-4 gap-2 h-20 border-b-2'>
             <div className='flex-container-center'>
-                <Button size='icon' variant='outline' className='h-8 w-8  flex items-center sm:hidden' onClick={toggleSideBar}>
+                <Button size='icon' variant='outline' className='h-8 w-8 flex items-center xl:hidden' onClick={toggleSideBar}>
                     <Icon name='List' size={14} />
                 </Button>
                 <div className='flex flex-col ml-2'>

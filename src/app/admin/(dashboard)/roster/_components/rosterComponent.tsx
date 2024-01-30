@@ -37,7 +37,7 @@ export default function RosterComponent({ roster, updateRoster }: RosterComponen
 
 
     return (
-        <div className='flex-container justify-between border-2 rounded-lg shadow-lg'>
+        <div className='flex-container justify-between border-2 rounded-lg shadow-lg bg-background-soft'>
             <div className='flex-col-container p-4 w-full'>
                 <div className='flex justify-between w-full'>
                     <span>

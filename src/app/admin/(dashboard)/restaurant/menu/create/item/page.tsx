@@ -183,7 +183,7 @@ export default function Create() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    if (!menuTypes || !section || !addOns) return null
+    if (!menuTypes || !section ) return null
 
     return (
         <Form {...form}>
