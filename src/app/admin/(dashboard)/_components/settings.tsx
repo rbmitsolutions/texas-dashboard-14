@@ -1,3 +1,5 @@
+import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized"
+import { Permissions } from "@/common/types/auth/auth.interface"
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -33,10 +35,10 @@ const navigation = [
 ]
 
 export default function Settings() {
-    const { user } = useAuthHooks()
+    const { user: { permissions} } = useAuthHooks()
     const { push } = useRouter()
 
-    if (!user?.permissions?.includes('admin')) return
+    if (!isUserAuthorized(permissions, [Permissions.ADMIN])) return
 
     return (
         <DropdownMenu>

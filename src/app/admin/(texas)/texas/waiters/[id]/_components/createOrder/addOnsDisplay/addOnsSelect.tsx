@@ -134,7 +134,7 @@ export default function AddOnsSelect({ addOn, handleAddOns, handleAddFlag, addOn
                     }
                 </div>
             </div>
-            <div className={cn('flex items-center p-2 gap-2 w-full h-15 rounded-lg overflow-auto', addOn?.is_mandatory ? 'bg-foreground/5' : 'bg-foreground/0')}>
+            <div className={cn('flex items-center p-2 gap-2 w-full h-15 rounded-lg scrollbar-thin overflow-auto bg-foreground/5')}>
                 {addOn?.options?.map(opt => {
                     return (
                         <Button

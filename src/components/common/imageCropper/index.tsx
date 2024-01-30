@@ -118,10 +118,20 @@ export default function ImageCropper({ image, cropSize, cropShape = 'rect', onSa
                         />
                     </div>
                 }
+
+
+
                 {(!image && !newImage) &&
-                    <div className='flex items-center justify-center relative w-[80vw] h-[300px] rounded-xl bg-foreground/5 sm:w-[500px]'>
-                        <h1 className='text-3xl font-semibold text-gray-500'>No Image</h1>
-                    </div>
+                    <label className='flex items-center justify-center relative w-[80vw] h-[300px] rounded-xl bg-foreground/5 sm:w-[500px] cursor-pointer'>
+                        <input
+                            id="fileInput"
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={createPreviewFile}
+                        />
+                        <h1 className='text-3xl font-semibold text-gray-500'>Upload Image</h1>
+                    </label>
                 }
                 {newImage &&
                     <>
@@ -150,18 +160,15 @@ export default function ImageCropper({ image, cropSize, cropShape = 'rect', onSa
                 }
                 {onSave &&
                     <DialogFooter className='mt-4'>
-                        {
-                            (onRemove && (image || newImage)) &&
-                            <Button
-                                disabled={isLoading}
-                                isLoading={isLoading}
-                                onClick={onRemove}
-                                leftIcon="Trash"
-                                variant='destructive'
-                            >
-                                Remove
-                            </Button>
-                        }
+                        <Button
+                            disabled={!image}
+                            isLoading={isLoading}
+                            onClick={onRemove}
+                            leftIcon="Trash"
+                            variant='destructive'
+                        >
+                            Remove
+                        </Button>
                         <div className='flex gap-4 w-full justify-end'>
                             <Button
                                 variant='secondary'

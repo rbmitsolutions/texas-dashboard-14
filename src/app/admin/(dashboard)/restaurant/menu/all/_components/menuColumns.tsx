@@ -8,11 +8,13 @@ import { Button } from "@/components/ui/button"
 import Icon from "@/common/libs/lucida-icon"
 import { Switch } from "@/components/ui/switch"
 import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
+import { IPUTMenuBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
 interface MenuColumnsTableProps {
     redirectTo: (path: string) => void
+    udpateMenu: (data: IPUTMenuBody['menu']) => void
     onDelete: (id: string) => void
     allowUpdate: boolean
     allowDelete: boolean
@@ -20,8 +22,10 @@ interface MenuColumnsTableProps {
 
 export const menuColumnsTable = ({
     redirectTo,
+    udpateMenu,
     onDelete,
-    allowDelete
+    allowDelete,
+    allowUpdate
 }: MenuColumnsTableProps): ColumnDef<IMenu>[] => {
     return [
         {
@@ -77,8 +81,12 @@ export const menuColumnsTable = ({
             cell: ({ row }) => {
                 return (
                     <Switch
-                        disabled
+                        disabled={!allowUpdate}
                         checked={row?.original?.website}
+                        onClick={() => udpateMenu({
+                            id: row?.original?.id,
+                            website: !row?.original?.website,
+                        })}
                     />
                 )
             }
@@ -90,8 +98,12 @@ export const menuColumnsTable = ({
             cell: ({ row }) => {
                 return (
                     <Switch
-                        disabled
+                        disabled={!allowUpdate}
                         checked={row?.original?.to_order}
+                        onClick={() => udpateMenu({
+                            id: row?.original?.id,
+                            to_order: !row?.original?.to_order,
+                        })}
                     />
                 )
             }
@@ -116,12 +128,12 @@ export const menuColumnsTable = ({
                             variant='orange'
                             size='iconSm'
                             onClick={() => redirectTo(`/admin/restaurant/menu/all/${row?.original?.id}`)}
-                            disabled={!allowDelete}
+                            disabled={!allowUpdate}
                         >
 
                             <Icon name="Pen" size={12} />
                         </Button>
-                         <DeleteDialogButton
+                        <DeleteDialogButton
                             onDelete={() => onDelete(row?.original?.id)}
                             isDisabled={!allowDelete}
                         />

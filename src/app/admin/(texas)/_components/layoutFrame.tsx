@@ -48,7 +48,7 @@ export default function LayoutFrame({ navigation, rightNavigation, children, mai
                     </Button>
                     <Sidebar />
                 </header>
-                <main className='max-h-[calc(100vh-140px)] h-full mt-4 overflow-auto '>
+                <main className='max-h-[calc(100vh-140px)] scrollbar-thin h-full mt-4 overflow-auto '>
                     {navigation?.content}
                 </main>
                 <footer>

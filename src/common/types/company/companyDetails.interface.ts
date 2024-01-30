@@ -1,4 +1,4 @@
-import { IPermissions } from "@/routes";
+import { Permissions } from "../auth/auth.interface";
 import { IUser } from "../user/user.interface";
 
 export interface ICompanyDetails {
@@ -38,7 +38,7 @@ export interface ICompanyDocuments {
 export interface IRoles {
     id: string;
     title: string;
-    permissions: IPermissions[];
+    permissions: Permissions[];
     
     users: IUser[];
     departament_id: string;

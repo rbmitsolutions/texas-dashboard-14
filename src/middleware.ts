@@ -1,6 +1,6 @@
 
 import { NextRequest, NextResponse } from "next/server";
-import { IToken } from "./common/types/auth/auth.interface";
+import { IToken, Permissions } from "./common/types/auth/auth.interface";
 import routers, { IRoute } from "./routes";
 import { isUserAuthorized } from "./common/libs/user/isUserAuthorized";
 import { findRouteByPathname } from "./common/libs/routers";
@@ -49,7 +49,7 @@ export async function middleware(request: NextRequest) {
       if (pathName.includes('/admin/restaurant/menu/create')) {
         const permission = isUserAuthorized(
           token?.permissions,
-          ['admin', 'admin-ghost', 'menu', 'menu-create']
+          [Permissions.ADMIN, Permissions.ADMIN_GHOST, Permissions.MENU_CREATE]
         );
         if (!permission) {
           return NextResponse.redirect(new URL("/admin/roster", request.url));
@@ -59,7 +59,7 @@ export async function middleware(request: NextRequest) {
       if (pathName.includes('/admin/settings')) {
         const permission = isUserAuthorized(
           token?.permissions,
-          ['admin']
+          [Permissions.ADMIN, Permissions.ADMIN_GHOST]
         );
         if (!permission) {
           return NextResponse.redirect(new URL("/admin/roster", request.url));

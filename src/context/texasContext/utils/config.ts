@@ -1,4 +1,5 @@
 import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized";
+import { Permissions } from "@/common/types/auth/auth.interface";
 import { useAuthHooks } from "@/hooks/useAuthHooks";
 import { usePathname } from "next/navigation";
 
@@ -15,14 +16,14 @@ export const useEnableFetch = ({ fetch }: IEnableFetch): boolean => {
     case "tables":
       return (
         isUserAuthorized(user?.permissions, [
-          "admin",
-          "admin-ghost",
-          "booking_reader",
-          "waiters",
-          "tables",
-          "reception",
-          "my_profile",
-          "pass",
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+          Permissions.BOOKING_READER,
+          Permissions.WAITERS,
+          Permissions.TABLES,
+          Permissions.RECEPTION,
+          Permissions.MY_PROFILE,
+          Permissions.PASS,
         ]) &&
         (pathname?.includes("/admin/texas/bookings") ||
           pathname?.includes("/admin/texas/reception") ||
@@ -33,27 +34,27 @@ export const useEnableFetch = ({ fetch }: IEnableFetch): boolean => {
     case "menu":
       return (
         isUserAuthorized(user?.permissions, [
-          "admin",
-          "admin-ghost",
-          "booking_reader",
-          "waiters",
-          "tables",
-          "reception",
-          "my_profile",
-          "pass",
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+          Permissions.BOOKING_READER,
+          Permissions.WAITERS,
+          Permissions.TABLES,
+          Permissions.RECEPTION,
+          Permissions.MY_PROFILE,
+          Permissions.PASS,
         ]) && pathname?.includes("/admin/texas/waiters")
       );
     case "sections":
       return (
         isUserAuthorized(user?.permissions, [
-          "admin",
-          "admin-ghost",
-          "booking_reader",
-          "waiters",
-          "tables",
-          "reception",
-          "my_profile",
-          "pass",
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+          Permissions.BOOKING_READER,
+          Permissions.WAITERS,
+          Permissions.TABLES,
+          Permissions.RECEPTION,
+          Permissions.MY_PROFILE,
+          Permissions.PASS,
         ]) &&
         (pathname?.includes("/admin/texas/bookings") ||
           pathname?.includes("/admin/texas/reception") ||
@@ -64,12 +65,12 @@ export const useEnableFetch = ({ fetch }: IEnableFetch): boolean => {
     case "orderController":
       return (
         isUserAuthorized(user?.permissions, [
-          "admin",
-          "admin-ghost",
-          "waiters",
-          "tables",
-          "reception",
-          "pass",
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+          Permissions.WAITERS,
+          Permissions.TABLES,
+          Permissions.RECEPTION,
+          Permissions.PASS,
         ]) &&
         (pathname?.includes("/admin/texas/reception") ||
           pathname?.includes("/admin/texas/waiters") ||
@@ -79,9 +80,9 @@ export const useEnableFetch = ({ fetch }: IEnableFetch): boolean => {
     case "transactions":
       return (
         isUserAuthorized(user?.permissions, [
-          "admin",
-          "admin-ghost",
-          "reception",
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+          Permissions.RECEPTION,
         ]) && pathname?.includes("/admin/texas/reception")
       );
     default:

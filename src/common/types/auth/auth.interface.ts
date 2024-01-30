@@ -17,24 +17,6 @@ export enum Permissions {
   MENU_UPDATE = 'menu-update',
   MENU_DELETE = 'menu-delete'
 }
-export type IPermissions =
-  | "my_profile"
-  | "admin"
-  | "admin-ghost"
-  | "reception"
-  | "booking_reader"
-  | 'booking_pagination'
-  | "booking_adm"
-  | "tables"
-  | "pass"
-  | "orders"
-  | "haccp_admin"
-  | "waiters"
-  | 'day_roster'
-  | 'menu'
-  | 'menu-create'
-  | 'menu-update'
-  | 'menu-delete'
 
 //token from texas-dashboard does not have roster-password
 export interface IToken {
@@ -43,7 +25,7 @@ export interface IToken {
   refresh_token: any;
   name: string;
   profile_image: string;
-  permissions: IPermissions[];
+  permissions: Permissions[];
 }
 
 export interface IRefreshToken {

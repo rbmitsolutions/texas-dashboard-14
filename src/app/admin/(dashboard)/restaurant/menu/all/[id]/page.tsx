@@ -197,10 +197,10 @@ export default function MenuItemPage(params: { params: { id: string } }) {
             }
         })
     };
-   
+
 
     useEffect(() => {
-        if (menu) {
+        if (menu && section) {
             form.reset({
                 title: menu?.title || '',
                 short_title: menu?.short_title || '',
@@ -220,11 +220,12 @@ export default function MenuItemPage(params: { params: { id: string } }) {
             })
             if (files) {
                 const urls = files?.data?.filter(x => x.id !== menu?.thumbnail_file_id).map(x => x.url)
-                form.setValue('images', urls)
+                if (urls?.length > 0) {
+                    form.setValue('images', urls)
+                }
             }
         }
-    }, [files, form, menu, params.params.id])
-
+    }, [files, form, menu, params.params.id, section])
 
     return (
         <Wrap

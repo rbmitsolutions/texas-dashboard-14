@@ -10,20 +10,21 @@ import { Button } from "@/components/ui/button"
 import Wrap from "@/components/common/wrap"
 
 //hooks
-import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
+import { useDELETERestaurantDataHooks, useGETRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 import { Checkbox } from "@/components/ui/checkbox"
 import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized"
 import { Permissions } from "@/common/types/auth/auth.interface"
 import { useAuthHooks } from "@/hooks/useAuthHooks"
 
 export default function AllMenuPage() {
-    const { user: {permissions} } = useAuthHooks()
+    const { user: { permissions } } = useAuthHooks()
     const router = useRouter()
     const [sectionSelected, setSectionSelected] = useState<string | undefined>('all')
     const {
         restaurantAllMenu: menu,
         setGETRestaurantDataParams: setMenu,
         GETRestaurantDataParams: GETMenu,
+        refetchRestaurantData: refetchMenu,
         isRestaurantDataFetching: isMenuLoading,
         restaurantDataError: menuError
     } = useGETRestaurantDataHooks({
@@ -62,6 +63,18 @@ export default function AllMenuPage() {
                 }
             }
         }
+    })
+
+    const {
+        updateRestaurantData: updateMenu,
+    } = usePUTRestaurantDataHooks({
+        query: 'MENU',
+        toRefetch: refetchMenu
+    })
+
+    const { deleteRestaurantData: deleteMenu } = useDELETERestaurantDataHooks({
+        query: 'MENU',
+        toRefetch: refetchMenu
     })
 
     const sectionsOptions = menuSections?.data?.map(section => ({
@@ -107,7 +120,7 @@ export default function AllMenuPage() {
                                 permissions,
                                 [Permissions.MENU_CREATE]
                             )}
-                            >
+                        >
                             New Item
                         </Button>
                         <label htmlFor="to_order" className='flex items-center cursor-pointer'>
@@ -214,11 +227,22 @@ export default function AllMenuPage() {
                         permissions,
                         [Permissions.MENU_UPDATE]
                     ),
-                    onDelete: (id: string) => console.log(id),
+                    onDelete: (id: string) => deleteMenu({
+                        menu: {
+                            id
+                        }
+                    }),
                     allowDelete: isUserAuthorized(
                         permissions,
                         [Permissions.MENU_DELETE]
-                    )
+                    ),
+                    udpateMenu: (data) => updateMenu({
+                        menu: {
+                            menu: {
+                                ...data
+                            }
+                        }
+                    }),
                 })}
                 data={menu?.data}
             />

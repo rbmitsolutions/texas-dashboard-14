@@ -1,23 +1,5 @@
 import Icon from "./common/libs/lucida-icon";
-
-export type IPermissions =
-  | "my_profile"
-  | "admin"
-  | "admin-ghost"
-  | "reception"
-  | "booking_reader"
-  | 'booking_pagination'
-  | "booking_adm"
-  | "tables"
-  | "pass"
-  | "orders"
-  | "haccp_admin"
-  | "waiters"
-  | 'day_roster'
-  | 'menu'
-  | 'menu-create'
-  | 'menu-update'
-  | 'menu-delete'
+import { Permissions } from "./common/types/auth/auth.interface";
 
 export interface IRoute {
   path: string;
@@ -27,7 +9,7 @@ export interface IRoute {
   collapse?: boolean;
   items?: IRoute[];
 
-  authorization: IPermissions[];
+  authorization: Permissions[];
   auth_device?: boolean;
 }
 
@@ -59,7 +41,7 @@ const routers: IRoute[] = [
     icon: <Icon name='AArrowDown' size={14} />,
     // icon: <Wrench />,
     layout: "/admin/texas/waiters",
-    authorization: ["my_profile"],
+    authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST, Permissions.MENU],
     collapse: false,
   },
   // {
@@ -103,7 +85,12 @@ const routers: IRoute[] = [
     layout: "/admin",
     icon: <Icon name='AArrowDown' size={14} />,
     collapse: true,
-    authorization: ["admin", 'admin-ghost', "booking_reader", "menu"],
+    // authorization: ["admin", 'admin-ghost', "booking_reader", "menu"],
+    authorization: [
+      Permissions.ADMIN,
+      Permissions.ADMIN_GHOST,
+      Permissions.MENU
+    ],
     //need [menu-list, menu-create]
     items: [
       // {
@@ -147,7 +134,12 @@ const routers: IRoute[] = [
         icon: <Icon name='AArrowDown' size={14} />,
         layout: "/admin/restaurant",
         collapse: true,
-        authorization: ["admin", 'admin-ghost', 'menu'],
+        // authorization: ["admin", 'admin-ghost', 'menu'],
+        authorization: [
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+          Permissions.MENU
+        ],
         //need [menu-list, menu-create]
         items: [
           {
@@ -155,7 +147,12 @@ const routers: IRoute[] = [
             path: "/all",
             icon: <Icon name='AArrowDown' size={14} />,
             layout: "/admin/restaurant/menu",
-            authorization: ["admin", 'admin-ghost', 'menu'],
+            // authorization: ["admin", 'admin-ghost', 'menu'],
+            authorization: [
+              Permissions.ADMIN,
+              Permissions.ADMIN_GHOST,
+              Permissions.MENU
+            ],
             //routes [GET-MENU, GET-MENU-SECTION]
             //need [menu-list]
           },
@@ -164,7 +161,13 @@ const routers: IRoute[] = [
             path: "/create/section",
             icon: <Icon name='AArrowDown' size={14} />,
             layout: "/admin/restaurant/menu",
-            authorization: ["admin", 'admin-ghost', 'menu', 'menu-create'],
+            // authorization: ["admin", 'admin-ghost', 'menu', 'menu-create'],
+            authorization: [
+              Permissions.ADMIN,
+              Permissions.ADMIN_GHOST,
+              Permissions.MENU,
+              Permissions.MENU_CREATE
+            ],
             //routes [GET-MENU, GET-PRINTERS GET-MENU_ADD_ONS, POST-MENU_ADD_ONS, PUT-MENU_ADD_ONS, DELETE-MENU_ADD_ONS, GET-MENU_SECTION, GET-MENU_TYPES, POST-MENU_SECTION, DELETE-MENU_SECTION, POST-MENU_TYPE, DELETE-MENU_TYPE]
             //meed [menu-create]
           },
@@ -178,7 +181,12 @@ const routers: IRoute[] = [
     icon: <Icon name='AArrowDown' size={14} />,
     layout: "/admin",
     collapse: true,
-    authorization: ["admin", 'admin-ghost', 'haccp_admin'],
+    // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
+    authorization: [
+      Permissions.ADMIN,
+      Permissions.ADMIN_GHOST,
+      Permissions.HACCP_ADMIN
+    ],
     //need [user-list, user-list-filled, haccp-list, haccp-create, form-data-list]
     items: [
       {
@@ -187,7 +195,8 @@ const routers: IRoute[] = [
         icon: <Icon name='AArrowDown' size={14} />,
         layout: "/admin/hrsystem",
         collapse: true,
-        authorization: ["admin", 'admin-ghost'],
+        // authorization: ["admin", 'admin-ghost'],
+        authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST],
         //need [user-list, user-list-filled]
         items: [
           {
@@ -195,7 +204,8 @@ const routers: IRoute[] = [
             path: "/all",
             icon: <Icon name='AArrowDown' size={14} />,
             layout: "/admin/hrsystem/employees",
-            authorization: ["admin", 'admin-ghost'],
+            // authorization: ["admin", 'admin-ghost'],
+            authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST],
             //rotas [GET-USER, GET-DEPARTAMENTS]
             //need [user-list]
           },
@@ -218,7 +228,8 @@ const routers: IRoute[] = [
             path: "/filled",
             icon: <Icon name='AArrowDown' size={14} />,
             layout: "/admin/hrsystem/employees",
-            authorization: ["admin", 'admin-ghost'],
+            // authorization: ["admin", 'admin-ghost'],
+            authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST],
             //rotas [GET-USER, GET-ROLES]
             //need [user-list-filled]
           },
@@ -261,7 +272,12 @@ const routers: IRoute[] = [
         icon: <Icon name='AArrowDown' size={14} />,
         layout: "/admin/hrsystem",
         collapse: true,
-        authorization: ["admin", 'admin-ghost', 'haccp_admin'],
+        // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
+        authorization: [
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+          Permissions.HACCP_ADMIN
+        ],
         //need [form-data-list]
         items: [
           {
@@ -269,7 +285,12 @@ const routers: IRoute[] = [
             path: "/data",
             icon: <Icon name='AArrowDown' size={14} />,
             layout: "/admin/hrsystem/forms",
-            authorization: ["admin", 'admin-ghost', 'haccp_admin'],
+            // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
+            authorization: [
+              Permissions.ADMIN,
+              Permissions.ADMIN_GHOST,
+              Permissions.HACCP_ADMIN
+            ],
             //rotas [GET-FORM-DATA, GET-FORMS]
             //need [form-data-list]
           },
@@ -295,7 +316,12 @@ const routers: IRoute[] = [
         icon: <Icon name='AArrowDown' size={14} />,
         layout: "/admin/hrsystem",
         collapse: true,
-        authorization: ["admin", 'admin-ghost', 'haccp_admin'],
+        // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
+        authorization: [
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+          Permissions.HACCP_ADMIN
+        ],
         //need [haccp-list, haccp-create]
         auth_device: true,
         items: [
@@ -304,7 +330,12 @@ const routers: IRoute[] = [
             path: "/all",
             icon: <Icon name='AArrowDown' size={14} />,
             layout: "/admin/hrsystem/reports",
-            authorization: ["admin", 'admin-ghost', 'haccp_admin'],
+            // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
+            authorization: [
+              Permissions.ADMIN,
+              Permissions.ADMIN_GHOST,
+              Permissions.HACCP_ADMIN
+            ],
             auth_device: true,
             //rotas [GET-HACCP-REPORTS, DELETE-HACCP-REPORTS]
             //need [haccp-list, haccp-delete]
@@ -314,7 +345,12 @@ const routers: IRoute[] = [
             path: "/create",
             icon: <Icon name='AArrowDown' size={14} />,
             layout: "/admin/hrsystem/reports",
-            authorization: ["admin", 'admin-ghost', 'haccp_admin'],
+            // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
+            authorization: [
+              Permissions.ADMIN,
+              Permissions.ADMIN_GHOST,
+              Permissions.HACCP_ADMIN
+            ],
             auth_device: true,
             //rotas [GET-FORMS, GET-FORMS_SECTION, POST-HACCP_REPORTS]
             //need [haccp-create]
@@ -394,7 +430,8 @@ const routers: IRoute[] = [
     path: "",
     icon: <Icon name='AArrowDown' size={14} />,
     layout: "/admin/roster",
-    authorization: ["my_profile"],
+    // authorization: ["my_profile"],
+    authorization: [Permissions.MY_PROFILE],
     auth_device: false,
     collapse: false,
   },
@@ -403,7 +440,7 @@ const routers: IRoute[] = [
     path: "",
     icon: <Icon name='AArrowDown' size={14} />,
     layout: "/admin/requests",
-    authorization: ["my_profile"],
+    authorization: [Permissions.MY_PROFILE],
     auth_device: false,
     collapse: false,
   },
@@ -412,7 +449,7 @@ const routers: IRoute[] = [
     path: "",
     icon: <Icon name='AArrowDown' size={14} />,
     layout: "/admin/company",
-    authorization: ["my_profile"],
+    authorization: [Permissions.MY_PROFILE],
     auth_device: false,
     collapse: false,
   },
@@ -421,7 +458,7 @@ const routers: IRoute[] = [
     path: "",
     icon: <Icon name='AArrowDown' size={14} />,
     layout: "/admin/myinfo",
-    authorization: ["my_profile"],
+    authorization: [Permissions.MY_PROFILE],
     auth_device: false,
     collapse: false,
   },

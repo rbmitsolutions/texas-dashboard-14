@@ -221,15 +221,15 @@ export interface IPUTMenuBody {
         add: string[]
         remove: string[]
       }
-      f_options: {
+      f_options?: {
         remove: string[]
         add: string[]
       }
-      go_with_ids: {
+      go_with_ids?: {
         remove: string[]
         add: string[]
       }
-      add_ons:{
+      add_ons?:{
         remove: string[]
         add: string[]
       }

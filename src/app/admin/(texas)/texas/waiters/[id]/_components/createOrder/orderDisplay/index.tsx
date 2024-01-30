@@ -21,7 +21,7 @@ export default function OrderDisplay({ menu, order }: OrderDisplayProps) {
                     }
                 </div>
             </div>
-            <main className='flex-col-container gap-2 h-full max-h-[390px] scrollbar-thin overflow-auto p-2'>
+            <main className='flex-col-container gap-2 h-full max-h-[380px] scrollbar-thin overflow-auto p-2'>
                 {order?.add_ons?.sort((a, b) => {
                     if (a.is_mandatory && !b.is_mandatory) {
                         return -1;
