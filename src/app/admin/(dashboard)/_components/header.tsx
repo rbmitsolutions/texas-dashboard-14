@@ -54,7 +54,9 @@ export function Header() {
                         {user && user?.name?.split('')[0]}
                     </AvatarFallback>
                 </Avatar>
-                <Settings />
+                {isUserAuthorized(user?.permissions, [Permissions.ADMIN, Permissions.ADMIN_GHOST]) &&
+                    <Settings />
+                }
                 <ThemeToggle />
                 <SignOut />
             </div>
