@@ -1,6 +1,6 @@
+'use client'
 import { cn } from "@/common/libs/shadcn/utils";
-import { Header } from "./_components/header";
-import { Sidebar } from "./_components/sideBar";
+import { TexasHooksContextProvider } from "@/context/texasContext/TexasContext";
 
 interface TexasLayoutProps {
     children: React.ReactNode;
@@ -10,7 +10,9 @@ export default function TexasLayout({ children }: TexasLayoutProps) {
     return (
         <main>
             <main className={cn("relative min-h-screen")}>
-                {children}
+                <TexasHooksContextProvider>
+                    {children}
+                </TexasHooksContextProvider>
             </main>
         </main>
     )
