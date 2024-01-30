@@ -180,7 +180,7 @@ export default function ImageCropper({ image, cropSize, cropShape = 'rect', onSa
                                 />
                             </Button>
                             <Button
-                                disabled={isLoading}
+                                disabled={isLoading || !newImage}
                                 isLoading={isLoading}
                                 onClick={handleCroppedImage}
                                 leftIcon="Save"

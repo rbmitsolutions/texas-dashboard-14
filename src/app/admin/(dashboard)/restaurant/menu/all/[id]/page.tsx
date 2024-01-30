@@ -202,21 +202,21 @@ export default function MenuItemPage(params: { params: { id: string } }) {
     useEffect(() => {
         if (menu) {
             form.reset({
-                title: menu?.title,
-                short_title: menu?.short_title,
-                description: menu?.description,
+                title: menu?.title || '',
+                short_title: menu?.short_title || '',
+                description: menu?.description || '',
                 thumbnail: menu?.thumbnail || '',
-                value: menu?.value,
-                profit: menu?.profit,
-                to_print_ids: menu?.to_print_ids,
-                mn_type_id: menu?.mn_type_id,
+                value: menu?.value || 0,
+                profit: menu?.profit || 0,
+                to_print_ids: menu?.to_print_ids || [],
+                mn_type_id: menu?.mn_type_id || '',
                 website: menu?.website,
                 to_order: menu?.to_order,
-                allergens: menu?.allergens,
-                go_with_ids: menu?.go_with_ids,
-                options_priority: getOptionsPriorityValueAsKeyString(String(menu?.options_priority)),
-                add_ons: menu?.add_ons?.map((item) => item?.id),
-                f_options: menu?.f_options?.map((item) => item?.id),
+                allergens: menu?.allergens || [],
+                go_with_ids: menu?.go_with_ids || [],
+                options_priority: getOptionsPriorityValueAsKeyString(String(menu?.options_priority)) || 'LOW',
+                add_ons: menu?.add_ons?.map((item) => item?.id) || [],
+                f_options: menu?.f_options?.map((item) => item?.id) || [],
             })
             if (files) {
                 const urls = files?.data?.filter(x => x.id !== menu?.thumbnail_file_id).map(x => x.url)

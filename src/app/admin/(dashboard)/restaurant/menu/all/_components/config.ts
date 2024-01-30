@@ -42,7 +42,6 @@ export const getUpdateMenuInfo = (data: CreateMenuFormSchemaType, menu: IMenu, f
     }
 
     if(hasImagesChanged) {
-        console.log("hasImagesChanged", hasImagesChanged)
         updatedMenu.menu.images = {
             add: data.images?.filter(f => !files?.map((option) => option.url).includes(f)).filter(f => f !== "") as string[],
             remove: files?.filter(f => !data.images?.includes(f.url)).map(f => f.id) as string[]

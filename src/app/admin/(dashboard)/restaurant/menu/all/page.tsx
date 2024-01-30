@@ -22,6 +22,7 @@ export default function AllMenuPage() {
         setGETRestaurantDataParams: setMenu,
         GETRestaurantDataParams: GETMenu,
         isRestaurantDataFetching: isMenuLoading,
+        restaurantDataError: menuError
     } = useGETRestaurantDataHooks({
         query: 'MENU',
         keepParmas: true,
@@ -73,6 +74,7 @@ export default function AllMenuPage() {
     return (
         <Wrap
             isLoading={isMenuLoading}
+            error={menuError}
             header={{
                 title: {
                     title: 'Menu',

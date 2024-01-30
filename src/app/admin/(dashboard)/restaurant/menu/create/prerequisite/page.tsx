@@ -25,7 +25,7 @@ export default function MenuPrerequisite() {
             menu: {
                 all: {
                     pagination: {
-                        take: 20,
+                        take: 10,
                         skip: 0
                     },
                 }

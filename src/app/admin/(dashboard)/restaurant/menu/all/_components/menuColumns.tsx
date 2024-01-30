@@ -6,6 +6,7 @@ import { ImagesPath } from "@/common/types/imges"
 import { cn } from "@/common/libs/shadcn/utils"
 import { Button } from "@/components/ui/button"
 import Icon from "@/common/libs/lucida-icon"
+import { Switch } from "@/components/ui/switch"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -64,19 +65,40 @@ export const menuColumnsTable = ({
             }
         },
         {
-            id: "description",
-            accessorKey: "Description",
-            // cell: ({ row }) => {
-            //     return (
-            //         <h2>{row?.original?.types?.length} linked</h2>
-            //     )
-            // },
+            id: "website",
+            accessorKey: "Website",
+            size: 80,
             cell: ({ row }) => {
                 return (
-                    row?.original?.description
+                    <Switch
+                        disabled
+                        checked={row?.original?.website}
+                    />
+                )
+            }
+        },
+        {
+            id: "to_order",
+            accessorKey: "Order",
+            size: 80,
+            cell: ({ row }) => {
+                return (
+                    <Switch
+                        disabled
+                        checked={row?.original?.to_order}
+                    />
+                )
+            }
+        },
+        {
+            id: "description",
+            accessorKey: "Description",
+            cell: ({ row }) => {
+                return (
+                    <span className='line-clamp-2'>{row?.original?.description}</span>
                 )
             },
-            size: 400,
+            size: 500,
         },
         {
             accessorKey: "actions",

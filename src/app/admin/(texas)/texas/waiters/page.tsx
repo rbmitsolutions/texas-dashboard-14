@@ -9,7 +9,6 @@ import Link from 'next/link';
 
 export default function Tables() {
     const { menu } = useOrderSystemMenuStore()
-    console.log(menu)
     return (
         <LayoutFrame
             navigation={{

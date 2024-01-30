@@ -72,10 +72,6 @@ export default function CreateReportsForm({ forms, formSections, create }: Creat
                 title: data?.title,
                 description: data?.description
             }
-        }, {
-            onError: (err) => {
-                console.log(err)
-            }
         })
     }
 

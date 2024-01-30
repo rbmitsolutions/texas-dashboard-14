@@ -41,7 +41,6 @@ export default function RequestForm({ createRequest, isCreateRequestLoading }: R
         const dateStr = formatDate({ date, f: "yyyy-MM-dd" })
         setDates(prev => {
             if (prev.includes(dateStr)) {
-                console.log('includes')
                 return prev.filter(d => d !== dateStr)
             }
             return [...prev, dateStr]

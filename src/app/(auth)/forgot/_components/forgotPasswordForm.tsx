@@ -34,7 +34,6 @@ export function ForgotPasswordForm() {
         //     success: "Signed in successfully!",
         //     error: (err) => err.message,
         //   })
-        console.log(formData)
         form.reset()
         //   router.refresh()
 

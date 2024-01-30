@@ -1,57 +1,70 @@
-import { cn } from "@/common/libs/shadcn/utils";
-import { IMenu, IMenuAddOns } from "@/common/types/restaurant/menu.interface";
-import { Button } from "@/components/ui/button";
+import { memo, useState } from "react";
+import Icon from "@/common/libs/lucida-icon";
+
+//components
 import {
     AlertDialog,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { memo, useEffect, useState } from "react";
-import MenuOptionsComponent from "./optionsComponent";
-import Icon from "@/common/libs/lucida-icon";
-import AddOnsComponent from "./addOnsComponent";
+import { Button } from "@/components/ui/button";
+import MenuOptionsComponent from "./menuOptionsComponent";
+import CreateOrder from "./createOrder";
+
+//store
+import { getFilteredOrderSystemMenu } from "@/store/texas/menu";
+
+//hooks
+import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 
 interface MenuOrderItemProps {
-    menu: IMenu
+    menu: IGETMenuOrderSystemResponse
     bg: string
+    menuData: IGETMenuOrderSystemResponse[]
 }
 
-
-export function MenuOrderItem({ menu, bg }: MenuOrderItemProps) {
-    const [menuItem, setMenuItem] = useState<IMenu>(menu)
+export function MenuOrderItem({ menu, bg, menuData }: MenuOrderItemProps) {
+    const [menuItem, setMenuItem] = useState<IGETMenuOrderSystemResponse>(menu)
     const [step, setStep] = useState(0)
     const [isOpen, setIsOpen] = useState(false)
 
-    console.log(menu)
     const handleOpen = () => {
+        if(menuItem?.f_options?.length > 0) {
+            setStep(1)
+        }
         setIsOpen(!isOpen)
         setMenuItem(menu)
     }
 
-    const updateMenuItem = (menu: IMenu) => {
-        setMenuItem(menu)
+    const updateMenuItem = (option: IGETMenuOrderSystemResponse) => {
+        setStep(0)
+        setMenuItem(option)
     }
+
+    
 
     const renderContent = () => {
         switch (step) {
             case 0:
-                return <AddOnsComponent menu={menuItem} type_add_ons={menu?.add_ons}/>
-                case 1: {
-                return <MenuOptionsComponent options={menuItem?.f_options} updateMenuItem={updateMenuItem} />
+                return <CreateOrder menu={menuItem} />
+            case 1: {
+                const options = getFilteredOrderSystemMenu({
+                    menuItems: menuData,
+                    menuFilter: {
+                        id: [menuItem?.id, ...menuItem?.f_options?.map((item) => item?.id)],
+                        sort: {
+                            options_priority: true
+                        }
+                    }
+                })
+                return <MenuOptionsComponent options={options} updateMenuItem={updateMenuItem} />
             }
             default:
                 return <h1>Default</h1>
         }
     }
 
-    useEffect(() => {
-        if (menuItem?.f_options?.length > 0) {
-            setStep(1)
-        } else {
-            setStep(0)
-        }
-    }, [menuItem])
     return (
         <AlertDialog
             open={isOpen}
@@ -60,13 +73,16 @@ export function MenuOrderItem({ menu, bg }: MenuOrderItemProps) {
             <AlertDialogTrigger asChild>
                 <Button
                     type='button'
-                    className={cn('flex-container-center justify-center min-h-40 max-h-60 h-full rounded-xl border-2 hover:bg-transparent', bg)}
+                    className='flex-container-center justify-center min-h-40 max-h-60 h-full rounded-xl border-2 bg-background-soft hover:bg-transparent text-black dark:text-white'
+                    // style={{
+                    //     background: bg,
+                    // }}
                 >
                     <h1>{menuItem?.short_title}</h1>
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent className='h-[600px] md:!min-w-[900px]'>
-                <div className='flex justify-center items-center mt-4'>
+                <div className='mt-4'>
                     {renderContent()}
                 </div>
                 <AlertDialogCancel asChild>

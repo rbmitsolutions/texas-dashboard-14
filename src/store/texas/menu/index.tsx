@@ -1,13 +1,14 @@
 import { IGETMenuOrderSystemResponse } from '@/hooks/restaurant/IGetRestaurantDataHooks.interface';
 import { create } from 'zustand';
 
-interface MenuFilterPorps {
+export interface IMenuOrderSystemFilter {
     allergens?: string[]
     mn_type_id?: string
     id?: string[]
     sort?: {
         options_priority?: boolean
-    }
+    },
+    short_title?: string
 }
 
 interface OrderSystemMenuState {
@@ -17,13 +18,13 @@ interface OrderSystemMenuState {
         menuFilter
     }: {
         menu: IGETMenuOrderSystemResponse[]
-        menuFilter?: MenuFilterPorps
+        menuFilter?: IMenuOrderSystemFilter
     }) => void
 }
 
 export const getFilteredOrderSystemMenu = ({ menuItems, menuFilter }: {
     menuItems: IGETMenuOrderSystemResponse[]
-    menuFilter?: MenuFilterPorps
+    menuFilter?: IMenuOrderSystemFilter
 }): IGETMenuOrderSystemResponse[] => {
     if (!menuFilter) return menuItems
 
@@ -50,8 +51,11 @@ export const getFilteredOrderSystemMenu = ({ menuItems, menuFilter }: {
         });
     }
 
-    return menu
+    if (menuFilter?.short_title) {
+        menu = menu?.filter((item) => item?.short_title?.toLowerCase().includes(menuFilter?.short_title?.toLowerCase() || ''));
+    }
 
+    return menu
 }
 
 export const useOrderSystemMenuStore = create<OrderSystemMenuState>((set) => ({

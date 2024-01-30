@@ -28,13 +28,16 @@ interface LayoutFrameProps {
         placement?: 'left' | 'right' | 'top' | 'bottom'
         content: React.ReactNode
     }
+    main?: {
+        header: React.ReactNode
+    }
     children: React.ReactNode;
 }
 
-export default function LayoutFrame({ navigation, rightNavigation, children }: LayoutFrameProps) {
+export default function LayoutFrame({ navigation, rightNavigation, children, main }: LayoutFrameProps) {
     const { user } = useAuthHooks()
     const gridFrame = rightNavigation ? 'grid-cols-1 md:grid-cols-[240px,1fr,240px]' : 'grid-cols-1 md:grid-cols-[240px,1fr]'
-    const defaultCss = 'h-screen p-4 overflow-auto'
+    const defaultCss = 'h-screen p-4 scrollbar-thin overflow-auto'
     const { isOpen, toggleSideBar } = useSideBarStore()
     return (
         <div className={cn("grid", gridFrame)}>
@@ -61,9 +64,13 @@ export default function LayoutFrame({ navigation, rightNavigation, children }: L
                     </div>
                 </footer>
             </div>
-            <div className={cn('', defaultCss)}>
-                <div></div>
-                {children}
+            <div>
+                {main?.header &&
+                    <div className='h-[120px] px-4 pt-4'>{main?.header}</div>
+                }
+                <div className={cn(main?.header ? 'h-[calc(100vh-140px)] scrollbar-thin overflow-auto p-4' : defaultCss)}>
+                    {children}
+                </div>
             </div>
             {rightNavigation &&
                 <div className={cn('hidden bg-background-soft md:block', defaultCss)}>

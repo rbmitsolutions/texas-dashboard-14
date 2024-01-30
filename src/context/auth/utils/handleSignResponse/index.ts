@@ -6,7 +6,6 @@ import { setCookie } from "nookies";
 // import { cookies } from 'next/headers'
 
 export const handleSignResponse = async (response: IToken) => {
-  console.log(1)
   await setCookie(
     null,
     process.env.NEXT_PUBLIC_AUTH_COOKIE_KEY as string,
@@ -16,8 +15,6 @@ export const handleSignResponse = async (response: IToken) => {
       path: "/",
     }
     );
-    console.log(2)
     setAuthHeader(response.token);
-    console.log(3)
   return;
 };

@@ -13,7 +13,6 @@ export enum Allergens {
   SULPHITES = 'Sulphites',
   LUPIN = 'Lupin',
   MOLLUSCS = 'Molluscs',
-  NONE = 'None'
 }
 
 export enum OptionsPriority {
