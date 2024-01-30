@@ -16,6 +16,7 @@ import Wrap from "@/components/common/wrap"
 //interface 
 import { IGETRestaurantDataQuery, IGETMenuResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
 import { IMenu, IMenuType } from "@/common/types/restaurant/menu.interface"
+import { Switch } from "@/components/ui/switch"
 
 interface SelectMenuToLinkProps {
     handleUpdateMenuIds: (id: string, to: 'add' | 'remove') => void
@@ -201,7 +202,10 @@ export default function SelectMenuToLink({ menu, menuTypes, handleUpdateMenuIds,
                     >
                         <div className='flex-container-center justify-between mb-2'>
                             <strong>Menu</strong>
-                            <strong>Priority</strong>
+                            <div className='flex gap-6'>
+                                <small>On Order</small>
+                                <small>Priority</small>
+                            </div>
                         </div>
                         <div className='flex-col-container min-h-80'>
                             {menu?.data?.data?.map(m => {
@@ -215,9 +219,18 @@ export default function SelectMenuToLink({ menu, menuTypes, handleUpdateMenuIds,
                                             />
                                             <span>{m?.title}</span>
                                         </div>
-                                        <span>
-                                            {m?.options_priority}
-                                        </span>
+                                        <div className='flex gap-20'>
+                                            <span>
+                                                <Switch
+                                                    checked={m?.to_order}
+                                                    aria-label="On order system readonly switch"
+                                                    disabled
+                                                />
+                                            </span>
+                                            <span>
+                                                {m?.options_priority}
+                                            </span>
+                                        </div>
                                     </FormLabel>
                                 )
                             })}
