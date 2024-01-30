@@ -1,12 +1,15 @@
 'use client'
 //hooks
-import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
+import { useGETCompanyDataHooks, usePOSTCompanyDataHooks } from "@/hooks/company/companyDataHooks"
 import CreateReportsForm from "./_components/createReportsForm";
+import Wrap from "@/components/common/wrap";
 
 
 export default function Create() {
     const {
         companyAllForms: companyForms,
+        isCompanyDataLoading: isFormsLoading,
+        companyDataError: formsError,
     } = useGETCompanyDataHooks({
         query: 'FORMS',
         defaultParams: {
@@ -44,12 +47,23 @@ export default function Create() {
     })
 
 
-
+    const { createCompanyData: createReport, isCreateCompanyDataLoading: isCreateReportLoading } = usePOSTCompanyDataHooks({
+        query: 'HACCP_REPORTS',
+    })
 
     return (
-        <CreateReportsForm
-            formSections={companyFormSections?.data}
-            forms={companyForms?.data}
-        />
+        <Wrap
+            isLoading={isFormsLoading}
+            error={formsError}
+        >
+            <CreateReportsForm
+                formSections={companyFormSections?.data}
+                forms={companyForms?.data}
+                create={{
+                    createReport,
+                    isCreateReportLoading
+                }}
+            />
+        </Wrap>
     )
 }
