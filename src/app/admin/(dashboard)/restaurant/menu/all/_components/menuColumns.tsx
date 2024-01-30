@@ -6,7 +6,6 @@ import { ImagesPath } from "@/common/types/imges"
 import { cn } from "@/common/libs/shadcn/utils"
 import { Button } from "@/components/ui/button"
 import Icon from "@/common/libs/lucida-icon"
-import Link from "next/link"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -41,6 +40,16 @@ export const menuColumnsTable = ({
             cell: ({ row }) => {
                 return (
                     row?.original?.title
+                )
+            }
+        },
+        {
+            id: "short_title",
+            accessorKey: "Short Title",
+            size: 120,
+            cell: ({ row }) => {
+                return (
+                    row?.original?.short_title
                 )
             }
         },

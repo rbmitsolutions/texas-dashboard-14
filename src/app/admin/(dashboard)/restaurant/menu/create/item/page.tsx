@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from 'react';
 
 //components
+import CreateUpdateMenuForm from '../_components/createUpdateMenuForm';
 import UploadMenuImages from './_components/uploadMenuImages';
 import { Form } from '@/components/ui/form';
 
@@ -13,8 +14,9 @@ import { useDebounce } from '@/common/utils/useDebouce';
 
 //libs
 import { CreateMenuFormSchema, CreateMenuFormSchemaType } from "@/common/libs/zod/forms/restaurant/createMenuForm";
+
+//interface
 import { OptionsPriority } from '@/common/types/restaurant/menu.interface';
-import CreateUpdateMenuForm from '../_components/createUpdateMenuForm';
 
 export default function Create() {
     const {

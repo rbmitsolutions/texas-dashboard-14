@@ -161,6 +161,7 @@ export default function CreateUpdateMenuAddOnsForm({ menuAddOns, createAddOns, u
                                         type="text"
                                         placeholder="on-side"
                                         {...field}
+                                        readOnly={form.watch('multiple')}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -211,7 +212,7 @@ export default function CreateUpdateMenuAddOnsForm({ menuAddOns, createAddOns, u
                                 <div className="space-y-0.5">
                                     <FormLabel>Mutiple Choise</FormLabel>
                                     <FormDescription>
-                                        Can the user select more than one option?
+                                        Can the user select more than one option? if yes, the &quot;flag&quot; will be ignored.
                                     </FormDescription>
                                 </div>
                                 <FormControl>
@@ -236,7 +237,7 @@ export default function CreateUpdateMenuAddOnsForm({ menuAddOns, createAddOns, u
                                             <RadioGroup
                                                 onValueChange={(e: string) => field.onChange(Number(e))}
                                                 defaultValue={String(field.value)}
-                                                className="flex gap-4"
+                                                className="flex flex-wrap gap-4"
                                             >
                                                 {[...Array(form.watch('options').length)].map((_, i) => {
                                                     return (
@@ -272,7 +273,7 @@ export default function CreateUpdateMenuAddOnsForm({ menuAddOns, createAddOns, u
                                             <RadioGroup
                                                 onValueChange={(e: string) => field.onChange(Number(e))}
                                                 defaultValue={String(field.value)}
-                                                className="flex gap-4"
+                                                className="flex flex-wrap gap-4"
                                             >
                                                 {[...Array(form.watch('options').length - form.watch('min') - 1)].map((_, i) => {
                                                     const value = i + form.watch('min')

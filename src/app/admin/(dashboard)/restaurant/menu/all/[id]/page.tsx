@@ -4,7 +4,6 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CreateMenuFormSchema, CreateMenuFormSchemaType } from "@/common/libs/zod/forms/restaurant/createMenuForm"
 import { Form } from "@/components/ui/form"
-import { OptionsPriority } from "@/common/types/restaurant/menu.interface"
 import { useEffect } from "react"
 import UploadMenuImages from "../../create/item/_components/uploadMenuImages"
 import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
@@ -206,7 +205,7 @@ export default function MenuItemPage(params: { params: { id: string } }) {
                 title: menu?.title,
                 short_title: menu?.short_title,
                 description: menu?.description,
-                thumbnail: menu?.thumbnail,
+                thumbnail: menu?.thumbnail || '',
                 value: menu?.value,
                 profit: menu?.profit,
                 to_print_ids: menu?.to_print_ids,
@@ -225,7 +224,6 @@ export default function MenuItemPage(params: { params: { id: string } }) {
             }
         }
     }, [files, form, menu, params.params.id])
-
 
 
     return (

@@ -25,7 +25,7 @@ export default function MenuSectionsPage() {
             menu_sections: {
                 all: {
                     pagination: {
-                        take: 40,
+                        take: 10,
                         skip: 0
                     },
                     includes: {
@@ -49,7 +49,7 @@ export default function MenuSectionsPage() {
             menu_types: {
                 all: {
                     pagination: {
-                        take: 40,
+                        take: 10,
                         skip: 0
                     },
                     includes: {

@@ -67,7 +67,10 @@ export default function CreateMenuTypeForm({ createType, menuSections, isLoading
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Section</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select onValueChange={field.onChange}
+                                defaultValue={field.value}
+                                value={field.value}
+                            >
                                 <FormControl>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select Section" />

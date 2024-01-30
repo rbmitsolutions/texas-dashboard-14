@@ -24,6 +24,7 @@ export default function AllMenuPage() {
         isRestaurantDataFetching: isMenuLoading,
     } = useGETRestaurantDataHooks({
         query: 'MENU',
+        keepParmas: true,
         defaultParams: {
             menu: {
                 all: {

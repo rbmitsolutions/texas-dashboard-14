@@ -49,7 +49,6 @@ export default function RosterComponent({ roster, updateRoster }: RosterComponen
                     <Switch
                         className='bg-orange-200'
                         checked={roster?.status === "confirmed"}
-                        // onClick={handlUpdateRoster}
                         onClick={handlUpdateRoster}
                     />
                 </div>

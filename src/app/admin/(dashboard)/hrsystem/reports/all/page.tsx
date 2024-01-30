@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import { columnsReports } from "./_components/columnsReport"
 import { TableRerport } from "./_components/tableReport"
 import { Button } from "@/components/ui/button"
-import Icon from "@/common/libs/lucida-icon"
 import Wrap from "@/components/common/wrap"
 
 //libs
@@ -50,12 +49,8 @@ export default function Reports() {
     const { deleteCompanyData: deleteHaccpReport, isDeleteCompanyDataLoading: isDeleteLoading } = useDELETECompanyDataHooks({
         query: 'HACCP_REPORTS',
         toRefetch: refetchHaccpReports,
-        // UseMutationOptions: {
-        //     onSuccess: () => refetchHaccpReports()
-        // }
     })
 
-    console.log(user?.user_id)
     return (
         <Wrap
             header={{
@@ -123,6 +118,7 @@ export default function Reports() {
                 className: 'grid grid-cols-1 justify-end items-center gap-4 md:grid-cols-2 lg:grid-cols-[1fr,300px,250px]'
             }}
             isLoading={isHaccpReportsLoading}
+            error={haccpReportsError}
         >
             <TableRerport columns={columnsReports({
                 user: user,

@@ -1,6 +1,7 @@
 'use client'
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { UseMutateFunction } from "react-query";
 import { useEffect, useState } from "react";
 import { CalendarIcon } from "lucide-react";
 
@@ -9,6 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FormSelectComponent } from "./formSelectComponent";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -20,27 +22,26 @@ import { formatDate, getFirstTimeOfTheDay, getLastTimeOfTheDay, subDaysToDate } 
 import { cn } from "@/common/libs/shadcn/utils";
 
 //hooks
-import { usePOSTCompanyDataHooks } from "@/hooks/company/companyDataHooks";
 import { useAuthHooks } from "@/hooks/useAuthHooks";
 
 //interfaces
+import { IPOSTCompanyBody, IPOSTCompanyDataRerturn } from "@/hooks/company/IPostCompanyDataHooks.interface";
 import { IForm, IFormSection } from "@/common/types/company/form.interface";
-import { Skeleton } from "@/components/ui/skeleton";
-import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
 
 interface CreateReportsFormProps {
     forms: IForm[]
     formSections: IFormSection[]
+    create: {
+        createReport: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
+        isCreateReportLoading: boolean
+    }
 }
 
-export default function CreateReportsForm({ forms, formSections }: CreateReportsFormProps) {
+export default function CreateReportsForm({ forms, formSections, create }: CreateReportsFormProps) {
     const { user } = useAuthHooks()
-    const [haccpReport, setHaccpReport] = useState<IHaccpReports>({} as IHaccpReports)
     const [submitError, setSubmitError] = useState<string>("");
     const [preRendered, setPreRendered] = useState<boolean>(false);
-    const { createCompanyData: createReport, isCreateCompanyDataLoading: isCreateReportLoading } = usePOSTCompanyDataHooks({
-        query: 'HACCP_REPORTS',
-    })
+
     const form = useForm<ReportsFormSchemaType>({
         mode: "onChange",
         resolver: zodResolver(ReportsFormSchema),
@@ -59,7 +60,7 @@ export default function CreateReportsForm({ forms, formSections }: CreateReports
     })
 
     const handleCreateReport: SubmitHandler<ReportsFormSchemaType> = async (data) => {
-        await createReport({
+        await create.createReport({
             haccpReport: {
                 created_by: user?.name,
                 created_by_id: user?.user_id,
@@ -72,9 +73,6 @@ export default function CreateReportsForm({ forms, formSections }: CreateReports
                 description: data?.description
             }
         }, {
-            onSuccess: (data) => {
-                setHaccpReport(data as IHaccpReports)
-            },
             onError: (err) => {
                 console.log(err)
             }
@@ -260,9 +258,9 @@ export default function CreateReportsForm({ forms, formSections }: CreateReports
                 <Button
                     type='submit'
                     variant={fields?.length > 0 ? 'default' : 'destructive'}
-                    className='mt-4'
+                    className='mt-4 self-end'
                     leftIcon='AlertTriangle'
-                    disabled={isCreateReportLoading || fields?.length === 0}
+                    disabled={create.isCreateReportLoading || fields?.length === 0}
                 >
                     {fields?.length > 0 ? 'Create' : 'Select one or more forms to create a report'}
                 </Button>

@@ -23,6 +23,7 @@ export default function Data() {
         GETCompanyDataParams: GETFormDataParams,
         setGETCompanyDataParams: setGETFormDataParams,
         isCompanyDataFetching: isFormDataFetching,
+        companyDataError: formsDataError
     } = useGETCompanyDataHooks({
         query: 'FORM_DATA',
         keepParmas: true,
@@ -241,6 +242,8 @@ export default function Data() {
                 },
                 className: 'grid grid-cols-1 justify-end items-center gap-4 md:grid-cols-2 lg:grid-cols-[1fr,300px,200px,40px]'
             }}
+            isLoading={isFormDataFetching}
+            error={formsDataError}
         >
             <FormDataTable data={formsData?.data} isFetching={isFormDataFetching} />
         </Wrap >

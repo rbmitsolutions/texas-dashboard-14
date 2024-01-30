@@ -1,15 +1,19 @@
 'use client'
-import { addDaysToDate, getFirstTimeOfTheDay, getLastTimeOfTheDay } from '@/common/libs/date-fns/dateFormat';
+import { cn } from '@/common/libs/shadcn/utils';
 
 //components
-import { usePUTCompanyDataHooks } from '@/hooks/company/companyDataHooks';
 import RosterComponent from './_components/rosterComponent';
 import Wrap from '@/components/common/wrap';
-import { ROSTER_CONFIG, rosterBackground } from '@/common/libs/company/roster';
-import { IRosterStatus } from '@/common/types/company/roster.interface';
-import { cn } from '@/common/libs/shadcn/utils';
+
+//hooks
 import { useGETUserDataHooks, usePUTUserDataHooks } from '@/hooks/user/useUserDataHooks';
 
+//libs
+import { addDaysToDate, getFirstTimeOfTheDay, getLastTimeOfTheDay } from '@/common/libs/date-fns/dateFormat';
+import { ROSTER_CONFIG, rosterBackground } from '@/common/libs/company/roster';
+
+//interfaces
+import { IRosterStatus } from '@/common/types/company/roster.interface';
 
 export default function Roster() {
     const {
