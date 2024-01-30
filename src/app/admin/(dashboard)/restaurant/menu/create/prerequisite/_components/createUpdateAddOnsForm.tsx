@@ -200,7 +200,7 @@ export default function CreateUpdateMenuAddOnsForm({ menuAddOns, createAddOns, u
                         form={form}
                     />
                     <FormDescription>
-                        You can link this prerequisite to
+                        Do not add options that need to use items from a stock (e.g. &quot;Coke&quot;). These options should be added as prerequisite (e.g. &quot;How Coooked&quot; , &quot;Sauce&quot; ).
                     </FormDescription>
                 </div>
                 <div className='flex-col-container border-2 p-4 rounded-xl gap-4 bg-background-soft'>
