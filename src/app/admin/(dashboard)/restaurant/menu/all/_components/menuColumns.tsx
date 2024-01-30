@@ -7,15 +7,21 @@ import { cn } from "@/common/libs/shadcn/utils"
 import { Button } from "@/components/ui/button"
 import Icon from "@/common/libs/lucida-icon"
 import { Switch } from "@/components/ui/switch"
+import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
 interface MenuColumnsTableProps {
     redirectTo: (path: string) => void
+    onDelete: (id: string) => void
+    allowUpdate: boolean
+    allowDelete: boolean
 }
 
 export const menuColumnsTable = ({
-    redirectTo
+    redirectTo,
+    onDelete,
+    allowDelete
 }: MenuColumnsTableProps): ColumnDef<IMenu>[] => {
     return [
         {
@@ -110,14 +116,15 @@ export const menuColumnsTable = ({
                             variant='orange'
                             size='iconSm'
                             onClick={() => redirectTo(`/admin/restaurant/menu/all/${row?.original?.id}`)}
+                            disabled={!allowDelete}
                         >
 
                             <Icon name="Pen" size={12} />
                         </Button>
-                        {/* <DeleteDialogButton
+                         <DeleteDialogButton
                             onDelete={() => onDelete(row?.original?.id)}
-                            isDisabled={row?.original?.types?.length > 0}
-                        /> */}
+                            isDisabled={!allowDelete}
+                        />
                     </div>
                 )
             },

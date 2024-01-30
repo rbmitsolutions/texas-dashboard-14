@@ -466,37 +466,6 @@ export default function CreateUpdateMenuForm({ form, sections, menu, addOns, isC
             />
 
             <div className='flex justify-end gap-4'>
-                {/* <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                        <Button
-                            type="button"
-                            variant='destructive'
-                            leftIcon='Trash'
-                        >
-                            Delete
-                        </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                This action cannot be undone. This will permanently delete this item.
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction asChild>
-                                <Button
-                                    type="button"
-                                    variant='destructive'
-                                    leftIcon='Trash'
-                                >
-                                    Delete
-                                </Button>
-                            </AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog> */}
                 <Button
                     type="submit"
                     leftIcon='Save'

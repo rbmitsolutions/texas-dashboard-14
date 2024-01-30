@@ -6,15 +6,18 @@ import { useRouter } from "next/navigation"
 //copmponents
 import { menuColumnsTable } from "./_components/menuColumns"
 import { MenuTables } from "./_components/menuTable"
-import { FormLabel } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import Wrap from "@/components/common/wrap"
 
 //hooks
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 import { Checkbox } from "@/components/ui/checkbox"
+import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized"
+import { Permissions } from "@/common/types/auth/auth.interface"
+import { useAuthHooks } from "@/hooks/useAuthHooks"
 
 export default function AllMenuPage() {
+    const { user: {permissions} } = useAuthHooks()
     const router = useRouter()
     const [sectionSelected, setSectionSelected] = useState<string | undefined>('all')
     const {
@@ -99,7 +102,12 @@ export default function AllMenuPage() {
                     <div className='flex-container-center flex-wrap'>
                         <Button
                             onClick={() => router.push('/admin/restaurant/menu/create/section')}
-                            leftIcon='ChefHat'>
+                            leftIcon='ChefHat'
+                            disabled={!isUserAuthorized(
+                                permissions,
+                                [Permissions.MENU_CREATE]
+                            )}
+                            >
                             New Item
                         </Button>
                         <label htmlFor="to_order" className='flex items-center cursor-pointer'>
@@ -201,7 +209,16 @@ export default function AllMenuPage() {
         >
             <MenuTables
                 columns={menuColumnsTable({
-                    redirectTo: (path: string) => router.push(path)
+                    redirectTo: (path: string) => router.push(path),
+                    allowUpdate: isUserAuthorized(
+                        permissions,
+                        [Permissions.MENU_UPDATE]
+                    ),
+                    onDelete: (id: string) => console.log(id),
+                    allowDelete: isUserAuthorized(
+                        permissions,
+                        [Permissions.MENU_DELETE]
+                    )
                 })}
                 data={menu?.data}
             />
