@@ -90,7 +90,6 @@ export default function MenuSectionsPage() {
 
     return (
         <div className='flex-col-container'>
-
             <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
                 <Wrap
                     header={{
@@ -104,7 +103,7 @@ export default function MenuSectionsPage() {
                                 menu_sections: {
                                     all: {
                                         ...prev.menu_sections?.all,
-                                        pagination
+                                        pagination,
                                     }
                                 }
                             })),
@@ -157,12 +156,15 @@ export default function MenuSectionsPage() {
                                 menu_types: {
                                     all: {
                                         ...prev.menu_types?.all,
-                                        title
+                                        title,
+                                        pagination: {
+                                            take: 10,
+                                            skip: 0
+                                        }
                                     }
                                 }
                             })),
                             placeholder: 'Search by title . . .',
-                            isFetching: menuTypesLoading
                         },
                         optionsPopover: {
                             isLoading: menuSectionsLoading || menuTypesLoading,
@@ -173,7 +175,11 @@ export default function MenuSectionsPage() {
                                         menu_types: {
                                             all: {
                                                 ...prev.menu_types?.all,
-                                                section_id: section_id === 'All' ? '' : section_id
+                                                section_id: section_id === 'All' ? '' : section_id,
+                                                pagination: {
+                                                    take: 10,
+                                                    skip: 0
+                                                }
                                             }
                                         }
                                     })),
