@@ -156,12 +156,10 @@ export default function Table({ params }: { params: { id: string } }) {
                                             onCheckedChange={(e) => setFilter(prev => {
                                                 if (e) {
                                                     return {
-                                                        ...prev,
                                                         allergens: [...prev?.allergens || [], a]
                                                     }
                                                 } else {
                                                     return {
-                                                        ...prev,
                                                         allergens: prev?.allergens?.filter((al) => al !== a)
                                                     }
                                                 }
