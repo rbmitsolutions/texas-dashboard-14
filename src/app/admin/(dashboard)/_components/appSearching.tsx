@@ -194,6 +194,48 @@ const data: IData[] = [
                 description: 'Update  Shifts',
                 key_words: ['shifts', 'edit shift', 'create shift', 'edit shift',],
                 path: '/admin/settings/hrsystem/shifts'
+            },
+            {
+                id: 9,
+                title: 'Restaurant Tables',
+                description: 'Update Tables',
+                key_words: ['restaurant sections', 'restaurant tables', 'edit tables', 'edit section'],
+                path: '/admin/settings/restaurant/sections'
+            },
+            {
+                id: 10,
+                title: 'Restaurant Sections',
+                description: 'Update Sections',
+                key_words: ['restaurant sections', 'restaurant tables', 'edit tables', 'edit section'],
+                path: '/admin/settings/restaurant/sections'
+            },
+            {
+                id: 11,
+                title: 'Auth Devices',
+                description: 'Update  Auth Devices',
+                key_words: ['auth devices', 'auth', 'devices'],
+                path: '/admin/settings/restaurant/authdevices'
+            },
+            {
+                id: 12,
+                title: 'Printers',
+                description: 'Update  Printers',
+                key_words: ['printers', 'print', 'prin', 'new printer', 'delete printer', 'update printer'],
+                path: '/admin/settings/restaurant/printers'
+            },
+            {
+                id: 13,
+                title: 'Bookings Open Days',
+                description: 'Update  Open Days',
+                key_words: ['open days', 'booking days open', 'special days', 'close day open', 'close day', 'close time', 'close'],
+                path: '/admin/settings/bookings/opendays'
+            },
+            {
+                id : 14,
+                title : 'Booking Special Days',
+                description : 'Update  Special Days',
+                key_words : ['open days', 'booking days open', 'special days', 'close day open', 'close day', 'close time', 'close'],
+                path : '/admin/settings/bookings/specialdays'
             }
         ]
     }

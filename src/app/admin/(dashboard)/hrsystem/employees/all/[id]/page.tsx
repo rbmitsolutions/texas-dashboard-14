@@ -5,7 +5,6 @@ import { useGETUserDataHooks } from "@/hooks/user/useUserDataHooks";
 export default function User({ params }: { params: { id: string } }) {
     const {
         userDetails: user,
-        refetchUserData
     } = useGETUserDataHooks({
         query: 'USER_COMPANY',
         defaultParams: {

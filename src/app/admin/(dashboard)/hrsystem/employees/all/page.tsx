@@ -57,7 +57,7 @@ export default function Employees() {
     return (
         <div className='flex-col-container gap-8'>
             <div>
-                <IconText 
+                <IconText
                     icon="Users"
                     text='Group actions'
                 />
