@@ -27,7 +27,7 @@ const NavbarButton = ({ router }: NavBarButtonsProps) => {
     return (
         <Button
             variant='link'
-            className={cn('flex gap-2 justify-start px-2 text-sm text-foreground w-full hover:text-primary', pathName === router?.layout + router?.path && 'bg-background-soft')}
+            className={cn('flex gap-2 justify-start px-2 text-sm text-foreground w-full h-10 hover:text-primary', pathName === router?.layout + router?.path && 'bg-background-soft')}
             onClick={() => r.push(router?.layout + router?.path)}
         >
             {router?.icon}
@@ -40,7 +40,7 @@ const NavbarButtonCollapsible = ({ router }: NavBarButtonsProps) => {
     const pathName = usePathname()
     return (
         <Collapsible>
-            <CollapsibleTrigger className={cn('w-full p-2 rounded-md hover:text-primary', 
+            <CollapsibleTrigger className={cn('w-full p-2 rounded-md h-10 hover:text-primary', 
             pathName?.includes(router?.path) && 'bg-background-soft'
             )}>
                 <div className='flex justify-between items-center gap-2 text-sm'>

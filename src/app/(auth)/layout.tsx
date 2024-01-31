@@ -10,7 +10,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         <main className="grid grid-cols-1 grid-rows-2 h-screen md:grid-cols-2 md:grid-rows-1">
             <aside className='flex-col-container-center shadow-2xl bg-[url("/img/background.png")] bg-center bg-no-repeat bg-cover dark:grayscale md:border-r-4' />
             <div className='flex-col-container-center justify-center relative'>
-                <section className='flex-col-container relative space-y-6 p-6 w-full max-w-sm bg-background mt-[-300px] rounded-2xl md:mt-0'>
+                <section className='flex-col-container relative space-y-6 p-4 w-[90%] max-w-sm bg-background mt-[-300px] rounded-2xl md:mt-0'>
                     <div className='absolute top-4 right-4 rounded-md'>
                         <ThemeToggle />
                     </div>

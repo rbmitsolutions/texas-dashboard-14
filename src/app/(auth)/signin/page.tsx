@@ -7,9 +7,9 @@ export default function SignIn() {
     return (
         <div>
             <SignInForm />
-            <Link href="/forgot" className="text-sm text-primary font-semibold">
+            {/* <Link href="/forgot" className="text-sm text-primary font-semibold">
                 Forgot your password?
-            </Link>
+            </Link> */}
         </div>
     )
 }

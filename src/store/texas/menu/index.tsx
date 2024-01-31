@@ -36,7 +36,7 @@ export const getFilteredOrderSystemMenu = ({ menuItems, menuFilter }: {
     }
 
     if (menuFilter?.allergens && menuFilter?.allergens.length > 0) {
-        menu = menu?.filter((item) => item?.allergens?.some((allergen) => menuFilter?.allergens?.includes(allergen)));
+        menu = menu?.filter((item) => item?.allergens?.some((allergen) => !menuFilter?.allergens?.includes(allergen)));
     }
 
     if (menuFilter?.id && menuFilter?.id.length > 0) {

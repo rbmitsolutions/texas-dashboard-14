@@ -31,7 +31,7 @@ export function Header() {
                 <Button size='icon' variant='outline' className='h-8 w-8 flex items-center xl:hidden' onClick={toggleSideBar}>
                     <Icon name='List' size={14} />
                 </Button>
-                <div className='flex flex-col ml-2'>
+                <div className='flex flex-col'>
                     {splitPathname[splitPathname?.length - 1].length < 20 ?
                         <>
                             <span className='capitalize text-[10px]'>/{splitPathname[splitPathname?.length - 2]}/</span>
@@ -47,7 +47,7 @@ export function Header() {
             {isUserAuthorized(user?.permissions, [Permissions.ADMIN, Permissions.ADMIN_GHOST]) &&
                 <AppSearching />
             }
-            <div className='flex-container-center'>
+            <div className='flex-container-center gap-2'>
                 <Avatar className='h-9 w-9'>
                     <AvatarImage src={user?.profile_image} alt={user?.name} />
                     <AvatarFallback>

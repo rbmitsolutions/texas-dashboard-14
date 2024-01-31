@@ -30,7 +30,7 @@ export default function RequestComponent({ request, deleteRequest, isDeleteReque
     }
 
     return (
-        <div className='flex-col-container border-2 p-4 rounded-xl hover:bg-foreground/5'>
+        <div className='flex-col-container border-2 p-4 rounded-xl shadow-lg hover:bg-foreground/5'>
             <div className='flex-container justify-between'>
                 <div className='flex-container-center'>
                     <Icon name='CalendarDays' size={14} />

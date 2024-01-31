@@ -73,7 +73,7 @@ export function MenuOrderItem({ menu, bg, menuData }: MenuOrderItemProps) {
             <AlertDialogTrigger asChild>
                 <Button
                     type='button'
-                    className='flex-container-center justify-center min-h-40 max-h-60 h-full rounded-xl border-2 bg-background-soft hover:bg-transparent text-black dark:text-white'
+                    className='flex-container-center justify-center min-h-40 max-h-60 h-full rounded-xl border-2 bg-background-soft text-black dark:text-white hover:bg-background-soft'
                     // style={{
                     //     background: bg,
                     // }}
