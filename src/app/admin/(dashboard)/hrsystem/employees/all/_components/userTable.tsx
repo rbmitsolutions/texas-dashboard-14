@@ -20,6 +20,8 @@ import {
 import { useState } from "react"
 import Wrap from "@/components/common/wrap"
 import { IDepartaments } from "@/common/types/company/departaments.interface"
+import SendEmail from "@/components/common/sendEmail"
+import { IUser } from "@/common/types/user/user.interface"
 
 interface UserTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -49,6 +51,9 @@ export function UserTable<TData, TValue>({
       columnFilters,
     },
   })
+
+
+  const usersSelected: IUser[] = table.getSelectedRowModel().rows.map(r => r.original) as IUser[]
 
   return (
     <Wrap
@@ -83,13 +88,26 @@ export function UserTable<TData, TValue>({
                   value: r.id
                 }
               }),
-  
+
             ],
             value: table.getColumn("role_id")?.getFilterValue() as string,
             onChange: (e) => table.getColumn("role_id")?.setFilterValue(e == 'all' ? null : e),
           }]
         },
-        className: 'grid grid-cols-[1fr,auto] gap-4 items-center',
+        toRight: (
+          <div>
+            <SendEmail
+              contacts={usersSelected?.map(u => {
+                return {
+                  id: u?.id,
+                  name: u?.name,
+                  email: u?.email
+                }
+              })}
+            />
+          </div>
+        ),
+        className: 'grid grid-cols-[1fr,auto,40px] gap-4 items-center',
       }}
     >
       <div className="rounded-md border">

@@ -3,10 +3,17 @@ import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
 import { useGETUserDataHooks } from "@/hooks/user/useUserDataHooks"
 import { userColumnsTable } from "./_components/userColumnsTable"
 import { UserTable } from "./_components/userTable"
+import SendEmail from "@/components/common/sendEmail"
+import SearchInput from "@/components/common/searchInput"
+import Wrap from "@/components/common/wrap"
+import IconText from "@/components/common/iconText"
 
 export default function Employees() {
     const {
-        allUsers
+        allUsers,
+        setGETUserDataParams,
+        GETUserDataParams,
+        isUserDataLoading
     } = useGETUserDataHooks({
         query: "USER_COMPANY",
         keepParmas: true,
@@ -28,6 +35,7 @@ export default function Employees() {
 
     const {
         companyAllDepartaments: allDepartaments,
+        isCompanyDataLoading: isDepartamentsLoading
     } = useGETCompanyDataHooks({
         query: 'DEPARTAMENTS',
         defaultParams: {
@@ -39,28 +47,60 @@ export default function Employees() {
                     },
                     includes: {
                         roles: '1'
-                    
+
                     }
                 }
             }
         }
     })
 
-    if (!allUsers || !allDepartaments) return null
-
     return (
         <div className='flex-col-container gap-8'>
-            {allDepartaments?.data?.map(d => {
-                const users = allUsers?.data?.filter(u => u?.role?.departament_id === d.id)
-                return (
-                    <UserTable
-                        key={d.id}
-                        departament={d}
-                        columns={userColumnsTable}
-                        data={users}
+            <div>
+                <IconText 
+                    icon="Users"
+                    text='Group actions'
+                />
+                <div className='grid grid-cols-[1fr,40px,40px] gap-2 border-2 p-4 rounded-lg mt-2'>
+                    <SearchInput
+                        onSearchChange={e => setGETUserDataParams(prev => ({
+                            user: {
+                                all: {
+                                    ...prev.user?.all,
+                                    name: e
+                                }
+                            }
+                        }))}
+                        value={GETUserDataParams?.user?.all?.name || ''}
+                        placeholder="Search by name"
+                        custom="max-w-sm"
                     />
-                )
-            })}
+                    <SendEmail
+                        contacts={allUsers?.data?.filter(u => {
+                            return {
+                                id: u?.id,
+                                name: u?.name,
+                                email: u?.email
+                            }
+                        })}
+                    />
+                </div>
+            </div>
+            <Wrap
+                isLoading={isDepartamentsLoading || isUserDataLoading}
+            >
+                {allDepartaments?.data?.map(d => {
+                    const users = allUsers?.data?.filter(u => u?.role?.departament_id === d.id)
+                    return (
+                        <UserTable
+                            key={d.id}
+                            departament={d}
+                            columns={userColumnsTable}
+                            data={users}
+                        />
+                    )
+                })}
+            </Wrap>
 
         </div>
     )
