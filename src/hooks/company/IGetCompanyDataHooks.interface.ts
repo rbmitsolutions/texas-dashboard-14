@@ -1,4 +1,4 @@
-import { ICompanyContacts, ICompanyDetails, ICompanyDocuments, ICompanyLinks, IRoles } from "@/common/types/company/companyDetails.interface";
+import { ICompanyContacts, ICompanyDetails, ICompanyDocuments, ICompanyLinks, IDuties, IRoles, IShifts } from "@/common/types/company/companyDetails.interface";
 import { IDepartaments } from "@/common/types/company/departaments.interface";
 import { IFiles } from "@/common/types/company/files.interface";
 import { IForm, IFormData, IFormSection, IFormType } from "@/common/types/company/form.interface";
@@ -221,6 +221,27 @@ export interface IGETDepartamentsQuery {
   };
 }
 
+export interface IGETAllDutiesResponse {
+  data: IDuties[];
+  pagination: IPaginationResponse
+}
+export interface IGETDutiesQuery {
+  all?: {
+    pagination?: IQueryPagination
+  };
+}
+
+export interface IGETAllShiftsResponse {
+  data: IShifts[];
+  pagination: IPaginationResponse
+}
+
+export interface IGETShiftsQuery {
+  all?: {
+      pagination?: IQueryPagination
+  };
+}
+
 export interface IGETCompanyAllFilesResponse {
   data: IFiles[];
   pagination: IPaginationResponse
@@ -239,9 +260,8 @@ export interface IGETFilesQuery {
 }
 
 
-export type IGETCompanyResponse = IGETCompanyRosterResponse | IHaccpReportsResponse | IHaccpReports | IFormsGetAllResponse | IForm | IFormSectionGetAllResponse | IFormSection | IGETFormDataQuery | IFormData | IFiles | IRequests | IRequestsGetAllResponse | ICompanyDetailsResponse | IGETRolesResponse | IRoles | IGETAllDepartamentsResponse | IDepartaments | IGETCompanyAllFilesResponse
-
-export type ICompanyDataQueryType = 'ROSTER' | "ROLES" | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "FILES" | "REQUESTS" | 'DETAILS' | "DEPARTAMENTS"
+export type IGETCompanyResponse = IGETCompanyRosterResponse | IHaccpReportsResponse | IHaccpReports | IFormsGetAllResponse | IForm | IFormSectionGetAllResponse | IFormSection | IGETFormDataQuery | IFormData | IFiles | IRequests | IRequestsGetAllResponse | ICompanyDetailsResponse | IGETRolesResponse | IRoles | IGETAllDepartamentsResponse | IDepartaments | IGETCompanyAllFilesResponse | IGETShiftsQuery | IGETDutiesQuery
+export type ICompanyDataQueryType = 'ROSTER' | "ROLES" | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "FILES" | "REQUESTS" | 'DETAILS' | "DEPARTAMENTS" | "DUTIES" | "SHIFTS"
 
 export interface IGETCompanyDataQuery {
   roster?: IGETCompanyRosterQuery
@@ -254,4 +274,6 @@ export interface IGETCompanyDataQuery {
   details?: IGETCompanyDetailsQuery
   roles?: IGETRolesQuery
   departments?: IGETDepartamentsQuery
+  duties?: IGETDutiesQuery
+  shifts?: IGETShiftsQuery
 }

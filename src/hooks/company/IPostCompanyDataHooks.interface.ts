@@ -1,3 +1,4 @@
+import { IDuties, IShifts } from "@/common/types/company/companyDetails.interface";
 import { IForm, IFormData, IFormSection } from "@/common/types/company/form.interface";
 import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
 import { IRequestsType } from "@/common/types/company/requests.interface";
@@ -60,14 +61,26 @@ export interface IPOSTFormDataBody {
 }
 
 
+export interface IPOSTShiftsBody {
+    title: string
+    hours: number
+    reduce_break_time: boolean;
+    break_minutes: number;
+}
 
-export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "REQUESTS" 
+export interface IPOSTDutiesBody {
+    title: string;
+    departament_id: string;
+}
 
-export type IPOSTCompanyDataRerturn = IRoster | IHaccpReports | IForm | IFormSection | IFormData
+export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "REQUESTS" | 'DUTIES' | 'SHIFTS'
+export type IPOSTCompanyDataRerturn = IRoster | IHaccpReports | IForm | IFormSection | IFormData | IShifts | IDuties
 export interface IPOSTCompanyBody {
     roster?: any,
     haccpReport?: IPOSTHaccpReportsBody
     form?: IPOSTFormBody
     formSection?: IPOSTFormSectionBody
     formData?: IPOSTFormDataBody
+    duty?: IPOSTDutiesBody
+    shift?: IPOSTShiftsBody
 }

@@ -39,11 +39,28 @@ export interface IPUTRosterBody {
     tasks_title?: string[];
 }
 
-export type IPUTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION"
+export interface IPUTShiftsBody {
+    id: string;
+    title: string
+    hours: number
+    reduce_break_time: boolean;
+    break_minutes: number;
+};
+
+
+export interface IPUTDutiesBody {
+    id: string;
+    title?: string;
+    departament_id?: string;
+}
+
+export type IPUTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "DUTIES" | "SHIFTS"
 
 export interface IPUTCompanyBody {
     roster?: IPUTRosterBody,
     haccpReport?: IPUTHaccpReportsBody
     form?: IPUTFormBody
     formSection?: IPUTFormSectionBody
+    duty?: IPUTDutiesBody
+    shift?: IPUTShiftsBody
 }
