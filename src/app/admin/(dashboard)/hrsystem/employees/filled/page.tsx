@@ -87,6 +87,10 @@ export default function Filled() {
                             user: {
                                 all: {
                                     ...prev?.user?.all,
+                                    pagination: {
+                                        take: 40,
+                                        skip: 0
+                                    },
                                     status: 'Filled',
                                     name: e
                                 }

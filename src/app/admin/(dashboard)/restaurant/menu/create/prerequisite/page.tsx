@@ -126,12 +126,15 @@ export default function MenuPrerequisite() {
                                 menu_add_ons: {
                                     all: {
                                         ...prev.menu_add_ons?.all,
-                                        title
+                                        title,
+                                        pagination: {
+                                            take: 10,
+                                            skip: 0
+                                        }
                                     }
                                 }
                             })),
                             placeholder: 'Search by title . . .',
-                            isFetching: isMenuAddOnsLoading
                         },
                         className: 'flex justify-between gap-4'
                     }}

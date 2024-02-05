@@ -160,6 +160,10 @@ export default function AllMenuPage() {
                         menu: {
                             all: {
                                 ...prev?.menu?.all,
+                                pagination: {
+                                    take: 20,
+                                    skip: 0
+                                },
                                 title: e
                             }
                         }

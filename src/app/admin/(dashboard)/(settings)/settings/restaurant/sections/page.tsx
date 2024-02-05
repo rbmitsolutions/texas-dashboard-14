@@ -1,7 +1,7 @@
 export default function Sections () {
     return (
         <div>
-            <h1>Open Days</h1>
+            <h1>Section / tables</h1>
         </div>
     )
 }
