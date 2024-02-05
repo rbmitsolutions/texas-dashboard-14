@@ -57,6 +57,7 @@ export default function SendSms({ contacts }: SendSmsProps) {
                 }
             })
             toast.success('Message Sent')
+            onOpenChange()
         } catch (err) {
             console.log(err)
         }

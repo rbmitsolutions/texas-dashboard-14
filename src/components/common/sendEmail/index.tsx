@@ -62,6 +62,7 @@ export default function SendEmail({ contacts }: SendEmaiLProps) {
                 }
             })
             toast.success('Email Sent')
+            onOpenChange()
         } catch (err) {
             console.log(err)
         }
