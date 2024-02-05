@@ -24,6 +24,9 @@ import { EndPointsTypes } from "@/common/types/routers/endPoints.types"
 //api
 import { api } from "@/common/libs/axios/api"
 import toast from "react-hot-toast"
+import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized"
+import { Permissions } from "@/common/types/auth/auth.interface"
+import { useAuthHooks } from "@/hooks/useAuthHooks"
 
 export interface SendEmailContacts {
     id: string;
@@ -37,6 +40,7 @@ interface SendEmaiLProps {
 
 //todo: change router in back-end to group message
 export default function SendEmail({ contacts }: SendEmaiLProps) {
+    const { user: { permissions } } = useAuthHooks()
     const form = useForm<ComponentsSendEmailSchemaType>({
         mode: "onChange",
         resolver: zodResolver(ComponentsSendEmailSchema),
@@ -73,7 +77,12 @@ export default function SendEmail({ contacts }: SendEmaiLProps) {
             onOpenChange={onOpenChange}
         >
             <SheetTrigger asChild>
-                <Button variant="outline" className='p-1' size='icon'>
+                <Button variant="outline" className='p-1' size='icon'
+                    disabled={!isUserAuthorized(
+                        permissions,
+                        [Permissions.SEND_SMS]
+                    )}
+                >
                     <Icon name="Mail" />
                 </Button>
             </SheetTrigger>
