@@ -62,11 +62,7 @@ api.interceptors.response.use(
                 destroyCookie({}, process.env.NEXT_PUBLIC_AUTH_COOKIE_KEY as string, {
                   path: "/",
                 });
-                //redirect to signin
                 window.location.href = "/signin"
-
-
-                // Router.push("/admin");
               }
             })
             .finally(() => {

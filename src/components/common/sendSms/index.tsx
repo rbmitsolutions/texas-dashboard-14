@@ -12,36 +12,34 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
+import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import Icon from "@/common/libs/lucida-icon"
-import { Input } from "@/components/ui/input"
-import RichText from "../richText"
 
-//lins
-import { ComponentsSendEmailSchema, ComponentsSendEmailSchemaType } from "@/common/libs/zod/forms/components/sendEmail"
+//libs
+import { ComponentsSendSmsSchema, ComponentsSendSmsSchemaType } from "@/common/libs/zod/forms/components/sendSms"
 import { EndPointsTypes } from "@/common/types/routers/endPoints.types"
 
 //api
 import { api } from "@/common/libs/axios/api"
 import toast from "react-hot-toast"
 
-export interface SendEmailContacts {
+export interface SendSmsContacts {
     id: string;
     name: string;
-    email: string;
+    contact_number: string;
 }
 
-interface SendEmaiLProps {
-    contacts: SendEmailContacts[]
+interface SendSmsProps {
+    contacts: SendSmsContacts[]
 }
 
 //todo: change router in back-end to group message
-export default function SendEmail({ contacts }: SendEmaiLProps) {
-    const form = useForm<ComponentsSendEmailSchemaType>({
+export default function SendSms({ contacts }: SendSmsProps) {
+    const form = useForm<ComponentsSendSmsSchemaType>({
         mode: "onChange",
-        resolver: zodResolver(ComponentsSendEmailSchema),
+        resolver: zodResolver(ComponentsSendSmsSchema),
         defaultValues: {
-            subject: 'Texas Steakout',
             message: ''
         },
     });
@@ -50,21 +48,19 @@ export default function SendEmail({ contacts }: SendEmaiLProps) {
         form.reset()
     }
 
-    const onSubmitForm: SubmitHandler<ComponentsSendEmailSchemaType> = async (formData) => {
+    const onSubmitForm: SubmitHandler<ComponentsSendSmsSchemaType> = async (formData) => {
         try {
-            await api.post(`${EndPointsTypes['SERVICES_EMAIL_ENDPOINT']}`, {
+            await api.post(`${EndPointsTypes['SERVICES_SMS_ENDPOINT']}`, {
                 data: {
-                    group: {
-                        email: contacts?.map(c => c.email),
-                        subject: formData.subject,
-                        message: formData.message,
-                    }
+                    messagetext: formData.message,
+                    recipients: contacts.map(c => c.contact_number)
                 }
             })
-            toast.success('Email Sent')
+            toast.success('Message Sent')
         } catch (err) {
             console.log(err)
         }
+
         form.reset()
     };
     return (
@@ -73,12 +69,12 @@ export default function SendEmail({ contacts }: SendEmaiLProps) {
         >
             <SheetTrigger asChild>
                 <Button variant="outline" className='p-1' size='icon'>
-                    <Icon name="Mail" />
+                    <Icon name="Phone" />
                 </Button>
             </SheetTrigger>
             <SheetContent >
                 <SheetHeader>
-                    <SheetTitle>Email To</SheetTitle>
+                    <SheetTitle>Sms To</SheetTitle>
                 </SheetHeader>
                 <div className="flex-col-container">
                     <div className='flex flex-wrap items-start gap-2 max-h-40 overflow-auto scrollbar-thin'>
@@ -93,35 +89,14 @@ export default function SendEmail({ contacts }: SendEmaiLProps) {
                                 className='flex flex-col gap-4 w-full'>
                                 <FormField
                                     control={form.control}
-                                    name="subject"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormControl>
-                                                <Input
-                                                    type="text"
-                                                    placeholder="Subject"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                {form.watch('message').length > 1 &&
-                                    <div
-                                        dangerouslySetInnerHTML={{ __html: form.watch('message') }}
-                                        className='max-h-60 overflow-auto scrollbar-thin p-2 bg-background-soft rounded-lg'
-                                    />
-                                }
-                                <FormField
-                                    control={form.control}
                                     name="message"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormControl>
-                                                <RichText
-                                                    description={field.value}
-                                                    onChange={field.onChange}
+                                                <Textarea
+                                                    {...field}
+                                                    placeholder='Message'
+                                                    className='w-full h-80'
                                                 />
                                             </FormControl>
                                             <FormMessage />

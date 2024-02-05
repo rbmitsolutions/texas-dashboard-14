@@ -7,6 +7,7 @@ import SendEmail from "@/components/common/sendEmail"
 import SearchInput from "@/components/common/searchInput"
 import Wrap from "@/components/common/wrap"
 import IconText from "@/components/common/iconText"
+import SendSms from "@/components/common/sendSms"
 
 export default function Employees() {
     const {
@@ -57,7 +58,7 @@ export default function Employees() {
     return (
         <div className='flex-col-container gap-8'>
             <div>
-                <IconText 
+                <IconText
                     icon="Users"
                     text='Group actions'
                 />
@@ -83,6 +84,15 @@ export default function Employees() {
                                 email: u?.email
                             }
                         })}
+                    />
+                    <SendSms
+                        contacts={allUsers?.data?.map(u => {
+                            return {
+                                id: u?.id,
+                                name: u?.name,
+                                contact_number: u?.contact_number || ''
+                            }
+                        }).filter(u => u.contact_number)}
                     />
                 </div>
             </div>

@@ -22,7 +22,9 @@ export enum Permissions {
 export interface IToken {
   user_id: string;
   token: string;
-  refresh_token: any;
+  refresh_token: {
+    id:string
+  }
   name: string;
   profile_image: string;
   permissions: Permissions[];

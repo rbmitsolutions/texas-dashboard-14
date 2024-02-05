@@ -22,6 +22,7 @@ import Wrap from "@/components/common/wrap"
 import { IDepartaments } from "@/common/types/company/departaments.interface"
 import SendEmail from "@/components/common/sendEmail"
 import { IUser } from "@/common/types/user/user.interface"
+import SendSms from "@/components/common/sendSms"
 
 interface UserTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -95,7 +96,7 @@ export function UserTable<TData, TValue>({
           }]
         },
         toRight: (
-          <div>
+          <div className='flex gap-2'>
             <SendEmail
               contacts={usersSelected?.map(u => {
                 return {
@@ -105,9 +106,18 @@ export function UserTable<TData, TValue>({
                 }
               })}
             />
+            <SendSms
+              contacts={usersSelected?.map(u => {
+                return {
+                  id: u?.id,
+                  name: u?.name,
+                  contact_number: u?.contact_number || ''
+                }
+              }).filter(u => u.contact_number)}
+            />
           </div>
         ),
-        className: 'grid grid-cols-[1fr,auto,40px] gap-4 items-center',
+        className: 'grid grid-cols-[1fr,auto,74px] gap-2 items-center',
       }}
     >
       <div className="rounded-md border">
