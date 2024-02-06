@@ -1,5 +1,6 @@
 //todo: add interface
-export type IFormBuildInput = {}
+
+import { IFormBuildInput } from "@/common/utils/formBuilder";
 
 export interface IFormData {
     id: string;

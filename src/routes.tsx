@@ -295,13 +295,17 @@ const routers: IRoute[] = [
             //rotas [GET-FORM-DATA, GET-FORMS]
             //need [form-data-list]
           },
-          // {
-          //   name: "Create",
-          //   path: "/create",
-          //   icon: <Icon name='AArrowDown' size={14} />,
-          //   layout: "/admin/hrsystem/forms",
-          //   authorization: ["admin", 'admin-ghost', 'haccp_admin'],
-          // },
+          {
+            name: "Create",
+            path: "/create",
+            icon: <Icon name='AArrowDown' size={14} />,
+            layout: "/admin/hrsystem/forms",
+            authorization: [
+              Permissions.ADMIN,
+              Permissions.ADMIN_GHOST,
+              Permissions.HACCP_ADMIN
+            ],
+          },
           // {
           //   name: "Config",
           //   path: "/config",

@@ -122,7 +122,7 @@ const data: IData[] = [
         id: 4,
         title: 'Forms',
         icon: 'FileText',
-        key_words: ['forms', 'form', 'frm', 'frms', 'form data', 'forms data', 'form data', 'create form', 'create forms', 'create frm', 'create frms', 'create form data', 'create forms data', 'create form data'],
+        key_words: ['forms', 'form', 'frm', 'frms', 'form data', 'forms data', 'form data', 'create form', 'create forms', 'create frm', 'create frms', 'create form', 'create forms data', 'create'],
         links: [
             {
                 id: 1,
@@ -130,6 +130,13 @@ const data: IData[] = [
                 description: 'List of forms data',
                 path: '/admin/hrsystem/forms/data',
                 key_words: ['forms', 'form', 'frm', 'frms', 'form data', 'forms data', 'form data']
+            },
+            {
+                id: 2,
+                title: 'Create Form',
+                description: 'Create a new form',
+                path: '/admin/hrsystem/forms/create',
+                key_words: ['forms', 'form', 'frm', 'frms', 'form ', 'create forms ', 'create form ']
             },
             // {
             //     id: 2,
