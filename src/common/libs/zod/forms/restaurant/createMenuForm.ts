@@ -10,9 +10,7 @@ export const CreateMenuFormSchema = z.object({
     description: z.string().optional(),
     thumbnail: z.string().optional(),
 
-    value: z.number().min(0.01, {
-        message: "Minimum 0.01",
-    }),
+    value: z.number(),
     profit: z.number().min(0.01, {
         message: "Minimum 0.01",
     }).max(100, {
