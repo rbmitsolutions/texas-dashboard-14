@@ -73,7 +73,7 @@ const data: IData[] = [
     {
         id: 2,
         title: 'Employees',
-        key_words: ['employees', 'employee', 'emp', 'emps', 'empl', 'empls', 'filled', 'fill', 'gone', 'fired', 'employees filled', 'employee filled', 'emp filled', 'emps filled', 'empl filled', 'empls filled', 'employee filled list', 'employees filled list', 'employee filled list'],
+        key_words: ['employees', 'employee', 'emp', 'emps', 'empl', 'empls', 'filled', 'fill', 'gone', 'fired', 'employees filled', 'employee filled', 'emp filled', 'emps filled', 'empl filled', 'empls filled', 'employee filled list', 'employees filled list', 'employee filled list', 'roster', 'new roster', 'build roster'],
         icon: 'Users',
         links: [
             {
@@ -88,7 +88,14 @@ const data: IData[] = [
                 title: 'Employees Filled',
                 description: 'List of employees filled',
                 path: '/admin/hrsystem/employees/filled',
-                key_words: ['employees filled', 'employee filled', 'emp filled', 'emps filled', 'empl filled', 'empls filled', 'employee filled list', 'employees filled list', 'employee filled list']
+                key_words: ['employees', 'employee', 'emp', 'emps', 'empl', 'empls','employees filled', 'employee filled', 'emp filled', 'emps filled', 'empl filled', 'empls filled', 'employee filled list', 'employees filled list', 'employee filled list']
+            },
+            {
+                id: 2,
+                title: 'Roster',
+                description: 'Build Roster',
+                path: '/admin/hrsystem/roster',
+                key_words: ['employees', 'employee', 'emp', 'emps', 'empl', 'empls', 'roster', 'ros', 'new roster', 'build roster']
             }
         ]
     },
