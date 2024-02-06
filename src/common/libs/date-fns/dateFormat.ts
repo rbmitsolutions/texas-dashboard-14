@@ -1,4 +1,24 @@
-import { format, addDays, subDays, startOfMonth, endOfMonth, startOfDay, endOfDay } from "date-fns";
+import { format, addDays, subDays, startOfMonth, endOfMonth, startOfDay, endOfDay, startOfWeek, parse } from "date-fns";
+
+export const parseDate = (date: string, format: 'dd/MM/yy'): Date => {
+    return parse(date, format, new Date())
+}
+
+export const getMondayOfTheWeek = (date: Date): Date => {
+    return addDays(startOfWeek(date), 1)
+}
+
+export const getSundayOfTheWeek = (date: Date): Date => {
+    return addDays(startOfWeek(date), 7)
+}
+
+export const getFistDayOfTheWeek = (date: Date): Date => {
+    return startOfWeek(date)
+}
+
+export const getLastDayOfTheWeek = (date: Date): Date => {
+    return addDays(startOfWeek(date), 6)
+}
 
 export const getFirstDayOfMonth = (date: Date): Date => {
     return startOfMonth(date)
@@ -10,7 +30,7 @@ export const getLastDayOfMonth = (date: Date): Date => {
 
 interface IFormatDate {
     date: Date,
-    f?: 'dd/MM/yyyy' | 'dd/MM/yyyy HH:mm' | 'LLL dd, yy' | 'PPP' | 'dd, LLL, yy' | 'yyyy-MM-dd'
+    f?: 'dd/MM/yyyy' | 'dd/MM/yyyy HH:mm' | 'LLL dd, yy' | 'PPP' | 'dd, LLL, yy' | 'yyyy-MM-dd' | 'dd LLL, yy'
 }
 
 export const formatDate = ({ date, f = 'dd/MM/yyyy' }: IFormatDate): string => {
