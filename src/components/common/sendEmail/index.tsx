@@ -2,6 +2,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Badge } from "@/components/ui/badge"
 
+//components
 import {
     Sheet,
     SheetClose,
@@ -36,10 +37,11 @@ export interface SendEmailContacts {
 
 interface SendEmaiLProps {
     contacts: SendEmailContacts[]
+    size?: 'icon' | 'iconSm' | 'iconExSm'
 }
 
 //todo: change router in back-end to group message
-export default function SendEmail({ contacts }: SendEmaiLProps) {
+export default function SendEmail({ contacts, size = 'icon' }: SendEmaiLProps) {
     const { user: { permissions } } = useAuthHooks()
     const form = useForm<ComponentsSendEmailSchemaType>({
         mode: "onChange",
@@ -77,7 +79,10 @@ export default function SendEmail({ contacts }: SendEmaiLProps) {
             onOpenChange={onOpenChange}
         >
             <SheetTrigger asChild>
-                <Button variant="outline" className='p-1' size='icon'
+                <Button
+                    variant="outline"
+                    className='p-1'
+                    size={size}
                     disabled={!isUserAuthorized(
                         permissions,
                         [Permissions.SEND_SMS]

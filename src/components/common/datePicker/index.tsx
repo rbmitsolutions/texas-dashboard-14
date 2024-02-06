@@ -69,17 +69,17 @@ export function DatePickerWithRange({
                                 <>
                                     {formatDate({
                                         date: date.from,
-                                        f: "LLL dd, yy",
+                                        f: "dd LLL, yy",
                                     })} -{" "}
                                     {formatDate({
                                         date: date.to,
-                                        f: "LLL dd, yy",
+                                        f: "dd LLL, yy",
                                     })}
                                 </>
                             ) : (
                                 formatDate({
                                     date: date.from,
-                                    f: "LLL dd, yy",
+                                    f: "dd LLL, yy",
                                 })
                             )
                         ) : (

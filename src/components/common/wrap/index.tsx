@@ -40,12 +40,11 @@ export default function Wrap({ header, actions, footer, error = false, isLoading
                 <header className='flex-col-container justify-between sm:flex-row'>
                     {header?.title &&
                         <div className='flex-container-center gap-2 min-w-40'>
-                            <Icon name={header?.title?.icon} size={18} />
-                            <h3 className='text-md'>{header?.title?.title}</h3>
+                            <Icon name={header?.title?.icon} size={18} className='text-primary' />
+                            <h3 className='text-md capitalize'>{header?.title?.title?.toLowerCase()}</h3>
                         </div>
                     }
                     {header?.pagination &&
-
                         <div className='flex-container w-full justify-start gap-4 sm:justify-end'>
                             <Pagination {...header.pagination} />
                         </div>

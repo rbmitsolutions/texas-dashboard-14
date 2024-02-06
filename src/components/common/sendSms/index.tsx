@@ -35,10 +35,11 @@ export interface SendSmsContacts {
 
 interface SendSmsProps {
     contacts: SendSmsContacts[]
+    size?: 'icon' | 'iconSm' | 'iconExSm'
 }
 
 //todo: change router in back-end to group message
-export default function SendSms({ contacts }: SendSmsProps) {
+export default function SendSms({ contacts, size = 'icon' }: SendSmsProps) {
     const { user: { permissions } } = useAuthHooks()
     const form = useForm<ComponentsSendSmsSchemaType>({
         mode: "onChange",
@@ -73,7 +74,10 @@ export default function SendSms({ contacts }: SendSmsProps) {
             onOpenChange={onOpenChange}
         >
             <SheetTrigger asChild>
-                <Button variant="outline" className='p-1' size='icon'
+                <Button
+                    variant="outline"
+                    className='p-1'
+                    size={size}
                     disabled={!isUserAuthorized(
                         permissions,
                         [Permissions.SEND_SMS]

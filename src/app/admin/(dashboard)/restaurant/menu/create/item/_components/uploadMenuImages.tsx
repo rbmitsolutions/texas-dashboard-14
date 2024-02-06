@@ -5,7 +5,7 @@ import Image from "next/image";
 import { convertCentsToEuro } from "@/common/utils/convertToEuro";
 import ImageCropper from "@/components/common/imageCropper";
 import { ExtendedCreateMenuFormType } from "../../_components/createUpdateMenuForm";
-import { ImagesPath } from "@/common/types/imges";
+import { ImagesPath } from "@/common/types/imgs";
 
 export interface UploadMenuImagesProps {
     form: ExtendedCreateMenuFormType

@@ -2,7 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { IMenu } from "@/common/types/restaurant/menu.interface"
 import Image from "next/image"
-import { ImagesPath } from "@/common/types/imges"
+import { ImagesPath } from "@/common/types/imgs"
 import { cn } from "@/common/libs/shadcn/utils"
 import { Button } from "@/components/ui/button"
 import Icon from "@/common/libs/lucida-icon"
