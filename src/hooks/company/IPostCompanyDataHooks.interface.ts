@@ -73,10 +73,24 @@ export interface IPOSTDutiesBody {
     departament_id: string;
 }
 
-export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "REQUESTS" | 'DUTIES' | 'SHIFTS'
+export interface IPOSTRosterBody {
+    date: Date;
+    duty: string;
+    shift: string;
+    status: string;
+    hours: number;
+    week_day: string;
+    week_payment_preview: number;
+    user_id: string;
+    fixed_salary: boolean;
+    salary: number;
+}
+
+export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "REQUESTS" | 'DUTIES' | 'SHIFTS' | 'ROSTER'
+
 export type IPOSTCompanyDataRerturn = IRoster | IHaccpReports | IForm | IFormSection | IFormData | IShifts | IDuties
 export interface IPOSTCompanyBody {
-    roster?: any,
+    roster?: IPOSTRosterBody,
     haccpReport?: IPOSTHaccpReportsBody
     form?: IPOSTFormBody
     formSection?: IPOSTFormSectionBody

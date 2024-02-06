@@ -195,7 +195,6 @@ const routers: IRoute[] = [
         icon: <Icon name='AArrowDown' size={14} />,
         layout: "/admin/hrsystem",
         collapse: true,
-        // authorization: ["admin", 'admin-ghost'],
         authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST],
         //need [user-list, user-list-filled]
         items: [
@@ -204,7 +203,6 @@ const routers: IRoute[] = [
             path: "/all",
             icon: <Icon name='AArrowDown' size={14} />,
             layout: "/admin/hrsystem/employees",
-            // authorization: ["admin", 'admin-ghost'],
             authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST],
             //rotas [GET-USER, GET-DEPARTAMENTS]
             //need [user-list]
@@ -235,13 +233,16 @@ const routers: IRoute[] = [
           },
         ],
       },
-      // {
-      //   name: "Roster",
-      //   path: "/roster",
-      //   icon: <Icon name='AArrowDown' size={14} />,
-      //   layout: "/admin/hrsystem",
-      //   authorization: ["admin", 'admin-ghost'],
-      // },
+      {
+        name: "Roster",
+        path: "/roster",
+        icon: <Icon name='AArrowDown' size={14} />,
+        layout: "/admin/hrsystem",
+        authorization: [
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+        ],
+      },
       // {
       //   name: "Tasks",
       //   path: "/tasks",

@@ -6,12 +6,30 @@ import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
 import { IRequests, IRequestsStatus, IRequestsType } from "@/common/types/company/requests.interface";
 import { IRoster, IRosterStatus } from "@/common/types/company/roster.interface";
 import { IPaginationResponse, IQueryPagination } from "@/common/types/settings.interface";
+import { IUser, IUserStatus } from "@/common/types/user/user.interface";
 
 export interface IGETCompanyRosterResponse {
   data: IRoster[];
   pagination: IPaginationResponse
 }
 
+export interface IUserExtraData extends IUser {
+  preview_hours: string;
+  roster_hours: string;
+  diff_roster: number;
+  preview_roster: number;
+  total_roster: number;
+}
+
+export interface IRosterPageResponse {
+  users: IUserExtraData[];
+  payments_data: {
+    total_preview: number;
+    total_available: number;
+    total_roster: number;
+    total_diff: number;
+  };
+}
 export interface IGETCompanyRosterQuery {
   all?: {
     date: {
@@ -30,6 +48,14 @@ export interface IGETCompanyRosterQuery {
       order: "asc" | "desc";
     };
   };
+  rosterPage?: {
+    name?: string
+    status?: IUserStatus
+    date: {
+      gte: Date;
+      lte: Date;
+    }
+  }
 }
 
 export interface IHaccpReportsResponse {
@@ -238,7 +264,7 @@ export interface IGETAllShiftsResponse {
 
 export interface IGETShiftsQuery {
   all?: {
-      pagination?: IQueryPagination
+    pagination?: IQueryPagination
   };
 }
 
@@ -260,7 +286,8 @@ export interface IGETFilesQuery {
 }
 
 
-export type IGETCompanyResponse = IGETCompanyRosterResponse | IHaccpReportsResponse | IHaccpReports | IFormsGetAllResponse | IForm | IFormSectionGetAllResponse | IFormSection | IGETFormDataQuery | IFormData | IFiles | IRequests | IRequestsGetAllResponse | ICompanyDetailsResponse | IGETRolesResponse | IRoles | IGETAllDepartamentsResponse | IDepartaments | IGETCompanyAllFilesResponse | IGETShiftsQuery | IGETDutiesQuery
+export type IGETCompanyResponse = IGETCompanyRosterResponse | IHaccpReportsResponse | IHaccpReports | IFormsGetAllResponse | IForm | IFormSectionGetAllResponse | IFormSection | IGETFormDataQuery | IFormData | IFiles | IRequests | IRequestsGetAllResponse | ICompanyDetailsResponse | IGETRolesResponse | IRoles | IGETAllDepartamentsResponse | IDepartaments | IGETCompanyAllFilesResponse | IGETShiftsQuery | IGETDutiesQuery | IRosterPageResponse
+
 export type ICompanyDataQueryType = 'ROSTER' | "ROLES" | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "FILES" | "REQUESTS" | 'DETAILS' | "DEPARTAMENTS" | "DUTIES" | "SHIFTS"
 
 export interface IGETCompanyDataQuery {
