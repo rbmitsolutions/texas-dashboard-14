@@ -47,7 +47,7 @@ export default function RosterHeader({ payments_data, isLoading, error, setUsers
                     error={error} />
                 <InfoBox
                     icon={{
-                        name: payments_data?.total_diff > 0 ? 'ArrowDown' : 'ArrowUp',
+                        name: payments_data?.total_diff > 0 ? 'ArrowUp' : 'ArrowDown',
                         className: payments_data?.total_diff > 0 ? 'text-red-600' : 'text-green-600'
                     }}
                     title="Difference"

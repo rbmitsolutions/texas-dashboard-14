@@ -91,6 +91,7 @@ export function RosterTableMemo({ users, duties, shifts, forms, deleteRoster, cr
             </thead>
             <tbody>
                 {users?.map(user => {
+                    console.log(user?.diff_roster)
                     return (
                         <tr
                             key={user?.id}
@@ -166,9 +167,10 @@ export function RosterTableMemo({ users, duties, shifts, forms, deleteRoster, cr
                             <td className={styles?.td}>
                                 <div className='flex flex-col items-center gap-2'>
                                     <small className='text-xs'>{convertCentsToEuro(user?.total_roster * 100)}</small>
-                                    <Badge className={cn('flex gap-1 text-[8px] font-bold text-white', user?.diff_roster >= 0 ? 'bg-green-800 hover:bg-green-900' : 'bg-red-800 hover:bg-red-900')}>
-                                        <Icon name={user?.diff_roster >= 0 ? 'ThumbsUp' : 'ThumbsDown'} size={10} />
-                                        {convertCentsToEuro(user?.diff_roster * 100)}
+                                    <Badge className={cn('flex gap-1 text-[8px] font-bold text-white',
+                                        user?.preview_roster < user?.total_roster ? 'bg-red-800 hover:bg-red-900' : 'bg-green-800 hover:bg-green-900')}>
+                                        <Icon name={user?.preview_roster < user?.total_roster ? 'ThumbsDown' : 'ThumbsUp'} size={10} />
+                                        {user?.preview_roster > user?.total_roster ? '-' : '+'}{convertCentsToEuro(user?.diff_roster * 100)}
                                     </Badge>
                                 </div>
                             </td>
