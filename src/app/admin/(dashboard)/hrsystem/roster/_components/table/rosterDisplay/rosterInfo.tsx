@@ -1,4 +1,5 @@
 import { UseMutateFunction } from "react-query"
+import { cn } from "@/common/libs/shadcn/utils"
 
 //components
 import {
@@ -14,16 +15,23 @@ import AddTaskToRoster from "../addTaskToRoster"
 import { Button } from "@/components/ui/button"
 
 //libs
+import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized"
 import { formatDate } from "@/common/libs/date-fns/dateFormat"
 import Icon from "@/common/libs/lucida-icon"
+
+//hooks
+import { useAuthHooks } from "@/hooks/useAuthHooks"
 
 //interface
 import { IPOSTCompanyBody, IPOSTCompanyDataRerturn } from "@/hooks/company/IPostCompanyDataHooks.interface"
 import { IDELETECompanyDataBody } from "@/hooks/company/IDeleteCompanyDataHooks.interface"
+import { IDuties, IShifts } from "@/common/types/company/companyDetails.interface"
 import { IPUTCompanyBody } from "@/hooks/company/IPutCompanyDataHooks.interface"
 import { IRoster } from "@/common/types/company/roster.interface"
+import { Permissions } from "@/common/types/auth/auth.interface"
 import { IForm } from "@/common/types/company/form.interface"
-
+import UpdateRoster from "./updateRoster"
+import { IUser } from "@/common/types/user/user.interface"
 
 interface RosterInfoProps {
     forms: IForm[]
@@ -31,9 +39,14 @@ interface RosterInfoProps {
     updateRoster: UseMutateFunction<any, any, IPUTCompanyBody, unknown>
     createRosterTask: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
     deleteRosterTask: UseMutateFunction<void, any, IDELETECompanyDataBody, unknown>
+    shifts?: IShifts[]
+    duties?: IDuties[]
+    user?: IUser
+    buttonClassName?: string
 }
 
-export default function RosterInfo({ roster, forms, createRosterTask, deleteRosterTask, updateRoster }: RosterInfoProps): JSX.Element {
+export default function RosterInfo({ roster, user, forms, shifts, duties, createRosterTask, deleteRosterTask, updateRoster, buttonClassName }: RosterInfoProps): JSX.Element {
+    const { user: UserToken } = useAuthHooks()
     const handleUpdateRoster = async () => {
         await updateRoster({
             roster: {
@@ -59,8 +72,8 @@ export default function RosterInfo({ roster, forms, createRosterTask, deleteRost
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <Button className='h-4 w-4 p-1' variant='secondary'>
-                    <Icon name='FileBadge2' size={8} />
+                <Button className={cn('h-4 w-4 p-1', buttonClassName)} variant='secondary'>
+                    <Icon name='FileBadge2' />
                 </Button>
             </SheetTrigger>
             <SheetContent className="w-80">
@@ -95,19 +108,29 @@ export default function RosterInfo({ roster, forms, createRosterTask, deleteRost
                             f: 'HH:mm:ss'
                         })}
                     </Button>
-
+                    {(shifts && duties && roster && user && isUserAuthorized(
+                        UserToken?.permissions,
+                        [Permissions.ROSTER_UPDATE]
+                    )) &&
+                        <UpdateRoster
+                            duties={duties}
+                            shifts={shifts}
+                            updateRoster={updateRoster}
+                            user={user}
+                            roster={roster}
+                        />}
                     <div>
                         <strong className='mr-2'>Tasks</strong>
                         <AddTaskToRoster
                             createRosterTask={createRosterTask}
                             forms={forms}
-                            roster_id={roster?.id}
+                            roster={roster}
                         />
                     </div>
                     {roster?.tasks?.map(t => {
                         return (
                             <RosterTasksDisplay
-                                key={t?.id} 
+                                key={t?.id}
                                 task={t}
                                 deleteRosterTask={deleteRosterTask}
                             />
@@ -119,7 +142,10 @@ export default function RosterInfo({ roster, forms, createRosterTask, deleteRost
                         className='w-full h-12'
                         variant='purple'
                         leftIcon="Stethoscope"
-                        disabled={roster?.status === 'dayoff' || roster?.status === 'holiday' || roster?.status === 'sickday'}
+                        disabled={!isUserAuthorized(
+                            UserToken?.permissions,
+                            [Permissions.ROSTER_UPDATE]
+                        ) || roster?.status === 'dayoff' || roster?.status === 'holiday' || roster?.status === 'sickday'}
                         onClick={handleUpdateRoster}
                     >
                         Update to Sick Day

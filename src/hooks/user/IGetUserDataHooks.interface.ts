@@ -25,6 +25,7 @@ export interface IGETUserQuery {
             role?: "1";
             contract?: "1";
             roster?: {
+                available?: '1'
                 gte: Date;
                 lte: Date;
             };

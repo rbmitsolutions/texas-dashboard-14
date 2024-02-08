@@ -36,7 +36,10 @@ export interface IPUTRosterBody {
         roster_checked?: boolean;
         paid?: boolean
         available?: boolean;
+        salary?: number;
+        hours?: number;
         forgot_to_clock_out?: boolean;
+        week_payment_preview?: number;
     }
     many?: {
         ids: string[];

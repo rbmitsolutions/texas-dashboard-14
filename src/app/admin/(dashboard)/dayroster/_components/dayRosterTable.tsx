@@ -17,25 +17,30 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import Wrap from "@/components/common/wrap"
 import { IDepartaments } from "@/common/types/company/departaments.interface"
 import SendEmail from "@/components/common/sendEmail"
 import { IUser } from "@/common/types/user/user.interface"
 import SendSms from "@/components/common/sendSms"
+import { IGETUserDataQuery } from "@/hooks/user/IGetUserDataHooks.interface"
+import { addDaysToDate } from "@/common/libs/date-fns/dateFormat"
 
-interface UserTableProps<TData, TValue> {
+interface DayRosterTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   departament: IDepartaments
+  setUsers: Dispatch<SetStateAction<IGETUserDataQuery>>
+  userParams: IGETUserDataQuery
 }
 
-export function UserTable<TData, TValue>({
+export function DayRosterTable<TData, TValue>({
   columns,
   data,
-  departament
-}: UserTableProps<TData, TValue>) {
-  const [rowSelection, setRowSelection] = useState({})
+  departament,
+  setUsers,
+  userParams
+}: DayRosterTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   )
@@ -44,11 +49,9 @@ export function UserTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    onRowSelectionChange: setRowSelection,
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     state: {
-      rowSelection,
       columnFilters,
     },
   })
@@ -73,27 +76,29 @@ export function UserTable<TData, TValue>({
           debounceDelay: 0,
           custom: 'max-w-sm relative'
         },
-        optionsPopover: {
-          isLoading: !departament,
-          options: [{
-            label: 'Role',
-            placeholder: 'Role',
-            options: [
-              {
-                label: 'All',
-                value: 'all'
-              },
-              ...departament?.roles?.map(r => {
-                return {
-                  label: r.title,
-                  value: r.id
+        dateChange: {
+          datePicker: {
+            onConfirm: (date) => {
+              setUsers(prev => ({
+                user: {
+                  all: {
+                    ...prev?.user?.all,
+                    include: {
+                      ...prev?.user?.all?.include,
+                      roster: {
+                        available: '1',
+                        gte: new Date(date || new Date()),
+                        lte: new Date(date || new Date())
+                      }
+                    }
+                  }
                 }
-              }),
-
-            ],
-            value: table.getColumn("role_id")?.getFilterValue() as string,
-            onChange: (e) => table.getColumn("role_id")?.setFilterValue(e == 'all' ? null : e),
-          }]
+              }))
+            },
+            value: userParams?.user?.all?.include?.roster?.gte || new Date(),
+            fromDate: new Date(),
+            toDate: addDaysToDate(new Date(), 14)
+          }
         },
         toRight: (
           <div className='flex gap-2'>
@@ -117,7 +122,7 @@ export function UserTable<TData, TValue>({
             />
           </div>
         ),
-        className: 'grid grid-cols-[1fr,auto,74px] gap-2 items-center',
+        className: 'grid grid-cols-[1fr,auto,auto] gap-2 items-center',
       }}
       className='mt-6'
     >

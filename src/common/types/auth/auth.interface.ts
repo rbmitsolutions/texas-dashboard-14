@@ -19,6 +19,7 @@ export enum Permissions {
   SEND_EMAIL = 'send-email',
   SEND_SMS = 'send-sms',
   ROSTER_TASKS = 'roster-tasks',
+  ROSTER_UPDATE = 'roster-update'
 }
 
 //token from texas-dashboard does not have roster-password

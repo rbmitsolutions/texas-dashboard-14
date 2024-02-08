@@ -238,8 +238,8 @@ export default function CreateReportsForm({ forms, formSections, create }: Creat
                 {formSections?.filter(s => s?.forms?.length > 0)?.map(section => {
                     return (
                         <div className='flex-col-container gap-4' key={section?.id}>
-                            <h2 >
-                                {section?.title}
+                            <h2 className='capitalize text-primary'>
+                                {section?.title?.toLowerCase()}
                             </h2>
                             <div className='flex-col-container gap-4'>
                                 {section?.forms?.map(f => {

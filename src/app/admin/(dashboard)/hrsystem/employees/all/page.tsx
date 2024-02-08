@@ -56,7 +56,7 @@ export default function Employees() {
     })
 
     return (
-        <div className='flex-col-container gap-8'>
+        <div className='flex flex-col'>
             <div>
                 <IconText
                     icon="Users"

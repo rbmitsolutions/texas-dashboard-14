@@ -3,6 +3,7 @@ import { useState } from "react";
 
 //libs
 import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized";
+import { subDaysToDate } from "@/common/libs/date-fns/dateFormat";
 import Icon from "@/common/libs/lucida-icon";
 
 //components
@@ -22,16 +23,17 @@ import { useAuthHooks } from "@/hooks/useAuthHooks";
 
 //interface
 import { IPOSTCompanyBody, IPOSTCompanyDataRerturn } from "@/hooks/company/IPostCompanyDataHooks.interface"
+import { IRoster } from "@/common/types/company/roster.interface";
 import { Permissions } from "@/common/types/auth/auth.interface";
 import { IForm } from "@/common/types/company/form.interface";
 
 interface AddTaskToRosterProps {
-    roster_id: string
+    roster: IRoster
     forms: IForm[]
     createRosterTask: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
 }
 
-export default function AddTaskToRoster({ roster_id, forms, createRosterTask }: AddTaskToRosterProps): JSX.Element {
+export default function AddTaskToRoster({ roster, forms, createRosterTask }: AddTaskToRosterProps): JSX.Element {
     const { user } = useAuthHooks()
     const [selected, setSelected] = useState<string>()
 
@@ -48,7 +50,7 @@ export default function AddTaskToRoster({ roster_id, forms, createRosterTask }: 
                 form: form?.title,
                 created_by: user?.name,
                 created_id: user?.user_id,
-                roster_id
+                roster_id: roster?.id
             }
         }, {
             onSuccess: () => {
@@ -66,7 +68,7 @@ export default function AddTaskToRoster({ roster_id, forms, createRosterTask }: 
                     disabled={!isUserAuthorized(
                         user?.permissions,
                         [Permissions.ROSTER_TASKS]
-                    )}
+                    ) || (new Date(roster?.date!) < subDaysToDate(new Date(), 1)) }
                 >
                     <Icon name="FileCheck" />
                 </Button>

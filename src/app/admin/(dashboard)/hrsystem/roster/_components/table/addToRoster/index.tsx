@@ -3,7 +3,7 @@ import { UseMutateFunction } from "react-query"
 //libs
 import { CreateRosterFormSchema, CreateRosterFormSchemaType } from "@/common/libs/zod/forms/company/companyRosterForm";
 import { rosterBackground } from "@/common/libs/company/roster";
-import { parseDate } from "@/common/libs/date-fns/dateFormat";
+import { parseDate, subDaysToDate } from "@/common/libs/date-fns/dateFormat";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/common/libs/shadcn/utils";
@@ -222,7 +222,7 @@ export default function AddToRoster({
                                                 size='iconExSm'
                                                 type='submit'
                                                 onClick={form.handleSubmit(data => onSubmitForm(data, date as any))}
-                                                disabled={parseDate(date?.date, 'dd/MM/yy') < new Date()}
+                                                disabled={parseDate(date?.date, 'dd/MM/yy') < subDaysToDate(new Date(), 1)}
                                             >
                                                 <Icon name="Plus" />
                                             </Button>
@@ -239,7 +239,7 @@ export default function AddToRoster({
                                                                 </div>
                                                                 <div className='flex gap-2'>
                                                                     <AddTaskToRoster
-                                                                        roster_id={roster?.id}
+                                                                        roster={roster}
                                                                         forms={forms}
                                                                         createRosterTask={createRosterTask}
                                                                     />

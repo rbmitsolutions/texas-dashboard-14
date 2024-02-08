@@ -7,7 +7,7 @@ import { IUser } from "@/common/types/user/user.interface"
 interface IGenerateRoster {
     user: IUser
     shift: IShifts
-    date: { date: string, day: string }
+    date: { date: string | Date, day: string }
     formData: CreateRosterFormSchemaType
 }
 export const generateRoster = ({
@@ -17,7 +17,7 @@ export const generateRoster = ({
     formData,
 }: IGenerateRoster): IPOSTRosterBody => {
     return {
-        date: parseDate(date?.date, 'dd/MM/yy'),
+        date: typeof date?.date === 'object' ? date?.date : parseDate(date?.date, 'dd/MM/yy'),
         duty: formData?.is_dayoff ? "Day Off" : formData?.duty,
         shift: formData?.is_dayoff ? "Day Off" : shift?.title,
         status: formData?.is_dayoff ? "dayoff" : 'unconfirmed',

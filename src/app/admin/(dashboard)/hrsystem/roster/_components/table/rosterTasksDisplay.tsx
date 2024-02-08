@@ -1,12 +1,18 @@
+import { UseMutateFunction } from "react-query"
 import Icon from "@/common/libs/lucida-icon"
+
+//libs
 import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized"
+
+//components
 import { Permissions } from "@/common/types/auth/auth.interface"
 import { IRosterTasks } from "@/common/types/company/roster.interface"
 import InfoBadge from "@/components/common/infoBadge"
 import { Button } from "@/components/ui/button"
+
+//hooks
 import { IDELETECompanyDataBody } from "@/hooks/company/IDeleteCompanyDataHooks.interface"
 import { useAuthHooks } from "@/hooks/useAuthHooks"
-import { UseMutateFunction } from "react-query"
 
 interface RosterTasksDisplayProps {
     task: IRosterTasks
@@ -35,7 +41,7 @@ export default function RosterTasksDisplay({ task, deleteRosterTask }: RosterTas
                     disabled={!isUserAuthorized(
                         user?.permissions,
                         [Permissions.ROSTER_TASKS]
-                    )}
+                    ) || task?.done}
                     type='button'
                 >
                     <Icon name='Trash' size={8} />
