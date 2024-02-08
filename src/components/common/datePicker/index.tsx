@@ -132,15 +132,18 @@ export interface IDatePicker {
     onConfirm: (date: Date | undefined) => void
     fromDate?: Date
     toDate?: Date
+    value: Date
 }
 
-export function DatePicker({ className, fromDate, toDate, onConfirm }: IDatePicker) {
+export function DatePicker({ className, fromDate, toDate, value, onConfirm }: IDatePicker) {
     const [preRendered, setPreRendered] = useState(false);
-    const [date, setDate] = useState<Date>()
+    const [date, setDate] = useState<Date | undefined>(value)
 
-    useEffect(() => {
+    console.log(date)
+    const onDateChange = (date: Date | undefined) => {
+        setDate(date)
         onConfirm(date)
-    }, [date, onConfirm])
+    }
 
     useEffect(() => {
         setPreRendered(true);
@@ -163,7 +166,7 @@ export function DatePicker({ className, fromDate, toDate, onConfirm }: IDatePick
                     <Icon name='Calendar' size={14} className='mr-2' />
                     {date ? formatDate({
                         date: date,
-                        f: "PPP",
+                        f: "dd, LLL, yy",
                     }) : <span>Pick a date</span>}
                 </Button>
             </PopoverTrigger>
@@ -171,7 +174,7 @@ export function DatePicker({ className, fromDate, toDate, onConfirm }: IDatePick
                 <Calendar
                     mode="single"
                     selected={date}
-                    onSelect={setDate}
+                    onSelect={onDateChange}
                     initialFocus
                     fromDate={fromDate && fromDate}
                     toDate={toDate && toDate}

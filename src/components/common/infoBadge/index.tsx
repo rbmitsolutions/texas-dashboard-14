@@ -13,7 +13,8 @@ export default function InfoBadge({ status }: InfoBadgeProps) {
             case 'working':
             case 'pending':
                 return 'bg-orange-600 dark:bg-orange-300 hover:bg-orange-700 dark:hover:bg-orange-400'
-            case 'approved' || 'done':
+            case 'approved':
+            case 'done':
                 return 'bg-green-600 dark:bg-green-300 hover:bg-green-700 dark:hover:bg-green-400'
             case 'denied':
                 return 'bg-red-600 dark:bg-red-300 hover:bg-red-700 dark:hover:bg-red-400'
