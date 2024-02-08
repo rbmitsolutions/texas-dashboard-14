@@ -15,6 +15,7 @@ import UpdateRoleForm from "./_components/updateRoleForm";
 import { IRoles } from "@/common/types/company/companyDetails.interface";
 import { IPUTUserBody } from "@/hooks/user/IPutUserDataHooks.interface";
 import { IUser } from "@/common/types/user/user.interface";
+import IconText from "../../iconText";
 
 interface UserProfileProps {
     user: IUser
@@ -27,7 +28,13 @@ export default function UserProfile({ user, isAdmin, roles, onUpdate }: UserProf
         <div className='flex-col-container gap-4'>
             <ProfileForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} roles={roles} />
             <div className='md:h-20 md:pl-64'>
-                <UpdatePasswordForm user={user} onUpdate={onUpdate} />
+                <div className='flex-col-container'>
+                    <IconText
+                        icon="Key"
+                        text={`Roster: ${user?.roster_password}`}
+                    />
+                    <UpdatePasswordForm user={user} onUpdate={onUpdate} />
+                </div>
                 {isAdmin &&
                     <>
                         <Button

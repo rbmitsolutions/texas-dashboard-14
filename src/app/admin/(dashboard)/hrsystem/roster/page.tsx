@@ -1,8 +1,10 @@
+'use server'
 import { getDepartments } from "@/common/libs/company/actions/departaments"
 import { getDuties } from "@/common/libs/company/actions/duties"
 import { getShifts } from "@/common/libs/company/actions/shifts"
 import RosterContainer from "./_components"
 import { getForms } from "@/common/libs/company/actions/forms"
+import { IFormsGetAllResponse } from "@/hooks/company/IGetCompanyDataHooks.interface"
 
 export default async function RosterPage() {
     const duties = await getDuties({
@@ -42,7 +44,7 @@ export default async function RosterPage() {
                 order: 'asc'
             }
         }
-    })
+    }) as IFormsGetAllResponse
 
     return (
         <RosterContainer

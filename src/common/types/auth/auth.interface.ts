@@ -25,12 +25,13 @@ export enum Permissions {
 export interface IToken {
   user_id: string;
   token: string;
-  refresh_token: {
-    id:string
-  }
   name: string;
   profile_image: string;
   permissions: Permissions[];
+  roster_password: number;
+  refresh_token: {
+    id:string
+  }
 }
 
 export interface IRefreshToken {

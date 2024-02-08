@@ -18,16 +18,26 @@ interface IPage {
 interface FormLayoutProps {
     form: IForm
     onSubmit: (data: any) => void
+    toReset?: boolean
 }
 
-export default function FormLayout({ form, onSubmit }: FormLayoutProps): JSX.Element {
+export default function FormLayout({ form, onSubmit, toReset = false }: FormLayoutProps): JSX.Element {
     const [page, setPage] = useState<IPage>({
         page: 0,
         maxPage: form?.inputs?.length
     })
+
     const f = useForm();
 
-    const validateFormAndPagination = (data: any) => {
+    const resetForm = () => {
+        f.reset()
+        setPage({
+            page: 0,
+            maxPage: form?.inputs?.length
+        })
+    }
+
+    const validateFormAndPagination = async (data: any) => {
         const requiredInputs = form?.inputs[page?.page]?.filter(input => input?.required)
         if (requiredInputs?.length > 0) {
             const isValid = requiredInputs?.every(input => {
@@ -75,6 +85,11 @@ export default function FormLayout({ form, onSubmit }: FormLayoutProps): JSX.Ele
             maxPage: form?.inputs?.length
         })
     }, [form])
+
+    useEffect(() => {
+        resetForm()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [toReset])
 
     return (
         <div className='flex flex-col items-center relative'>

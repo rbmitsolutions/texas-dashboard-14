@@ -45,6 +45,9 @@ export interface IGETUserQuery {
             role?: '1'
         }
     }
+    byRosterPassword?: {
+        roster_password: string
+    }
 }
 
 export interface IUserGETRequestsQuery {

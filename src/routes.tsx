@@ -421,15 +421,17 @@ const routers: IRoute[] = [
   //     },
   //   ],
   // },
-  // {
-  //   path: "/forms",
-  //   name: "HACCP",
-  //   layout: "/admin",
-  //   icon: <Icon name='AArrowDown' size={14} />,
-  //   // icon: <ClipboardText />,
-  //   collapse: false,
-  //   authorization: ["my_profile"],
-  // },
+  {
+    path: "/haccp",
+    name: "HACCP",
+    layout: "/admin",
+    icon: <Icon name='FileText' size={14} />,
+    // icon: <ClipboardText />,
+    collapse: false,
+    authorization: [
+      Permissions.MY_PROFILE
+    ],
+  },
   {
     name: "My Roster",
     path: "",
