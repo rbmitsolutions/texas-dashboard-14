@@ -63,7 +63,6 @@ export function FormDataTable<TData, TValue>({
                                         })}</small>
                                         <small className='font-bold'>{form?.title}</small>
                                         <small>{form?.by}</small>
-                                        <small>{form?.type}</small>
                                     </div>
                                 </TableCell>
                                 <TableCell >

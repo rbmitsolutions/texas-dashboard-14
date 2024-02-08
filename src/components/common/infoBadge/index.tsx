@@ -12,6 +12,7 @@ export default function InfoBadge({ status }: InfoBadgeProps) {
         switch (status.toLocaleLowerCase().replace(" ", "")) {
             case 'working':
             case 'pending':
+            case 'waiting':
                 return 'bg-orange-600 dark:bg-orange-300 hover:bg-orange-700 dark:hover:bg-orange-400'
             case 'approved':
             case 'done':

@@ -4,8 +4,11 @@ import { UseMutateFunction } from "react-query"
 import { rosterBackground } from "@/common/libs/company/roster"
 import { formatDate } from "@/common/libs/date-fns/dateFormat"
 import { cn } from "@/common/libs/shadcn/utils"
-import Icon from "@/common/libs/lucida-icon"
+
+//components
+import DeleteRosterButton from "./deleteRosterButton"
 import { Button } from "@/components/ui/button"
+import Icon from "@/common/libs/lucida-icon"
 import RosterInfo from "./rosterInfo"
 
 //interface
@@ -74,20 +77,10 @@ export default function RosterDisplay({ roster, forms, createRosterTask, deleteR
                                                 >
                                                     <Icon name='Send' size={8} />
                                                 </Button>
-                                                <Button
-                                                    className='h-4 w-4 p-1'
-                                                    variant='destructive'
-                                                    disabled={new Date(r?.date!) < new Date()}
-                                                    onClick={async () => {
-                                                        await deleteRoster({
-                                                            roster: {
-                                                                id: r?.id
-                                                            }
-                                                        })
-                                                    }}
-                                                >
-                                                    <Icon name='X' size={8} />
-                                                </Button>
+                                                <DeleteRosterButton
+                                                    roster={r}
+                                                    deleteRoster={deleteRoster}
+                                                />
                                             </>
                                         }
                                     </div>

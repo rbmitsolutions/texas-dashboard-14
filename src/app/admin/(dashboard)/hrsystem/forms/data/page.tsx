@@ -30,7 +30,6 @@ export default function Data() {
         defaultParams: {
             formData: {
                 all: {
-                    type: 'form',
                     created_at: {
                         gte: getFirstDayOfMonth(new Date()),
                         lte: getLastDayOfMonth(new Date())

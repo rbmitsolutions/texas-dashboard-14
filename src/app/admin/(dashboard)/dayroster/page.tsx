@@ -1,5 +1,4 @@
 'use client'
-
 import Wrap from "@/components/common/wrap"
 import { useDELETECompanyDataHooks, useGETCompanyDataHooks, usePOSTCompanyDataHooks, usePUTCompanyDataHooks } from "@/hooks/company/companyDataHooks"
 import { useGETUserDataHooks } from "@/hooks/user/useUserDataHooks"

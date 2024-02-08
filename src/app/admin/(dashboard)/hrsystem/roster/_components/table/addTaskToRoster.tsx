@@ -68,7 +68,7 @@ export default function AddTaskToRoster({ roster, forms, createRosterTask }: Add
                     disabled={!isUserAuthorized(
                         user?.permissions,
                         [Permissions.ROSTER_TASKS]
-                    ) || (new Date(roster?.date!) < subDaysToDate(new Date(), 1)) }
+                    ) || (new Date(roster?.date!) < subDaysToDate(new Date(), 1)) || roster?.status === 'dayoff' || roster?.status === 'holiday' || roster?.status === 'sickday'}
                 >
                     <Icon name="FileCheck" />
                 </Button>

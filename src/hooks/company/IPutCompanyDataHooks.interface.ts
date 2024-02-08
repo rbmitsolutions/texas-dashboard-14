@@ -1,3 +1,4 @@
+import { IRequestsStatus, IRequestsType } from "@/common/types/company/requests.interface";
 import { IRosterStatus } from "@/common/types/company/roster.interface";
 
 export interface IPUTHaccpReportsBody {
@@ -75,8 +76,16 @@ export interface IPUTDutiesBody {
     departament_id?: string;
 }
 
-export type IPUTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "DUTIES" | "SHIFTS"
+export interface IPUTRequestsBody {
+    id: string,
+    type?: IRequestsType;
+    message?: string;
+    status: IRequestsStatus
+    answer?: string;
+}
 
+
+export type IPUTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "DUTIES" | "SHIFTS" | 'REQUESTS'
 export interface IPUTCompanyBody {
     roster?: IPUTRosterBody,
     haccpReport?: IPUTHaccpReportsBody
@@ -84,4 +93,5 @@ export interface IPUTCompanyBody {
     formSection?: IPUTFormSectionBody
     duty?: IPUTDutiesBody
     shift?: IPUTShiftsBody
+    request?: IPUTRequestsBody
 }

@@ -66,9 +66,8 @@ export default function Pagination({
             </Button>
             <Popover>
                 <PopoverTrigger asChild>
-                    <Button size='icon' variant='outline' className='h-8 w-20 text-xs'>
+                    <Button size='icon' variant='outline' className='h-8 min-w-20 text-xs'>
                        {pagination?.currentPage} / {pagination?.maxPages}
-
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className='flex-col-container gap-3 bg-background p-2 w-[180px]'>

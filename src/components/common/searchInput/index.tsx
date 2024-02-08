@@ -47,7 +47,7 @@ export default function SearchInput({ onSearchChange, value, isFetching, placeho
     }
 
     return (
-        <div className={cn('w-full relative', custom)}>
+        <div className={cn('w-full relative max-w-lg', custom)}>
             <Input
                 onChange={(e: any) => handleChange(e.target.value)}
                 value={displayValue || ''}

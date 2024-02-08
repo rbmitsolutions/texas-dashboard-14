@@ -86,10 +86,17 @@ export default function RequestForm({ createRequest, isCreateRequestLoading }: R
                 message: formData.message,
                 dates_off: dates?.join("/"),
             }
+        }, {
+            onSuccess: async () => {
+                await form.reset({
+                    message: "",
+                    type: 'Message'
+                })
+                setDates([])
+            }
         })
 
-        form.reset()
-        setDates([])
+
     };
 
 
@@ -132,7 +139,7 @@ export default function RequestForm({ createRequest, isCreateRequestLoading }: R
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Email</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <Select onValueChange={field.onChange} defaultValue={field.value} value={field?.value}>
                                     <FormControl>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Request Type" />

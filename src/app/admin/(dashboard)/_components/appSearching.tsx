@@ -72,7 +72,7 @@ const data: IData[] = [
     {
         id: 2,
         title: 'Employees',
-        key_words: ['employees', 'employee', 'emp', 'emps', 'empl', 'empls', 'filled', 'fill', 'gone', 'fired', 'employees filled', 'employee filled', 'emp filled', 'emps filled', 'empl filled', 'empls filled', 'employee filled list', 'employees filled list', 'employee filled list', 'roster', 'new roster', 'build roster'],
+        key_words: ['employees', 'employee', 'emp', 'emps', 'empl', 'empls', 'filled', 'fill', 'gone', 'fired', 'employees filled', 'employee filled', 'emp filled', 'emps filled', 'empl filled', 'empls filled', 'employee filled list', 'employees filled list', 'employee filled list', 'roster', 'new roster', 'build roster', 'requests', 'req', 'reque', 'user reques', 'user requests', 'employee requ'],
         icon: 'Users',
         links: [
             {
@@ -87,15 +87,23 @@ const data: IData[] = [
                 title: 'Employees Filled',
                 description: 'List of employees filled',
                 path: '/admin/hrsystem/employees/filled',
-                key_words: ['employees', 'employee', 'emp', 'emps', 'empl', 'empls','employees filled', 'employee filled', 'emp filled', 'emps filled', 'empl filled', 'empls filled', 'employee filled list', 'employees filled list', 'employee filled list']
+                key_words: ['employees', 'employee', 'emp', 'emps', 'empl', 'empls', 'employees filled', 'employee filled', 'emp filled', 'emps filled', 'empl filled', 'empls filled', 'employee filled list', 'employees filled list', 'employee filled list']
             },
             {
-                id: 2,
+                id: 3,
                 title: 'Roster',
                 description: 'Build Roster',
                 path: '/admin/hrsystem/roster',
                 key_words: ['employees', 'employee', 'emp', 'emps', 'empl', 'empls', 'roster', 'ros', 'new roster', 'build roster']
-            }
+            },
+            {
+                id: 4,
+                title: 'Requests',
+                description: 'Requests',
+                path: '/admin/hrsystem/requests',
+                key_words: ['employees', 'employee', 'emp', 'emps', 'empl', 'empls', 'requests', 'req', 'reque', 'user reques', 'user requests', 'employee requ']
+            },
+
         ]
     },
     {
@@ -156,42 +164,42 @@ const data: IData[] = [
                 id: 1,
                 title: 'Company Details',
                 description: 'Update compay details such as contacts, documents and links',
-                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings','company details', 'texas details', 'details', 'info', 'contacts', 'emergency contacts', 'texas contacts', 'menager contact', 'texas documents', 'documents', 'important links', 'link', 'texas links'],
+                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings', 'company details', 'texas details', 'details', 'info', 'contacts', 'emergency contacts', 'texas contacts', 'menager contact', 'texas documents', 'documents', 'important links', 'link', 'texas links'],
                 path: '/admin/settings/company/details'
             },
             {
                 id: 2,
                 title: 'Company Contacts',
                 description: 'Update compay contacts',
-                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings','company details', 'texas details', 'details', 'info', 'contacts', 'emergency contacts', 'texas contacts', 'menager contact', 'texas documents', 'documents', 'important links', 'link', 'texas links'],
+                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings', 'company details', 'texas details', 'details', 'info', 'contacts', 'emergency contacts', 'texas contacts', 'menager contact', 'texas documents', 'documents', 'important links', 'link', 'texas links'],
                 path: '/admin/settings/company/contacts'
             },
             {
                 id: 3,
                 title: 'Company Documets',
                 description: 'Update compay documents ',
-                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings','company details', 'texas details', 'details', 'info', 'contacts', 'emergency contacts', 'texas contacts', 'menager contact', 'texas documents', 'documents', 'important links', 'link', 'texas links'],
+                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings', 'company details', 'texas details', 'details', 'info', 'contacts', 'emergency contacts', 'texas contacts', 'menager contact', 'texas documents', 'documents', 'important links', 'link', 'texas links'],
                 path: '/admin/settings/company/documents'
             },
             {
                 id: 4,
                 title: 'Company Links',
                 description: 'Update compay links',
-                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings','company details', 'texas details', 'details', 'info', 'contacts', 'emergency contacts', 'texas contacts', 'menager contact', 'texas documents', 'documents', 'important links', 'link', 'texas links'],
+                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings', 'company details', 'texas details', 'details', 'info', 'contacts', 'emergency contacts', 'texas contacts', 'menager contact', 'texas documents', 'documents', 'important links', 'link', 'texas links'],
                 path: '/admin/settings/company/links'
             },
             {
                 id: 5,
                 title: 'Departments Settings',
                 description: 'Update  departments',
-                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings','company details', 'departamnets', 'create departaments'],
+                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings', 'company details', 'departamnets', 'create departaments'],
                 path: '/admin/settings/hrsystem/departments'
             },
             {
                 id: 6,
                 title: 'Roles Settings',
                 description: 'Update  Roles',
-                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings','roles', 'change role', 'update role', 'create role', 'delete role', 'permissions', 'permission'],
+                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings', 'roles', 'change role', 'update role', 'create role', 'delete role', 'permissions', 'permission'],
                 path: '/admin/settings/hrsystem/roles'
             },
             {
@@ -212,43 +220,43 @@ const data: IData[] = [
                 id: 9,
                 title: 'Restaurant Tables',
                 description: 'Update Tables',
-                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings','restaurant sections', 'restaurant tables', 'edit tables', 'edit section'],
+                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings', 'restaurant sections', 'restaurant tables', 'edit tables', 'edit section'],
                 path: '/admin/settings/restaurant/sections'
             },
             {
                 id: 10,
                 title: 'Restaurant Sections',
                 description: 'Update Sections',
-                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings','restaurant sections', 'restaurant tables', 'edit tables', 'edit section'],
+                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings', 'restaurant sections', 'restaurant tables', 'edit tables', 'edit section'],
                 path: '/admin/settings/restaurant/sections'
             },
             {
                 id: 11,
                 title: 'Auth Devices',
                 description: 'Update  Auth Devices',
-                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings','auth devices', 'auth', 'devices'],
+                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings', 'auth devices', 'auth', 'devices'],
                 path: '/admin/settings/restaurant/authdevices'
             },
             {
                 id: 12,
                 title: 'Printers',
                 description: 'Update  Printers',
-                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings','printers', 'print', 'prin', 'new printer', 'delete printer', 'update printer'],
+                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings', 'printers', 'print', 'prin', 'new printer', 'delete printer', 'update printer'],
                 path: '/admin/settings/restaurant/printers'
             },
             {
                 id: 13,
                 title: 'Bookings Open Days',
                 description: 'Update  Open Days',
-                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings','open days', 'booking days open', 'special days', 'close day open', 'close day', 'close time', 'close'],
+                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings', 'open days', 'booking days open', 'special days', 'close day open', 'close day', 'close time', 'close'],
                 path: '/admin/settings/bookings/opendays'
             },
             {
-                id : 14,
-                title : 'Booking Special Days',
-                description : 'Update  Special Days',
-                key_words : ['sett', 'config', 'conf', 'configu', 'configuration', 'settings','open days', 'booking days open', 'special days', 'close day open', 'close day', 'close time', 'close'],
-                path : '/admin/settings/bookings/specialdays'
+                id: 14,
+                title: 'Booking Special Days',
+                description: 'Update  Special Days',
+                key_words: ['sett', 'config', 'conf', 'configu', 'configuration', 'settings', 'open days', 'booking days open', 'special days', 'close day open', 'close day', 'close time', 'close'],
+                path: '/admin/settings/bookings/specialdays'
             }
         ]
     }

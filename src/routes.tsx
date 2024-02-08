@@ -234,6 +234,16 @@ const routers: IRoute[] = [
         ],
       },
       {
+        name: "Requests",
+        path: "/requests",
+        icon: <Icon name='Mails' size={14} />,
+        layout: "/admin/hrsystem",
+        authorization: [
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+        ],
+      },
+      {
         name: "Roster",
         path: "/roster",
         icon: <Icon name='Network' size={14} />,
@@ -243,30 +253,6 @@ const routers: IRoute[] = [
           Permissions.ADMIN_GHOST,
         ],
       },
-      // {
-      //   name: "Tasks",
-      //   path: "/tasks",
-      //   icon: <Icon name='AArrowDown' size={14} />,
-      //   layout: "/admin/hrsystem",
-      //   collapse: true,
-      //   authorization: ["admin", 'admin-ghost'],
-      //   items: [
-      //     {
-      //       name: "All",
-      //       path: "/all",
-      //       icon: <Icon name='AArrowDown' size={14} />,
-      //       layout: "/admin/hrsystem/tasks",
-      //       authorization: ["admin", 'admin-ghost'],
-      //     },
-      //     {
-      //       name: "Create",
-      //       path: "/create",
-      //       icon: <Icon name='AArrowDown' size={14} />,
-      //       layout: "/admin/hrsystem/tasks",
-      //       authorization: ["admin", 'admin-ghost'],
-      //     },
-      //   ],
-      // },
       {
         name: "Forms",
         path: "/forms",
@@ -386,13 +372,6 @@ const routers: IRoute[] = [
       //       authorization: ["admin", 'admin-ghost'],
       //     },
       //   ],
-      // },
-      // {
-      //   name: "Requests",
-      //   path: "/requests",
-      //   icon: <Icon name='AArrowDown' size={14} />,
-      //   layout: "/admin/hrsystem",
-      //   authorization: ["admin", 'admin-ghost'],
       // },
 
     ],

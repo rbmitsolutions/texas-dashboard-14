@@ -33,6 +33,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import DeleteRosterButton from "../rosterDisplay/deleteRosterButton";
 import RosterTasksDisplay from "../rosterTasksDisplay";
 import AddTaskToRoster from "../addTaskToRoster";
 import { Button } from "@/components/ui/button"
@@ -243,21 +244,10 @@ export default function AddToRoster({
                                                                         forms={forms}
                                                                         createRosterTask={createRosterTask}
                                                                     />
-                                                                    <Button
-                                                                        className='h-4 w-4 p-1'
-                                                                        variant='destructive'
-                                                                        type='button'
-                                                                        disabled={new Date(roster?.date!) < new Date()}
-                                                                        onClick={async () => {
-                                                                            await deleteRoster({
-                                                                                roster: {
-                                                                                    id: roster?.id
-                                                                                }
-                                                                            })
-                                                                        }}
-                                                                    >
-                                                                        <Icon name="X" />
-                                                                    </Button>
+                                                                    <DeleteRosterButton
+                                                                        roster={roster}
+                                                                        deleteRoster={deleteRoster}
+                                                                    />
                                                                 </div>
                                                             </div>
                                                             {roster?.tasks?.map(task => {

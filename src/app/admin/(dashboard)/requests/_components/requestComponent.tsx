@@ -83,7 +83,7 @@ export default function RequestComponent({ request, deleteRequest, isDeleteReque
                                     <small>To : </small>
                                     <Badge>
                                         {formatDate({
-                                            date: new Date(request?.dates_off[0]),
+                                            date: new Date(request?.dates_off[1]),
                                             f: 'dd/MM/yyyy'
                                         })}
                                     </Badge>

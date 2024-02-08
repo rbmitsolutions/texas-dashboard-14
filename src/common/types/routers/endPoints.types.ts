@@ -75,3 +75,7 @@ export enum EndPointsTypes {
     SERVICES_EMAIL_ENDPOINT = "/services/email",
     SERVICES_SMS_ENDPOINT = "/services/sms"
 }
+
+export enum RedirectTo {
+    USER_PROFILE = '/admin/hrsystem/employees/all',
+}
