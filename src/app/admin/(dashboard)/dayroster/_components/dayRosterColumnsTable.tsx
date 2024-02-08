@@ -1,17 +1,24 @@
 "use client"
+import { ColumnDef } from "@tanstack/react-table"
+import { UseMutateFunction } from "react-query"
+
+//libs
 import { formatDate } from "@/common/libs/date-fns/dateFormat"
-import { IUser } from "@/common/types/user/user.interface"
+
+//components
+import RosterInfo from "../../hrsystem/roster/_components/table/rosterDisplay/rosterInfo"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Checkbox } from "@/components/ui/checkbox"
-import { ColumnDef } from "@tanstack/react-table"
-import RosterInfo from "../../hrsystem/roster/_components/table/rosterDisplay/rosterInfo"
-import { IDuties, IShifts } from "@/common/types/company/companyDetails.interface"
-import { UseMutateFunction } from "react-query"
-import { IPUTCompanyBody } from "@/hooks/company/IPutCompanyDataHooks.interface"
+
+
+//interfaces
 import { IPOSTCompanyBody, IPOSTCompanyDataRerturn } from "@/hooks/company/IPostCompanyDataHooks.interface"
 import { IDELETECompanyDataBody } from "@/hooks/company/IDeleteCompanyDataHooks.interface"
-import { IForm } from "@/common/types/company/form.interface"
+import { IDuties, IShifts } from "@/common/types/company/companyDetails.interface"
+import { IPUTCompanyBody } from "@/hooks/company/IPutCompanyDataHooks.interface"
 import { IGETUserDataQuery } from "@/hooks/user/IGetUserDataHooks.interface"
+import { IForm } from "@/common/types/company/form.interface"
+import { IUser } from "@/common/types/user/user.interface"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -149,8 +156,8 @@ export const dayRosterColumnsTable = ({
 
                 return (
                     <div className="flex-container-center justify-center h-12 rounded-lg text-dark bg-green-300 dark:bg-green-800 dark:text-white">
-                        {roster?.break_in ? formatDate({
-                            date: roster?.break_in,
+                        {roster?.clock_in ? formatDate({
+                            date: roster?.clock_in,
                             f: 'HH:mm:ss'
                         }) : '-'}
                     </div>
@@ -170,8 +177,8 @@ export const dayRosterColumnsTable = ({
 
                 return (
                     <div className="flex-container-center justify-center h-12 rounded-lg text-dark bg-orange-300 dark:bg-orange-800 dark:text-white">
-                        {roster?.clock_in ? formatDate({
-                            date: roster?.clock_in,
+                        {roster?.break_in ? formatDate({
+                            date: roster?.break_in,
                             f: 'HH:mm:ss'
                         }) : '-'}
                     </div>

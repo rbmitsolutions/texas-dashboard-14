@@ -5,17 +5,17 @@ import ProfileForm from "./profileForm";
 
 //components
 import EmergencyContactForm from "./_components/emergencyContactForm";
-import BankDetailsForm from "./_components/bankDetailsForm";
-import VisaDetailsForm from "./_components/visaDetailsForm";
 import UpdatePasswordForm from "./_components/updatePasswordForm";
-import { Button } from "@/components/ui/button";
+import VisaDetailsForm from "./_components/visaDetailsForm";
+import BankDetailsForm from "./_components/bankDetailsForm";
 import UpdateRoleForm from "./_components/updateRoleForm";
+import { Button } from "@/components/ui/button";
+import IconText from "../../iconText";
 
 //interface
 import { IRoles } from "@/common/types/company/companyDetails.interface";
 import { IPUTUserBody } from "@/hooks/user/IPutUserDataHooks.interface";
 import { IUser } from "@/common/types/user/user.interface";
-import IconText from "../../iconText";
 
 interface UserProfileProps {
     user: IUser

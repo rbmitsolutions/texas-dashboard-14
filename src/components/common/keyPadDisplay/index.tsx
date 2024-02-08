@@ -48,7 +48,7 @@ export const KeyPadDisplay = ({ displayValue, onChange, buttonClassName, deleteB
                             className={cn(styles.button, buttonClassName)}
                             isLoading={isLoading}
                         >
-                            {n}
+                            {!isLoading && n}
                         </Button>
                     ))}
                     <Button
@@ -58,7 +58,7 @@ export const KeyPadDisplay = ({ displayValue, onChange, buttonClassName, deleteB
                         className={cn(styles.button, `col-span-2 ${deleteButtonClassName}`)}
                         isLoading={isLoading}
                     >
-                        0
+                        {!isLoading && 0}
                     </Button>
                     <Button
                         onClick={() => handleChange(0, true)}
@@ -67,7 +67,7 @@ export const KeyPadDisplay = ({ displayValue, onChange, buttonClassName, deleteB
                         className={cn("w-full h-16 text-2xl bg-red-700 hover:bg-red-600 rounded-lg shadow-lg", deleteButtonClassName)}
                         isLoading={isLoading}
                     >
-                        Del
+                        {!isLoading && 'Del'}
                     </Button>
                 </div>
             </div>

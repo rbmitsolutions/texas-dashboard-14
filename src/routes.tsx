@@ -83,7 +83,7 @@ const routers: IRoute[] = [
     path: "/admin/restaurant",
     name: "Restaurant",
     layout: "/admin",
-    icon: <Icon name='AArrowDown' size={14} />,
+    icon: <Icon name='ChefHat' size={14} />,
     collapse: true,
     // authorization: ["admin", 'admin-ghost', "booking_reader", "menu"],
     authorization: [
@@ -131,7 +131,7 @@ const routers: IRoute[] = [
       {
         name: "Menu",
         path: "/menu",
-        icon: <Icon name='AArrowDown' size={14} />,
+        icon: <Icon name='CookingPot' size={14} />,
         layout: "/admin/restaurant",
         collapse: true,
         // authorization: ["admin", 'admin-ghost', 'menu'],
@@ -145,7 +145,7 @@ const routers: IRoute[] = [
           {
             name: "All",
             path: "/all",
-            icon: <Icon name='AArrowDown' size={14} />,
+            icon: <Icon name='Utensils' size={14} />,
             layout: "/admin/restaurant/menu",
             // authorization: ["admin", 'admin-ghost', 'menu'],
             authorization: [
@@ -159,7 +159,7 @@ const routers: IRoute[] = [
           {
             name: "Create",
             path: "/create/section",
-            icon: <Icon name='AArrowDown' size={14} />,
+            icon: <Icon name='UtensilsCrossed' size={14} />,
             layout: "/admin/restaurant/menu",
             // authorization: ["admin", 'admin-ghost', 'menu', 'menu-create'],
             authorization: [
@@ -178,7 +178,7 @@ const routers: IRoute[] = [
   {
     path: "/admin/hrsystem",
     name: "HR System",
-    icon: <Icon name='AArrowDown' size={14} />,
+    icon: <Icon name='Building' size={14} />,
     layout: "/admin",
     collapse: true,
     // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
@@ -192,7 +192,7 @@ const routers: IRoute[] = [
       {
         name: "Employees",
         path: "/employees",
-        icon: <Icon name='AArrowDown' size={14} />,
+        icon: <Icon name='Users' size={14} />,
         layout: "/admin/hrsystem",
         collapse: true,
         authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST],
@@ -201,7 +201,7 @@ const routers: IRoute[] = [
           {
             name: "Employees",
             path: "/all",
-            icon: <Icon name='AArrowDown' size={14} />,
+            icon: <Icon name='Users' size={14} />,
             layout: "/admin/hrsystem/employees",
             authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST],
             //rotas [GET-USER, GET-DEPARTAMENTS]
@@ -224,7 +224,7 @@ const routers: IRoute[] = [
           {
             name: "Filed",
             path: "/filled",
-            icon: <Icon name='AArrowDown' size={14} />,
+            icon: <Icon name='UserRoundMinus' size={14} />,
             layout: "/admin/hrsystem/employees",
             // authorization: ["admin", 'admin-ghost'],
             authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST],
@@ -236,7 +236,7 @@ const routers: IRoute[] = [
       {
         name: "Roster",
         path: "/roster",
-        icon: <Icon name='AArrowDown' size={14} />,
+        icon: <Icon name='Network' size={14} />,
         layout: "/admin/hrsystem",
         authorization: [
           Permissions.ADMIN,
@@ -270,7 +270,7 @@ const routers: IRoute[] = [
       {
         name: "Forms",
         path: "/forms",
-        icon: <Icon name='AArrowDown' size={14} />,
+        icon: <Icon name='FileText' size={14} />,
         layout: "/admin/hrsystem",
         collapse: true,
         // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
@@ -284,7 +284,7 @@ const routers: IRoute[] = [
           {
             name: "Data",
             path: "/data",
-            icon: <Icon name='AArrowDown' size={14} />,
+            icon: <Icon name='FileText' size={14} />,
             layout: "/admin/hrsystem/forms",
             // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
             authorization: [
@@ -298,7 +298,7 @@ const routers: IRoute[] = [
           {
             name: "Create",
             path: "/create",
-            icon: <Icon name='AArrowDown' size={14} />,
+            icon: <Icon name='FilePlus' size={14} />,
             layout: "/admin/hrsystem/forms",
             authorization: [
               Permissions.ADMIN,
@@ -318,7 +318,7 @@ const routers: IRoute[] = [
       {
         name: "Reports",
         path: "/reports",
-        icon: <Icon name='AArrowDown' size={14} />,
+        icon: <Icon name='Siren' size={14} />,
         layout: "/admin/hrsystem",
         collapse: true,
         // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
@@ -333,7 +333,7 @@ const routers: IRoute[] = [
           {
             name: "All",
             path: "/all",
-            icon: <Icon name='AArrowDown' size={14} />,
+            icon: <Icon name='FileSearch' size={14} />,
             layout: "/admin/hrsystem/reports",
             // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
             authorization: [
@@ -348,7 +348,7 @@ const routers: IRoute[] = [
           {
             name: "Create",
             path: "/create",
-            icon: <Icon name='AArrowDown' size={14} />,
+            icon: <Icon name='FilePlus' size={14} />,
             layout: "/admin/hrsystem/reports",
             // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
             authorization: [
@@ -397,30 +397,28 @@ const routers: IRoute[] = [
 
     ],
   },
-  // {
-  //   path: "/admin/apps",
-  //   name: "Apps",
-  //   layout: "/admin",
-  //   icon: <Icon name='AArrowDown' size={14} />,
-  //   collapse: true,
-  //   authorization: ["admin", 'admin-ghost', 'day_roster'],
-  //   items: [
-  //     {
-  //       name: "Day Roster",
-  //       path: "/dayroster",
-  //       icon: <Icon name='AArrowDown' size={14} />,
-  //       layout: "/admin/apps",
-  //       authorization: ["admin", 'admin-ghost', 'day_roster'],
-  //     },
-  //     {
-  //       name: "Clock in",
-  //       path: "/clockin",
-  //       icon: <Icon name='AArrowDown' size={14} />,
-  //       layout: "/admin/apps",
-  //       authorization: ["admin"],
-  //     },
-  //   ],
-  // },
+  {
+    name: "Clock in",
+    path: "/clockin",
+    icon: <Icon name='Clock10' size={14} />,
+    layout: "/admin",
+    authorization: [
+      Permissions.ADMIN,
+      Permissions.ADMIN_GHOST,
+      Permissions.MY_PROFILE
+    ],
+  },
+  {
+    name: "Day Roster",
+    path: "/dayroster",
+    icon: <Icon name='Network' size={14} />,
+    layout: "/admin",
+    authorization: [
+      Permissions.ADMIN,
+      Permissions.ADMIN_GHOST,
+      Permissions.DAY_ROSTER
+    ],
+  },
   {
     path: "/haccp",
     name: "HACCP",
@@ -435,7 +433,7 @@ const routers: IRoute[] = [
   {
     name: "My Roster",
     path: "",
-    icon: <Icon name='AArrowDown' size={14} />,
+    icon: <Icon name='Network' size={14} />,
     layout: "/admin/roster",
     // authorization: ["my_profile"],
     authorization: [Permissions.MY_PROFILE],
@@ -445,7 +443,7 @@ const routers: IRoute[] = [
   {
     name: "Requests",
     path: "",
-    icon: <Icon name='AArrowDown' size={14} />,
+    icon: <Icon name='Mails' size={14} />,
     layout: "/admin/requests",
     authorization: [Permissions.MY_PROFILE],
     auth_device: false,
@@ -454,7 +452,7 @@ const routers: IRoute[] = [
   {
     name: "Company",
     path: "",
-    icon: <Icon name='AArrowDown' size={14} />,
+    icon: <Icon name='Building' size={14} />,
     layout: "/admin/company",
     authorization: [Permissions.MY_PROFILE],
     auth_device: false,
@@ -463,7 +461,7 @@ const routers: IRoute[] = [
   {
     name: "My Info",
     path: "",
-    icon: <Icon name='AArrowDown' size={14} />,
+    icon: <Icon name='User' size={14} />,
     layout: "/admin/myinfo",
     authorization: [Permissions.MY_PROFILE],
     auth_device: false,
