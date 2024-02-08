@@ -40,12 +40,13 @@ export default function AddNewOption({ form, onSave, onRemove }: AddNewOptionPro
         onSave(option)
         setOption('')
     }
+    
     return (
         <>
             <div>
                 <strong className='text-sm'>Options</strong>
                 <ul className='list-disc pl-4'>
-                    {form.getValues('options').map((option: string, index: number) => (
+                    {form.watch('options').map((option: string, index: number) => (
                         <li key={index}
                             className='mt-1'
 

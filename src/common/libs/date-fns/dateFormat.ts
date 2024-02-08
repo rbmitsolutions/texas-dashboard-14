@@ -1,4 +1,4 @@
-import { format, addDays, subDays, startOfMonth, endOfMonth, startOfDay, endOfDay, startOfWeek, parse } from "date-fns";
+import { isToday as isTodayFns, format, addDays, subDays, startOfMonth, endOfMonth, startOfDay, endOfDay, startOfWeek, parse } from "date-fns";
 
 export const parseDate = (date: string, format: 'dd/MM/yy'): Date => {
     return parse(date, format, new Date())
@@ -30,7 +30,7 @@ export const getLastDayOfMonth = (date: Date): Date => {
 
 interface IFormatDate {
     date: Date,
-    f?: 'dd/MM/yyyy' | 'dd/MM/yyyy HH:mm' | 'LLL dd, yy' | 'PPP' | 'dd, LLL, yy' | 'yyyy-MM-dd' | 'dd LLL, yy'
+    f?: 'dd/MM/yyyy' | 'dd/MM/yyyy HH:mm' | 'LLL dd, yy' | 'PPP' | 'dd, LLL, yy' | 'yyyy-MM-dd' | 'dd LLL, yy' | 'HH:mm:ss'
 }
 
 export const formatDate = ({ date, f = 'dd/MM/yyyy' }: IFormatDate): string => {
@@ -51,4 +51,8 @@ export const getFirstTimeOfTheDay = (date: Date): Date => {
 
 export const getLastTimeOfTheDay = (date: Date): Date => {
     return endOfDay(date)
+}
+
+export const isToday = (date: Date): boolean => {
+    return isTodayFns(date);
 }

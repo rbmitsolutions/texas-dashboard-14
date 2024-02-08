@@ -52,13 +52,13 @@ export interface IPUTUserDetailsBody {
 }
 
 export interface IPUTUserRosterBody {
-    id: string;
-    status?: IRosterStatus;
-    confirmed?: boolean;
-    roster_checked?: boolean;
-    week_payment_roster?: number;
-    availableBody?: boolean;
-    tasks_title?: string[];
+    one: {
+        id: string;
+        status?: string;
+        confirmed?: boolean;
+        roster_checked?: boolean;
+    }
+
 }
 
 export type IPUTUserDataQueryType = 'DETAILS' | 'USER_ROSTER'

@@ -15,24 +15,30 @@ export type IFormBuildInput =
   | IConditionalSelectForm;
 
 export function fieldBuilder(
-  field: IFormBuildInput,
+  input: IFormBuildInput,
   form: UseFormReturn<FieldValues, any, undefined>,
 ): React.ReactNode {
-  switch (field?.type) {
+  switch (input?.type) {
     case "input":
       return (
         <FormField
+          key={input?.register}
           control={form.control}
-          name={field?.register}
-          render={({ field: f }) => (
+          name={input?.register}
+          render={({ field }) => (
             <FormItem>
-              <FormLabel>{field?.label}</FormLabel>
+              <FormLabel>{input?.label}</FormLabel>
               <FormControl>
-                <Input placeholder={field?.label} {...field?.propsUi} {...f} />
+                <Input
+                  placeholder={input?.label}
+                  type={input?.propsUi?.type}
+                  {...field}
+                  value={field?.value || ''}
+                />
               </FormControl>
-              {field?.description &&
+              {input?.description &&
                 <FormDescription>
-                  {field?.description}
+                  {input?.description}
                 </FormDescription>
               }
               <FormMessage />
@@ -44,18 +50,18 @@ export function fieldBuilder(
       return (
         <FormField
           control={form.control}
-          name={field?.register}
-          render={({ field: f }) => (
+          name={input?.register}
+          render={({ field }) => (
             <FormItem className="space-y-3">
-              <FormLabel>{field?.label}</FormLabel>
+              <FormLabel>{input?.label}</FormLabel>
               <FormControl>
                 <RadioGroup
-                  onValueChange={f.onChange}
-                  defaultValue={f.value}
-                  value={f.value}
+                  onValueChange={field?.onChange}
+                  defaultValue={field?.value}
+                  value={field?.value}
                   className="flex flex-col space-y-1"
                 >
-                  {field?.options?.map(opt => {
+                  {input?.options?.map(opt => {
                     return (
                       <FormItem key={opt?.value} className="flex items-center space-x-3 space-y-0">
                         <FormControl>
@@ -78,20 +84,20 @@ export function fieldBuilder(
       return (
         <FormField
           control={form.control}
-          name={field?.register}
+          name={input?.register}
           render={({ field: f }) => (
             <FormItem>
-              <FormLabel>{field?.label}</FormLabel>
+              <FormLabel>{input?.label}</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder={field?.label}
+                  placeholder={input?.label}
                   className="resize-none h-60"
                   {...f}
                 />
               </FormControl>
-              {field?.description &&
+              {input?.description &&
                 <FormDescription>
-                  {field?.description}
+                  {input?.description}
                 </FormDescription>
               }
               <FormMessage />
@@ -103,56 +109,37 @@ export function fieldBuilder(
       return (
         <FormField
           control={form.control}
-          name={field?.register}
-          render={({ field: f }) => (
+          name={input?.register}
+          render={({ field }) => (
             <FormItem>
-              <FormLabel>{field?.label}</FormLabel>
+              <FormLabel>{input?.label}</FormLabel>
               <Select
-                onValueChange={f.onChange}
-                defaultValue={f.value}
-                value={f.value}
+                onValueChange={field?.onChange}
+                defaultValue={field?.value}
+                value={field?.value}
               >
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder={field?.label} />
+                    <SelectValue placeholder={input?.label} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {field?.options?.map(opt => {
+                  {input?.options?.map(opt => {
                     return (
                       <SelectItem key={opt?.label} value={opt?.value}>{opt?.label}</SelectItem>
                     )
                   })}
                 </SelectContent>
               </Select>
-              {field?.description &&
+              {input?.description &&
                 <FormDescription>
-                  {field?.description}
+                  {input?.description}
                 </FormDescription>
               }
               <FormMessage />
             </FormItem>
           )}
         />
-
-        // <FormField
-        //   control={form.control}
-        //   name={field?.register}
-        //   render={({ field: f }) => (
-        //     <FormItem>
-        //       <FormLabel>{field?.label}</FormLabel>
-        //       <FormControl>
-        //         <Input placeholder="shadcn" {...f} />
-        //       </FormControl>
-        //       {field?.description &&
-        //         <FormDescription>
-        //           {field?.description}
-        //         </FormDescription>
-        //       }
-        //       <FormMessage />
-        //     </FormItem>
-        //   )}
-        // />
       );
     default:
       return

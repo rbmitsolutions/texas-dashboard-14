@@ -2,6 +2,7 @@ import { getDepartments } from "@/common/libs/company/actions/departaments"
 import { getDuties } from "@/common/libs/company/actions/duties"
 import { getShifts } from "@/common/libs/company/actions/shifts"
 import RosterContainer from "./_components"
+import { getForms } from "@/common/libs/company/actions/forms"
 
 export default async function RosterPage() {
     const duties = await getDuties({
@@ -29,11 +30,25 @@ export default async function RosterPage() {
             },
         }
     })
+
+    const forms = await getForms({
+        all: {
+            pagination: {
+                take: 500,
+                skip: 0
+            },
+            orderBy: {
+                key: 'title',
+                order: 'asc'
+            }
+        }
+    })
+
     return (
         <RosterContainer
             departaments={departaments?.data || []}
             duties={duties?.data || []}
-            forms={[]}
+            forms={forms?.data || []}
             shifts={shfits?.data || []}
         />
     )

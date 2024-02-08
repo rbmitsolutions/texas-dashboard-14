@@ -9,7 +9,7 @@ import RosterHeader from "./header"
 import { getMondayOfTheWeek, getSundayOfTheWeek } from "@/common/libs/date-fns/dateFormat"
 
 //hooks
-import { useDELETECompanyDataHooks, useGETCompanyDataHooks, usePOSTCompanyDataHooks } from "@/hooks/company/companyDataHooks"
+import { useDELETECompanyDataHooks, useGETCompanyDataHooks, usePOSTCompanyDataHooks, usePUTCompanyDataHooks } from "@/hooks/company/companyDataHooks"
 
 //interfaces
 import { IDuties, IShifts } from "@/common/types/company/companyDetails.interface"
@@ -52,9 +52,30 @@ export default function RosterContainer({
     })
 
     const {
+        updateCompanyData: updateRoster
+    } = usePUTCompanyDataHooks({
+        query: 'ROSTER',
+        toRefetch
+    })
+
+    const {
         createCompanyData: createRoster,
     } = usePOSTCompanyDataHooks({
         query: 'ROSTER',
+        toRefetch
+    })
+
+    const {
+        createCompanyData: createRosterTask
+    } = usePOSTCompanyDataHooks({
+        query: 'ROSTER_TASKS',
+        toRefetch
+    })
+
+    const {
+        deleteCompanyData: deleteRosterTask
+    } = useDELETECompanyDataHooks({
+        query: 'ROSTER_TASKS',
         toRefetch
     })
 
@@ -118,6 +139,9 @@ export default function RosterContainer({
                             params={GETCompanyDataParams}
                             createRoster={createRoster}
                             deleteRoster={deleteRoster}
+                            updateRoster={updateRoster}
+                            createRosterTask={createRosterTask}
+                            deleteRosterTask={deleteRosterTask}
                         />
                     </Wrap>
                 )

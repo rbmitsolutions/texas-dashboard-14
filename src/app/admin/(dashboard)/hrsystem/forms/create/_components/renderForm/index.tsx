@@ -3,7 +3,6 @@ import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UseMutateFunction } from 'react-query';
-import { useEffect } from 'react';
 
 //components
 import { CreateFormFormSchema, CreateFormFormSchemaType } from '@/common/libs/zod/forms/company/companyCreateForm';
@@ -22,8 +21,8 @@ import { IForm, IFormSection } from "@/common/types/company/form.interface"
 import { IFormBuildInput } from "@/common/utils/formBuilder"
 
 interface RenderFormProps {
-    form: IForm
-    setForm: React.Dispatch<React.SetStateAction<IForm>>
+    inputs: IFormBuildInput[][]
+    setInputs: React.Dispatch<React.SetStateAction<IFormBuildInput[][]>>
     page: number
     setPage: React.Dispatch<React.SetStateAction<number>>
     setField: React.Dispatch<React.SetStateAction<IFormBuildInput>>
@@ -34,19 +33,19 @@ interface RenderFormProps {
     createForm: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
 }
 
-export default function RenderForm({ form, setForm, page, setPage, setField, replaceInputs, deleteField, removePage, formSections, createForm }: RenderFormProps) {
+export default function RenderForm({ inputs, setInputs, page, setPage, setField, replaceInputs, deleteField, removePage, formSections, createForm }: RenderFormProps) {
     const { user } = useAuthHooks()
 
     const handleDragEnd = (event: any) => {
         const { active, over } = event
         if (active.id !== over.id) {
-            const inputs = form?.inputs[page]
-            const activeIndex = inputs.findIndex(input => input.register === active.id)
-            const overIndex = inputs.findIndex(input => input.register === over.id)
-            const temp = inputs[activeIndex]
-            inputs[activeIndex] = inputs[overIndex]
-            inputs[overIndex] = temp
-            replaceInputs(page, inputs)
+            const i = inputs[page]
+            const activeIndex = i.findIndex(input => input.register === active.id)
+            const overIndex = i.findIndex(input => input.register === over.id)
+            const temp = i[activeIndex]
+            i[activeIndex] = i[overIndex]
+            i[overIndex] = temp
+            replaceInputs(page, i)
         }
     }
 
@@ -55,42 +54,31 @@ export default function RenderForm({ form, setForm, page, setPage, setField, rep
         resolver: zodResolver(CreateFormFormSchema),
         defaultValues: {
             form_section_id: '',
-            title: form?.title,
-            type: ''
+            title: 'Form',
         },
     });
 
     const onSubmitForm: SubmitHandler<CreateFormFormSchemaType> = async (formData) => {
-        const fields = form?.inputs?.filter(input => input?.length > 0)
+        const fields = inputs?.filter(input => input?.length > 0)
+        const form = {
+            inputs: fields,
+            title: formData?.title,
+            form_section_id: formData?.form_section_id === 'none' ? undefined : formData?.form_section_id,
+            created_by: user?.name,
+            created_by_id: user?.user_id
+        }
         await createForm({
-            form: {
-                inputs: fields,
-                title: formData.title,
-                type: formData.type,
-                form_section_id: formData.form_section_id,
-                created_by: user?.name,
-                created_by_id: user?.user_id
-            }
+            form
         }, {
             onSuccess: () => {
-                localStorage.removeItem('createForm')
+                localStorage.removeItem('formInputs')
                 f.reset()
-                setForm({
-                    title: 'Form',
-                    inputs: [[]] as IForm['inputs'],
-                } as IForm)
+                setPage(0)
+                setInputs([[]] as IForm['inputs'])
             }
         })
 
     };
-
-    useEffect(() => {
-        f.reset({
-            title: form?.title,
-            type: '',
-            form_section_id: ''
-        })
-    }, [form, f])
 
     return (
         <div className='p-2 rounded-xl bg-background-soft'>
@@ -102,7 +90,7 @@ export default function RenderForm({ form, setForm, page, setPage, setField, rep
                     <div className='flex items-center justify-center relative h-48 border-2 p-4 rounded-xl bg-[url("/img/background.png")] bg-center bg-no-repeat bg-cover z-10 '>
                         <Button
                             variant='destructive'
-                            disabled={(form?.inputs.length === 1 && page === 0)}
+                            disabled={(inputs.length === 1 && page === 0)}
                             leftIcon='Minus'
                             className='absolute top-2 right-2'
                             type='button'
@@ -113,7 +101,7 @@ export default function RenderForm({ form, setForm, page, setPage, setField, rep
                         <h1 className='text-2xl font-bold bg-background p-2 rounded-xl text-primary dark:text-white'>{f?.watch('title')}</h1>
                     </div>
                     <div className='flex-col-container relative bg-background shadow-lg min-h-20 p-4 max-w-lg m-auto mt-[-40px] rounded-lg z-10'>
-                        <div className='grid grid-cols-[1fr,100px,150px] gap-4'>
+                        <div className='grid grid-cols-[1fr,150px] gap-4'>
                             <FormField
                                 control={f.control}
                                 name="title"
@@ -123,34 +111,6 @@ export default function RenderForm({ form, setForm, page, setPage, setField, rep
                                         <FormControl>
                                             <Input placeholder="Title" {...field} />
                                         </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={f.control}
-                                name="type"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Section</FormLabel>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                            value={field.value}
-                                        >
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Type" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {['form', 'task']?.map(t => {
-                                                    return (
-                                                        <SelectItem key={t} value={t}>{t}</SelectItem>
-                                                    )
-                                                })}
-                                            </SelectContent>
-                                        </Select>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -172,11 +132,13 @@ export default function RenderForm({ form, setForm, page, setPage, setField, rep
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
+                                                <SelectItem value='none'>No Section</SelectItem>
                                                 {formSections?.map(sec => {
                                                     return (
                                                         <SelectItem key={sec?.id} value={sec?.id}>{sec?.title}</SelectItem>
                                                     )
                                                 })}
+
                                             </SelectContent>
                                         </Select>
                                         <FormMessage />
@@ -184,31 +146,33 @@ export default function RenderForm({ form, setForm, page, setPage, setField, rep
                                 )}
                             />
                         </div>
-                        <DndContext
-                            collisionDetection={closestCenter}
-                            onDragEnd={handleDragEnd}
-                        >
-                            <SortableContext
-                                items={form?.inputs[page]?.map(input => input?.register)}
-                                strategy={verticalListSortingStrategy}
+                        {inputs[page]?.length > 0 &&
+                            <DndContext
+                                collisionDetection={closestCenter}
+                                onDragEnd={handleDragEnd}
                             >
-                                {form?.inputs[page]?.map(input => {
-                                    return (
-                                        <SortbleField
-                                            key={input?.register}
-                                            form={f}
-                                            input={input}
-                                            deleteField={deleteField}
-                                            setField={setField}
-                                        />
-                                    )
-                                })}
-                            </SortableContext>
-                        </DndContext>
+                                <SortableContext
+                                    items={inputs[page]?.map(input => input?.register)}
+                                    strategy={verticalListSortingStrategy}
+                                >
+                                    {inputs[page]?.map(input => {
+                                        return (
+                                            <SortbleField
+                                                key={input?.register}
+                                                form={f}
+                                                input={input}
+                                                deleteField={deleteField}
+                                                setField={setField}
+                                            />
+                                        )
+                                    })}
+                                </SortableContext>
+                            </DndContext>
+                        }
                         <div className='flex items-center justify-between'>
                             <div className='flex gap-2'>
-                                {form?.inputs.length > 1 &&
-                                    Array.from({ length: form?.inputs.length }, (_, i) => {
+                                {inputs.length > 1 &&
+                                    Array.from({ length: inputs.length }, (_, i) => {
                                         return (
                                             <Button
                                                 key={i}
@@ -227,7 +191,7 @@ export default function RenderForm({ form, setForm, page, setPage, setField, rep
                             <Button
                                 leftIcon='Save'
                                 className='self-end'
-                                disabled={form?.inputs?.length === 1 && form?.inputs[0]?.length === 0}
+                                disabled={inputs?.length === 1 && inputs[0]?.length === 0}
                             >
                                 Save
                             </Button>

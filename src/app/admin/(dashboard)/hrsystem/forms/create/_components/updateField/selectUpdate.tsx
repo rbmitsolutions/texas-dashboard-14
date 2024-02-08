@@ -10,12 +10,12 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import AddNewOption from "./utils/addNewOption";
 import { Input } from "@/components/ui/input";
 
 //interface
 import { IConditionalSelectForm } from "@/common/utils/formBuilder/formBuilder.interface";
 import { IFormBuildInput } from "@/common/utils/formBuilder";
-import AddNewOption from "./utils/addNewOption";
 
 export interface SelectUpdateFormType extends UseFormReturn<FormSelectBuilderFormSchemaType> { }
 
@@ -38,20 +38,22 @@ export default function SelectUpdate({ field, onSave }: SelectUpdateProps) {
     });
 
     const onSubmitForm: SubmitHandler<FormSelectBuilderFormSchemaType> = (formData) => {
+        console.log(form.getValues())
         onSave({
             ...field,
             label: formData.label,
             description: formData.description,
             required: formData.required,
-            options: formData.options.map(option => ({ 
+            options: formData.options.map(option => ({
                 label: option?.toLowerCase(),
                 value: option?.toLowerCase()
-             }))
+            }))
         })
         form.reset()
     };
 
     useEffect(() => {
+       
         form.reset({
             label: field?.label,
             description: field?.description,
@@ -126,6 +128,7 @@ export default function SelectUpdate({ field, onSave }: SelectUpdateProps) {
                         form.setValue('options', options.filter(opt => opt !== option))
                     }}
                 />
+                <small>You have to add a minimum of two options</small>
                 <Button
                     className='mt-4 self-end'
                     leftIcon='Save'

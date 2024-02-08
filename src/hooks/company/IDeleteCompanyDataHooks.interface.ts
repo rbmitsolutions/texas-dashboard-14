@@ -1,8 +1,11 @@
-export type IDELETECompanyDataQueryType = 'HACCP_REPORTS' | 'FORMS' | 'ROSTER' | "FORM_SECTION" | "DUTIES" | "SHIFTS"
+export type IDELETECompanyDataQueryType = 'HACCP_REPORTS' | 'FORMS' | 'ROSTER' | 'ROSTER_TASKS' | "FORM_SECTION" | "DUTIES" | "SHIFTS"
 export interface IDELETECompanyDataBody {
   roster?: {
     id: string;
   },
+  rosterTask?:{
+    id: string;
+  }
   haccpReport?: {
     id: string;
     file_id: string;

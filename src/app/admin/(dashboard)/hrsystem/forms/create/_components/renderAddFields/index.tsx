@@ -1,6 +1,5 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { IForm } from "@/common/types/company/form.interface";
 import { IFormBuildInput } from "@/common/utils/formBuilder";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -9,12 +8,22 @@ import { Label } from "@/components/ui/label";
 import AddField from "./addField";
 
 interface RenderAddFieldsProps {
-    form: IForm
+    inputs: IFormBuildInput[][]
     addField: (field: IFormBuildInput) => void
     addNewPage: () => void
 }
 
-export default function RenderAddFields({ form, addField, addNewPage }: RenderAddFieldsProps) {
+function generateRandomString(length: number) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+export default function RenderAddFields({ inputs, addField, addNewPage }: RenderAddFieldsProps) {
     return (
         <div className='flex-col-container p-2 border-2 rounded-xl'>
             <h2>Actions</h2>
@@ -23,7 +32,7 @@ export default function RenderAddFields({ form, addField, addNewPage }: RenderAd
                 field={{
                     label: 'Input' + Math.round(Math.random() * 10),
                     type: 'input',
-                    register: String(Math.random() * 10),
+                    register: generateRandomString(10),
                     description: '',
                     required: true,
                     title: 'Input' + Math.round(Math.random() * 10),
@@ -40,12 +49,18 @@ export default function RenderAddFields({ form, addField, addNewPage }: RenderAd
             <AddField
                 addField={addField}
                 field={{
-                    label: 'Input' + Math.round(Math.random() * 10),
+                    label: 'Select' + Math.round(Math.random() * 10),
                     type: 'select',
-                    register: String(Math.random() * 10),
+                    register: generateRandomString(10),
                     description: '',
-                    title: 'Input' + Math.round(Math.random() * 10),
-                    options: [],
+                    title: 'Select' + Math.round(Math.random() * 10),
+                    options: [{
+                        label: 'Option 1',
+                        value: 'option1'
+                    }, {
+                        label: 'Option 2',
+                        value: 'option2'
+                    }],
                     required: true,
                 }}
             >
@@ -62,11 +77,11 @@ export default function RenderAddFields({ form, addField, addNewPage }: RenderAd
             <AddField
                 addField={addField}
                 field={{
-                    label: 'Input' + Math.round(Math.random() * 10),
+                    label: 'Textarea' + Math.round(Math.random() * 10),
                     type: 'textarea',
-                    register: String(Math.random() * 10),
+                    register: generateRandomString(10),
                     description: '',
-                    title: 'Input' + Math.round(Math.random() * 10),
+                    title: 'Textarea' + Math.round(Math.random() * 10),
                     required: true,
                 }}
             >
@@ -76,11 +91,11 @@ export default function RenderAddFields({ form, addField, addNewPage }: RenderAd
             <AddField
                 addField={addField}
                 field={{
-                    label: 'Input' + Math.round(Math.random() * 10),
+                    label: 'Radio Group' + Math.round(Math.random() * 10),
                     type: 'radio_group',
-                    register: String(Math.random() * 10),
+                    register: generateRandomString(10),
                     description: '',
-                    title: 'Input' + Math.round(Math.random() * 10),
+                    title: 'Radio Group' + Math.round(Math.random() * 10),
                     options: [{
                         label: 'Option 1',
                         value: 'option1'
@@ -106,7 +121,7 @@ export default function RenderAddFields({ form, addField, addNewPage }: RenderAd
             <Button
                 leftIcon="Plus"
                 onClick={addNewPage}
-                disabled={form?.inputs?.length === 4}
+                disabled={inputs?.length === 4}
                 className='self-end'
             >
                 Page

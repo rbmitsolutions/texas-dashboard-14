@@ -3,22 +3,20 @@ import { UseMutateFunction } from "react-query"
 
 //components
 import { rosterBackground } from "@/common/libs/company/roster"
-import { formatDate } from "@/common/libs/date-fns/dateFormat"
+import { formatDate, isToday } from "@/common/libs/date-fns/dateFormat"
 import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
 
 //libs
 import { cn } from "@/common/libs/shadcn/utils"
 
-//hooks
-import { IPUTCompanyBody } from "@/hooks/company/IPutCompanyDataHooks.interface"
-
 //interface
+import { IPUTUserBody } from "@/hooks/user/IPutUserDataHooks.interface"
 import { IRoster } from "@/common/types/company/roster.interface"
 
 interface RosterComponentProps {
     roster: IRoster
-    updateRoster: UseMutateFunction<void, any, IPUTCompanyBody, unknown>
+    updateRoster: UseMutateFunction<any, any, IPUTUserBody, unknown>
 }
 
 export default function RosterComponent({ roster, updateRoster }: RosterComponentProps) {
@@ -28,9 +26,11 @@ export default function RosterComponent({ roster, updateRoster }: RosterComponen
         if (roster?.status !== 'unconfirmed') return
         await updateRoster({
             roster: {
-                id: roster?.id,
-                status: 'confirmed',
-                confirmed: true,
+                one: {
+                    id: roster?.id,
+                    status: 'confirmed',
+                    confirmed: true,
+                }
             }
         })
     }
@@ -47,25 +47,22 @@ export default function RosterComponent({ roster, updateRoster }: RosterComponen
                         })}
                     </span>
                     <Switch
-                        className='bg-orange-200'
                         checked={roster?.status === "confirmed"}
                         onClick={handlUpdateRoster}
+                        disabled={new Date(roster?.date!) < new Date() || roster?.status === 'confirmed'}
                     />
                 </div>
                 <span className="capitalize">{roster?.duty?.toLowerCase()}</span>
                 <span className="capitalize">{roster?.shift?.toLowerCase()}</span>
-                {roster?.tasks_title?.map(task => {
+                {roster?.tasks?.map(task => {
                     return (
                         <Button
-                            key={task}
-                            disabled={task?.toLowerCase().split(" ").includes("done") ||
-                                new Date().getDate() !== new Date(roster?.date!).getDate() ||
-                                roster.status === "sickday"
-                            }
+                            key={task?.id}
+                            disabled={task?.done || !isToday(new Date(roster?.date!))}
                             className='text-pretty text-left leading-[18px] h-22'
-                            onClick={() => router.push(`/admin/task/${task}/${roster.id}`)}
+                            onClick={() => router.push(`/admin/task/${task?.id}`)}
                         >
-                            {task}
+                            {task?.form}
                         </Button>
                     )
                 })}

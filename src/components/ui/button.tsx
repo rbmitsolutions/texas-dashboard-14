@@ -25,6 +25,8 @@ const buttonVariants = cva(
         orange: "bg-orange-600 text-white hover:bg-orange-600/80 dark:bg-orange-400 dark:text-black dark:hover:bg-orange-400/80",
         blue: "bg-blue-600 text-white hover:bg-blue-600/80 dark:bg-blue-400 dark:text-black dark:hover:bg-blue-400/80",
         yellow: "bg-yellow-500 text-dark hover:bg-yellow-500/80 dark:bg-yellow-400 dark:text-black dark:hover:bg-yellow-400/80",
+        green: "bg-green-500 text-dark hover:bg-green-500/80 dark:bg-green-400 dark:text-black dark:hover:bg-green-400/80",
+        purple: "bg-purple-500 text-dark hover:bg-purple-500/80 dark:bg-purple-400 dark:text-black dark:hover:bg-purple-400/80",
       },
       size: {
         default: "h-9 px-4 py-2",

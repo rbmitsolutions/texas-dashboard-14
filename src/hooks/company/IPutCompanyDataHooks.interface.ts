@@ -11,7 +11,6 @@ export interface IPUTFormBody {
     title?: string;
     inputs?: any
     form_section_id?: string;
-    type?: string;
     created_by?: string;
     created_by_id?: string;
 }
@@ -22,21 +21,40 @@ export interface IPUTFormSectionBody {
 }
 
 export interface IPUTRosterBody {
-    id: string;
-    duty?: string;
-    shift?: string;
-    hours?: number;
-    status?: IRosterStatus;
-    week_payment_preview?: number;
-    break_in?: Date;
-    break_out?: Date;
-    clock_in?: Date;
-    clock_out?: Date;
-    confirmed?: boolean;
-    roster_checked?: boolean;
-    week_payment_roster?: number;
-    availableBody?: boolean;
-    tasks_title?: string[];
+    one?: {
+        id: string;
+        status?: string;
+        duty?: string;
+        shift?: string;
+        hours_roster?: number;
+        week_payment_roster?: number;
+        break_in?: Date | null;
+        break_out?: Date | null;
+        clock_in?: Date | null;
+        clock_out?: Date | null;
+        confirmed?: boolean;
+        roster_checked?: boolean;
+        paid?: boolean
+        available?: boolean;
+        forgot_to_clock_out?: boolean;
+    }
+    many?: {
+        ids: string[];
+        status?: string;
+        break_in?: Date;
+        break_out?: Date;
+        clock_in?: Date;
+        clock_out?: Date;
+        confirmed?: boolean;
+        roster_checked?: boolean;
+        paid?: boolean
+        available?: boolean;
+        forgot_to_clock_out?: boolean;
+        send_email?: {
+            start_date: Date;
+            end_date: Date;
+        }
+    }
 }
 
 export interface IPUTShiftsBody {

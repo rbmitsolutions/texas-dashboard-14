@@ -19,6 +19,7 @@ export enum EndPointsTypes {
     COMPANY_SHIFTS_ENDPOINT = '/company/shifts',
     COMPANY_DUTIES_ENDPOINT = '/company/duties',
     COMPANY_ROSTER_ENDPOINT = '/company/roster',
+    COMPANY_ROSTER_TASKS_ENDPOINT = '/company/roster/tasks',
     COMPANY_TASKS_ENDPOINT = '/company/tasks',
     COMPANY_HACCP_ENDPOINT = '/company/haccp',
     COMPANY_USERS_ENDPOINT = '/company/users',

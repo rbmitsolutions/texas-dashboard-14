@@ -33,6 +33,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import RosterTasksDisplay from "../rosterTasksDisplay";
+import AddTaskToRoster from "../addTaskToRoster";
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch";
 
@@ -47,14 +49,18 @@ import { IDELETECompanyDataBody } from "@/hooks/company/IDeleteCompanyDataHooks.
 import { IDuties, IShifts } from "@/common/types/company/companyDetails.interface";
 import { IUser } from "@/common/types/user/user.interface";
 import { IWeekDays } from "..";
+import { IForm } from "@/common/types/company/form.interface";
 
 interface AddToRosterProps {
     user: IUser;
     weekDays: IWeekDays
     shifts: IShifts[],
     duties: IDuties[]
+    forms: IForm[]
+    createRosterTask: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
     createRoster: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
     deleteRoster: UseMutateFunction<void, any, IDELETECompanyDataBody, unknown>
+    deleteRosterTask: UseMutateFunction<void, any, IDELETECompanyDataBody, unknown>
 }
 
 export default function AddToRoster({
@@ -63,7 +69,10 @@ export default function AddToRoster({
     shifts,
     duties,
     deleteRoster,
-    createRoster
+    createRoster,
+    forms,
+    createRosterTask,
+    deleteRosterTask
 }: AddToRosterProps) {
     const form = useForm<CreateRosterFormSchemaType>({
         mode: "onChange",
@@ -112,10 +121,6 @@ export default function AddToRoster({
                 <Button
                     size='iconExSm'
                     variant='outline'
-                // disabled={!isUserAuthorized(
-                //     permissions,
-                //     [Permissions.SEND_SMS]
-                // )}
                 >
                     <Icon name="Plus" />
                 </Button>
@@ -226,28 +231,44 @@ export default function AddToRoster({
                                             {user?.roster?.map(roster => {
                                                 if (roster?.week_day === date?.day) {
                                                     return (
-                                                        <div key={roster?.id} className={cn('flex justify-between gap-1 p-2 rounded-md mt-1', rosterBackground(roster?.status!, true))}>
-                                                            <div className='flex flex-col'>
-                                                                <small className='text-xs'>{roster?.shift}</small>
-                                                                <small className='text-xs'>{roster?.duty}</small>
+                                                        <div key={roster?.id} className={cn('flex flex-col gap-1 p-2 rounded-md mt-1', rosterBackground(roster?.status!, true))}>
+                                                            <div className='flex justify-between'>
+                                                                <div className='flex flex-col'>
+                                                                    <small className='text-xs'>{roster?.shift}</small>
+                                                                    <small className='text-xs'>{roster?.duty}</small>
+                                                                </div>
+                                                                <div className='flex gap-2'>
+                                                                    <AddTaskToRoster
+                                                                        roster_id={roster?.id}
+                                                                        forms={forms}
+                                                                        createRosterTask={createRosterTask}
+                                                                    />
+                                                                    <Button
+                                                                        className='h-4 w-4 p-1'
+                                                                        variant='destructive'
+                                                                        type='button'
+                                                                        disabled={new Date(roster?.date!) < new Date()}
+                                                                        onClick={async () => {
+                                                                            await deleteRoster({
+                                                                                roster: {
+                                                                                    id: roster?.id
+                                                                                }
+                                                                            })
+                                                                        }}
+                                                                    >
+                                                                        <Icon name="X" />
+                                                                    </Button>
+                                                                </div>
                                                             </div>
-                                                            <div className='flex gap-2'>
-                                                                <Button
-                                                                    size='iconExSm'
-                                                                    variant='destructive'
-                                                                    type='button'
-                                                                    disabled={roster?.date! < new Date()}
-                                                                    onClick={async () => {
-                                                                        await deleteRoster({
-                                                                            roster: {
-                                                                                id: roster?.id
-                                                                            }
-                                                                        })
-                                                                    }}
-                                                                >
-                                                                    <Icon name="X" />
-                                                                </Button>
-                                                            </div>
+                                                            {roster?.tasks?.map(task => {
+                                                                return (
+                                                                    <RosterTasksDisplay
+                                                                        key={task?.id}
+                                                                        task={task}
+                                                                        deleteRosterTask={deleteRosterTask}
+                                                                    />
+                                                                )
+                                                            })}
                                                         </div>
                                                     )
                                                 }

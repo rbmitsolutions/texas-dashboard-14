@@ -6,7 +6,7 @@ export default function SendRoster(): JSX.Element {
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <Button size='iconSm'>
+                <Button size='iconSm' variant='yellow'>
                     <Icon name="Send"/>
                 </Button>
             </PopoverTrigger>

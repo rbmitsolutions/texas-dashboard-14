@@ -1,8 +1,7 @@
 import { IDuties, IShifts } from "@/common/types/company/companyDetails.interface";
 import { IForm, IFormData, IFormSection } from "@/common/types/company/form.interface";
 import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
-import { IRequestsType } from "@/common/types/company/requests.interface";
-import { IRoster } from "@/common/types/company/roster.interface";
+import { IRoster, IRosterTasks } from "@/common/types/company/roster.interface";
 import { ITransactionsDirection, ITransactionsMethod, ITransactionsType } from "@/common/types/company/transactions.interface";
 
 export interface IPOSTTransactionsBody {
@@ -44,7 +43,6 @@ export interface IPOSTFormBody {
     title: string;
     inputs: any;
     form_section_id?: string;
-    type: string;
     created_by: string;
     created_by_id: string;
 }
@@ -56,8 +54,11 @@ export interface IPOSTFormSectionBody {
 export interface IPOSTFormDataBody {
     title: string;
     by: string;
-    type: string;
     values: string;
+    rosterTask?: {
+        id: string
+        done: boolean
+    }
 }
 
 
@@ -86,11 +87,23 @@ export interface IPOSTRosterBody {
     salary: number;
 }
 
-export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "REQUESTS" | 'DUTIES' | 'SHIFTS' | 'ROSTER'
+export interface IPOSTRosterTasksBody {
+    form_id: string;
+    form: string;
 
-export type IPOSTCompanyDataRerturn = IRoster | IHaccpReports | IForm | IFormSection | IFormData | IShifts | IDuties
+    created_by: string;
+    created_id: string;
+
+    roster_id: string;
+}
+
+
+export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "REQUESTS" | 'DUTIES' | 'SHIFTS' | 'ROSTER' | 'ROSTER_TASKS'
+
+export type IPOSTCompanyDataRerturn = IRoster | IHaccpReports | IForm | IFormSection | IFormData | IShifts | IDuties | IRosterTasks
 export interface IPOSTCompanyBody {
     roster?: IPOSTRosterBody,
+    rosterTask?: IPOSTRosterTasksBody
     haccpReport?: IPOSTHaccpReportsBody
     form?: IPOSTFormBody
     formSection?: IPOSTFormSectionBody

@@ -22,6 +22,16 @@ export const companyEndPoint = {
         createSucess: 'Roster created successfully!',
         createError: "Roster creation failed!",
     },
+    ROSTER_TASKS: {
+        url: EndPointsTypes['COMPANY_ROSTER_TASKS_ENDPOINT'],
+        queryParams: 'roster-tasks',
+        updateSucess: "Task updated successfully!",
+        updateError: "Task update failed!",
+        deleteSucess: "Task deleted successfully!",
+        deleteError: "Task delete failed!",
+        createSucess: 'Task created successfully!',
+        createError: "Task creation failed!",
+    },
     HACCP_REPORTS: {
         url: EndPointsTypes['COMPANY_HACCP_REPORTS_ENDPOINT'],
         queryParams: 'haccpReports',

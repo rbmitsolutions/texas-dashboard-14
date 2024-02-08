@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { api } from "@/common/libs/axios/api";
 
 //interface
-import { ICompanyAllFormsDataReponse, ICompanyDataQueryType, ICompanyDetailsResponse, IFormSectionGetAllResponse, IFormsGetAllResponse, IGETAllDepartamentsResponse, IGETAllDutiesResponse, IGETAllShiftsResponse, IGETCompanyAllFilesResponse, IGETCompanyDataQuery, IGETCompanyResponse, IGETCompanyRosterResponse, IGETRolesResponse, IHaccpReportsResponse, IRequestsGetAllResponse, IRosterPageResponse } from "./IGetCompanyDataHooks.interface";
+import { ICompanyAllFormsDataReponse, ICompanyDataQueryType, ICompanyDetailsResponse, IFormSectionGetAllResponse, IFormsGetAllResponse, IGETAllDepartamentsResponse, IGETAllDutiesResponse, IGETAllShiftsResponse, IGETCompanyAllFilesResponse, IGETCompanyDataQuery, IGETCompanyResponse, IGETCompanyRosterResponse, IGETRolesResponse, IGETRosterTaskResponse, IHaccpReportsResponse, IRequestsGetAllResponse, IRosterPageResponse } from "./IGetCompanyDataHooks.interface";
 import { IDELETECompanyDataBody, IDELETECompanyDataQueryType } from "./IDeleteCompanyDataHooks.interface";
 import { IPOSTCompanyBody, IPOSTCompanyDataQueryType, IPOSTCompanyDataRerturn } from "./IPostCompanyDataHooks.interface";
 import { IPUTCompanyBody, IPUTCompanyDataQueryType } from "./IPutCompanyDataHooks.interface";
@@ -101,6 +101,7 @@ export function useGETCompanyDataHooks({
         companyAllShifts: data as IGETAllShiftsResponse,
         companyAllDuties: data as IGETAllDutiesResponse,
         companyRosterPage: data as IRosterPageResponse,
+        companyRosterTask: data as IGETRosterTaskResponse,
 
         isCompanyDataFetching: isFetching,
         companyDataError: error ? true : false,

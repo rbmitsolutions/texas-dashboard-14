@@ -1,4 +1,5 @@
 import { IUser } from "../user/user.interface";
+import { IFormData } from "./form.interface";
 
 export type IRosterStatus =
     | "unconfirmed"
@@ -36,6 +37,8 @@ export interface IRoster {
     tasks_title?: string[];
     status?: IRosterStatus;
 
+    tasks: IRosterTasks[]
+
     user?: IUser;
     user_id?: string;
 
@@ -43,6 +46,25 @@ export interface IRoster {
     updated_at: Date;
 }
 
+export interface IRosterTasks {
+    id: string;
+
+    form_id: string;
+    form: string;
+
+    done: boolean;
+    form_data: IFormData
+    form_data_id: string;
+
+    created_by: string;
+    created_id: string;
+
+    roster_id: string;
+    roster: IRoster;
+
+    created_at: Date;
+    updated_at: Date;
+}
 export interface IRosterDates {
     id: number;
     date: Date;

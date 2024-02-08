@@ -1,10 +1,10 @@
 import { ICompanyContacts, ICompanyDetails, ICompanyDocuments, ICompanyLinks, IDuties, IRoles, IShifts } from "@/common/types/company/companyDetails.interface";
 import { IDepartaments } from "@/common/types/company/departaments.interface";
 import { IFiles } from "@/common/types/company/files.interface";
-import { IForm, IFormData, IFormSection, IFormType } from "@/common/types/company/form.interface";
+import { IForm, IFormData, IFormSection } from "@/common/types/company/form.interface";
 import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
 import { IRequests, IRequestsStatus, IRequestsType } from "@/common/types/company/requests.interface";
-import { IRoster, IRosterStatus } from "@/common/types/company/roster.interface";
+import { IRoster, IRosterStatus, IRosterTasks } from "@/common/types/company/roster.interface";
 import { IPaginationResponse, IQueryPagination } from "@/common/types/settings.interface";
 import { IUser, IUserStatus } from "@/common/types/user/user.interface";
 
@@ -30,6 +30,12 @@ export interface IRosterPageResponse {
     total_diff: number;
   };
 }
+
+export interface IGETRosterTaskResponse {
+  task: IRosterTasks
+  form: IForm
+}
+
 export interface IGETCompanyRosterQuery {
   all?: {
     date: {
@@ -55,6 +61,9 @@ export interface IGETCompanyRosterQuery {
       gte: Date;
       lte: Date;
     }
+  }
+  rosterTask?: {
+    id: string
   }
 }
 
@@ -97,7 +106,6 @@ export interface IGETFormsQuery {
   };
   all?: {
     title?: string;
-    type?: IFormType
     section_id?: string;
     created_by_id?: string;
     include?: {
@@ -136,7 +144,6 @@ export interface IGETFormDataQuery {
   all?: {
     title?: string;
     by?: string;
-    type?: IFormType
     created_at?: {
       gte: Date;
       lte: Date;
@@ -286,9 +293,9 @@ export interface IGETFilesQuery {
 }
 
 
-export type IGETCompanyResponse = IGETCompanyRosterResponse | IHaccpReportsResponse | IHaccpReports | IFormsGetAllResponse | IForm | IFormSectionGetAllResponse | IFormSection | IGETFormDataQuery | IFormData | IFiles | IRequests | IRequestsGetAllResponse | ICompanyDetailsResponse | IGETRolesResponse | IRoles | IGETAllDepartamentsResponse | IDepartaments | IGETCompanyAllFilesResponse | IGETShiftsQuery | IGETDutiesQuery | IRosterPageResponse
+export type IGETCompanyResponse = IGETCompanyRosterResponse | IHaccpReportsResponse | IHaccpReports | IFormsGetAllResponse | IForm | IFormSectionGetAllResponse | IFormSection | IGETFormDataQuery | IFormData | IFiles | IRequests | IRequestsGetAllResponse | ICompanyDetailsResponse | IGETRolesResponse | IRoles | IGETAllDepartamentsResponse | IDepartaments | IGETCompanyAllFilesResponse | IGETShiftsQuery | IGETDutiesQuery | IRosterPageResponse | IGETRosterTaskResponse
 
-export type ICompanyDataQueryType = 'ROSTER' | "ROLES" | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "FILES" | "REQUESTS" | 'DETAILS' | "DEPARTAMENTS" | "DUTIES" | "SHIFTS"
+export type ICompanyDataQueryType = 'ROSTER' | "ROLES" | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "FILES" | "REQUESTS" | 'DETAILS' | "DEPARTAMENTS" | "DUTIES" | "SHIFTS" | 'ROSTER_TASKS'
 
 export interface IGETCompanyDataQuery {
   roster?: IGETCompanyRosterQuery
@@ -303,4 +310,5 @@ export interface IGETCompanyDataQuery {
   departments?: IGETDepartamentsQuery
   duties?: IGETDutiesQuery
   shifts?: IGETShiftsQuery
+  rosterTask?: IGETCompanyRosterQuery
 }

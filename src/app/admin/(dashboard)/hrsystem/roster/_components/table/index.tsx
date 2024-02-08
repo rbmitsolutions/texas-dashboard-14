@@ -25,6 +25,7 @@ import { IDELETECompanyDataBody } from "@/hooks/company/IDeleteCompanyDataHooks.
 import { IDuties, IShifts } from "@/common/types/company/companyDetails.interface";
 import { IForm } from "@/common/types/company/form.interface";
 import { ImagesPath } from "@/common/types/imgs";
+import { IPUTCompanyBody } from "@/hooks/company/IPutCompanyDataHooks.interface";
 
 export type IWeekDays = { date: string; day: string; }[]
 
@@ -36,6 +37,9 @@ interface RosterTableProps {
     params: IGETCompanyDataQuery
     createRoster: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
     deleteRoster: UseMutateFunction<void, any, IDELETECompanyDataBody, unknown>
+    deleteRosterTask: UseMutateFunction<void, any, IDELETECompanyDataBody, unknown>
+    updateRoster: UseMutateFunction<any, any, IPUTCompanyBody, unknown>
+    createRosterTask: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
 }
 
 const getWeekdaysBetweenDates = (startDate: Date, endDate: Date) => {
@@ -51,7 +55,7 @@ const styles = {
     td: 'text-[10px] p-1 text-center'
 }
 
-export function RosterTableMemo({ users, duties, shifts, forms, deleteRoster, createRoster, params }: RosterTableProps): JSX.Element {
+export function RosterTableMemo({ users, duties, shifts, forms, createRosterTask, deleteRoster, deleteRosterTask, createRoster, updateRoster, params }: RosterTableProps): JSX.Element {
     const [weekDays, setWeekDays] = useState<IWeekDays>([])
 
     useEffect(() => {
@@ -91,7 +95,6 @@ export function RosterTableMemo({ users, duties, shifts, forms, deleteRoster, cr
             </thead>
             <tbody>
                 {users?.map(user => {
-                    console.log(user?.diff_roster)
                     return (
                         <tr
                             key={user?.id}
@@ -117,6 +120,9 @@ export function RosterTableMemo({ users, duties, shifts, forms, deleteRoster, cr
                                             duties={duties}
                                             createRoster={createRoster}
                                             deleteRoster={deleteRoster}
+                                            createRosterTask={createRosterTask}
+                                            forms={forms}
+                                            deleteRosterTask={deleteRosterTask}
                                         />
                                         <SendEmail
                                             contacts={[{
@@ -145,12 +151,17 @@ export function RosterTableMemo({ users, duties, shifts, forms, deleteRoster, cr
                                 return (
                                     <td key={date?.date} className='h-20'>
                                         <RosterDisplay
+                                            forms={forms}
+                                            updateRoster={updateRoster}
+                                            deleteRoster={deleteRoster}
+                                            createRosterTask={createRosterTask}
+                                            deleteRosterTask={deleteRosterTask}
                                             roster={user?.roster?.filter(
                                                 (x) => x.week_day === date?.day
                                             ) || []}
-                                            available={user?.available_days?.find(
-                                                (x) => x.weekDay === date?.day
-                                            )}
+                                        // available={user?.available_days?.find(
+                                        //     (x) => x.weekDay === date?.day
+                                        // )}
                                         />
                                     </td>
                                 );

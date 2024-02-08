@@ -46,7 +46,6 @@ export default function DetailsForm({ user, isAdmin, onUpdate }: DetailsFormProp
 
 
     const onSubmitForm: SubmitHandler<UserDetailsFormSchemaType> = async (formData) => {
-        console.log(new Date(formData?.date_of_birthday))
         await onUpdate({
             details: {
                 id: user?.id,
