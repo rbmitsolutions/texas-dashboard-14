@@ -102,8 +102,21 @@ export interface IPOSTRosterTasksBody {
     roster_id: string;
 }
 
+export interface IPOSTSignUpBody {
+    name: string;
+    email: string;
+    role_id: string;
+    visa_needed: boolean;
+    commencement_date: Date;
+    fixed_salary: boolean;
+    rate_per_hour: number;
+    rate_per_hour_weekend: number;
+    salary: number;
+    contract: any;
+}
 
-export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "REQUESTS" | 'DUTIES' | 'SHIFTS' | 'ROSTER' | 'ROSTER_TASKS' | 'TRANSACTIONS'
+
+export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "REQUESTS" | 'DUTIES' | 'SHIFTS' | 'ROSTER' | 'ROSTER_TASKS' | 'TRANSACTIONS' | "AUTH"
 
 export type IPOSTCompanyDataRerturn = IRoster | IHaccpReports | IForm | IFormSection | IFormData | IShifts | IDuties | IRosterTasks | ITransactions
 export interface IPOSTCompanyBody {
@@ -116,4 +129,5 @@ export interface IPOSTCompanyBody {
     duty?: IPOSTDutiesBody
     shift?: IPOSTShiftsBody
     transaction?: IPOSTTransactionsBody
+    signUp?: IPOSTSignUpBody
 }

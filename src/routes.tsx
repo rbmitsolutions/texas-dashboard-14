@@ -214,13 +214,16 @@ const routers: IRoute[] = [
           //   layout: "/admin/hrsystem/employees",
           //   authorization: ["admin", 'admin-ghost'],
           // },
-          // {
-          //   name: "New Hire",
-          //   path: "/hire",
-          //   icon: <Icon name='AArrowDown' size={14} />,
-          //   layout: "/admin/hrsystem/employees",
-          //   authorization: ["admin", 'admin-ghost'],
-          // },
+          {
+            name: "Hire",
+            path: "/hire",
+            icon: <Icon name='UserPlus' size={14} />,
+            layout: "/admin/hrsystem/employees",
+            authorization: [
+              Permissions.ADMIN,
+              Permissions.ADMIN_GHOST,
+            ],
+          },
           {
             name: "Filed",
             path: "/filled",

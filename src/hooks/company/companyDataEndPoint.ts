@@ -1,6 +1,16 @@
 import { EndPointsTypes } from "@/common/types/routers/endPoints.types";
 
 export const companyEndPoint = {
+    AUTH: {
+        url: EndPointsTypes['AUTH_ENDPOINT_SIGNUP'],
+        queryParams: 'auth',
+        updateSucess: "",
+        updateError: "",
+        deleteSucess: "",
+        deleteError: "",
+        createSucess: 'User Created successfully!',
+        createError: "User creation failed!",
+    },
     DETAILS: {
         url: EndPointsTypes['COMPANY_DETAILS_ENDPOINT'],
         queryParams: 'details',
