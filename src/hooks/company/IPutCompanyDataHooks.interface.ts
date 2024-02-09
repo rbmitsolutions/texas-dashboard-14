@@ -43,7 +43,10 @@ export interface IPUTRosterBody {
         week_payment_preview?: number;
     }
     many?: {
-        ids: string[];
+        between: {
+            gte: Date;
+            lte: Date;
+        }
         status?: string;
         break_in?: Date;
         break_out?: Date;
@@ -55,8 +58,8 @@ export interface IPUTRosterBody {
         available?: boolean;
         forgot_to_clock_out?: boolean;
         send_email?: {
-            start_date: Date;
-            end_date: Date;
+            gte: Date;
+            lte: Date;
         }
     }
 }

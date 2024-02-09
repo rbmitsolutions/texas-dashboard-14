@@ -21,6 +21,7 @@ export default function DeleteRosterButton({ roster, deleteRoster }: DeleteRoste
         <Button
             className='h-4 w-4 p-1'
             variant='destructive'
+            type='button'
             disabled={new Date(roster?.date!) < subDaysToDate(new Date(), 1) || roster?.status === 'dayoff' || roster?.status === 'holiday' || roster?.status === 'sickday'}
             onClick={async () => {
                 await deleteRoster({

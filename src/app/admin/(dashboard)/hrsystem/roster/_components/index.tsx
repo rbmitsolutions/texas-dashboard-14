@@ -95,6 +95,7 @@ export default function RosterContainer({
                 setUsers={setGETCompanyDataParams}
                 usersParams={GETCompanyDataParams}
                 users={users?.users}
+                updateRoster={updateRoster}
             />
             {departaments?.map(d => {
                 return (

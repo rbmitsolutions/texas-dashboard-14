@@ -10,7 +10,7 @@ export type ITransactionsType =
 
 export type ITransactionsMethod = "cash" | "card" | "payroll" | "gift-card";
 
-export type ITransactionsDirection = "in" | "out";
+export type ITransactionsDirection = "in" | "out" | 'voucher' // voucher will be used for gift card transactions
 
 export type ITransactionsStatus = "confirmed" | "cancelled";
 

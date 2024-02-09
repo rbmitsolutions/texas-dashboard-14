@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react"
+import { UseMutateFunction } from "react-query"
 
 //components
 import SearchInput from "@/components/common/searchInput"
@@ -13,6 +14,7 @@ import { convertCentsToEuro } from "@/common/utils/convertToEuro"
 
 //hooks
 import { IGETCompanyDataQuery, IRosterPageResponse } from "@/hooks/company/IGetCompanyDataHooks.interface"
+import { IPUTCompanyBody } from "@/hooks/company/IPutCompanyDataHooks.interface"
 
 interface RosterHeaderProps {
     payments_data: IRosterPageResponse['payments_data']
@@ -21,9 +23,11 @@ interface RosterHeaderProps {
     error: boolean
     setUsers: Dispatch<SetStateAction<IGETCompanyDataQuery>>
     usersParams: IGETCompanyDataQuery
+    updateRoster: UseMutateFunction<any, any, IPUTCompanyBody, unknown>
 }
 
-export default function RosterHeader({ payments_data, isLoading, error, setUsers, users, usersParams }: RosterHeaderProps): JSX.Element {
+export default function RosterHeader({ payments_data, isLoading, error, setUsers, users, usersParams, updateRoster }: RosterHeaderProps): JSX.Element {
+
     return (
         <header className='flex-col-container'>
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4'>
@@ -95,7 +99,10 @@ export default function RosterHeader({ payments_data, isLoading, error, setUsers
                         href='/admin/hrsystem/payments/roster'
                         icon='Euro'
                     />
-                    <SendRoster />
+                    <SendRoster
+                        usersParams={usersParams}
+                        updateRoster={updateRoster}
+                    />
                 </div>
             </div>
         </header>
