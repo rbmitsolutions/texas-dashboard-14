@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/table"
 import { useState } from "react"
 import Wrap from "@/components/common/wrap"
-import { IDepartaments } from "@/common/types/company/departaments.interface"
+import { IDepartments } from "@/common/types/company/departaments.interface"
 import SendEmail from "@/components/common/sendEmail"
 import { IUser } from "@/common/types/user/user.interface"
 import SendSms from "@/components/common/sendSms"
@@ -27,7 +27,7 @@ import SendSms from "@/components/common/sendSms"
 interface UserTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  departament: IDepartaments
+  departament: IDepartments
 }
 
 export function UserTable<TData, TValue>({

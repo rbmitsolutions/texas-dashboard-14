@@ -132,4 +132,14 @@ export const companyEndPoint = {
         createSucess: 'Shift created successfully!',
         createError: "Shift creation failed!",
     },
+    TRANSACTIONS: {
+        url: EndPointsTypes['COMPANY_TRANSACTIONS_ENDPOINT'],
+        queryParams: 'transactions',
+        updateSucess: "Transaction updated successfully!",
+        updateError: "Transaction update failed!",
+        deleteSucess: "Transaction deleted successfully!",
+        deleteError: "Transaction delete failed!",
+        createSucess: 'Transaction created successfully!',
+        createError: "Transaction creation failed!",
+    },
 }

@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { api } from "@/common/libs/axios/api";
 
 //interface
-import { ICompanyAllFormsDataReponse, ICompanyDataQueryType, ICompanyDetailsResponse, IFormSectionGetAllResponse, IFormsGetAllResponse, IGETAllDepartamentsResponse, IGETAllDutiesResponse, IGETAllShiftsResponse, IGETCompanyAllFilesResponse, IGETCompanyDataQuery, IGETCompanyResponse, IGETCompanyRosterResponse, IGETRolesResponse, IGETRosterTaskResponse, IHaccpReportsResponse, IRequestsGetAllResponse, IRosterPageResponse } from "./IGetCompanyDataHooks.interface";
+import { ICompanyAllFormsDataReponse, ICompanyDataQueryType, ICompanyDetailsResponse, IFormSectionGetAllResponse, IFormsGetAllResponse, IGETAllDepartamentsResponse, IGETAllDutiesResponse, IGETAllShiftsResponse, IGETCompanyAllFilesResponse, IGETCompanyDataQuery, IGETCompanyResponse, IGETCompanyRosterResponse, IGETRolesResponse, IGETRosterTaskResponse, IGetAllTransactionsResponse, IHaccpReportsResponse, IRequestsGetAllResponse, IRosterPageResponse, IRosterPaymentPageResponse } from "./IGetCompanyDataHooks.interface";
 import { IDELETECompanyDataBody, IDELETECompanyDataQueryType } from "./IDeleteCompanyDataHooks.interface";
 import { IPOSTCompanyBody, IPOSTCompanyDataQueryType, IPOSTCompanyDataRerturn } from "./IPostCompanyDataHooks.interface";
 import { IPUTCompanyBody, IPUTCompanyDataQueryType } from "./IPutCompanyDataHooks.interface";
@@ -18,7 +18,8 @@ import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
 import { IFiles } from "@/common/types/company/files.interface";
 import { IRequests } from "@/common/types/company/requests.interface";
 import { IRoles } from "@/common/types/company/companyDetails.interface";
-import { IDepartaments } from "@/common/types/company/departaments.interface";
+import { IDepartments } from "@/common/types/company/departaments.interface";
+import { ITransactions } from "@/common/types/company/transactions.interface";
 
 interface IUseGETCompanyDataHooks {
     query: ICompanyDataQueryType,
@@ -97,11 +98,14 @@ export function useGETCompanyDataHooks({
         companyAllRoles: data as IGETRolesResponse,
         companyRole: data as IRoles,
         companyAllDepartaments: data as IGETAllDepartamentsResponse,
-        companyDepartament: data as IDepartaments,
+        companyDepartament: data as IDepartments,
         companyAllShifts: data as IGETAllShiftsResponse,
         companyAllDuties: data as IGETAllDutiesResponse,
         companyRosterPage: data as IRosterPageResponse,
         companyRosterTask: data as IGETRosterTaskResponse,
+        companyRosterPaymentPage: data as IRosterPaymentPageResponse,
+        companyAllTransacations: data as IGetAllTransactionsResponse,
+        compnayTransaction: data as ITransactions,
 
         isCompanyDataFetching: isFetching,
         companyDataError: error ? true : false,

@@ -1,5 +1,6 @@
 import { IRequestsStatus, IRequestsType } from "@/common/types/company/requests.interface";
 import { IRosterStatus } from "@/common/types/company/roster.interface";
+import { TransactionsDirection, TransactionsMethod, TransactionsStatus, TransactionsType } from "@/common/types/company/transactions.interface";
 
 export interface IPUTHaccpReportsBody {
     title: string
@@ -86,7 +87,56 @@ export interface IPUTRequestsBody {
     status: IRequestsStatus
     answer?: string;
 }
+export type ITransactionsPut = {
+    id: string;
 
+    type?: TransactionsType
+    method?: TransactionsMethod;
+    direction?: TransactionsDirection;
+
+    status?: TransactionsStatus
+
+    gift_card_id?: string;
+
+    total: number;
+    description?: string;
+
+    valid_by?: string;
+    valid_by_id?: string;
+
+    payee?: string; // "client`s name" "table`s number" "employee`s name"
+    payee_key?: string; // "client`s id" "tables`s is" "employee`s id"
+};
+
+
+export interface IPUTTransactionsBody {
+    transaction: {
+        one?: ITransactionsPut
+        many?: {
+            id: {
+                in: string[];
+            };
+            data: {
+                type?: TransactionsType;
+                method?: TransactionsMethod;
+                direction?: TransactionsDirection;
+
+                status?: TransactionsStatus
+
+                gift_card_id?: string;
+
+                total?: number;
+                description?: string;
+
+                valid_by?: string;
+                valid_by_id?: string;
+
+                payee?: string; // "client`s name" "table`s number" "employee`s name"
+                payee_key?: string; // "client`s id" "tables`s is" "employee`s id"
+            };
+        };
+    };
+}
 
 export type IPUTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "DUTIES" | "SHIFTS" | 'REQUESTS'
 export interface IPUTCompanyBody {

@@ -2,12 +2,13 @@ import { IDuties, IShifts } from "@/common/types/company/companyDetails.interfac
 import { IForm, IFormData, IFormSection } from "@/common/types/company/form.interface";
 import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
 import { IRoster, IRosterTasks } from "@/common/types/company/roster.interface";
-import { ITransactionsDirection, ITransactionsMethod, ITransactionsType } from "@/common/types/company/transactions.interface";
+import { ITransactions, TransactionsDirection, TransactionsMethod, TransactionsType } from "@/common/types/company/transactions.interface";
 
-export interface IPOSTTransactionsBody {
-    type: ITransactionsType
-    method: ITransactionsMethod;
-    direction: ITransactionsDirection
+
+export interface IPOSTTransaction {
+    type: TransactionsType;
+    method: TransactionsMethod;
+    direction: TransactionsDirection;
 
     gift_card_id?: string;
     client_id?: string;
@@ -20,8 +21,12 @@ export interface IPOSTTransactionsBody {
 
     payee?: string; // "client`s name" "table`s number" "employee`s name"
     payee_key?: string; // "client`s id" "tables`s is" "employee`s id"
-}
 
+}
+export interface IPOSTTransactionsBody {
+    one?: IPOSTTransaction,
+    many?: IPOSTTransaction[]
+}
 
 export interface IPOSTHaccpReportsBody {
     title: string
@@ -98,9 +103,9 @@ export interface IPOSTRosterTasksBody {
 }
 
 
-export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "REQUESTS" | 'DUTIES' | 'SHIFTS' | 'ROSTER' | 'ROSTER_TASKS'
+export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "REQUESTS" | 'DUTIES' | 'SHIFTS' | 'ROSTER' | 'ROSTER_TASKS' | 'TRANSACTIONS'
 
-export type IPOSTCompanyDataRerturn = IRoster | IHaccpReports | IForm | IFormSection | IFormData | IShifts | IDuties | IRosterTasks
+export type IPOSTCompanyDataRerturn = IRoster | IHaccpReports | IForm | IFormSection | IFormData | IShifts | IDuties | IRosterTasks | ITransactions
 export interface IPOSTCompanyBody {
     roster?: IPOSTRosterBody,
     rosterTask?: IPOSTRosterTasksBody
@@ -110,4 +115,5 @@ export interface IPOSTCompanyBody {
     formData?: IPOSTFormDataBody
     duty?: IPOSTDutiesBody
     shift?: IPOSTShiftsBody
+    transaction?: IPOSTTransactionsBody
 }

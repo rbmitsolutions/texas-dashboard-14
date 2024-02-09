@@ -349,31 +349,16 @@ const routers: IRoute[] = [
 
         ],
       },
-      // {
-      //   name: "Payments",
-      //   path: "/payments",
-      //   icon: <Icon name='AArrowDown' size={14} />,
-      //   layout: "/admin/hrsystem",
-      //   collapse: true,
-      //   authorization: ["admin", 'admin-ghost'],
-      //   items: [
-      //     {
-      //       name: "All",
-      //       path: "/all",
-      //       icon: <Icon name='AArrowDown' size={14} />,
-      //       layout: "/admin/hrsystem/payments",
-      //       authorization: ["admin", 'admin-ghost'],
-      //     },
-      //     {
-      //       name: "Roster",
-      //       path: "/roster",
-      //       icon: <Icon name='AArrowDown' size={14} />,
-      //       layout: "/admin/hrsystem/payments",
-      //       authorization: ["admin", 'admin-ghost'],
-      //     },
-      //   ],
-      // },
-
+      {
+        name: "Payments",
+        path: "/payments/all",
+        icon: <Icon name='Banknote' size={14} />,
+        layout: "/admin/hrsystem",
+        authorization: [
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+        ],
+      }
     ],
   },
   {

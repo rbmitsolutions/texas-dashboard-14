@@ -1,10 +1,11 @@
 import { ICompanyContacts, ICompanyDetails, ICompanyDocuments, ICompanyLinks, IDuties, IRoles, IShifts } from "@/common/types/company/companyDetails.interface";
-import { IDepartaments } from "@/common/types/company/departaments.interface";
+import { IDepartments } from "@/common/types/company/departaments.interface";
 import { IFiles } from "@/common/types/company/files.interface";
 import { IForm, IFormData, IFormSection } from "@/common/types/company/form.interface";
 import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
 import { IRequests, IRequestsStatus, IRequestsType } from "@/common/types/company/requests.interface";
 import { IRoster, IRosterStatus, IRosterTasks } from "@/common/types/company/roster.interface";
+import { ITransactions, TransactionsMethod, TransactionsStatus, TransactionsType } from "@/common/types/company/transactions.interface";
 import { IPaginationResponse, IQueryPagination } from "@/common/types/settings.interface";
 import { IUser, IUserStatus } from "@/common/types/user/user.interface";
 
@@ -12,6 +13,26 @@ export interface IGETCompanyRosterResponse {
   data: IRoster[];
   pagination: IPaginationResponse
 }
+
+export interface IUserExtraPaymentData extends IUser {
+  preview_hours: string;
+  roster_hours: string;
+  diff_roster: number;
+  preview_roster: number;
+  total_roster: number;
+  transactions: ITransactions[]
+}
+
+export interface IRosterPaymentPageResponse {
+  users: IUserExtraPaymentData[];
+  payments_data: {
+    total_preview: number;
+    total_available: number;
+    total_roster: number;
+    total_diff: number;
+  };
+}
+
 
 export interface IUserExtraData extends IUser {
   preview_hours: string;
@@ -64,6 +85,14 @@ export interface IGETCompanyRosterQuery {
   }
   rosterTask?: {
     id: string
+  }
+  rosterPayment?: {
+    name?: string
+    status?: IUserStatus
+    date: {
+      gte: Date;
+      lte: Date;
+    }
   }
 }
 
@@ -233,7 +262,7 @@ export interface IGETRolesQuery {
 }
 
 export interface IGETAllDepartamentsResponse {
-  data: IDepartaments[];
+  data: IDepartments[];
   pagination: IPaginationResponse
 }
 export interface IGETDepartamentsQuery {
@@ -248,7 +277,7 @@ export interface IGETDepartamentsQuery {
     }
     pagination?: IQueryPagination
     orderBy?: {
-      key: keyof IDepartaments
+      key: keyof IDepartments
       order: "asc" | "desc";
     };
   };
@@ -292,10 +321,49 @@ export interface IGETFilesQuery {
   }
 }
 
+export interface IGetAllTransactionsResponse {
+  data: ITransactions[];
+  pagination: IPaginationResponse;
+}
 
-export type IGETCompanyResponse = IGETCompanyRosterResponse | IHaccpReportsResponse | IHaccpReports | IFormsGetAllResponse | IForm | IFormSectionGetAllResponse | IFormSection | IGETFormDataQuery | IFormData | IFiles | IRequests | IRequestsGetAllResponse | ICompanyDetailsResponse | IGETRolesResponse | IRoles | IGETAllDepartamentsResponse | IDepartaments | IGETCompanyAllFilesResponse | IGETShiftsQuery | IGETDutiesQuery | IRosterPageResponse | IGETRosterTaskResponse
+export interface IGETTransactionsQuery {
+  all?: {
+    type?: {
+      in: TransactionsType[];
+    };
+    method?: {
+      in: TransactionsMethod[];
+    };
 
-export type ICompanyDataQueryType = 'ROSTER' | "ROLES" | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "FILES" | "REQUESTS" | 'DETAILS' | "DEPARTAMENTS" | "DUTIES" | "SHIFTS" | 'ROSTER_TASKS'
+    status?: TransactionsStatus
+
+    gift_card_id?: string;
+    client_id?: string;
+
+    valid_by_id?: string;
+
+    payee_key?: string;
+
+    date?: {
+      gte: Date;
+      lte: Date;
+    };
+
+    pagination?: IQueryPagination;
+    orderBy?: {
+      key: keyof ITransactions;
+      order: "asc" | "desc";
+    };
+  };
+  byId?: {
+    id: string;
+  };
+}
+
+
+export type IGETCompanyResponse = IGETCompanyRosterResponse | IHaccpReportsResponse | IHaccpReports | IFormsGetAllResponse | IForm | IFormSectionGetAllResponse | IFormSection | IGETFormDataQuery | IFormData | IFiles | IRequests | IRequestsGetAllResponse | ICompanyDetailsResponse | IGETRolesResponse | IRoles | IGETAllDepartamentsResponse | IDepartments | IGETCompanyAllFilesResponse | IGETShiftsQuery | IGETDutiesQuery | IRosterPageResponse | IGETRosterTaskResponse | IUserExtraPaymentData | IGetAllTransactionsResponse
+
+export type ICompanyDataQueryType = 'ROSTER' | "ROLES" | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "FILES" | "REQUESTS" | 'DETAILS' | "DEPARTAMENTS" | "DUTIES" | "SHIFTS" | 'ROSTER_TASKS' | "TRANSACTIONS"
 
 export interface IGETCompanyDataQuery {
   roster?: IGETCompanyRosterQuery
@@ -311,4 +379,5 @@ export interface IGETCompanyDataQuery {
   duties?: IGETDutiesQuery
   shifts?: IGETShiftsQuery
   rosterTask?: IGETCompanyRosterQuery
+  transactions?: IGETTransactionsQuery
 }

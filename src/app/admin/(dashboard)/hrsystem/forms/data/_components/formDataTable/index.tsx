@@ -65,15 +65,15 @@ export function FormDataTable<TData, TValue>({
                                         <small>{form?.by}</small>
                                     </div>
                                 </TableCell>
-                                <TableCell >
-                                    <div className='flex flex-col gap-4'>
+                                <TableCell>
+                                    <div className='flex flex-wrap gap-8 py-2'>
                                         {form?.values?.map((array, index) => {
                                             return (
                                                 <div key={index} className='flex gap-4 '>
                                                     {array?.map((input: any) => {
                                                         return (
                                                             <div key={input?.register} className='flex flex-col border-r-2 pr-4 min-w-24' >
-                                                                <small className='font-bold'>{input?.label}</small>
+                                                                <small className='font-bold text-primary/85'>{input?.label}</small>
                                                                 <small>{convertIfValueIsDate(input?.propsUi?.value?.toString())}</small>
                                                             </div>
                                                         )

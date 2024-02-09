@@ -13,11 +13,11 @@ import { useDELETECompanyDataHooks, useGETCompanyDataHooks, usePOSTCompanyDataHo
 
 //interfaces
 import { IDuties, IShifts } from "@/common/types/company/companyDetails.interface"
-import { IDepartaments } from "@/common/types/company/departaments.interface"
+import { IDepartments } from "@/common/types/company/departaments.interface"
 import { IForm } from "@/common/types/company/form.interface"
 
 interface RosterContainerProps {
-    departaments: IDepartaments[],
+    departaments: IDepartments[],
     duties: IDuties[],
     shifts: IShifts[],
     forms: IForm[]

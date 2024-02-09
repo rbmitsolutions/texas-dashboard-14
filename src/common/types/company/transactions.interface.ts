@@ -1,26 +1,48 @@
-export type ITransactionsType =
-  | "open-table"
-  | "closed-table"
-  | "buy-gift-card"
-  | "payroll"
-  | "adjustment"
-  | "tips"
-  | "holiday"
-  | "bank holiday pay";
+export type TransactionsType =
+  | TableTransactionsType
+  | GiftCardPaymentsType
+  | PayrollTransactionsType
 
-export type ITransactionsMethod = "cash" | "card" | "payroll" | "gift-card";
+export enum TableTransactionsType {
+  OPEN_TABLE = "open-table",
+  CLOSED_TABLE = "closed-table",
+}
+export enum GiftCardPaymentsType {
+  BUY_GIFT_CARD = "buy-gift-card",
+}
 
-export type ITransactionsDirection = "in" | "out" | 'voucher' // voucher will be used for gift card transactions
+export enum PayrollTransactionsType {
+  PAYROLL = "payroll",
+  ADJUSTMENT = "adjustment",
+  TIPS = "tips",
+  HOLIDAY = "holiday",
+  BANK_HOLIDAY_PAY = "bank holiday pay"
+}
+export enum TransactionsMethod {
+  CASH = "cash",
+  CARD = "card",
+  PAYROLL = "payroll",
+  GIFT_CARD = "gift-card",
+}
 
-export type ITransactionsStatus = "confirmed" | "cancelled";
+export enum TransactionsDirection {
+  IN = "in",
+  OUT = "out",
+  VOUCHER = "voucher",
+} 
+export enum TransactionsStatus {
+  COMPLETED = "completed",
+  CANCELLED = "cancelled",
+  REFUNDED = "refunded",
+}
 
 export interface ITransactions {
   id: string;
-  type: ITransactionsType;
-  method: ITransactionsMethod;
-  direction: ITransactionsDirection;
+  type: TransactionsType;
+  method: TransactionsMethod;
+  direction: TransactionsDirection;
 
-  status: ITransactionsStatus;
+  status: TransactionsStatus;
 
   gift_card_id?: string;
 

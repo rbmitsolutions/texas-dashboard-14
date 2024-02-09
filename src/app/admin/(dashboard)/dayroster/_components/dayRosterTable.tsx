@@ -27,14 +27,14 @@ import SendSms from "@/components/common/sendSms"
 import Wrap from "@/components/common/wrap"
 
 //interfaces
-import { IDepartaments } from "@/common/types/company/departaments.interface"
+import { IDepartments } from "@/common/types/company/departaments.interface"
 import { IGETUserDataQuery } from "@/hooks/user/IGetUserDataHooks.interface"
 import { IUser } from "@/common/types/user/user.interface"
 
 interface DayRosterTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  departament: IDepartaments
+  departament: IDepartments
   setUsers: Dispatch<SetStateAction<IGETUserDataQuery>>
   userParams: IGETUserDataQuery
 }

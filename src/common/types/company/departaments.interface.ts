@@ -1,6 +1,6 @@
 import { IDuties, IRoles } from "./companyDetails.interface";
 
-export interface IDepartaments {
+export interface IDepartments {
     id: string;
     title: string;
     roles: IRoles[];

@@ -1,5 +1,6 @@
 import { Permissions } from "../auth/auth.interface";
 import { IUser } from "../user/user.interface";
+import { IDepartments } from "./departaments.interface";
 
 export interface ICompanyDetails {
     id: string;
@@ -42,24 +43,17 @@ export interface IRoles {
     
     users: IUser[];
     departament_id: string;
-    departament: IDepartments;
+    departament: IDepartments
 
     created_at: Date;
     updated_at: Date;
-}
-
-export interface IDepartments {
-    id: string;
-    title: string;
-    roles: IRoles[];
-    duties: IDuties[];
 }
 
 export interface IDuties {
     id: string;
     title: string;
     departament_id: string;
-    departament: IDepartments;
+    departament: IDepartments
 }
 
 export interface ICompanyLinks {
@@ -69,3 +63,5 @@ export interface ICompanyLinks {
     link: string;
     section: string;
 }
+
+// IDepartments

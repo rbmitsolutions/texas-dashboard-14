@@ -72,7 +72,7 @@ const data: IData[] = [
     {
         id: 2,
         title: 'Employees',
-        key_words: ['employees', 'employee', 'emp', 'emps', 'empl', 'empls', 'filled', 'fill', 'gone', 'fired', 'employees filled', 'employee filled', 'emp filled', 'emps filled', 'empl filled', 'empls filled', 'employee filled list', 'employees filled list', 'employee filled list', 'roster', 'new roster', 'build roster', 'requests', 'req', 'reque', 'user reques', 'user requests', 'employee requ'],
+        key_words: ['employees', 'employee', 'emp', 'emps', 'empl', 'empls', 'filled', 'fill', 'gone', 'fired', 'employees filled', 'employee filled', 'emp filled', 'emps filled', 'empl filled', 'empls filled', 'employee filled list', 'employees filled list', 'employee filled list', 'roster', 'new roster', 'build roster', 'requests', 'req', 'reque', 'user reques', 'user requests', 'employee requ', 'payment', 'pay', 'employee pay', 'payments', 'payme', 'user pay'],
         icon: 'Users',
         links: [
             {
@@ -103,6 +103,13 @@ const data: IData[] = [
                 path: '/admin/hrsystem/requests',
                 key_words: ['employees', 'employee', 'emp', 'emps', 'empl', 'empls', 'requests', 'req', 'reque', 'user reques', 'user requests', 'employee requ']
             },
+            {
+                id: 5,
+                title: 'Payments',
+                description: 'Payments',
+                path: '/admin/hrsystem/payments/all',
+                key_words: ['employees', 'employee', 'emp', 'emps', 'empl', 'empls', 'payments', 'pay', 'payme', 'user pay', 'user paymen', 'employee pay']
+            }
 
         ]
     },
