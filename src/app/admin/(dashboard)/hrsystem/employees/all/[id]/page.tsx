@@ -1,29 +1,20 @@
-'use client'
-import UserProfile from "@/components/common/forms/user";
-import { useGETUserDataHooks } from "@/hooks/user/useUserDataHooks";
+import { getRoles } from "@/common/libs/company/actions/roles";
+import UserProfileAsAdmin from "./_components/userProfileAsAdmin";
 
-export default function User({ params }: { params: { id: string } }) {
-    const {
-        userDetails: user,
-    } = useGETUserDataHooks({
-        query: 'USER_COMPANY',
-        defaultParams: {
-            user: {
-                byId: {
-                    id: params?.id
-                }
-            }
-        },
-        UseQueryOptions: {
-            enabled: !!params?.id
+export default async function User({ params }: { params: { id: string } }): Promise<JSX.Element> {
+    const roles = await getRoles({
+        all: {
+            pagination: {
+                take: 200,
+                skip: 0
+            },
         }
     })
 
-    if(!user) return 
-
     return (
-        <div>
-            <UserProfile user={user} isAdmin={false} onUpdate={() => {}} />
-        </div>
+        <UserProfileAsAdmin
+            user_id={params?.id}
+            roles={roles?.data}
+        />
     )
 }

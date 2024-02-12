@@ -13,13 +13,12 @@ export enum Permissions {
   WAITERS = "waiters",
   DAY_ROSTER = 'day_roster',
   MENU = 'menu',
-  MENU_CREATE = 'menu-create',
-  MENU_UPDATE = 'menu-update',
-  MENU_DELETE = 'menu-delete',
-  SEND_EMAIL = 'send-email',
-  SEND_SMS = 'send-sms',
-  ROSTER_TASKS = 'roster-tasks',
-  ROSTER_UPDATE = 'roster-update'
+  MENU_CREATE = 'menu_create',
+  MENU_UPDATE = 'menu_update',
+  MENU_DELETE = 'menu_delete',
+  SEND_EMAIL = 'send_email',
+  SEND_SMS = 'send_sms',
+  ROSTER_TASKS = 'roster_tasks',
 }
 
 //token from texas-dashboard does not have roster-password

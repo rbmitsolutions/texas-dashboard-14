@@ -2,7 +2,7 @@ export enum EndPointsTypes {
     AUTH_ENDPOINT_SIGNIN = "/auth/signin",
     AUTH_ENDPOINT_SIGNUP = "/auth/signup",
     AUTH_ENDPOINT_FORGOT = "/auth/forgot",
-    AUTH_ENDPOINT_REFRESH_TOKEN= "/auth/refresh-token",
+    AUTH_ENDPOINT_REFRESH_TOKEN = "/auth/refresh-token",
     AUTH_ENDPOINT_WHEN_SIGN_IN = '/admin/roster',
 
     COMPANY_FORM_SECTIONS_ENDPOINT = '/company/form-sections',
@@ -44,7 +44,7 @@ export enum EndPointsTypes {
     RESTAURANT_CLIENT_ENDPOINT = '/restaurant/clients',
     RESTAURANT_REVIEWS_ENDPOINT = '/restaurant/reviews',
     RESTAURANT_ORDER_ENDPOINT = '/restaurant/order',
-    
+
     RESTAURANT_MENU_ADD_ONS_OPTIONS_ENDPOINT = '/restaurant/menu-add-ons-options',
     RESTAURANT_MENU_SECTION_ENDPOINT = '/restaurant/menu-sections',
     RESTAURANT_MENU_ADD_ONS_ENDPOINT = '/restaurant/menu-add-ons',
@@ -67,6 +67,7 @@ export enum EndPointsTypes {
     USER_REVIEWS_ENDPOINT = "/user/reviews",
     USER_ROSTER_ENDPOINT = "/user/roster",
     USER_HACCP_ENDPOINT = "/user/haccp",
+    USER_FILES_ENDPOINT = '/user/files',
     USER_ENDPOINT = "/user",
 
     SERVICES_OPENAI_ENDPOINT = "/services/openai",

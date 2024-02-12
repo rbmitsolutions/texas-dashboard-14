@@ -110,7 +110,7 @@ export default function RosterInfo({ roster, user, forms, shifts, duties, create
                     </Button>
                     {(shifts && duties && roster && user && isUserAuthorized(
                         UserToken?.permissions,
-                        [Permissions.ROSTER_UPDATE]
+                        [Permissions.ADMIN]
                     )) &&
                         <UpdateRoster
                             duties={duties}
@@ -144,7 +144,7 @@ export default function RosterInfo({ roster, user, forms, shifts, duties, create
                         leftIcon="Stethoscope"
                         disabled={!isUserAuthorized(
                             UserToken?.permissions,
-                            [Permissions.ROSTER_UPDATE]
+                            [Permissions.ADMIN]
                         ) || roster?.status === 'dayoff' || roster?.status === 'holiday' || roster?.status === 'sickday'}
                         onClick={handleUpdateRoster}
                     >

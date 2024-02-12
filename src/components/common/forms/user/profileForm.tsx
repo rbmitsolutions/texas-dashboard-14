@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ImageCropper from "@/components/common/imageCropper"
 import { IUser } from "@/common/types/user/user.interface";
 import { Skeleton } from "@/components/ui/skeleton";
-import Icon from "@/common/libs/lucida-icon";
+import IconText from "../../iconText";
 
 //hooks
 import { IPUTUserBody } from "@/hooks/user/IPutUserDataHooks.interface";
@@ -18,10 +18,9 @@ interface ProfileFormProps {
     user: IUser
     isAdmin: boolean
     onUpdate: UseMutateFunction<any, any, IPUTUserBody, unknown>
-    roles?: IRoles[]
 }
 
-export default function ProfileForm({ user, isAdmin, roles, onUpdate }: ProfileFormProps) {
+export default function ProfileForm({ user, onUpdate }: ProfileFormProps) {
     const { user: userToken, setUser } = useAuthHooks()
     const [preRendered, setPreRendered] = useState<boolean>(false);
 
@@ -53,8 +52,8 @@ export default function ProfileForm({ user, isAdmin, roles, onUpdate }: ProfileF
     return (
         <div className='relative'>
             <div className='flex-col-container items-center hidden h-80 border-2 p-4 rounded-xl  bg-[url("/img/background.png")] bg-center bg-no-repeat bg-cover dark:grayscale md:block' />
-            <div className='relative flex flex-col items-center gap-8 bg-background p-4 rounded-xl border-2 md:absolute md:top-1/2 md:left-8 md:flex-row md:items-start md:shadow-lg'>
-                <div className='r-2 max-w-40'>
+            <div className='relative flex flex-col items-center gap-8 bg-background p-4 rounded-xl border-2 md:absolute md:top-32 md:left-8 md:flex-row md:items-start md:shadow-lg'>
+                <div className='flex flex-col items-center r-2 max-w-40'>
                     <ImageCropper
                         cropShape="round"
                         image={user?.profile_image}
@@ -72,6 +71,11 @@ export default function ProfileForm({ user, isAdmin, roles, onUpdate }: ProfileF
                     </ImageCropper>
                     <h1 className='capitalize text-center'>{user?.name?.toLowerCase()}</h1>
                     <h1 className='capitalize text-sm text-center'>{user?.role?.title?.toLowerCase()}</h1>
+                    <IconText
+                        icon="Key"
+                        text={`Roster: ${user?.roster_password}`}
+                        className='mt-1'
+                    />
                 </div>
             </div>
         </div>

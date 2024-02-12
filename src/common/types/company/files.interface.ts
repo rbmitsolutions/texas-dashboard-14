@@ -1,5 +1,5 @@
 export type IFilesType = "image" | 'pdf'
-
+export type IFilesAs = 'avatar' | 'document' | 'contract' | 'contract-sgined' | 'cv' | 'report' | 'menu'
 export interface IFiles {
     id: string
 

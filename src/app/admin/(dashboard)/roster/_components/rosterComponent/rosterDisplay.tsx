@@ -14,12 +14,12 @@ import { cn } from "@/common/libs/shadcn/utils"
 import { IPUTUserBody } from "@/hooks/user/IPutUserDataHooks.interface"
 import { IRoster } from "@/common/types/company/roster.interface"
 
-interface RosterComponentProps {
+interface RosterDisplayProps {
     roster: IRoster
     updateRoster: UseMutateFunction<any, any, IPUTUserBody, unknown>
 }
 
-export default function RosterComponent({ roster, updateRoster }: RosterComponentProps) {
+export default function RosterDisplay({ roster, updateRoster }: RosterDisplayProps) {
     const router = useRouter()
 
     const handlUpdateRoster = async () => {
@@ -34,7 +34,6 @@ export default function RosterComponent({ roster, updateRoster }: RosterComponen
             }
         })
     }
-
 
     return (
         <div className='flex-container justify-between border-2 rounded-lg shadow-lg bg-background-soft'>

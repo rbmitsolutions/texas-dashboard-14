@@ -31,10 +31,10 @@ export default function BankDetailsForm({
         mode: "onChange",
         resolver: zodResolver(BankDetailsFormSchema),
         defaultValues: {
-            bank: user?.bank,
-            iban: user?.iban,
-            account_number: user?.account_number,
-            bic: user?.bic,
+            bank: user?.bank || '',
+            iban: user?.iban || '',
+            account_number: user?.account_number || '',
+            bic: user?.bic || '',
         },
     });
 

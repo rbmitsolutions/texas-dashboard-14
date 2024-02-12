@@ -38,7 +38,6 @@ export default function SelectUpdate({ field, onSave }: SelectUpdateProps) {
     });
 
     const onSubmitForm: SubmitHandler<FormSelectBuilderFormSchemaType> = (formData) => {
-        console.log(form.getValues())
         onSave({
             ...field,
             label: formData.label,

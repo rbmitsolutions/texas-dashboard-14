@@ -4,9 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/common/libs/shadcn/utils";
 import { CalendarIcon } from "lucide-react";
 import SignaturePad from "react-signature-canvas";
+import { useRef } from "react";
 
 //libs
 import { formatDate } from "@/common/libs/date-fns/dateFormat";
+import Icon from "@/common/libs/lucida-icon";
 
 //components
 import { CompanyHireFormSchema, CompanyHireFormSchemaType } from "@/common/libs/zod/forms/company/companyHireForm";
@@ -23,8 +25,7 @@ import { Input } from "@/components/ui/input";
 //interface
 import { IRoles } from "@/common/types/company/companyDetails.interface";
 
-import { useRef } from "react";
-import Icon from "@/common/libs/lucida-icon";
+//hooks
 import { usePOSTCompanyDataHooks } from "@/hooks/company/companyDataHooks";
 
 interface HireFormProps {
@@ -417,7 +418,7 @@ export default function HireForm({ roles }: HireFormProps): JSX.Element {
                             </FormItem>
                         )}
                     />
-                    <div className='flex flex-col items-center md:hidden'>
+                    <div className=' flex-col items-center md:flex'>
                         <FormField
                             control={form.control}
                             name="signature"
@@ -438,55 +439,21 @@ export default function HireForm({ roles }: HireFormProps): JSX.Element {
                                         </Button>
                                     </FormLabel>
                                     <FormControl >
-                                        <div className='rounded-2xl background-soft dark:bg-foreground/20'>
+                                        <div className='rounded-2xl w-full max-w-[450px] background-soft dark:bg-foreground/20'>
                                             <SignaturePad
                                                 ref={sigCanvas}
                                                 onEnd={() => field.onChange(formatIntoPng())}
                                                 penColor="black"
                                                 canvasProps={{
-                                                    width: 280,
-                                                    height: 200,
-                                                    style: { border: "1px solid", borderRadius: "20px" },
+                                                    style: {
+                                                        border: "1px solid",
+                                                        borderRadius: "20px",
+                                                        width: '100%',
+                                                        maxWidth: '450px',
+                                                        height: '200px'
+                                                    },
                                                 }}
-                                            />
-                                        </div>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <div className='hidden flex-col items-center md:flex'>
-                        <FormField
-                            control={form.control}
-                            name="signature"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className='flex justify-between items-center'>
-                                        Signature
-                                        <Button
-                                            variant='destructive'
-                                            type='button'
-                                            size='iconExSm'
-                                            onClick={() => {
-                                                (sigCanvas.current as any).clear()
-                                                field.onChange('')
-                                            }}
-                                        >
-                                            <Icon name='Trash' />
-                                        </Button>
-                                    </FormLabel>
-                                    <FormControl >
-                                        <div className='rounded-2xl background-soft dark:bg-foreground/20'>
-                                            <SignaturePad
-                                                ref={sigCanvas}
-                                                onEnd={() => field.onChange(formatIntoPng())}
-                                                penColor="black"
-                                                canvasProps={{
-                                                    width: 450,
-                                                    height: 200,
-                                                    style: { border: "1px solid", borderRadius: "20px" },
-                                                }}
+                                                clearOnResize={true}
                                             />
                                         </div>
                                     </FormControl>

@@ -64,7 +64,6 @@ export default function UpdatePasswordForm({ user, onUpdate }: UpdatePasswordFor
         >
             <AlertDialogTrigger asChild>
                 <Button
-                    className='flex justify-start'
                     leftIcon='KeySquare'
                     onClick={onOpenChange}
                 >Change Password
@@ -124,6 +123,7 @@ export default function UpdatePasswordForm({ user, onUpdate }: UpdatePasswordFor
                             <Button
                                 type="submit"
                                 className='text-sm'
+                                leftIcon="Save"
                             >Save</Button>
                         </div>
                     </form>

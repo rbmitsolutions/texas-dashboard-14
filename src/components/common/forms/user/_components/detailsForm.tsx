@@ -33,14 +33,14 @@ export default function DetailsForm({ user, isAdmin, onUpdate }: DetailsFormProp
         mode: "onChange",
         resolver: zodResolver(UserDetailsFormSchema),
         defaultValues: {
-            name: user?.name,
-            email: user?.email,
-            date_of_birthday: user?.date_of_birthday,
-            contact_number: user?.contact_number,
-            shirt_size: user?.shirt_size,
-            address: user?.address,
-            city: user?.city,
-            country: user?.country,
+            name: user?.name || '',
+            email: user?.email || '',
+            date_of_birthday: user?.date_of_birthday || new Date(),
+            contact_number: user?.contact_number || '',
+            shirt_size: user?.shirt_size || '',
+            address: user?.address || '',
+            city: user?.city || '',
+            country: user?.country || '',
         },
     });
 

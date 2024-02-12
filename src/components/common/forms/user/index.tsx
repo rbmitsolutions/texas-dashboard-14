@@ -10,7 +10,6 @@ import VisaDetailsForm from "./_components/visaDetailsForm";
 import BankDetailsForm from "./_components/bankDetailsForm";
 import UpdateRoleForm from "./_components/updateRoleForm";
 import { Button } from "@/components/ui/button";
-import IconText from "../../iconText";
 
 //interface
 import { IRoles } from "@/common/types/company/companyDetails.interface";
@@ -24,17 +23,12 @@ interface UserProfileProps {
     roles?: IRoles[]
 }
 export default function UserProfile({ user, isAdmin, roles, onUpdate }: UserProfileProps) {
+
     return (
         <div className='flex-col-container gap-4'>
-            <ProfileForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} roles={roles} />
-            <div className='md:h-20 md:pl-64'>
-                <div className='flex-col-container'>
-                    <IconText
-                        icon="Key"
-                        text={`Roster: ${user?.roster_password}`}
-                    />
-                    <UpdatePasswordForm user={user} onUpdate={onUpdate} />
-                </div>
+            <ProfileForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
+            <div className='grid-container grid-cols-2 md:pl-64 md:grid-cols-[repeat(auto-fit,minmax(200px,200px))]'>
+                <UpdatePasswordForm user={user} onUpdate={onUpdate} />
                 {isAdmin &&
                     <>
                         <Button
@@ -46,15 +40,19 @@ export default function UserProfile({ user, isAdmin, roles, onUpdate }: UserProf
                                 }
                             })}
                         >
-                            Update Roster Password
+                            Roster Password
                         </Button>
                         {roles &&
                             <UpdateRoleForm user={user} onUpdate={onUpdate} roles={roles} />
                         }
+                        <Button
+                            leftIcon="FileArchive"
+                            variant='destructive'
+                        >File Employee</Button>
                     </>
                 }
             </div>
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2 md:mt-4 lg:grid-cols-3'>
                 <DetailsForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
                 <EmergencyContactForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
                 <BankDetailsForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />

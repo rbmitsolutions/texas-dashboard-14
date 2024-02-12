@@ -48,6 +48,8 @@ export interface IPUTUserDetailsBody {
     type_of_visa?: string;
     id_work_authorization?: string;
 
+    contract_file_id?: string
+
     role_id?: string;
 }
 
@@ -61,7 +63,7 @@ export interface IPUTUserRosterBody {
 
 }
 
-export type IPUTUserDataQueryType = 'DETAILS' | 'USER_ROSTER'
+export type IPUTUserDataQueryType = 'DETAILS' | 'USER_ROSTER' | 'USER_COMPANY'
 
 export interface IPUTUserBody {
     details?: IPUTUserDetailsBody

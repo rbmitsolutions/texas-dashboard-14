@@ -1,6 +1,6 @@
 import { ICompanyContacts, ICompanyDetails, ICompanyDocuments, ICompanyLinks, IDuties, IRoles, IShifts } from "@/common/types/company/companyDetails.interface";
 import { IDepartments } from "@/common/types/company/departaments.interface";
-import { IFiles } from "@/common/types/company/files.interface";
+import { IFiles, IFilesAs, IFilesType } from "@/common/types/company/files.interface";
 import { IForm, IFormData, IFormSection } from "@/common/types/company/form.interface";
 import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
 import { IRequests, IRequestsStatus, IRequestsType } from "@/common/types/company/requests.interface";
@@ -309,15 +309,23 @@ export interface IGETCompanyAllFilesResponse {
   pagination: IPaginationResponse
 }
 export interface IGETFilesQuery {
-  byId?: {
-    id: string
-  };
   all?: {
     key?: string
     in?: {
-      id?: string[]
+      key?: string[]
     }
     pagination?: IQueryPagination
+  }
+  
+  byId?: {
+    id: string
+    key?: string
+  };
+
+  byKeyAs?: {
+    key: string
+    as: IFilesAs
+    type: IFilesType
   }
 }
 

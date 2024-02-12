@@ -139,7 +139,6 @@ export function DatePicker({ className, fromDate, toDate, value, onConfirm }: ID
     const [preRendered, setPreRendered] = useState(false);
     const [date, setDate] = useState<Date | undefined>(value)
 
-    console.log(date)
     const onDateChange = (date: Date | undefined) => {
         setDate(date)
         onConfirm(date)

@@ -196,7 +196,6 @@ const routers: IRoute[] = [
         layout: "/admin/hrsystem",
         collapse: true,
         authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST],
-        //need [user-list, user-list-filled]
         items: [
           {
             name: "Employees",
