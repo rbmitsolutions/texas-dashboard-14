@@ -1,4 +1,5 @@
 "use client"
+import { getReviewColor } from "@/common/libs/restaurant/reviews"
 import { cn } from "@/common/libs/shadcn/utils"
 import { IClient } from "@/common/types/restaurant/client.interface"
 import { convertCentsToEuro } from "@/common/utils/convertToEuro"
@@ -9,25 +10,6 @@ import { ColumnDef } from "@tanstack/react-table"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const getReviewColor = (value: number): string => {
-    if (value === 0) {
-        return 'text-foreground/20'
-    }
-
-    if (value > 0 && value < 2.5) {
-        return 'text-red-500'
-    }
-
-    if (value >= 2.5 && value <= 4) {
-        return 'text-yellow-500'
-    }
-
-    if (value > 4) {
-        return 'text-green-500'
-    }
-
-    return 'text-foreground/20'
-}
 
 export const clientsColumnsTable: ColumnDef<IClient>[] = [
     {

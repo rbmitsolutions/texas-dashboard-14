@@ -5,12 +5,42 @@ import InfoBadge from "@/components/common/infoBadge"
 import { ColumnDef } from "@tanstack/react-table"
 import { cn } from "@/common/libs/shadcn/utils"
 import { getReviewColor } from "@/common/libs/restaurant/reviews"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { ImagesPath } from "@/common/types/imgs"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
 
-export const clientReviewsColumnsTable: ColumnDef<IReviews>[] = [
+export const reviewsColumnsTable: ColumnDef<IReviews>[] = [
+    {
+        accessorKey: "profile_image",
+        size: 40,
+        header: () => <div className="text-left ">Avatar</div>,
+        cell: ({ row }) => {
+            const name = row.getValue('name') as string || ''
+            return (
+                <Avatar className='h-8 w-8'>
+                    <AvatarImage src={'' || ImagesPath.NO_IMAGE} alt={row.getValue('name') || 'no-image'} />
+                    <AvatarFallback>
+                        {name?.split('')[0]}
+                    </AvatarFallback>
+                </Avatar>
+            )
+        }
+    },
+    {
+        accessorKey: "name",
+        header: () => <div className="text-left max-w-48">Name</div>,
+        size: 150,
+        cell: ({ row }) => {
+            return (
+                <div className="capitalize">
+                    {row?.original?.client?.name?.toLowerCase()}
+                </div>
+            )
+        }
+    },
     {
         accessorKey: "date",
         header: () => <div className="text-left max-w-48">Date</div>,

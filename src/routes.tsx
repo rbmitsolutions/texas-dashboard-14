@@ -108,13 +108,17 @@ const routers: IRoute[] = [
       //   layout: "/admin/restaurant",
       //   authorization: ["admin", 'admin-ghost', "booking_reader"],
       // },
-      // {
-      //   name: "Reviews",
-      //   path: "/reviews",
-      //   icon: <Icon name='AArrowDown' size={14} />,
-      //   layout: "/admin/restaurant",
-      //   authorization: ["admin", 'admin-ghost'],
-      // },
+      {
+        name: "Reviews",
+        path: "/reviews",
+        icon: <Icon name='Star' size={14} />,
+        layout: "/admin/restaurant",
+        authorization: [
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+          Permissions.BOOKING_ADM
+        ],
+      },
       {
         name: "Clients",
         path: "/clients",

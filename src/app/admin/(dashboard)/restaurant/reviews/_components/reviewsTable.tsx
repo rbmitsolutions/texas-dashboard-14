@@ -19,15 +19,15 @@ import {
 } from "@/components/ui/table"
 import { useState } from "react"
 
-interface ClientReviewsColumnsTableProps<TData, TValue> {
+interface ReviewsColumnsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
-export function ClientReviewsColumnsTable<TData, TValue>({
+export function ReviewsColumnsTable<TData, TValue>({
   columns,
   data,
-}: ClientReviewsColumnsTableProps<TData, TValue>) {
+}: ReviewsColumnsTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
@@ -72,7 +72,6 @@ export function ClientReviewsColumnsTable<TData, TValue>({
             <TableRow
               key={row.id}
               data-state={row.getIsSelected() && "selected"}
-              className='h-12'
             >
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id}>

@@ -89,7 +89,6 @@ export default function AllMenuPage() {
 
     return (
         <Wrap
-            isLoading={isMenuLoading}
             error={menuError}
             header={{
                 title: {
@@ -169,7 +168,6 @@ export default function AllMenuPage() {
                         }
                     })),
                     value: GETMenu?.menu?.all?.title || '',
-                    isFetching: isMenuLoading,
                     placeholder: 'Search menu by title ...'
                 },
                 optionsPopover: {
@@ -248,7 +246,7 @@ export default function AllMenuPage() {
                         }
                     }),
                 })}
-                data={menu?.data}
+                data={menu?.data || []}
             />
         </Wrap >
     )
