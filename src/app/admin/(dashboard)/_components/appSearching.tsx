@@ -266,6 +266,35 @@ const data: IData[] = [
                 path: '/admin/settings/bookings/specialdays'
             }
         ]
+    },
+    {
+        id: 6,
+        title: 'Clients',
+        icon: 'Users',
+        key_words: ['clients', 'clien', 'cli', 'reviews', 'revi', 'rev', 'client revie', 'clients re'],
+        links: [
+            {
+                id: 1,
+                title: 'Clients',
+                description: 'List of Clients',
+                path: '/admin/restaurant/clients',
+                key_words: ['clients', 'clien', 'cli', 'reviews', 'revi', 'rev', 'client revie', 'clients re'],
+            },
+            {
+                id: 2,
+                title: 'Reviews',
+                description: 'List of Reviews',
+                path: '/admin/restaurant/clients',
+                key_words: ['clients', 'clien', 'cli', 'reviews', 'revi', 'rev', 'client revie', 'clients re'],
+            },
+            // {
+            //     id: 2,
+            //     title: 'Create Form',
+            //     description: 'Create a new form',
+            //     path: '/admin/hrsystem/forms/create',
+            //     key_words: ['create form', 'create forms', 'create frm', 'create frms', 'create form data', 'create forms data', 'create form data']
+            // }
+        ]
     }
 ]
 

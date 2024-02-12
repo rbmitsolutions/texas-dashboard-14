@@ -89,7 +89,8 @@ const routers: IRoute[] = [
     authorization: [
       Permissions.ADMIN,
       Permissions.ADMIN_GHOST,
-      Permissions.MENU
+      Permissions.MENU,
+      Permissions.BOOKING_ADM
     ],
     //need [menu-list, menu-create]
     items: [
@@ -114,13 +115,16 @@ const routers: IRoute[] = [
       //   layout: "/admin/restaurant",
       //   authorization: ["admin", 'admin-ghost'],
       // },
-      // {
-      //   name: "Clients",
-      //   path: "/clients",
-      //   icon: <Icon name='AArrowDown' size={14} />,
-      //   layout: "/admin/restaurant",
-      //   authorization: ["admin"],
-      // },
+      {
+        name: "Clients",
+        path: "/clients",
+        icon: <Icon name='UsersRound' size={14} />,
+        layout: "/admin/restaurant",
+        authorization: [
+          Permissions.ADMIN,
+          Permissions.BOOKING_ADM
+        ],
+      },
       // {
       //   name: "Giftcard",
       //   path: "/giftcard",

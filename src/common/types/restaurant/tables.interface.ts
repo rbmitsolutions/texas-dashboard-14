@@ -19,9 +19,11 @@ export interface IFinishedTable {
   section_id: string;
   client_id: string;
   client: string;
+  
   start_time: Date;
   end_time: Date;
   average_minutes: number;
+  
   guests: number;
   pass: number;
 

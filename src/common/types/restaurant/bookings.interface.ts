@@ -51,6 +51,8 @@ export interface IReviews {
     requests: number;
     timing: number;
     atmosphere: number;
+    staff_id: string
+    staff_name: string
 
     comment?: string;
   };

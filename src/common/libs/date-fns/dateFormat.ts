@@ -1,4 +1,4 @@
-import { isToday as isTodayFns, format, addDays, subDays, startOfMonth, endOfMonth, startOfDay, endOfDay, startOfWeek, parse } from "date-fns";
+import { isToday as isTodayFns, format, addDays, subDays, startOfMonth, endOfMonth, startOfDay, endOfDay, startOfWeek, parse, formatDuration } from "date-fns";
 
 export const parseDate = (date: string, format: 'dd/MM/yy'): Date => {
     return parse(date, format, new Date())
@@ -36,6 +36,13 @@ interface IFormatDate {
 export const formatDate = ({ date, f = 'dd/MM/yyyy' }: IFormatDate): string => {
     return format(date, f)
 }
+
+export const convertMinutesToHoursAndMinutes = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return format(new Date(0, 0, 0, hours, remainingMinutes), 'HH:mm');
+}
+
 
 export const addDaysToDate = (date: Date, days: number): Date => {
     return addDays(date, days)

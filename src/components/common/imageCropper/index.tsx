@@ -1,8 +1,10 @@
+import { cn } from "@/common/libs/shadcn/utils";
 import Resizer from "react-image-file-resizer";
 import { useCallback, useState } from "react";
 import Cropper from "react-easy-crop";
 import Image from "next/image";
 
+//components
 import {
     Dialog,
     DialogContent,
@@ -10,9 +12,12 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button";
-import getCroppedImg from "./cropImage";
+
+//libs
 import Icon from "@/common/libs/lucida-icon";
-import { cn } from "@/common/libs/shadcn/utils";
+
+//utils
+import getCroppedImg from "./cropImage";
 
 interface ImageCropperProps {
     cropShape?: 'round' | 'rect'
@@ -49,9 +54,9 @@ export default function ImageCropper({ image, cropSize, cropShape = 'rect', onSa
     }, []);
 
 
-    async function createPreviewFile(
+    const createPreviewFile = async (
         e: any,
-    ) {
+    ) => {
         setIsLoading(true);
         const objectFile = new FormData();
         const finishedFile = e.target.files[0];
@@ -68,7 +73,15 @@ export default function ImageCropper({ image, cropSize, cropShape = 'rect', onSa
         }
     }
 
-    async function handleCroppedImage() {
+    const handleDelete = async () => {
+        setIsLoading(true);
+        onRemove && await onRemove().finally(() => {
+            setIsLoading(false);
+            onOpenChange()
+        })
+    }
+
+    const handleCroppedImage = async () => {
         setIsLoading(true);
         const { file } = await getCroppedImg(
             newImage,
@@ -163,7 +176,7 @@ export default function ImageCropper({ image, cropSize, cropShape = 'rect', onSa
                         <Button
                             disabled={!image}
                             isLoading={isLoading}
-                            onClick={onRemove}
+                            onClick={handleDelete}
                             leftIcon="Trash"
                             variant='destructive'
                         >

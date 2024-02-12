@@ -24,6 +24,7 @@ export function Header() {
     const { user } = useAuthHooks()
     const pathname = usePathname()
     const splitPathname = pathname?.split('/')
+    const isParamsRouter = splitPathname[splitPathname?.length - 1].length < 20 && splitPathname[splitPathname?.length - 2].length < 20
 
     return (
         <header className='flex-container-center justify-between px-4 gap-2 h-20 border-b-2'>
@@ -32,7 +33,7 @@ export function Header() {
                     <Icon name='List' size={14} />
                 </Button>
                 <div className='flex flex-col'>
-                    {splitPathname[splitPathname?.length - 1].length < 20 ?
+                    {isParamsRouter ?
                         <>
                             <span className='capitalize text-[10px]'>/{splitPathname[splitPathname?.length - 2]}/</span>
                             <span className='capitalize text-xs'>{splitPathname[splitPathname?.length - 1]}</span>

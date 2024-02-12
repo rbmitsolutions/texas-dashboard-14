@@ -41,6 +41,22 @@ export default function ProfileForm({ user, onUpdate }: ProfileFormProps) {
         })
     }
 
+    const onImageDelete = async (): Promise<void> => {
+        await onUpdate({
+            details: {
+                id: user?.id,
+                profile_image: null
+            }
+        }, {
+            onSuccess: (data) => {
+                userToken && setUser({
+                    ...userToken,
+                    profile_image: ''
+                })
+            }
+        })
+    }
+
     useEffect(() => {
         setPreRendered(true);
     }, [])
@@ -59,6 +75,7 @@ export default function ProfileForm({ user, onUpdate }: ProfileFormProps) {
                         image={user?.profile_image}
                         cropSize={{ width: 250, height: 250 }}
                         onSave={onImageUpload}
+                        onRemove={onImageDelete}
                     >
                         <Avatar className='h-40 w-40 relative'>
                             <AvatarImage src={user?.profile_image} alt={user?.name} />

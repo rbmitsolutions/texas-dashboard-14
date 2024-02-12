@@ -174,7 +174,7 @@ export interface IGETOrderControllerQuery {
 
 export interface IGetAllClientsResponse {
   data: IClient[];
-  pagination: IQueryPagination
+  pagination: IPaginationResponse
 }
 
 export interface IGETClientQuery {

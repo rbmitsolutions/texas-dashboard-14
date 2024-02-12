@@ -1,7 +1,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { IToken, Permissions } from "./common/types/auth/auth.interface";
-import routers, { IRoute } from "./routes";
+import routers from "./routes";
 import { isUserAuthorized } from "./common/libs/user/isUserAuthorized";
 import { findRouteByPathname } from "./common/libs/routers";
 
@@ -12,8 +12,6 @@ export async function middleware(request: NextRequest) {
   const token: IToken | null = cookie ? JSON.parse(cookie?.value) : null;
 
   //redirect to /signin if page is not found
-
-
   if (pathName === '/' || pathName === '/admin') {
     return NextResponse.redirect(new URL("/signin", request.url));
   }

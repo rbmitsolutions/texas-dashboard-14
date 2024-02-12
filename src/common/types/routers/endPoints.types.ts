@@ -39,7 +39,7 @@ export enum EndPointsTypes {
     RESTAURANT_OPEN_DAYS_ENDPOINT = '/restaurant/open-days',
     RESTAURANT_GIFTCARD_ENDPOINT = '/restaurant/giftcard',
     RESTAURANT_SECTIONS_ENDPOINT = '/restaurant/sections',
-    RESTAURANT_BOOKING_ENDPOINT = '/restaurant/booking',
+    RESTAURANT_BOOKING_ENDPOINT = '/restaurant/bookings',
     RESTAURANT_TABLES_ENDPOINT = '/restaurant/tables',
     RESTAURANT_CLIENT_ENDPOINT = '/restaurant/clients',
     RESTAURANT_REVIEWS_ENDPOINT = '/restaurant/reviews',
