@@ -19,7 +19,11 @@ import Wrap from "@/components/common/wrap"
 
 //libs
 import { UserContractFormSchema, UserContractFormSchemaType } from "@/common/libs/zod/forms/user/contract.form";
+import { downloadPDF, signContract } from "@/common/libs/pdf-lib/contract";
 import Icon from "@/common/libs/lucida-icon";
+
+//hooks
+import { usePUTUserDataHooks } from "@/hooks/user/useUserDataHooks";
 
 //interface 
 import { IFiles } from "@/common/types/company/files.interface"
@@ -30,6 +34,14 @@ interface ContractComponentProps {
 
 export default function ContractComponent({ contract }: ContractComponentProps): JSX.Element {
     const sigCanvas = useRef(null);
+
+    const {
+        updateuserData: updateFile,
+        isUpdateuserDataLoading: isLoading
+    } = usePUTUserDataHooks({
+        query: "USER_FILES"
+    })
+
     const form = useForm<UserContractFormSchemaType>({
         mode: "onChange",
         resolver: zodResolver(UserContractFormSchema),
@@ -48,9 +60,31 @@ export default function ContractComponent({ contract }: ContractComponentProps):
         }
     };
 
-    const onSubmitForm: SubmitHandler<UserContractFormSchemaType> = (formData) => {
-        console.log(formData)
-        // form.reset()
+
+
+    const onSubmitForm: SubmitHandler<UserContractFormSchemaType> = async (formData) => {
+        const file = await signContract({
+            address: formData.address,
+            contact_number: formData.contact_number,
+            contract_pdf: contract.url,
+            pps_number: formData.pps_number,
+            signature: formData.signature,
+        })
+
+        await updateFile({
+            file: {
+                as: 'contract-sgined',
+                file,
+                id: contract?.id,
+                key: contract?.key,
+                type: 'pdf'
+            }
+        }, {
+            onSuccess: () => {
+                downloadPDF(file, `My-contract-${new Date().toISOString()}`)
+                window.location.reload()
+            }
+        })
     };
 
     return (
@@ -162,6 +196,8 @@ export default function ContractComponent({ contract }: ContractComponentProps):
                     <Button
                         type='submit'
                         leftIcon="Save"
+                        isLoading={isLoading}
+                        disabled={isLoading}
                     >
                         Save
                     </Button>

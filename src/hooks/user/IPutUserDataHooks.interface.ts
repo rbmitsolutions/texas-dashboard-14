@@ -1,3 +1,4 @@
+import { IFilesAs, IFilesType } from "@/common/types/company/files.interface";
 import { IRosterStatus } from "@/common/types/company/roster.interface";
 import { IAvailableDays, IUserStatus } from "@/common/types/user/user.interface";
 
@@ -53,6 +54,15 @@ export interface IPUTUserDetailsBody {
     role_id?: string;
 }
 
+
+export interface IPUTFilesBody {
+    id: string
+    key: string
+    as: IFilesAs
+    type: IFilesType
+    file: any
+}
+
 export interface IPUTUserRosterBody {
     one: {
         id: string;
@@ -63,9 +73,10 @@ export interface IPUTUserRosterBody {
 
 }
 
-export type IPUTUserDataQueryType = 'DETAILS' | 'USER_ROSTER' | 'USER_COMPANY'
+export type IPUTUserDataQueryType = 'DETAILS' | 'USER_ROSTER' | 'USER_COMPANY' | "USER_FILES"
 
 export interface IPUTUserBody {
     details?: IPUTUserDetailsBody
     roster?: IPUTUserRosterBody,
+    file?: IPUTFilesBody
 }

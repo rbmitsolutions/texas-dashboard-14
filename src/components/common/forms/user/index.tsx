@@ -52,7 +52,7 @@ export default function UserProfile({ user, isAdmin, roles, onUpdate }: UserProf
                     </>
                 }
             </div>
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-2 md:mt-4 lg:grid-cols-3'>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2 md:mt-6 lg:grid-cols-3'>
                 <DetailsForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
                 <EmergencyContactForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
                 <BankDetailsForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />

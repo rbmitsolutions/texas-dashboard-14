@@ -16,6 +16,11 @@ export interface IGetAllUserResponse {
     pagination: IPaginationResponse
 }
 
+export interface IUserProfileCompletedResponse {
+    id: string
+    password_updated: boolean
+  }
+
 export interface IGETUserQuery {
     all?: {
         name?: string;
@@ -48,6 +53,9 @@ export interface IGETUserQuery {
     }
     byRosterPassword?: {
         roster_password: string
+    }
+    profileCompleted?: {
+        id: string
     }
 }
 
@@ -87,7 +95,7 @@ export interface IUserGETCompanyRosterQuery {
     };
 }
 
-export type IGETUserDataResponse = IUser | IGETUserResponse | IGetAllUserResponse | IGETCompanyRosterResponse | IRequestsGetAllResponse
+export type IGETUserDataResponse = IUser | IGETUserResponse | IGetAllUserResponse | IGETCompanyRosterResponse | IRequestsGetAllResponse | IUserProfileCompletedResponse
 
 export type IUserDataQueryType = "DETAILS" | "USER_COMPANY" | "USER_ROSTER" | "USER_REQUESTS"
 

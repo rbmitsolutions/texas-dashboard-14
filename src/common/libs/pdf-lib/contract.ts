@@ -162,29 +162,29 @@ export const signContract = async ({
 }
 
 
-// const downloadPDF = (base64String, fileName) => {
-//     // Remove header of base64 string
-//     const base64WithoutHeader = base64String.split(';base64,').pop();
+export const downloadPDF = (base64String: any, fileName: string) => {
+    // Remove header of base64 string
+    const base64WithoutHeader = base64String.split(';base64,').pop();
 
-//     // Convert base64 to Uint8Array
-//     const bytes = new Uint8Array(atob(base64WithoutHeader).split('').map(char => char.charCodeAt(0)));
+    // Convert base64 to Uint8Array
+    const bytes = new Uint8Array(atob(base64WithoutHeader).split('').map(char => char.charCodeAt(0)));
 
-//     // Create Blob object
-//     const pdfBlob = new Blob([bytes], { type: 'application/pdf' });
+    // Create Blob object
+    const pdfBlob = new Blob([bytes], { type: 'application/pdf' });
 
-//     // Create temporary URL
-//     const url = URL.createObjectURL(pdfBlob);
+    // Create temporary URL
+    const url = URL.createObjectURL(pdfBlob);
 
-//     // Create anchor element
-//     const a = document.createElement('a');
-//     a.href = url;
-//     a.download = fileName;
+    // Create anchor element
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
 
-//     // Append anchor to body and trigger download
-//     document.body.appendChild(a);
-//     a.click();
+    // Append anchor to body and trigger download
+    document.body.appendChild(a);
+    a.click();
 
-//     // Clean up
-//     URL.revokeObjectURL(url);
-//     document.body.removeChild(a);
-// };
+    // Clean up
+    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+};

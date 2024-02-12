@@ -24,9 +24,10 @@ import { IUser } from "@/common/types/user/user.interface"
 interface UpdatePasswordFormProps {
     user: IUser
     onUpdate: UseMutateFunction<any, any, IPUTUserBody, unknown>
+    alwaysOpen?: boolean
 }
 
-export default function UpdatePasswordForm({ user, onUpdate }: UpdatePasswordFormProps) {
+export default function UpdatePasswordForm({ user, onUpdate, alwaysOpen = false }: UpdatePasswordFormProps) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const form = useForm<ChangePasswordFormSchemaType>({
@@ -59,16 +60,18 @@ export default function UpdatePasswordForm({ user, onUpdate }: UpdatePasswordFor
 
     return (
         <AlertDialog
-            open={isOpen}
+            open={alwaysOpen ? true : isOpen}
             onOpenChange={onOpenChange}
         >
-            <AlertDialogTrigger asChild>
-                <Button
-                    leftIcon='KeySquare'
-                    onClick={onOpenChange}
-                >Change Password
-                </Button>
-            </AlertDialogTrigger>
+            {!alwaysOpen &&
+                <AlertDialogTrigger asChild>
+                    <Button
+                        leftIcon='KeySquare'
+                        onClick={onOpenChange}
+                    >Change Password
+                    </Button>
+                </AlertDialogTrigger>
+            }
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Change Password</AlertDialogTitle>
@@ -119,6 +122,7 @@ export default function UpdatePasswordForm({ user, onUpdate }: UpdatePasswordFor
                                 variant='secondary'
                                 className='text-sm'
                                 onClick={onOpenChange}
+                                disabled={alwaysOpen}
                             >Cancel</Button>
                             <Button
                                 type="submit"

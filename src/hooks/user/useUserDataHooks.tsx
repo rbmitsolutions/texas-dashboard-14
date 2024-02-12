@@ -1,5 +1,5 @@
 import { UseMutationOptions, UseQueryOptions, useMutation, useQuery } from "react-query";
-import { IGETUserDataQuery, IGETUserDataResponse, IGetAllUserResponse, IUserDataQueryType } from "./IGetUserDataHooks.interface";
+import { IGETUserDataQuery, IGETUserDataResponse, IGetAllUserResponse, IUserDataQueryType, IUserProfileCompletedResponse } from "./IGetUserDataHooks.interface";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { api } from "@/common/libs/axios/api";
@@ -77,7 +77,7 @@ export function useGETUserDataHooks({
         allUsers: data as IGetAllUserResponse,
         userAllRoster: data as IGETCompanyRosterResponse,
         userAllRequests: data as IRequestsGetAllResponse,
-
+        userProfileCompleted: data as IUserProfileCompletedResponse,
         userDataError: error ? true : false,
         isUserDataLoading: isLoading,
         refetchUserData: refetch,

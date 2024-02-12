@@ -192,7 +192,7 @@ export default function MenuItemPage(params: { params: { id: string } }) {
                                 skip: 0
                             },
                             in: {
-                                id: data?.img_ids
+                                key: data?.img_ids
                             }
                         }
                     }

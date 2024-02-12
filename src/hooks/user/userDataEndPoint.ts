@@ -40,4 +40,14 @@ export const userEndPoint = {
         createSucess: 'Request created successfully!',
         createError: "Request creation failed!",
     },
+    USER_FILES: {
+        url: EndPointsTypes['USER_FILES_ENDPOINT'],
+        queryParams: 'files',
+        updateSucess: "Updated successfully!",
+        updateError: "Update failed!",
+        deleteSucess: "Deleted successfully!",
+        deleteError: "Delete failed!",
+        createSucess: 'Created successfully!',
+        createError: "Creation failed!",
+    },
 }
