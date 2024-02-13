@@ -1,13 +1,17 @@
 'use client'
+
+//components
+import { userColumnsTable } from "./_components/userColumnsTable"
+import SearchInput from "@/components/common/searchInput"
+import SendEmail from "@/components/common/sendEmail"
+import IconText from "@/components/common/iconText"
+import { UserTable } from "./_components/userTable"
+import SendSms from "@/components/common/sendSms"
+import Wrap from "@/components/common/wrap"
+
+//hooks
 import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
 import { useGETUserDataHooks } from "@/hooks/user/useUserDataHooks"
-import { userColumnsTable } from "./_components/userColumnsTable"
-import { UserTable } from "./_components/userTable"
-import SendEmail from "@/components/common/sendEmail"
-import SearchInput from "@/components/common/searchInput"
-import Wrap from "@/components/common/wrap"
-import IconText from "@/components/common/iconText"
-import SendSms from "@/components/common/sendSms"
 
 export default function Employees() {
     const {
@@ -62,7 +66,7 @@ export default function Employees() {
                     icon="Users"
                     text='Group actions'
                 />
-                <div className='grid grid-cols-[1fr,40px,40px] gap-2 border-2 p-4 rounded-lg mt-2'>
+                <div className='grid grid-cols-[1fr,auto,auto] gap-2 border-2 p-4 rounded-lg mt-2 bg-background-soft'>
                     <SearchInput
                         onSearchChange={e => setGETUserDataParams(prev => ({
                             user: {

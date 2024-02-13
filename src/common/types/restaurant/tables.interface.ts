@@ -1,3 +1,4 @@
+import { IBookingDays, ISpecialDays } from "./config.interface";
 import { IOrderController } from "./order.interface";
 
 export interface ISection {
@@ -5,7 +6,11 @@ export interface ISection {
 
   title: string;
   open: boolean;
+  priority: number;
+  
   tables: ITable[];
+  days_open: IBookingDays[]
+  special_days: ISpecialDays[]
 
   created_at: Date;
   updated_at: Date;
@@ -23,7 +28,6 @@ export interface IFinishedTable {
   start_time: Date;
   end_time: Date;
   average_minutes: number;
-  
   guests: number;
   pass: number;
 

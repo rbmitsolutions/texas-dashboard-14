@@ -80,6 +80,7 @@ export interface IPOSTOrderBody {
 
 export interface IPOSTSectionBody {
   title: string;
+  priority: number;
 }
 
 export interface IPOSTGiftCardBody {

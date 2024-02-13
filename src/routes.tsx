@@ -18,14 +18,19 @@ export interface IRoute {
 // caso ele tenha permissao e esteja no device da rota o fetch será feito
 
 const routers: IRoute[] = [
-  // {
-  //   name: "Bookings",
-  //   path: "",
-  //   icon: <Icon name='CalendarDays' size={14} />,
-  //   layout: "/admin/texas/bookings",
-  //   authorization: ["my_profile"],
-  //   collapse: false,
-  // },
+  {
+    name: "Bookings",
+    path: "",
+    icon: <Icon name='CalendarDays' size={14} />,
+    layout: "/admin/texas/bookings",
+    authorization: [
+      Permissions.ADMIN,
+      Permissions.ADMIN_GHOST,
+      Permissions.BOOKING_ADM,
+      Permissions.BOOKING_READER
+    ],
+    collapse: false,
+  },
   // {
   //   name: "Reception",
   //   path: "",

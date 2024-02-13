@@ -1,7 +1,6 @@
 import { IBookings } from "@/common/types/restaurant/bookings.interface";
 import { ITimesOpen } from "@/common/types/restaurant/config.interface";
 import { IGiftCardStatus } from "@/common/types/restaurant/giftcard.interface";
-import { IMenu } from "@/common/types/restaurant/menu.interface";
 import { IOrderStatus } from "@/common/types/restaurant/order.interface";
 import { ITableMealStatus } from "@/common/types/restaurant/tables.interface";
 
@@ -124,7 +123,24 @@ export interface IPUTBookingsBody {
 
 export interface IPUTSectionBody {
     id: string;
-    title: string;
+    title?: string;
+    priority?: number;
+    connect?: {
+        days_open?: {
+            ids: string[];
+        },
+        special_days?: {
+            ids: string[];
+        },
+    },
+    disconnect?: {
+        days_open?: {
+            ids: string[];
+        },
+        special_days?: {
+            ids: string[];
+        },
+    }
 }
 
 export interface IPUTGiftCardBody {
@@ -201,44 +217,44 @@ export interface IPUTMenuAddOnsBody {
 
 export interface IPUTMenuBody {
     menu: {
-      id: string
-      title?: string
-      short_title?: string
-      description?: string
-      value?: number
-      profit?: number
-  
-      mn_type_id?: string
-      website?: boolean
-      to_order?: boolean
-      options_priority?: number
-      to_print_ids?: string[]
-      allergens?: string[]
-  
-      thumbnail?: string
-      
-      images?: {
-        add: string[]
-        remove: string[]
-      }
-      f_options?: {
-        remove: string[]
-        add: string[]
-      }
-      go_with_ids?: {
-        remove: string[]
-        add: string[]
-      }
-      add_ons?:{
-        remove: string[]
-        add: string[]
-      }
+        id: string
+        title?: string
+        short_title?: string
+        description?: string
+        value?: number
+        profit?: number
+
+        mn_type_id?: string
+        website?: boolean
+        to_order?: boolean
+        options_priority?: number
+        to_print_ids?: string[]
+        allergens?: string[]
+
+        thumbnail?: string
+
+        images?: {
+            add: string[]
+            remove: string[]
+        }
+        f_options?: {
+            remove: string[]
+            add: string[]
+        }
+        go_with_ids?: {
+            remove: string[]
+            add: string[]
+        }
+        add_ons?: {
+            remove: string[]
+            add: string[]
+        }
     };
     highlight?: {
         id: string
     }
-  }
-  
+}
+
 
 export type IPUTRestaurantDataQueryType = 'BOOKINGS' | "TABLES" | "ORDER" | "CLIENTS" | "SECTIONS" | "MENU" | "GIFTCARD" | "AUTHORIZED_DEVICES" | 'SPECIAL_DAYS' | 'TIMES_OPEN' | "PRINTERS" | 'MENU_SECTION' | 'MENU_TYPE' | 'MENU_ADD_ONS'
 

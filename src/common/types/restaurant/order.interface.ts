@@ -1,70 +1,47 @@
+import { IMenuType } from "./menu.interface";
+import { IFinishedTable, ITable } from "./tables.interface";
 
 export type IOrderStatus = "ordered" | "cancelled" | "returned" | "delivered";
 
-export interface IOrderAddOns {
-    is_mandatory: boolean,
-    title: string,
-}
-
 export interface IOrder {
-    id: string;
+  id: string;
 
-    status: IOrderStatus;
-    quantity: number;
+  status: IOrderStatus;
+  quantity: number;
 
-    //   type: IMenuType
-    //   menu_type: IMenuType;
-    add_ons: IOrderAddOns[]
+  type: string;
+  menu_type: IMenuType;
 
-    value: number; // price in cents
-    description: string;
+  price: number;
+  description: string;
 
-    menu: string;
-    menu_id: string;
+  menu: string;
+  menu_id: string;
 
-    order_controller: IOrderController;
-    order_controller_id: string;
+  order_controller: IOrderController;
+  order_controller_id: string;
 
-    created_at: Date;
-    updated_at: Date;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface IOrderController {
-    id: string;
+  id: string;
+  number: number
 
-    number: number
+  waiter: string;
+  waiter_id: string;
 
-    waiter: string;
-    waiter_id: string;
+  client_id: string;
 
-    client_id: string;
+  table: ITable | null;
+  table_id: string | null;
 
-    //   table: ITable | null;
-    //   table_id: string | null;
+  finished_table: IFinishedTable | null;
+  finished_table_id: string | null;
 
-    //   finished_table: IFinishedTable | null;
-    //   finished_table_id: string | null;
+  orders: IOrder[];
 
-    orders: IOrder[];
-
-    created_at: Date;
-    updated_at: Date;
-}
-
-export interface IExtraSide {
-    title: string;
-    price: number;
-}
-
-export interface IOrderConfig {
-    doneness?: string;
-    sauce?: {
-        title?: string;
-        price?: number;
-    };
-    side?: string;
-    extra_side: IExtraSide[];
-    notes?: string;
-    quantity: number;
-    extra_notes: string[];
+  created_at: Date;
+  updated_at: Date;
 }

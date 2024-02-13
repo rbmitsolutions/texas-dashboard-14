@@ -48,24 +48,19 @@ const hrsystemComponents = [
 
 const restaurantComponents = [
     {
-        title: "Sections",
+        title: "Sections / Tables",
         href: "/admin/settings/restaurant/sections",
-        description: "Update Restaurant Sections Table",
-    },
-    {
-        title: 'Tables',
-        href: '/admin/settings/restaurant/tables',
-        description: 'Update Restaurant tables'
+        description: "Update Sections and Tables",
     },
     {
         title: 'Auth Devices',
         href: '/admin/settings/restaurant/authdevices',
-        description: 'Update Restaurant Auth Devices'
+        description: 'Update Auth Devices'
     },
     {
         title: 'Printers',
         href: '/admin/settings/restaurant/printers',
-        description: 'Update Restaurant Printers'
+        description: 'Update Printers'
     },
 ]
 
@@ -73,29 +68,29 @@ const bookingsComponents = [
     {
         title: "Open Days",
         href: "/admin/settings/bookings/opendays",
-        description: "Update Restaurant Open Days",
+        description: "Update Open Days",
     },
     {
         title: 'Special Days',
         href: '/admin/settings/bookings/specialdays',
-        description: 'Update Restaurant Special Days'
+        description: 'Update Special Days'
     },
 ]
 const apisComponents = [
     {
         title: "Email",
         href: "/admin/settings/apis/email",
-        description: "Update Restaurant Email",
+        description: "Email Api",
     },
     {
         title: "Sms",
         href: "/admin/settings/apis/sms",
-        description: "Update Restaurant sms",
+        description: "Sms Api",
     },
     {
         title: "Images",
         href: "/admin/settings/apis/images",
-        description: "Update Restaurant images",
+        description: "Images Api",
     },
 ]
 
@@ -132,7 +127,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
     return (
         <div >
             <SettingsNavigation navigation={navigation} />
-            <div className='mt-4'>
+            <div className='mt-6'>
                 {children}
             </div>
         </div>

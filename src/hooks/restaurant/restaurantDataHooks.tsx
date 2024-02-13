@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { api } from "@/common/libs/axios/api";
 import { restaurantEndPoint } from "./restaurantDataEndPoint";
-import { IAllAuthorizedDevicesResponse, IAllOrderControllerResponse, IAllOrdersResponse, IFinishedTableAllResponse, IGETAllBookingsResponse, IGETAllReviewsResponse, IGETMenuAddOnsResponse, IGETMenuSectionsResponse, IGETMenuTypesResponse, IGETPrintersResponse, IGETRestaurantDataQuery, IGETRestaurantResponse, IGETTablesAllResponse, IGetAllClientsResponse, IGiftCardReponse, IGETMenuResponse, IOpenDaysGetAllResponse, IRestaurantDataQueryType, IGETMenuOrderSystemResponse } from "./IGetRestaurantDataHooks.interface";
+import { IAllAuthorizedDevicesResponse, IAllOrderControllerResponse, IAllOrdersResponse, IFinishedTableAllResponse, IGETAllBookingsResponse, IGETAllReviewsResponse, IGETMenuAddOnsResponse, IGETMenuSectionsResponse, IGETMenuTypesResponse, IGETPrintersResponse, IGETRestaurantDataQuery, IGETRestaurantResponse, IGETTablesAllResponse, IGetAllClientsResponse, IGiftCardReponse, IGETMenuResponse, IOpenDaysGetAllResponse, IRestaurantDataQueryType, IGETMenuOrderSystemResponse, IGETSectionResponse } from "./IGetRestaurantDataHooks.interface";
 import { IPOSTRestaurantBody, IPOSTRestaurantDataQueryType, IPOSTRestaurantDataRerturn } from "./IPostRestaurantDataHooks.interface";
 import { IPUTRestaurantBody, IPUTRestaurantDataQueryType } from "./IPutRestaurantDataHooks.interface";
 import { IDELETERestaurantDataBody, IDELETERestaurantDataQueryType } from "./IDeleteRestaurantDataHooks.interface";
@@ -15,8 +15,8 @@ import { IOrder, IOrderController } from "@/common/types/restaurant/order.interf
 import { IClient } from "@/common/types/restaurant/client.interface";
 import { IGiftCards } from "@/common/types/restaurant/giftcard.interface";
 import { IAuthorizedDevices } from "@/common/types/restaurant/authorizedDevices.interface";
-import { IDays } from "@/common/types/restaurant/config.interface";
 import { IMenu } from "@/common/types/restaurant/menu.interface";
+import { IBookingDays } from "@/common/types/restaurant/config.interface";
 
 interface IUseGETRestaurantDataHooks {
     query: IRestaurantDataQueryType,
@@ -97,7 +97,8 @@ export function useGETRestaurantDataHooks({
         restaurantAllAuthorizedDevices: data as IAllAuthorizedDevicesResponse,
         restaurantAuthorizedDevice: data as IAuthorizedDevices,
         restaurantAllOpenDays: data as IOpenDaysGetAllResponse,
-        restaurantOpenDay: data as IDays,
+        restaurantOpenDay: data as IBookingDays,
+        restaurantAllSections: data as IGETSectionResponse,
         restaurantAllPrinters: data as IGETPrintersResponse,
         restaurantAllMenuSections: data as IGETMenuSectionsResponse,
         restaurantAllMenuTypes: data as IGETMenuTypesResponse,
