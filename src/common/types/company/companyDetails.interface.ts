@@ -15,8 +15,11 @@ export interface IShifts {
     id: string;
     title: string;
     hours: number;
-    reduce_break_time: boolean;
+    reduce_break_time: boolean; //todo remove it
     break_minutes: number;
+
+    created_at: Date;
+    updated_at: Date;
 }
 
 export interface ICompanyContacts {

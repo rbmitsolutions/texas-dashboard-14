@@ -1,12 +1,19 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface";
 import { UseMutateFunction } from "react-query";
+
+
+//libs
 import { CreatePrintersFormSchema, CreatePrintersFormSchemaType } from "@/common/libs/zod/forms/settings/createPrintersForms";
+
+//components
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+//interfaces
+import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface";
 
 interface CreatePrintersFormProps {
     createPrinter: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>

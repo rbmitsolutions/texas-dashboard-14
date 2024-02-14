@@ -1,4 +1,4 @@
-import { isToday as isTodayFns, format, addDays, subDays, startOfMonth, endOfMonth, startOfDay, endOfDay, startOfWeek, parse, formatDuration, parseISO } from "date-fns";
+import { isToday as isTodayFns, format, addDays, subDays, startOfMonth, endOfMonth, startOfDay, endOfDay, startOfWeek, parse, formatDuration, parseISO, addMinutes } from "date-fns";
 
 export const parseDate = (date: string, format: 'dd/MM/yy'): Date => {
     return parse(date, format, new Date())
@@ -30,22 +30,28 @@ export const getLastDayOfMonth = (date: Date): Date => {
 
 interface IFormatDate {
     date: Date,
-    f?: 'dd/MM/yyyy' | 'dd/MM/yyyy HH:mm' | 'LLL dd, yy' | 'PPP' | 'dd, LLL, yy' | 'yyyy-MM-dd' | 'dd LLL, yy' | 'HH:mm:ss'
+    f?: 'dd/MM/yyyy' | 'dd/MM/yyyy HH:mm' | 'LLL dd, yy' | 'PPP' | 'dd, LLL, yy' | 'yyyy-MM-dd' | 'dd LLL, yy' | 'HH:mm:ss' | 'HH:mm'
 }
 
 export const formatDate = ({ date, f = 'dd/MM/yyyy' }: IFormatDate): string => {
     return format(date, f)
 }
 
-export const convertMinutesToHoursAndMinutes = (minutes: number) => {
+export const convertMinutesToHoursAndMinutes = (minutes: number): string => {
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
-    return format(new Date(0, 0, 0, hours, remainingMinutes), 'HH:mm');
+    const hoursString = hours > 0 ? `${hours}h` : '';
+    const minutesString = remainingMinutes > 0 ? `${remainingMinutes}m` : '';
+    return `${hoursString} ${minutesString}`
 }
 
 
 export const addDaysToDate = (date: Date, days: number): Date => {
     return addDays(date, days)
+}
+
+export const addMinutesToDate = (date: Date, minutes: number): Date => {
+    return addMinutes(date, minutes)
 }
 
 export const subDaysToDate = (date: Date, days: number): Date => {

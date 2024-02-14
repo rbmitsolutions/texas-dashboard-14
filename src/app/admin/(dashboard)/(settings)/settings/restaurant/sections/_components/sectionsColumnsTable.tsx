@@ -11,6 +11,7 @@ import Icon from "@/common/libs/lucida-icon"
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 import { cn } from "@/common/libs/shadcn/utils"
 import { IBookingDays } from "@/common/types/restaurant/config.interface"
+import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -166,19 +167,15 @@ export const sectionsColumnsTable = ({
                             addTable={addTable}
                             section={row?.original}
                         />
-                        <Button
-                            size='iconExSm'
-                            onClick={async () => await deleteSection({
+                        <DeleteDialogButton
+                            onDelete={async () => await deleteSection({
                                 section: {
                                     id: row?.original?.id
 
                                 }
                             })}
-                            disabled={row?.original?.tables?.length > 0}
-                            variant='destructive'
-                        >
-                            <Icon name='Trash2' />
-                        </Button>
+                            isDisabled={row?.original?.tables?.length > 0}
+                        />
                     </div>
                 )
             },

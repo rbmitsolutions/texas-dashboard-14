@@ -6,6 +6,7 @@ import { UseMutateFunction } from "react-query"
 import { IDELETERestaurantDataBody } from "@/hooks/restaurant/IDeleteRestaurantDataHooks.interface"
 import { Button } from "@/components/ui/button"
 import Icon from "@/common/libs/lucida-icon"
+import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
 
 interface AuthDevicesColumnsTableProps {
     deleteAuthorizedDevices: UseMutateFunction<void, any, IDELETERestaurantDataBody, unknown>
@@ -41,17 +42,13 @@ export const authDevicesColumnsTable = ({
             cell: ({ row }) => {
                 return (
                     <div className="flex-container-center">
-                        <Button 
-                        size='iconExSm' 
-                        variant='destructive'
-                        onClick={async () => await deleteAuthorizedDevices({
-                            authorizedDevice: {
-                                id: row?.original?.id
-                            }
-                        })}
-                        >
-                            <Icon name='Trash' />
-                        </Button>
+                        <DeleteDialogButton
+                            onDelete={async () => await deleteAuthorizedDevices({
+                                authorizedDevice: {
+                                    id: row?.original?.id
+                                }
+                            })}
+                        />
                     </div>
                 )
             },
