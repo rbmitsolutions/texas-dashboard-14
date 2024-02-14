@@ -8,7 +8,7 @@ import { IUser } from "@/common/types/user/user.interface";
 import { IPUTUserBody, IPUTUserDataQueryType } from "./IPutUserDataHooks.interface";
 import { AxiosRequestConfig } from "axios";
 import toast from "react-hot-toast";
-import { IGETCompanyRosterResponse, IRequestsGetAllResponse } from "../company/IGetCompanyDataHooks.interface";
+import { ICompanyDetailsResponse, IGETCompanyRosterResponse, IRequestsGetAllResponse } from "../company/IGetCompanyDataHooks.interface";
 import { IPOSTUserBody, IPOSTUserDataQueryType, IPOSTUserDataRerturn } from "./IPostUserDataHooks.interface";
 import { IDELETEUserDataBody, IDELETEUserDataQueryType } from "./IDeleteUserDataHooks.interface";
 
@@ -75,6 +75,7 @@ export function useGETUserDataHooks({
     return {
         userDetails: data as IUser,
         allUsers: data as IGetAllUserResponse,
+        companyDetails: data as ICompanyDetailsResponse,
         userAllRoster: data as IGETCompanyRosterResponse,
         userAllRequests: data as IRequestsGetAllResponse,
         userProfileCompleted: data as IUserProfileCompletedResponse,

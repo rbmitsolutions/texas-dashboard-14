@@ -39,7 +39,7 @@ export default function RosterTasksDisplay({ task, deleteRosterTask }: RosterTas
                         })
                     }}
                     disabled={!isUserAuthorized(
-                        user?.permissions,
+                        user,
                         [Permissions.ROSTER_TASKS]
                     ) || task?.done}
                     type='button'

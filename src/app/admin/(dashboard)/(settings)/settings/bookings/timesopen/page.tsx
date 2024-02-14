@@ -10,8 +10,6 @@ import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHook
 
 const dayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-
-
 export default function TimesOpen() {
 
     const {
@@ -34,7 +32,6 @@ export default function TimesOpen() {
         return dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day);
     }) || []
 
-    console.log(sortedDays)
     return (
         <Wrap
             header={{

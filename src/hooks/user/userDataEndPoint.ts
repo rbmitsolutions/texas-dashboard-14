@@ -20,6 +20,15 @@ export const userEndPoint = {
         deleteSucess: "User company deleted successfully!",
         deleteError: "User company delete failed!",
     },
+    COMPANY_DETAILS: {
+        url: EndPointsTypes['USER_COMPANY_DETAILS_ENDPOINT'],
+        createSucess: "User company created successfully!",
+        createError: "User company creation failed!",
+        updateSucess: "User company updated successfully!",
+        updateError: "User company update failed!",
+        deleteSucess: "User company deleted successfully!",
+        deleteError: "User company delete failed!",
+    },
     USER_ROSTER: {
         url: EndPointsTypes['USER_ROSTER_ENDPOINT'],
         queryParams: 'roster',

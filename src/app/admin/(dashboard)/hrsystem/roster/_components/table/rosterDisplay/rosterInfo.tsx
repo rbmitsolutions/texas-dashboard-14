@@ -13,6 +13,7 @@ import {
 import RosterTasksDisplay from "../rosterTasksDisplay"
 import AddTaskToRoster from "../addTaskToRoster"
 import { Button } from "@/components/ui/button"
+import UpdateRoster from "./updateRoster"
 
 //libs
 import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized"
@@ -30,7 +31,6 @@ import { IPUTCompanyBody } from "@/hooks/company/IPutCompanyDataHooks.interface"
 import { IRoster } from "@/common/types/company/roster.interface"
 import { Permissions } from "@/common/types/auth/auth.interface"
 import { IForm } from "@/common/types/company/form.interface"
-import UpdateRoster from "./updateRoster"
 import { IUser } from "@/common/types/user/user.interface"
 
 interface RosterInfoProps {
@@ -109,7 +109,7 @@ export default function RosterInfo({ roster, user, forms, shifts, duties, create
                         })}
                     </Button>
                     {(shifts && duties && roster && user && isUserAuthorized(
-                        UserToken?.permissions,
+                        UserToken,
                         [Permissions.ADMIN]
                     )) &&
                         <UpdateRoster
@@ -143,7 +143,7 @@ export default function RosterInfo({ roster, user, forms, shifts, duties, create
                         variant='purple'
                         leftIcon="Stethoscope"
                         disabled={!isUserAuthorized(
-                            UserToken?.permissions,
+                            UserToken,
                             [Permissions.ADMIN]
                         ) || roster?.status === 'dayoff' || roster?.status === 'holiday' || roster?.status === 'sickday'}
                         onClick={handleUpdateRoster}

@@ -6,18 +6,20 @@ import { useRouter } from "next/navigation"
 //copmponents
 import { menuColumnsTable } from "./_components/menuColumns"
 import { MenuTables } from "./_components/menuTable"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import Wrap from "@/components/common/wrap"
 
-//hooks
-import { useDELETERestaurantDataHooks, useGETRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
-import { Checkbox } from "@/components/ui/checkbox"
+//libs
 import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized"
 import { Permissions } from "@/common/types/auth/auth.interface"
+
+//hooks
+import { useDELETERestaurantDataHooks, useGETRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 import { useAuthHooks } from "@/hooks/useAuthHooks"
 
 export default function AllMenuPage() {
-    const { user: { permissions } } = useAuthHooks()
+    const { user } = useAuthHooks()
     const router = useRouter()
     const [sectionSelected, setSectionSelected] = useState<string | undefined>('all')
     const {
@@ -116,7 +118,7 @@ export default function AllMenuPage() {
                             onClick={() => router.push('/admin/restaurant/menu/create/section')}
                             leftIcon='ChefHat'
                             disabled={!isUserAuthorized(
-                                permissions,
+                                user,
                                 [Permissions.MENU_CREATE]
                             )}
                         >
@@ -226,7 +228,7 @@ export default function AllMenuPage() {
                 columns={menuColumnsTable({
                     redirectTo: (path: string) => router.push(path),
                     allowUpdate: isUserAuthorized(
-                        permissions,
+                        user,
                         [Permissions.MENU_UPDATE]
                     ),
                     onDelete: (id: string) => deleteMenu({
@@ -235,7 +237,7 @@ export default function AllMenuPage() {
                         }
                     }),
                     allowDelete: isUserAuthorized(
-                        permissions,
+                        user,
                         [Permissions.MENU_DELETE]
                     ),
                     udpateMenu: (data) => updateMenu({

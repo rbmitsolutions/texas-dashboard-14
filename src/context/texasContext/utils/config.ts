@@ -15,7 +15,7 @@ export const useEnableFetch = ({ fetch }: IEnableFetch): boolean => {
   switch (fetch) {
     case "tables":
       return (
-        isUserAuthorized(user?.permissions, [
+        isUserAuthorized(user, [
           Permissions.ADMIN,
           Permissions.ADMIN_GHOST,
           Permissions.BOOKING_READER,
@@ -33,7 +33,7 @@ export const useEnableFetch = ({ fetch }: IEnableFetch): boolean => {
       );
     case "menu":
       return (
-        isUserAuthorized(user?.permissions, [
+        isUserAuthorized(user, [
           Permissions.ADMIN,
           Permissions.ADMIN_GHOST,
           Permissions.BOOKING_READER,
@@ -46,7 +46,7 @@ export const useEnableFetch = ({ fetch }: IEnableFetch): boolean => {
       );
     case "sections":
       return (
-        isUserAuthorized(user?.permissions, [
+        isUserAuthorized(user, [
           Permissions.ADMIN,
           Permissions.ADMIN_GHOST,
           Permissions.BOOKING_READER,
@@ -64,7 +64,7 @@ export const useEnableFetch = ({ fetch }: IEnableFetch): boolean => {
       );
     case "orderController":
       return (
-        isUserAuthorized(user?.permissions, [
+        isUserAuthorized(user, [
           Permissions.ADMIN,
           Permissions.ADMIN_GHOST,
           Permissions.WAITERS,
@@ -79,7 +79,7 @@ export const useEnableFetch = ({ fetch }: IEnableFetch): boolean => {
       );
     case "transactions":
       return (
-        isUserAuthorized(user?.permissions, [
+        isUserAuthorized(user, [
           Permissions.ADMIN,
           Permissions.ADMIN_GHOST,
           Permissions.RECEPTION,

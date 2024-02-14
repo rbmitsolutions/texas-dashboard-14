@@ -45,7 +45,7 @@ export function Header() {
                     }
                 </div>
             </div>
-            {isUserAuthorized(user?.permissions, [Permissions.ADMIN, Permissions.ADMIN_GHOST]) &&
+            {isUserAuthorized(user, [Permissions.ADMIN, Permissions.ADMIN_GHOST]) &&
                 <AppSearching />
             }
             <div className='flex-container-center gap-2'>
@@ -55,7 +55,7 @@ export function Header() {
                         {user && user?.name?.split('')[0]}
                     </AvatarFallback>
                 </Avatar>
-                {isUserAuthorized(user?.permissions, [Permissions.ADMIN, Permissions.ADMIN_GHOST]) &&
+                {isUserAuthorized(user, [Permissions.ADMIN, Permissions.ADMIN_GHOST]) &&
                     <Settings />
                 }
                 <ThemeToggle />

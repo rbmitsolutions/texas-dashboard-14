@@ -1,6 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Badge } from "@/components/ui/badge"
+import toast from "react-hot-toast"
 
 //components
 import {
@@ -18,15 +19,16 @@ import Icon from "@/common/libs/lucida-icon"
 import { Input } from "@/components/ui/input"
 import RichText from "../richText"
 
-//lins
+//libs
 import { ComponentsSendEmailSchema, ComponentsSendEmailSchemaType } from "@/common/libs/zod/forms/components/sendEmail"
 import { EndPointsTypes } from "@/common/types/routers/endPoints.types"
+import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized"
+import { Permissions } from "@/common/types/auth/auth.interface"
 
 //api
 import { api } from "@/common/libs/axios/api"
-import toast from "react-hot-toast"
-import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized"
-import { Permissions } from "@/common/types/auth/auth.interface"
+
+//hooks
 import { useAuthHooks } from "@/hooks/useAuthHooks"
 
 export interface SendEmailContacts {
@@ -42,7 +44,7 @@ interface SendEmaiLProps {
 
 //todo: change router in back-end to group message
 export default function SendEmail({ contacts, size = 'icon' }: SendEmaiLProps) {
-    const { user: { permissions } } = useAuthHooks()
+    const { user } = useAuthHooks()
     const form = useForm<ComponentsSendEmailSchemaType>({
         mode: "onChange",
         resolver: zodResolver(ComponentsSendEmailSchema),
@@ -84,7 +86,7 @@ export default function SendEmail({ contacts, size = 'icon' }: SendEmaiLProps) {
                     className='p-1'
                     size={size}
                     disabled={!isUserAuthorized(
-                        permissions,
+                        user,
                         [Permissions.SEND_SMS]
                     )}
                 >

@@ -1,4 +1,5 @@
 export enum EndPointsTypes {
+    AUTH_AUTHORIZED_DEVICES_ENDPOINT = '/auth/devices',
     AUTH_ENDPOINT_SIGNIN = "/auth/signin",
     AUTH_ENDPOINT_SIGNUP = "/auth/signup",
     AUTH_ENDPOINT_FORGOT = "/auth/forgot",
@@ -31,7 +32,6 @@ export enum EndPointsTypes {
 
     ANALYTICS_BOOKINGS_ENDPOINT = '/analytics/bookings',
 
-    RESTAURANT_AUTHORIZED_DEVICES_ENDPOINT = '/restaurant/authorized-devices',
     RESTAURANT_FINISHED_TABLES_ENDPOINT = '/restaurant/finished-tables',
     RESTAURANT_ORDER_CONTROLLER_ENDPOINT = '/restaurant/order-controller',
     RESTAURANT_SPECIAL_DAYS_ENDPOINT = '/restaurant/special-days',
@@ -55,6 +55,7 @@ export enum EndPointsTypes {
     APP_CLOCKIN_ENDPOINT = '/app/clockin',
     APP_DAYROSTER_ENDPOINT = '/app/dayroster',
 
+    USER_COMPANY_DETAILS_ENDPOINT = "/user/company/details",
     USER_PROFILE_COMPLETED_ENDPOINT = '/user/profile-completed',
     USER_ROSTER_ANALYTICS_ENDPOINT = '/user/roster-analytics',
     USER_PERFORMANCE_ENDPOINT = "/user/performance",

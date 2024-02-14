@@ -41,6 +41,7 @@ api.interceptors.response.use(
                   profile_image: token?.profile_image,
                   permissions: token?.permissions,
                   token: data.token,
+                  authorized_device: data?.device_authorized,
                   refresh_token: { ...data.refresh_token },
                 }),
                 {

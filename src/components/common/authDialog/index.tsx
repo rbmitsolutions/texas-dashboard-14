@@ -2,8 +2,6 @@ import { IToken, Permissions } from "@/common/types/auth/auth.interface";
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
@@ -73,7 +71,7 @@ export default function AuthDialog({
             setIsLoading(false);
             onToggleDialog();
 
-            if (!isUserAuthorized(user?.permissions, permissions)) {
+            if (!isUserAuthorized(user, permissions)) {
                 return toast.error('You are not authorized')
             }
 
@@ -101,7 +99,7 @@ export default function AuthDialog({
             }
             );
 
-            if (!isUserAuthorized(user?.permissions, permissions)) {
+            if (!isUserAuthorized(user, permissions)) {
                 return toast.error('You are not authorized')
             }
 

@@ -40,7 +40,7 @@ interface SendSmsProps {
 
 //todo: change router in back-end to group message
 export default function SendSms({ contacts, size = 'icon' }: SendSmsProps) {
-    const { user: { permissions } } = useAuthHooks()
+    const { user } = useAuthHooks()
     const form = useForm<ComponentsSendSmsSchemaType>({
         mode: "onChange",
         resolver: zodResolver(ComponentsSendSmsSchema),
@@ -79,7 +79,7 @@ export default function SendSms({ contacts, size = 'icon' }: SendSmsProps) {
                     className='p-1'
                     size={size}
                     disabled={!isUserAuthorized(
-                        permissions,
+                        user,
                         [Permissions.SEND_SMS]
                     )}
                 >

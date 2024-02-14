@@ -66,7 +66,7 @@ export default function AddTaskToRoster({ roster, forms, createRosterTask }: Add
                 <Button
                     className='h-4 w-4 p-1'
                     disabled={!isUserAuthorized(
-                        user?.permissions,
+                        user,
                         [Permissions.ROSTER_TASKS]
                     ) || (new Date(roster?.date!) < subDaysToDate(new Date(), 1)) || roster?.status === 'dayoff' || roster?.status === 'holiday' || roster?.status === 'sickday'}
                 >

@@ -19,7 +19,7 @@ interface UserProfileAsAdminProps {
     roles: IRoles[]
 }
 export default function UserProfileAsAdmin({ user_id, roles }: UserProfileAsAdminProps): JSX.Element {
-    const { user: { permissions } } = useAuthHooks()
+    const { user: userToken } = useAuthHooks()
 
     const {
         userDetails: user,
@@ -52,7 +52,7 @@ export default function UserProfileAsAdmin({ user_id, roles }: UserProfileAsAdmi
             <UserProfile 
             user={user} 
             isAdmin={isUserAuthorized(
-                permissions,
+                userToken,
                 [Permissions.ADMIN, Permissions.ADMIN_GHOST]
             )} 
             roles={roles}

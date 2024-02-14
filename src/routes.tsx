@@ -10,7 +10,7 @@ export interface IRoute {
   items?: IRoute[];
 
   authorization: Permissions[];
-  auth_device?: boolean;
+  auth_device: boolean;
 }
 
 //algumas rotas como bookings serão pegadas do back-end
@@ -30,6 +30,7 @@ const routers: IRoute[] = [
       Permissions.BOOKING_READER
     ],
     collapse: false,
+    auth_device: true,
   },
   // {
   //   name: "Reception",
@@ -48,6 +49,7 @@ const routers: IRoute[] = [
     layout: "/admin/texas/waiters",
     authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST, Permissions.MENU],
     collapse: false,
+    auth_device: true,
   },
   // {
   //   name: "Pass",
@@ -90,6 +92,7 @@ const routers: IRoute[] = [
     layout: "/admin",
     icon: <Icon name='ChefHat' size={14} />,
     collapse: true,
+    auth_device: true,
     // authorization: ["admin", 'admin-ghost', "booking_reader", "menu"],
     authorization: [
       Permissions.ADMIN,
@@ -123,6 +126,7 @@ const routers: IRoute[] = [
           Permissions.ADMIN_GHOST,
           Permissions.BOOKING_ADM
         ],
+        auth_device: true,
       },
       {
         name: "Clients",
@@ -133,6 +137,7 @@ const routers: IRoute[] = [
           Permissions.ADMIN,
           Permissions.BOOKING_ADM
         ],
+        auth_device: true,
       },
       // {
       //   name: "Giftcard",
@@ -153,6 +158,7 @@ const routers: IRoute[] = [
           Permissions.ADMIN_GHOST,
           Permissions.MENU
         ],
+        auth_device: true,
         //need [menu-list, menu-create]
         items: [
           {
@@ -166,6 +172,7 @@ const routers: IRoute[] = [
               Permissions.ADMIN_GHOST,
               Permissions.MENU
             ],
+            auth_device: true,
             //routes [GET-MENU, GET-MENU-SECTION]
             //need [menu-list]
           },
@@ -181,6 +188,7 @@ const routers: IRoute[] = [
               Permissions.MENU,
               Permissions.MENU_CREATE
             ],
+            auth_device: true,
             //routes [GET-MENU, GET-PRINTERS GET-MENU_ADD_ONS, POST-MENU_ADD_ONS, PUT-MENU_ADD_ONS, DELETE-MENU_ADD_ONS, GET-MENU_SECTION, GET-MENU_TYPES, POST-MENU_SECTION, DELETE-MENU_SECTION, POST-MENU_TYPE, DELETE-MENU_TYPE]
             //meed [menu-create]
           },
@@ -200,6 +208,7 @@ const routers: IRoute[] = [
       Permissions.ADMIN_GHOST,
       Permissions.HACCP_ADMIN
     ],
+    auth_device: true,
     //need [user-list, user-list-filled, haccp-list, haccp-create, form-data-list]
     items: [
       {
@@ -208,6 +217,7 @@ const routers: IRoute[] = [
         icon: <Icon name='Users' size={14} />,
         layout: "/admin/hrsystem",
         collapse: true,
+        auth_device: true,
         authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST],
         items: [
           {
@@ -216,6 +226,7 @@ const routers: IRoute[] = [
             icon: <Icon name='Users' size={14} />,
             layout: "/admin/hrsystem/employees",
             authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST],
+            auth_device: true,
             //rotas [GET-USER, GET-DEPARTAMENTS]
             //need [user-list]
           },
@@ -235,6 +246,7 @@ const routers: IRoute[] = [
               Permissions.ADMIN,
               Permissions.ADMIN_GHOST,
             ],
+            auth_device: true,
           },
           {
             name: "Filed",
@@ -243,6 +255,7 @@ const routers: IRoute[] = [
             layout: "/admin/hrsystem/employees",
             // authorization: ["admin", 'admin-ghost'],
             authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST],
+            auth_device: true,
             //rotas [GET-USER, GET-ROLES]
             //need [user-list-filled]
           },
@@ -257,6 +270,7 @@ const routers: IRoute[] = [
           Permissions.ADMIN,
           Permissions.ADMIN_GHOST,
         ],
+        auth_device: true,
       },
       {
         name: "Roster",
@@ -267,6 +281,7 @@ const routers: IRoute[] = [
           Permissions.ADMIN,
           Permissions.ADMIN_GHOST,
         ],
+        auth_device: true,
       },
       {
         name: "Forms",
@@ -280,6 +295,7 @@ const routers: IRoute[] = [
           Permissions.ADMIN_GHOST,
           Permissions.HACCP_ADMIN
         ],
+        auth_device: true,
         //need [form-data-list]
         items: [
           {
@@ -293,6 +309,7 @@ const routers: IRoute[] = [
               Permissions.ADMIN_GHOST,
               Permissions.HACCP_ADMIN
             ],
+            auth_device : true,
             //rotas [GET-FORM-DATA, GET-FORMS]
             //need [form-data-list]
           },
@@ -306,6 +323,7 @@ const routers: IRoute[] = [
               Permissions.ADMIN_GHOST,
               Permissions.HACCP_ADMIN
             ],
+            auth_device: true,
           },
           // {
           //   name: "Config",
@@ -328,6 +346,7 @@ const routers: IRoute[] = [
           Permissions.ADMIN_GHOST,
           Permissions.HACCP_ADMIN
         ],
+        
         //need [haccp-list, haccp-create]
         auth_device: true,
         items: [
@@ -373,6 +392,7 @@ const routers: IRoute[] = [
           Permissions.ADMIN,
           Permissions.ADMIN_GHOST,
         ],
+        auth_device: true,
       }
     ],
   },
@@ -386,6 +406,7 @@ const routers: IRoute[] = [
       Permissions.ADMIN_GHOST,
       Permissions.MY_PROFILE
     ],
+    auth_device: true,
   },
   {
     name: "Day Roster",
@@ -397,6 +418,7 @@ const routers: IRoute[] = [
       Permissions.ADMIN_GHOST,
       Permissions.DAY_ROSTER
     ],
+    auth_device: true,
   },
   {
     path: "/haccp",
@@ -408,6 +430,7 @@ const routers: IRoute[] = [
     authorization: [
       Permissions.MY_PROFILE
     ],
+    auth_device: true,
   },
   {
     name: "My Roster",

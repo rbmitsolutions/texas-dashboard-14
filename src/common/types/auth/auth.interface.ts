@@ -29,6 +29,7 @@ export interface IToken {
   profile_image: string;
   permissions: Permissions[];
   roster_password: number;
+  authorized_device: boolean
   refresh_token: {
     id:string
   }

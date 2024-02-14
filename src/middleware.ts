@@ -34,7 +34,7 @@ export async function middleware(request: NextRequest) {
 
       if (findRouter) {
         const permission = isUserAuthorized(
-          token?.permissions,
+          token,
           findRouter?.authorization
         );
         if (!permission) {
@@ -46,7 +46,7 @@ export async function middleware(request: NextRequest) {
       //todo change it to menu-create
       if (pathName.includes('/admin/restaurant/menu/create')) {
         const permission = isUserAuthorized(
-          token?.permissions,
+          token,
           [Permissions.ADMIN, Permissions.ADMIN_GHOST, Permissions.MENU_CREATE]
         );
         if (!permission) {
@@ -56,7 +56,7 @@ export async function middleware(request: NextRequest) {
 
       if (pathName.includes('/admin/settings')) {
         const permission = isUserAuthorized(
-          token?.permissions,
+          token,
           [Permissions.ADMIN, Permissions.ADMIN_GHOST]
         );
         if (!permission) {

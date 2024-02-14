@@ -26,7 +26,7 @@ const navigation = [
     },
     {
         title: 'Bookings',
-        path: '/admin/settings/bookings/opendays'
+        path: '/admin/settings/bookings/timesopen'
     },
     {
         title: 'Apis',
@@ -35,10 +35,10 @@ const navigation = [
 ]
 
 export default function Settings() {
-    const { user: { permissions} } = useAuthHooks()
+    const { user } = useAuthHooks()
     const { push } = useRouter()
 
-    if (!isUserAuthorized(permissions, [Permissions.ADMIN])) return
+    if (!isUserAuthorized(user, [Permissions.ADMIN])) return
 
     return (
         <DropdownMenu>

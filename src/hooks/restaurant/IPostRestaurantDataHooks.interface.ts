@@ -107,8 +107,7 @@ export interface IPOSTGiftCardBody {
 }
 
 export interface IPOSTAuthorizedDevicesBody {
-  ip: string;
-  description?: string;
+  description: string;
 }
 
 export interface IPOSTSpecialDaysBody {
