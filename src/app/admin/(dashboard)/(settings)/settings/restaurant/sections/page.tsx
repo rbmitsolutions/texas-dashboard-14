@@ -1,19 +1,18 @@
 'use client'
-
 //components
+import { sectionsColumnsTable } from "./_components/sectionsColumnsTable"
+import { SectionsTable } from "./_components/sectionsTable"
 import AddSection from "./_components/addSection"
+import Icon from "@/common/libs/lucida-icon"
 import Wrap from "@/components/common/wrap"
 
 //hooks
 import { useDELETERestaurantDataHooks, useGETRestaurantDataHooks, usePOSTRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
-import { SectionsTable } from "./_components/sectionsTable"
-import { sectionsColumnsTable } from "./_components/sectionsColumnsTable"
-import InfoBox from "@/components/common/infoBox"
 
 export default function Sections() {
     const {
         restaurantAllSections: sections,
-        refetchRestaurantData: toRefetch,
+        refetchRestaurantData: restaurantSections,
     } = useGETRestaurantDataHooks({
         query: 'SECTIONS',
         defaultParams: {
@@ -39,6 +38,7 @@ export default function Sections() {
 
     const {
         restaurantAllOpenDays: daysOpen,
+        refetchRestaurantData: restaurantOpenDays,
     } = useGETRestaurantDataHooks({
         query: 'OPEN_DAYS',
         defaultParams: {
@@ -47,11 +47,16 @@ export default function Sections() {
                     pagination: {
                         take: 500,
                         skip: 0
-                    }
+                    },
                 }
             }
         }
     })
+
+    const toRefetch = () => {
+        restaurantSections()
+        restaurantOpenDays()
+    }
 
     const {
         createRestaurantData: createSection,
@@ -95,19 +100,80 @@ export default function Sections() {
                 {daysOpen?.data?.sort((a, b) => {
                     return dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day);
                 }).map(d => {
+                    const allTblesOpenPerDay = sections?.data?.map(section => {
+                        const isOpen = section?.days_open?.find(day => day?.day === d?.day)
+                        let tablesCount: { [key: number]: number } = {
+                            2: 0,
+                            4: 0,
+                            6: 0,
+                            8: 0
+                        }
+
+                        if (isOpen) {
+                            section?.tables?.forEach(t => {
+                                tablesCount[t?.guests] = tablesCount[t?.guests] + 1
+                            })
+                        }
+
+                        return tablesCount
+                    })
+
+                    const totalTables = allTblesOpenPerDay.reduce((a, b) => {
+                        return {
+                            2: a[2] + b[2],
+                            4: a[4] + b[4],
+                            6: a[6] + b[6],
+                            8: a[8] + b[8]
+                        }
+                    }, {
+                        2: 0,
+                        4: 0,
+                        6: 0,
+                        8: 0
+                    })
+
+
                     return (
-                        <InfoBox
-                            key={d?.id}
-                            title={d?.day}
-                            icon={{
-                                name: 'Calendar',
-                                size: 18
-                            }}
-                            value={8}
-                        />
+                        <div key={d?.id} className='flex flex-col gap-1 bg-background-soft p-4 rounded-xl'>
+                            <strong className='text-primary text-sm'>{d?.day}</strong>
+                            {Object.keys(totalTables).map(g => {
+                                return (
+                                    <div key={g} className='flex items-center gap-4'>
+                                        <div className='flex items-center gap-2'>
+                                            <Icon name='Dice4' className='text-primary' />
+                                            <small>Tbs {g}: {totalTables[g as any]}</small>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <Icon name='Armchair' className='text-primary' />
+                                            <small>{totalTables[g as any] * parseInt(g)} Sts</small>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                            <div className='mt-1'>
+                                <strong className='text-primary text-sm'>Total</strong>
+                                <div className='flex items-center gap-2'>
+                                    <div className='flex items-center gap-2'>
+                                        <Icon name='Dice4' className='text-primary' />
+                                        <small>Tbs: {Object.values(totalTables).reduce((a, b) => {
+                                            return Number(a) + Number(b)
+                                        }, 0)}
+                                        </small>
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <Icon name='Armchair' className='text-primary' />
+                                        <small>Sts: {Object.keys(totalTables).reduce((a, b) => {
+                                            return Number(a) + totalTables[b as any] * parseInt(b)
+                                        }, 0)}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     )
                 })}
             </div>
+
             <Wrap
                 header={{
                     title: {

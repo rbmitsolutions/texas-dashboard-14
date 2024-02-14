@@ -66,9 +66,9 @@ const restaurantComponents = [
 
 const bookingsComponents = [
     {
-        title: "Open Days",
-        href: "/admin/settings/bookings/opendays",
-        description: "Update Open Days",
+        title: "Times Open",
+        href: "/admin/settings/bookings/timesopen",
+        description: "Update Times Open",
     },
     {
         title: 'Special Days',

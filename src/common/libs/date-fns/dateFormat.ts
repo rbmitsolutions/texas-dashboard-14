@@ -1,4 +1,4 @@
-import { isToday as isTodayFns, format, addDays, subDays, startOfMonth, endOfMonth, startOfDay, endOfDay, startOfWeek, parse, formatDuration } from "date-fns";
+import { isToday as isTodayFns, format, addDays, subDays, startOfMonth, endOfMonth, startOfDay, endOfDay, startOfWeek, parse, formatDuration, parseISO } from "date-fns";
 
 export const parseDate = (date: string, format: 'dd/MM/yy'): Date => {
     return parse(date, format, new Date())
@@ -62,4 +62,12 @@ export const getLastTimeOfTheDay = (date: Date): Date => {
 
 export const isToday = (date: Date): boolean => {
     return isTodayFns(date);
+}
+
+export const parseISODate = (date: string): Date => {
+    return parseISO(date)
+}
+
+export const compareAscDate = (dateA: Date, dateB: Date): number => {
+    return dateA.getTime() - dateB.getTime()
 }
