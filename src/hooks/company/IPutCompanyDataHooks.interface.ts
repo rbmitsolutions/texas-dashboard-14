@@ -138,7 +138,14 @@ export interface IPUTTransactionsBody {
     };
 }
 
-export type IPUTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "DUTIES" | "SHIFTS" | 'REQUESTS'
+export interface IPUTRolesBody {
+    id: string;
+    title?: string;
+    departament_id?: string;
+    permissions?: string[];
+}
+
+export type IPUTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "DUTIES" | "SHIFTS" | 'REQUESTS' | "ROLES"
 export interface IPUTCompanyBody {
     roster?: IPUTRosterBody,
     haccpReport?: IPUTHaccpReportsBody
@@ -147,4 +154,5 @@ export interface IPUTCompanyBody {
     duty?: IPUTDutiesBody
     shift?: IPUTShiftsBody
     request?: IPUTRequestsBody
+    role?: IPUTRolesBody
 }

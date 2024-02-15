@@ -19,8 +19,6 @@ export default function MenuItemPage(params: { params: { id: string } }) {
     const {
         restaurantMenu: menu,
         refetchRestaurantData: refetchMenu,
-        isRestaurantDataFetching: isMenuLoading,
-        restaurantDataError: menuError,
     } = useGETRestaurantDataHooks({
         query: 'MENU',
         defaultParams: {

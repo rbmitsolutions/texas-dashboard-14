@@ -1,27 +1,32 @@
 export enum Permissions {
   MY_PROFILE = "my_profile",
+  
   ADMIN = "admin",
   ADMIN_GHOST = "admin-ghost",
-  RECEPTION = "reception",
+  
   BOOKING_READER = "booking_reader",
   BOOKING_PAGINATION = "booking_pagination",
   BOOKING_ADM = "booking_adm",
-  TABLES = "tables",
+  
+  RECEPTION = "reception",
   PASS = "pass",
   ORDERS = "orders",
-  HACCP_ADMIN = "haccp_admin",
   WAITERS = "waiters",
-  DAY_ROSTER = 'day_roster',
+  
+  HACCP_ADMIN = "haccp_admin",
+  
   MENU = 'menu',
   MENU_CREATE = 'menu_create',
   MENU_UPDATE = 'menu_update',
   MENU_DELETE = 'menu_delete',
+  
   SEND_EMAIL = 'send_email',
   SEND_SMS = 'send_sms',
+  
   ROSTER_TASKS = 'roster_tasks',
+  DAY_ROSTER = 'day_roster',
 }
 
-//token from texas-dashboard does not have roster-password
 export interface IToken {
   user_id: string;
   token: string;

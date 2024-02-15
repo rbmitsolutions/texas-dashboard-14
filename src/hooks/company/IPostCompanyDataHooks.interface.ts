@@ -1,4 +1,4 @@
-import { IDuties, IShifts } from "@/common/types/company/companyDetails.interface";
+import { IDuties, IRoles, IShifts } from "@/common/types/company/companyDetails.interface";
 import { IDepartments } from "@/common/types/company/departaments.interface";
 import { IForm, IFormData, IFormSection } from "@/common/types/company/form.interface";
 import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
@@ -67,11 +67,9 @@ export interface IPOSTFormDataBody {
     }
 }
 
-
 export interface IPOSTShiftsBody {
     title: string
     hours: number
-    reduce_break_time: boolean;
     break_minutes: number;
 }
 
@@ -120,10 +118,14 @@ export interface IPOSTDepartamentsBody {
     title: string;
 }
 
+export interface IPOSTRolesBody {
+    title: string;
+    departament_id: string;
+    permissions: string[];
+}
 
-export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "REQUESTS" | 'DUTIES' | 'SHIFTS' | 'ROSTER' | 'ROSTER_TASKS' | 'TRANSACTIONS' | "AUTH" | "DEPARTAMENTS"
-
-export type IPOSTCompanyDataRerturn = IRoster | IHaccpReports | IForm | IFormSection | IFormData | IShifts | IDuties | IRosterTasks | ITransactions | IDepartments
+export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "REQUESTS" | 'DUTIES' | 'SHIFTS' | 'ROSTER' | 'ROSTER_TASKS' | 'TRANSACTIONS' | "AUTH" | "DEPARTAMENTS" | 'ROLES'
+export type IPOSTCompanyDataRerturn = IRoster | IHaccpReports | IForm | IFormSection | IFormData | IShifts | IDuties | IRosterTasks | ITransactions | IDepartments | IRoles
 export interface IPOSTCompanyBody {
     roster?: IPOSTRosterBody,
     rosterTask?: IPOSTRosterTasksBody
@@ -136,4 +138,5 @@ export interface IPOSTCompanyBody {
     transaction?: IPOSTTransactionsBody
     signUp?: IPOSTSignUpBody
     departament?: IPOSTDepartamentsBody
+    role?: IPOSTRolesBody
 }

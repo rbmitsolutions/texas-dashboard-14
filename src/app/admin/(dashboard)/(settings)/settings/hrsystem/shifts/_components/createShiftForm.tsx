@@ -48,7 +48,6 @@ export default function CreateShiftForm({ createShift, isLoading }: CreateShiftF
         await createShift({
             shift: {
                 ...shiftFormat(formData),
-                reduce_break_time: true
             }
         }, {
             onSuccess: () => {
