@@ -236,7 +236,7 @@ export interface ICompanyDetailsResponse {
   details: ICompanyDetails
   contacts: ICompanyContacts[]
   links: ICompanyLinks[]
-  documents: ICompanyDocuments[]
+  documents:  IFiles[]
 }
 
 export interface IGETRolesResponse {

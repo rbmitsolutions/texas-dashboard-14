@@ -1,5 +1,6 @@
-import { IDuties, IRoles, IShifts } from "@/common/types/company/companyDetails.interface";
+import { ICompanyContacts, ICompanyLinks, IDuties, IRoles, IShifts } from "@/common/types/company/companyDetails.interface";
 import { IDepartments } from "@/common/types/company/departaments.interface";
+import { IFiles } from "@/common/types/company/files.interface";
 import { IForm, IFormData, IFormSection } from "@/common/types/company/form.interface";
 import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
 import { IRoster, IRosterTasks } from "@/common/types/company/roster.interface";
@@ -124,8 +125,28 @@ export interface IPOSTRolesBody {
     permissions: string[];
 }
 
-export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "REQUESTS" | 'DUTIES' | 'SHIFTS' | 'ROSTER' | 'ROSTER_TASKS' | 'TRANSACTIONS' | "AUTH" | "DEPARTAMENTS" | 'ROLES'
-export type IPOSTCompanyDataRerturn = IRoster | IHaccpReports | IForm | IFormSection | IFormData | IShifts | IDuties | IRosterTasks | ITransactions | IDepartments | IRoles
+export interface IPOSTTCompanyContactsBody {
+    name: string;
+    contact_number?: string;
+    email?: string;
+    manager_of: string;
+}
+
+export interface IPOSTTCompanyLinksBody {
+    title: string;
+    description?: string;
+    link: string;
+    section: string;
+}
+
+export interface IPOSTDocumentsBody {
+    title: string;
+    file: any
+}
+
+export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "REQUESTS" | 'DUTIES' | 'SHIFTS' | 'ROSTER' | 'ROSTER_TASKS' | 'TRANSACTIONS' | "AUTH" | "DEPARTAMENTS" | 'ROLES' | "CONTACTS" | "LINKS" | "DOCUMENTS"
+
+export type IPOSTCompanyDataRerturn = IRoster | IHaccpReports | IForm | IFormSection | IFormData | IShifts | IDuties | IRosterTasks | ITransactions | IDepartments | IRoles | ICompanyContacts | ICompanyLinks | IFiles
 export interface IPOSTCompanyBody {
     roster?: IPOSTRosterBody,
     rosterTask?: IPOSTRosterTasksBody
@@ -139,4 +160,7 @@ export interface IPOSTCompanyBody {
     signUp?: IPOSTSignUpBody
     departament?: IPOSTDepartamentsBody
     role?: IPOSTRolesBody
+    contact?: IPOSTTCompanyContactsBody
+    link?: IPOSTTCompanyLinksBody
+    document?: IPOSTDocumentsBody
 }

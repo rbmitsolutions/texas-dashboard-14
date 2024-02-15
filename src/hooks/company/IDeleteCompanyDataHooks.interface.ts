@@ -1,9 +1,9 @@
-export type IDELETECompanyDataQueryType = 'HACCP_REPORTS' | 'FORMS' | 'ROSTER' | 'ROSTER_TASKS' | "FORM_SECTION" | "DUTIES" | "SHIFTS" | 'DEPARTAMENTS' | 'ROLES'
+export type IDELETECompanyDataQueryType = 'HACCP_REPORTS' | 'FORMS' | 'ROSTER' | 'ROSTER_TASKS' | "FORM_SECTION" | "DUTIES" | "SHIFTS" | 'DEPARTAMENTS' | 'ROLES' | "CONTACTS" | "LINKS" | "DOCUMENTS"
 export interface IDELETECompanyDataBody {
   roster?: {
     id: string;
   },
-  rosterTask?:{
+  rosterTask?: {
     id: string;
   }
   haccpReport?: {
@@ -33,5 +33,14 @@ export interface IDELETECompanyDataBody {
   }
   role?: {
     id: string
+  }
+  contact?: {
+    id: string
+  }
+  link?: {
+    id: string
+  }
+  document?:{
+    file_id: string
   }
 }

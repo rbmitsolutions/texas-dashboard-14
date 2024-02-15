@@ -1,11 +1,18 @@
 'use client'
-import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks";
+
+//components
 import CompanyContactsForm from "@/components/common/forms/company/companyContacts";
+import CreateContactForm from "./_components/createContactForm";
+import Wrap from "@/components/common/wrap";
+
+//hooks
+import { useDELETECompanyDataHooks, useGETCompanyDataHooks, usePOSTCompanyDataHooks } from "@/hooks/company/companyDataHooks";
 
 export default function CompanyContactsSettings() {
     const {
         companyDetails,
-        isCompanyDataFetching
+        isCompanyDataFetching,
+        refetchCompanyData: toRefetch
     } = useGETCompanyDataHooks({
         query: 'DETAILS',
         defaultParams: {
@@ -17,11 +24,38 @@ export default function CompanyContactsSettings() {
         }
     })
 
+    const {
+        createCompanyData: createContact,
+        isCreateCompanyDataLoading: isLoading
+    } = usePOSTCompanyDataHooks({
+        query: 'CONTACTS',
+        toRefetch
+    })
+
+    const {
+        deleteCompanyData: deleteContact,
+    } = useDELETECompanyDataHooks({
+        query: 'CONTACTS',
+        toRefetch
+
+    })
+
     if (isCompanyDataFetching) return <div>Loading...</div>
 
     return (
-        <CompanyContactsForm
-            contacts={companyDetails?.contacts}
-        />
+        <Wrap
+            actions={{
+                toRight: <CreateContactForm
+                    createContact={createContact}
+                    isLoading={isLoading}
+                />,
+                className: 'flex justify-end'
+            }}
+        >
+            <CompanyContactsForm
+                contacts={companyDetails?.contacts}
+                onDelete={deleteContact}
+            />
+        </Wrap>
     )
 }

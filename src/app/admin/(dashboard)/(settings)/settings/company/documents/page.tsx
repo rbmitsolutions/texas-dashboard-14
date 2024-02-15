@@ -1,11 +1,17 @@
 'use client'
-import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks";
+//components
+import Wrap from "@/components/common/wrap";
+
+//hooks
+import { useDELETECompanyDataHooks, useGETCompanyDataHooks, usePOSTCompanyDataHooks } from "@/hooks/company/companyDataHooks";
+import CreateDocumentForm from "./_components/createDocument";
 import CompanyDocumentsForm from "@/components/common/forms/company/companyDocuments";
 
 export default function CompanyDocumentsSettings() {
     const {
         companyDetails,
-        isCompanyDataFetching
+        isCompanyDataFetching,
+        refetchCompanyData: toRefetch
     } = useGETCompanyDataHooks({
         query: 'DETAILS',
         defaultParams: {
@@ -17,11 +23,38 @@ export default function CompanyDocumentsSettings() {
         }
     })
 
+    const {
+        createCompanyData: createDocument,
+        isCreateCompanyDataLoading: isLoading
+    } = usePOSTCompanyDataHooks({
+        query: 'DOCUMENTS',
+        toRefetch
+    })
+
+    const {
+        deleteCompanyData: deleteDocument,
+    } = useDELETECompanyDataHooks({
+        query: 'DOCUMENTS',
+        toRefetch
+
+    })
+
     if (isCompanyDataFetching) return <div>Loading...</div>
 
     return (
-        <CompanyDocumentsForm
-            documents={companyDetails?.documents}
-        />
+        <Wrap
+            actions={{
+                toRight: <CreateDocumentForm
+                    createDocument={createDocument}
+                    isLoading={isLoading}
+                />,
+                className: 'flex justify-end'
+            }}
+        >
+            <CompanyDocumentsForm
+                documents={companyDetails?.documents}
+                deleteDocument={deleteDocument}
+            />
+        </Wrap>
     )
 }

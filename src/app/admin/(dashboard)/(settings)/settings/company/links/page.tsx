@@ -1,11 +1,17 @@
 'use client'
-import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks";
+//components
 import CompanyLinkForm from "@/components/common/forms/company/companyLinks";
+import CreateLinkForm from "./_components/createLink";
+import Wrap from "@/components/common/wrap";
+
+//hooks
+import { useDELETECompanyDataHooks, useGETCompanyDataHooks, usePOSTCompanyDataHooks } from "@/hooks/company/companyDataHooks";
 
 export default function CompanyLinksSettings() {
     const {
         companyDetails,
-        isCompanyDataFetching
+        isCompanyDataFetching,
+        refetchCompanyData: toRefetch
     } = useGETCompanyDataHooks({
         query: 'DETAILS',
         defaultParams: {
@@ -17,11 +23,40 @@ export default function CompanyLinksSettings() {
         }
     })
 
+    const {
+        createCompanyData: createLink,
+        isCreateCompanyDataLoading: isLoading
+    } = usePOSTCompanyDataHooks({
+        query: 'LINKS',
+        toRefetch
+    })
+
+    const {
+        deleteCompanyData: deleteLink,
+    } = useDELETECompanyDataHooks({
+        query: 'LINKS',
+        toRefetch
+
+    })
+
+    const linksSection = ['Training', 'Onboarding', 'Requests & Notifications']
     if (isCompanyDataFetching) return <div>Loading...</div>
 
     return (
-        <CompanyLinkForm
-        links={companyDetails?.links}
-        />
+        <Wrap
+            actions={{
+                toRight: <CreateLinkForm
+                    createLink={createLink}
+                    isLoading={isLoading}
+                    sections={linksSection}
+                />,
+                className: 'flex justify-end'
+            }}
+        >
+            <CompanyLinkForm
+                links={companyDetails?.links}
+                deleteLink={deleteLink}
+            />
+        </Wrap>
     )
 }

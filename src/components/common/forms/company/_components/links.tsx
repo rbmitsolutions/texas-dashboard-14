@@ -1,21 +1,23 @@
+import { UseMutateFunction } from "react-query";
+
+//components
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-
-import { ICompanyLinks } from "@/common/types/company/companyDetails.interface";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import Icon from "@/common/libs/lucida-icon";
 
+//interfaces
+import { IDELETECompanyDataBody } from "@/hooks/company/IDeleteCompanyDataHooks.interface";
+import { ICompanyLinks } from "@/common/types/company/companyDetails.interface";
 
-export default function Links({ link }: { link: ICompanyLinks }) {
+export default function Links({ link, deleteLink }: { link: ICompanyLinks, deleteLink?: UseMutateFunction<void, any, IDELETECompanyDataBody, unknown> }) {
 
     const downloadLink = (Links: ICompanyLinks) => {
         window.open(link?.link, '_blank')
@@ -41,9 +43,22 @@ export default function Links({ link }: { link: ICompanyLinks }) {
                     <label>Description</label>
                     <Textarea className='min-h-40' value={link?.description} />
                 </div>
-                <Button size='icon' onClick={() => downloadLink(link)}>
-                    <Icon name='Download' size={14} />
-                </Button>
+                <div className='flex-container justify-end'>
+                    <Button size='icon' onClick={() => downloadLink(link)}>
+                        <Icon name='Mouse' size={14} />
+                    </Button>
+                    {deleteLink &&
+                        <Button
+                            size='icon'
+                            variant='destructive'
+                            onClick={() => deleteLink({
+                                link: {
+                                    id: link?.id
+                                }
+                            })}>
+                            <Icon name='Trash' size={14} />
+                        </Button>}
+                </div>
             </DialogContent>
         </Dialog>
     )

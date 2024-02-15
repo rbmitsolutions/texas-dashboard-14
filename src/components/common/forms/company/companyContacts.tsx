@@ -1,35 +1,25 @@
 import { useState } from "react";
+import { UseMutateFunction } from "react-query";
 
 //libs
 import { ICompanyContacts } from "@/common/types/company/companyDetails.interface"
 import { Input } from "@/components/ui/input";
 
-//hooks
+//components
+import { Button } from "@/components/ui/button";
+import Icon from "@/common/libs/lucida-icon";
 import Wrap from "../../wrap";
+
+//interfaces
+import { IDELETECompanyDataBody } from "@/hooks/company/IDeleteCompanyDataHooks.interface";
 
 interface CompanyContactsFormProps {
     contacts: ICompanyContacts[]
+    onDelete?: UseMutateFunction<void, any, IDELETECompanyDataBody, unknown>
 }
 
 //todo add form
-export default function CompanyContactsForm({ contacts }: CompanyContactsFormProps) {
-    const [submitError, setSubmitError] = useState<string>("");
-
-    // const form = useForm<CompanyContactsFormSchemaType>({
-    //     mode: "onChange",
-    //     resolver: zodResolver(CompanyContactsFormSchema),
-    //     defaultValues: {
-    //         name: contact?.name,
-    //         email: contact?.email,
-    //         contact_number: contact?.contact_number,
-    //         manager_of: contact?.manager_of,
-    //     },
-    // });
-
-    // const onSubmitForm: SubmitHandler<CompanyContactsFormSchemaType> = (formData) => {
-    //     console.log(formData)
-
-    // };
+export default function CompanyContactsForm({ contacts, onDelete }: CompanyContactsFormProps) {
 
     return (
         <Wrap
@@ -41,32 +31,47 @@ export default function CompanyContactsForm({ contacts }: CompanyContactsFormPro
             }}
             className="border-2 p-4 rounded-xl"
         >
-            {contacts?.map(contact => {
-                return (
-                    <div
-                        key={contact?.id}
-                        className='grid grid-cols-1 gap-4 md:grid-cols-2 border-2 p-4 rounded-xl'
-                    >
-                        <div className='space-y-2'>
-                            <label>Name</label>
-                            <Input type="text" value={contact?.name} />
+            <div className="flex-col-container">
+                {contacts?.map(contact => {
+                    return (
+                        <div
+                            key={contact?.id}
+                            className='grid grid-cols-1 gap-4 relative md:grid-cols-2 border-2 p-4 rounded-xl'
+                        >
+                            <div className='space-y-2'>
+                                <label>Name</label>
+                                <Input type="text" defaultValue={contact?.name} readOnly />
+                            </div>
+                            <div className='space-y-2'>
+                                <label>Contact Number</label>
+                                <Input type="text" defaultValue={contact?.contact_number} readOnly />
+                            </div>
+                            <div className='space-y-2'>
+                                <label>Email</label>
+                                <Input type="text" defaultValue={contact?.email} readOnly />
+                            </div>
+                            <div className='space-y-2'>
+                                <label>Manager Of</label>
+                                <Input type="text" defaultValue={contact?.manager_of} readOnly />
+                            </div>
+                            {onDelete &&
+                                <Button
+                                    className='absolute top-2 right-2'
+                                    size='iconExSm'
+                                    variant='destructive'
+                                    onClick={async () => await onDelete({
+                                        contact: {
+                                            id: contact.id
+                                        }
+                                    })}
+                                >
+                                    <Icon name="Trash" />
+                                </Button>
+                            }
                         </div>
-                        <div className='space-y-2'>
-                            <label>Contact Number</label>
-                            <Input type="text" value={contact?.contact_number} />
-                        </div>
-                        <div className='space-y-2'>
-                            <label>Email</label>
-                            <Input type="text" value={contact?.email} />
-                        </div>
-                        <div className='space-y-2'>
-                            <label>Manager Of</label>
-                            <Input type="text" value={contact?.manager_of} />
-                        </div>
-
-                    </div>
-                )
-            })}
+                    )
+                })}
+            </div>
         </Wrap>
     )
 }

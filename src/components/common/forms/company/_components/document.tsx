@@ -1,21 +1,24 @@
+import { UseMutateFunction } from "react-query";
+
+//components
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-
-import { ICompanyDocuments } from "@/common/types/company/companyDetails.interface";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import Icon from "@/common/libs/lucida-icon";
 
+//interface
+import { ICompanyDocuments } from "@/common/types/company/companyDetails.interface";
+import { IDELETECompanyDataBody } from "@/hooks/company/IDeleteCompanyDataHooks.interface";
 
-export default function Document({ document }: { document: ICompanyDocuments }) {
+
+export default function Document({ document, deleteDocument }: { document: ICompanyDocuments, deleteDocument?: UseMutateFunction<void, any, IDELETECompanyDataBody, unknown> }) {
 
     const downloadDocument = (document: ICompanyDocuments) => {
         window.open(document?.url, '_blank')
@@ -37,13 +40,25 @@ export default function Document({ document }: { document: ICompanyDocuments }) 
                     <label>Name</label>
                     <Input type="text" value={document?.title} />
                 </div>
-                <div className='space-y-2 text-sm'>
-                    <label>Description</label>
-                    <Textarea className='min-h-40' value={document?.description} />
+                <div className='flex-container justify-end'>
+                    <Button size='icon' onClick={() => downloadDocument(document)}>
+                        <Icon name='Download' size={14} />
+                    </Button>
+                    {deleteDocument &&
+                        <Button 
+                        size='icon' 
+                        variant='destructive'
+                        onClick={async () => await deleteDocument({
+                            document: {
+                                file_id: document?.id
+                            }
+
+                        })}>
+                            <Icon name='Trash' size={14} />
+                        </Button>
+                    }
+
                 </div>
-                <Button size='icon' onClick={() => downloadDocument(document)}>
-                    <Icon name='Download' size={14} />
-                </Button>
             </DialogContent>
         </Dialog>
     )
