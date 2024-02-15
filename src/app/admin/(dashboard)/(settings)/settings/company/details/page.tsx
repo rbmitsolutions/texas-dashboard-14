@@ -1,11 +1,12 @@
 'use client'
-import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks";
+import { useGETCompanyDataHooks, usePUTCompanyDataHooks } from "@/hooks/company/companyDataHooks";
 import CompanyDetailsForm from "@/components/common/forms/company/companyDetails";
 
 export default function CompanyDetailsSettings() {
     const {
         companyDetails,
-        isCompanyDataFetching
+        isCompanyDataLoading: isLoading,
+        refetchCompanyData: toRefetch
     } = useGETCompanyDataHooks({
         query: 'DETAILS',
         defaultParams: {
@@ -17,11 +18,19 @@ export default function CompanyDetailsSettings() {
         }
     })
 
-    if (isCompanyDataFetching) return <div>Loading...</div>
+    const {
+        updateCompanyData: onUpdate
+    } = usePUTCompanyDataHooks({
+        query: 'DETAILS',
+        toRefetch
+    })
+
+    if(isLoading) return <div>Loading...</div>
 
     return (
         <CompanyDetailsForm 
-            details={companyDetails?.details}
+            details={companyDetails?.details || {}}
+            onUpdate={onUpdate}
         />
     )
 }

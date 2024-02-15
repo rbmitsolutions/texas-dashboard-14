@@ -145,7 +145,17 @@ export interface IPUTRolesBody {
     permissions?: string[];
 }
 
-export type IPUTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "DUTIES" | "SHIFTS" | 'REQUESTS' | "ROLES"
+export interface IPUTCompanyDetailsBody {
+    id: string
+    name?: string
+    email?: string
+    contact_number?: string
+    address?: string
+    registration_number?: string
+}
+
+
+export type IPUTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "DUTIES" | "SHIFTS" | 'REQUESTS' | "ROLES" | "DETAILS"
 export interface IPUTCompanyBody {
     roster?: IPUTRosterBody,
     haccpReport?: IPUTHaccpReportsBody
@@ -155,4 +165,5 @@ export interface IPUTCompanyBody {
     shift?: IPUTShiftsBody
     request?: IPUTRequestsBody
     role?: IPUTRolesBody
+    info?: IPUTCompanyDetailsBody
 }
