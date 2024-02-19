@@ -85,6 +85,7 @@ export default function UpdatePasswordForm({ user, onUpdate, alwaysOpen = false 
                     <form
                         onSubmit={form.handleSubmit(onSubmitForm)}
                         className='flex-col-container gap-4'>
+                            <strong className="text-[12px]" >Password must contain at least one letter, one number, and one special character and it can not contain the word &apos;texas&apos;, &apos;texassteak&apos;, &apos;steakout&apos;, or &apos;texassteakout&apos;.</strong>
                         <FormField
                             control={form.control}
                             name="password"
