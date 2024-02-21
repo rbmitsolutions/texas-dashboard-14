@@ -87,17 +87,21 @@ export const sectionsColumnsTable = ({
                         }
                         {row?.original?.tables?.sort((a, b) => a.number < b.number ? -1 : 1).map(t => {
                             return (
-                                <Badge
+                                <DeleteDialogButton
                                     key={t?.id}
-                                    className='cursor-pointer hover:bg-red-500'
-                                    onClick={async () => await deleteTable({
+                                    onDelete={async () => await deleteTable({
                                         table: {
                                             id: t?.id
                                         }
                                     })}
+                                    isDisabled={t?.is_open}
                                 >
-                                    Nº: {t?.number} / Seats: {t?.guests} / <div className={cn("h-3 w-3 border-white border-[1px] rounded-full ml-2", t?.is_open ? 'bg-green-600' : 'bg-red-500')} />
-                                </Badge>
+                                    <div
+                                        className='flex items-center bg-background-soft rounded-lg cursor-pointer p-2 hover:bg-red-300 dark:hover:bg-red-800'
+                                    >
+                                        Nº: {t?.number} / Seats: {t?.guests} / <div className={cn("h-3 w-3 rounded-full ml-2", t?.is_open ? 'bg-green-600' : 'bg-red-500')} />
+                                    </div>
+                                </DeleteDialogButton>
                             )
                         })}
                     </div>

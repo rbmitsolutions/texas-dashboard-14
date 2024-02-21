@@ -1,4 +1,4 @@
-import { IBookings } from "@/common/types/restaurant/bookings.interface";
+import { IBookingStatus, IBookings } from "@/common/types/restaurant/bookings.interface";
 import { ITimesOpen } from "@/common/types/restaurant/config.interface";
 import { IGiftCardStatus } from "@/common/types/restaurant/giftcard.interface";
 import { IOrderStatus } from "@/common/types/restaurant/order.interface";
@@ -107,7 +107,7 @@ export type IClientPut = {
 };
 
 
-export interface IPUTBookingsBody {
+export interface IPUTClientBody {
     data: {
         client?: {
             id: string;
@@ -256,13 +256,35 @@ export interface IPUTMenuBody {
 }
 
 
+export interface IPUTBookingsBody {
+    id: string;
+    date: Date;
+    amount_of_people: number;
+    time: string;
+
+    weekDay?: string;
+    amount_per_table?: number;
+    request?: string;
+    review_id?: string;
+    table_id?: string;
+
+    status?: IBookingStatus;
+    has_request?: boolean;
+
+    cancelation_comment?: string;
+    cancelation_reason?: "dashboard" | "user";
+
+    client_id?: string;
+}
+
+
 export type IPUTRestaurantDataQueryType = 'BOOKINGS' | "TABLES" | "ORDER" | "CLIENTS" | "SECTIONS" | "MENU" | "GIFTCARD" | "AUTHORIZED_DEVICES" | 'SPECIAL_DAYS' | 'TIMES_OPEN' | "PRINTERS" | 'MENU_SECTION' | 'MENU_TYPE' | 'MENU_ADD_ONS'
 
 export interface IPUTRestaurantBody {
-    booking?: IBookings
+    booking?: IPUTBookingsBody
     table?: IPUTTablesBody
     order?: IPUTOrderBody
-    client?: IPUTBookingsBody
+    client?: IPUTClientBody
     section?: IPUTSectionBody
     menu?: IPUTMenuBody
     giftcard?: IPUTGiftCardBody

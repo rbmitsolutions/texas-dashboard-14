@@ -12,6 +12,7 @@ import Icon from "@/common/libs/lucida-icon";
 
 export interface SearchInputProps {
     onSearchChange: (e: string) => void;
+    cleanSearch?: () => void;
     debounceDelay?: number;
     value: string;
     custom?: string;
@@ -19,7 +20,7 @@ export interface SearchInputProps {
     isFetching?: boolean;
 }
 
-export default function SearchInput({ onSearchChange, value, isFetching, placeholder = 'Search ...', debounceDelay = 600, custom }: SearchInputProps) {
+export default function SearchInput({ onSearchChange, cleanSearch, value, isFetching, placeholder = 'Search ...', debounceDelay = 600, custom }: SearchInputProps) {
     const [preRendered, setPreRendered] = useState(false);
     const [displayValue, setDisplayValue] = useState<string>(value || '');
     const debouncedChange = useDebounce(onSearchChange, debounceDelay);
@@ -32,6 +33,7 @@ export default function SearchInput({ onSearchChange, value, isFetching, placeho
     const clearSerchWithoutDebounce = () => {
         setDisplayValue('');
         onSearchChange('');
+        cleanSearch && cleanSearch()
     }
 
     useEffect(() => {

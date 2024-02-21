@@ -5,13 +5,15 @@ import { icons } from "lucide-react"
 interface ConTextProps {
     icon: keyof typeof icons
     text: string | number
+    iconSize?: number
+    pclass?: string
     className?: string
 }
-export default function IconText({ icon, text, className }: ConTextProps) {
+export default function IconText({ icon, text, iconSize = 18, pclass, className }: ConTextProps) {
     return (
         <div className={cn('flex items-center gap-2', className)}>
-            <Icon name={icon} size={18}/>
-            <p className='text-sm'>{text}</p>
+            <Icon name={icon} size={iconSize}/>
+            <p className={cn('text-sm', pclass)}>{text}</p>
         </div>
     )
 }

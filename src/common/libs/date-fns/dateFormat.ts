@@ -1,7 +1,11 @@
-import { isToday as isTodayFns, format, addDays, subDays, startOfMonth, endOfMonth, startOfDay, endOfDay, startOfWeek, parse, formatDuration, parseISO, addMinutes } from "date-fns";
+import { isToday as isTodayFns, format, addDays, subDays, startOfMonth, endOfMonth, startOfDay, endOfDay, startOfWeek, parse, formatDuration, parseISO, addMinutes, isWithinInterval } from "date-fns";
 
-export const parseDate = (date: string, format: 'dd/MM/yy'): Date => {
+export const parseDate = (date: string, format: 'dd/MM/yy' | 'h:mma'): Date => {
     return parse(date, format, new Date())
+}
+
+export const isWithinIntervalDate = (date: Date, interval: { start: Date, end: Date }): boolean => {
+    return isWithinInterval(date, interval)
 }
 
 export const getMondayOfTheWeek = (date: Date): Date => {
@@ -30,7 +34,7 @@ export const getLastDayOfMonth = (date: Date): Date => {
 
 interface IFormatDate {
     date: Date,
-    f?: 'dd/MM/yyyy' | 'dd/MM/yyyy HH:mm' | 'LLL dd, yy' | 'PPP' | 'dd, LLL, yy' | 'yyyy-MM-dd' | 'dd LLL, yy' | 'HH:mm:ss' | 'HH:mm'
+    f?: 'dd/MM/yyyy' | 'dd/MM/yyyy HH:mm' | 'LLL dd, yy' | 'PPP' | 'dd, LLL, yy' | 'yyyy-MM-dd' | 'dd LLL, yy' | 'HH:mm:ss' | 'HH:mm' | 'ccc' | 'h:mma'
 }
 
 export const formatDate = ({ date, f = 'dd/MM/yyyy' }: IFormatDate): string => {

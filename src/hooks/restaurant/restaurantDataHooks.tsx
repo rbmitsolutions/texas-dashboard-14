@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { api } from "@/common/libs/axios/api";
 import { restaurantEndPoint } from "./restaurantDataEndPoint";
-import { IAllAuthorizedDevicesResponse, IAllOrderControllerResponse, IAllOrdersResponse, IFinishedTableAllResponse, IGETAllBookingsResponse, IGETAllReviewsResponse, IGETMenuAddOnsResponse, IGETMenuSectionsResponse, IGETMenuTypesResponse, IGETPrintersResponse, IGETRestaurantDataQuery, IGETRestaurantResponse, IGETTablesAllResponse, IGetAllClientsResponse, IGiftCardReponse, IGETMenuResponse, IOpenDaysGetAllResponse, IRestaurantDataQueryType, IGETMenuOrderSystemResponse, IGETSectionResponse } from "./IGetRestaurantDataHooks.interface";
+import { IAllAuthorizedDevicesResponse, IAllOrderControllerResponse, IAllOrdersResponse, IFinishedTableAllResponse, IGETAllBookingsResponse, IGETAllReviewsResponse, IGETMenuAddOnsResponse, IGETMenuSectionsResponse, IGETMenuTypesResponse, IGETPrintersResponse, IGETRestaurantDataQuery, IGETRestaurantResponse, IGETTablesAllResponse, IGetAllClientsResponse, IGiftCardReponse, IGETMenuResponse, IOpenDaysGetAllResponse, IRestaurantDataQueryType, IGETMenuOrderSystemResponse, IGETSectionResponse, ITimesOpenWebsiteConfigResponse, IBookingPageResponse } from "./IGetRestaurantDataHooks.interface";
 import { IPOSTRestaurantBody, IPOSTRestaurantDataQueryType, IPOSTRestaurantDataRerturn } from "./IPostRestaurantDataHooks.interface";
 import { IPUTRestaurantBody, IPUTRestaurantDataQueryType } from "./IPutRestaurantDataHooks.interface";
 import { IDELETERestaurantDataBody, IDELETERestaurantDataQueryType } from "./IDeleteRestaurantDataHooks.interface";
@@ -106,7 +106,8 @@ export function useGETRestaurantDataHooks({
         restaurantAllMenu: data as IGETMenuResponse,
         restaurantMenu: data as IMenu,
         restaurantMenuOrderSystem: data as IGETMenuOrderSystemResponse[],
-
+        restaurantWebsiteTimeConfig: data as ITimesOpenWebsiteConfigResponse[],
+        restaurantBookingPageData: data as IBookingPageResponse,
 
         isRestaurantDataFetching: isFetching,
         restaurantDataError: error ? true : false,

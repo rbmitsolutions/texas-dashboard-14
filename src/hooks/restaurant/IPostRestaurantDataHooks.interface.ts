@@ -19,6 +19,7 @@ export interface IPOSTBookingsBody {
   name: string;
   time: string;
   request?: string;
+  table_id?: string;
 }
 
 export interface IPOSTTablesBody {
@@ -196,7 +197,7 @@ export interface IPOSTRestaurantBody {
   specialDays?: IPOSTSpecialDaysBody
   timesOpen?: IPOSTTimesOpenBody
   printer?: IPOSTPrinterBody
-  
+
   menu?: IPOSTMenuBody
   menu_type?: IPOSTMenuTypesBody
   menu_add_ons?: IPOSTMenuAddOnsBody

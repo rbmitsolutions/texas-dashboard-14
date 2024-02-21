@@ -36,7 +36,7 @@ interface LayoutFrameProps {
 
 export default function LayoutFrame({ navigation, rightNavigation, children, main }: LayoutFrameProps) {
     const { user } = useAuthHooks()
-    const gridFrame = rightNavigation ? 'grid-cols-1 md:grid-cols-[240px,1fr,240px]' : 'grid-cols-1 md:grid-cols-[240px,1fr]'
+    const gridFrame = rightNavigation ? 'grid-cols-1 md:grid-cols-[200px,1fr,240px]' : 'grid-cols-1 md:grid-cols-[200px,1fr]'
     const defaultCss = 'h-screen p-4 scrollbar-thin overflow-auto'
     const { isOpen, toggleSideBar } = useSideBarStore()
     return (

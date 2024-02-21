@@ -1,7 +1,7 @@
 import { IAuthorizedDevices } from "@/common/types/restaurant/authorizedDevices.interface";
 import { IBookingStatus, IBookings, IReviews, IReviewsType } from "@/common/types/restaurant/bookings.interface";
 import { IClient } from "@/common/types/restaurant/client.interface";
-import { IBookingDays, ISpecialDays } from "@/common/types/restaurant/config.interface";
+import { IBookingDays, ISpecialDays, ITimesOpen } from "@/common/types/restaurant/config.interface";
 import { IGiftCards } from "@/common/types/restaurant/giftcard.interface";
 import { IMenu, IMenuAddOns, IMenuSection, IMenuType } from "@/common/types/restaurant/menu.interface";
 import { IOrder, IOrderController, IOrderStatus } from "@/common/types/restaurant/order.interface";
@@ -41,6 +41,7 @@ export interface IGETBookingsQuery {
 
     include?: {
       client?: "1";
+      table?: "1";
     };
 
     pagination?: IQueryPagination
@@ -222,7 +223,9 @@ export interface IGETSectionResponse {
 interface IGETSectionQuery {
   all?: {
     include?: {
-      tables?: '1'
+      tables?: {
+        guests: number[]
+      }
       days_open?: '1'
       special_days?: '1'
     }
@@ -432,6 +435,113 @@ export interface IOpenDaysGetAllResponse {
   pagination: IPaginationResponse;
 }
 
+export interface IBookingPageBookings {
+  id: string
+  date: Date
+  weekDay: string
+  amount_of_people: number
+  request?: string
+  status: string
+  has_request: boolean
+  time: string
+  client: {
+    id: string
+    name: string
+    contact_number: string
+    email: string
+    qnt_of_bookings?: number
+    restaurant_review?: number
+  }
+}
+
+export interface GetBookingsWithNoTablesReturn {
+  id: string
+  date: Date
+  weekDay: string
+  amount_of_people: number
+  request?: string
+  status: IBookingStatus
+  has_request: boolean
+  time: string
+  client: {
+    id: string
+    name: string
+    contact_number: string
+    email: string
+    qnt_of_bookings?: number
+    restaurant_review?: number
+  }
+}
+
+export interface IGETSpareTablesReturn {
+  id: string
+  number: number
+  is_open: boolean
+  guests: number
+  section: {
+    id: string
+    title: string
+  }
+}
+
+export interface IGETBookingsPageReturn {
+  id: string
+  date: Date
+  weekDay: string
+  amount_of_people: number
+  request?: string
+  status: IBookingStatus
+  has_request: boolean
+  time: string
+  table_id: string
+  client: {
+    id: string
+    name: string
+    contact_number: string
+    email: string
+    qnt_of_bookings?: number
+    restaurant_review?: number
+  },
+  table: {
+    id: string
+    number: number
+    meal_status: string
+    is_open: boolean
+    section: {
+      id: string
+      title: string
+    }
+  }
+}
+
+export interface IGETBookingPageTimesOpenReturn {
+  id: string
+  time: string
+  active: boolean
+  open: string
+  close: string
+
+  tables_available: {
+    count: {
+      2: number
+      4: number
+      6: number
+      8: number
+    },
+    spare: IGETSpareTablesReturn[]
+  }
+  bookings: {
+    bookings: IGETBookingsPageReturn[]
+    canceled_not_shown: IBookings[]
+  }
+}
+export interface IBookingPageResponse {
+  date: Date;
+  short_day: string;
+  waiting_list: GetBookingsWithNoTablesReturn[]
+  times_open: IGETBookingPageTimesOpenReturn[]
+}
+
 export interface IGETOpenDaysQuery {
   byId?: {
     id: string
@@ -447,6 +557,21 @@ export interface IGETOpenDaysQuery {
       order: "asc" | "desc";
     };
   };
+  bookingPage?: {
+    date: Date
+    short_day: string,
+    client?: {
+      name?: string,
+      contact_number?: string,
+    },
+    status?: {
+      in: IBookingStatus[]
+    },
+    orderBy?: {
+      key: keyof IBookings
+      order: "asc" | "desc";
+    }
+  }
 }
 
 export interface IGETPrintersResponse {
@@ -525,9 +650,26 @@ export interface IGETMenuAddOnsQuery {
   };
 }
 
-export type IGETRestaurantResponse = IGETAllBookingsResponse | IBookings | IGETTablesAllResponse | ITable | IAllOrdersResponse | IOrder | IAllOrderControllerResponse | IOrderController | IGetAllClientsResponse | IClient | IGETSectionResponse | ISection | IGETMenuResponse | IMenu | IFinishedTableAllResponse | IFinishedTable | IGETAllReviewsResponse | IReviews | IGiftCardReponse | IGiftCards | IGETAuthorizedQuery | IAllSpecialDaysResponse | ISpecialDays | IOpenDaysGetAllResponse | IBookingDays | IGETPrintersResponse | IGETMenuSectionsResponse | IGETMenuTypesResponse | IGETMenuAddOnsResponse | IGETMenuOrderSystemResponse[]
+export interface ITimesOpenWebsiteConfigResponse {
+  id: string;
+  title: string;
+  real_time: string;
+  show_time: string;
+  disabled: boolean;
+}
 
-export type IRestaurantDataQueryType = 'BOOKINGS' | 'TABLES' | "ORDER" | "ORDER_CONTROLLER" | 'CLIENTS' | "SECTIONS" | "MENU" | "FINISHED_TABLE" | "REVIEWS" | "GIFTCARD" | "AUTHORIZED_DEVICES" | 'SPECIAL_DAYS' | 'OPEN_DAYS' | 'PRINTERS' | 'MENU_SECTION' | 'MENU_TYPE' | 'MENU_ADD_ONS'
+
+export interface IGETTimesOpenBody {
+  websiteConfig: {
+    date: Date
+    amount_per_table: number
+  }
+}
+
+
+export type IGETRestaurantResponse = IGETAllBookingsResponse | IBookings | IGETTablesAllResponse | ITable | IAllOrdersResponse | IOrder | IAllOrderControllerResponse | IOrderController | IGetAllClientsResponse | IClient | IGETSectionResponse | ISection | IGETMenuResponse | IMenu | IFinishedTableAllResponse | IFinishedTable | IGETAllReviewsResponse | IReviews | IGiftCardReponse | IGiftCards | IGETAuthorizedQuery | IAllSpecialDaysResponse | ISpecialDays | IOpenDaysGetAllResponse | IBookingDays | IGETPrintersResponse | IGETMenuSectionsResponse | IGETMenuTypesResponse | IGETMenuAddOnsResponse | IGETMenuOrderSystemResponse[] | ITimesOpenWebsiteConfigResponse | IBookingPageResponse
+
+export type IRestaurantDataQueryType = 'BOOKINGS' | 'TABLES' | "ORDER" | "ORDER_CONTROLLER" | 'CLIENTS' | "SECTIONS" | "MENU" | "FINISHED_TABLE" | "REVIEWS" | "GIFTCARD" | "AUTHORIZED_DEVICES" | 'SPECIAL_DAYS' | 'OPEN_DAYS' | 'PRINTERS' | 'MENU_SECTION' | 'MENU_TYPE' | 'MENU_ADD_ONS' | 'TIMES_OPEN'
 
 export interface IGETRestaurantDataQuery {
   bookings?: IGETBookingsQuery
@@ -547,5 +689,6 @@ export interface IGETRestaurantDataQuery {
   menu_sections?: IGETMenuSectionsQuery
   menu_types?: IGETMenuTypesQuery
   menu_add_ons?: IGETMenuAddOnsQuery
+  websiteConfig?: IGETTimesOpenBody
 }
 

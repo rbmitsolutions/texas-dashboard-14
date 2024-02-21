@@ -6,7 +6,8 @@ export type IBookingStatus =
   | "canceled"
   | "arrived"
   | "not_shown"
-  | "walk_in";
+  | "walk_in"
+  | 'waiting'
 
 export type IBookingCancelationReason = "dashboard" | "user";
 export interface IBookings {

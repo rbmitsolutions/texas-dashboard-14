@@ -13,21 +13,24 @@ import {
 import { Button } from "@/components/ui/button"
 
 interface DeleteDialogButtonProps {
-    isDisabled?: boolean
     onDelete: () => void
+    isDisabled?: boolean
+    children?: React.ReactNode
 }
 
-export function DeleteDialogButton({ isDisabled, onDelete }: DeleteDialogButtonProps) {
+export function DeleteDialogButton({ isDisabled, onDelete, children }: DeleteDialogButtonProps) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button
-                    variant='destructive'
-                    size='iconSm'
-                    disabled={isDisabled}
-                >
-                    <Icon name='Trash' size={14} />
-                </Button>
+                {children ? children :
+                    <Button
+                        variant='destructive'
+                        size='iconSm'
+                        disabled={isDisabled}
+                    >
+                        <Icon name='Trash' size={14} />
+                    </Button>
+                }
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
@@ -42,8 +45,12 @@ export function DeleteDialogButton({ isDisabled, onDelete }: DeleteDialogButtonP
                         <Button
                             leftIcon="Trash"
                             variant='destructive'
-                            onClick={onDelete}>
-                            Delete</Button>
+                            onClick={onDelete}
+                            className='bg-red-600'
+                            disabled={isDisabled}
+                        >
+                            Delete
+                        </Button>
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

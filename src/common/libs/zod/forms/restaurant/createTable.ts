@@ -3,7 +3,7 @@ import { z } from "zod";
 export const CreateTableTypeFormSchema = z.object({
     number: z.number().step(1).min(1, {
         message: "Table number must be at least 1",
-    }).max(50, {
+    }).max(100, {
         message: "Table number must be at most 50",
     }),
     guests: z.number().refine((value) => {
