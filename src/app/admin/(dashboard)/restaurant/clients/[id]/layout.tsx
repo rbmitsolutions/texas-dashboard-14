@@ -45,7 +45,7 @@ export default function ClientPageLayout({ children }: CreateMenuLayoutProps) {
                     <h1 className='capitalize text-center mt-2'>{client?.name?.toLowerCase()}</h1>
                 </div>
             </div>
-            <div className='flex flex-wrap items-center gap-4 mt-4 md:mt-14'>
+            <div className='flex flex-wrap items-center gap-4 mt-4 md:mt-20'>
                 <Link
                     className={cn(linkStyle(pathname === `/admin/restaurant/clients/${params?.id}/bookings`))}
                     href={`/admin/restaurant/clients/${params?.id}/bookings`}

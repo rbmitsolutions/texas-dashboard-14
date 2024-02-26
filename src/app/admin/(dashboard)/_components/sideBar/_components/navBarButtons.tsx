@@ -2,7 +2,7 @@
 import Icon from "@/common/libs/lucida-icon";
 import { cn } from "@/common/libs/shadcn/utils";
 import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized";
-import { IToken } from "@/common/types/auth/auth.interface";
+import { IToken, Permissions } from "@/common/types/auth/auth.interface";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useAuthHooks } from "@/hooks/useAuthHooks";
@@ -25,7 +25,7 @@ const NavbarButton = ({ router }: NavBarButtonsProps) => {
     }
 
     if (router?.auth_device) {
-        if (isUserAuthorized(user, router?.authorization) && user?.authorized_device) {
+        if (isUserAuthorized(user, router?.authorization) && (user?.authorized_device || isUserAuthorized(user, [Permissions.ADMIN, Permissions.ADMIN_GHOST]))) {
             return (
                 <Button
                     variant='link'
@@ -64,7 +64,7 @@ const NavbarButtonCollapsible = ({ router, user }: NavbarButtonCollapsibleProps)
     const pathName = usePathname()
 
     if (router?.auth_device) {
-        if (isUserAuthorized(user, router?.authorization) && user?.authorized_device) {
+        if (isUserAuthorized(user, router?.authorization) && (user?.authorized_device || isUserAuthorized(user, [Permissions.ADMIN, Permissions.ADMIN_GHOST]))) {
             return (
                 <Collapsible>
                     <CollapsibleTrigger className={cn('w-full p-2 rounded-md h-10 hover:text-primary',

@@ -71,6 +71,7 @@ export default function BookingPage() {
         }
     })
 
+
     const {
         restaurantAllClients: clients,
         setGETRestaurantDataParams: setGETClientsParams,
@@ -91,18 +92,21 @@ export default function BookingPage() {
 
     const {
         createRestaurantData: createBooking,
+        isCreateRestaurantDataLoading: isCreateBookingLoading
     } = usePOSTRestaurantDataHooks({
         query: 'BOOKINGS',
     })
 
     const {
         updateRestaurantData: updateBooking,
+        isUpdateRestaurantDataLoading: isUpdateBookingLoading
     } = usePUTRestaurantDataHooks({
         query: 'BOOKINGS',
     })
 
     const {
-        deleteRestaurantData: deleteBooking
+        deleteRestaurantData: deleteBooking,
+        isDeleteRestaurantDataLoading: isDeleteBookingLoading
     } = useDELETERestaurantDataHooks({
         query: 'BOOKINGS',
     })
@@ -156,6 +160,7 @@ export default function BookingPage() {
                         <BookingButton
                             createBooking={createBooking}
                             isUserAuth={isUserAuth}
+                            isLoading={isCreateBookingLoading}
                         />
                         <FindBooking
                             deleteBooking={deleteBooking}
@@ -273,6 +278,7 @@ export default function BookingPage() {
                                                     timeOpen: time,
                                                     sections: bookingPage?.sections_open || [],
                                                 }}
+                                                isUpdateBookingLoading={isUpdateBookingLoading || isDeleteBookingLoading}
                                             />
                                         )
                                     })}
@@ -284,6 +290,7 @@ export default function BookingPage() {
                                                 deleteBooking={deleteBooking}
                                                 updateBooking={updateBooking}
                                                 isUserAuth={isUserAuth}
+                                                isUpdateBookingLoading={isUpdateBookingLoading || isDeleteBookingLoading}
                                             />
                                         )
                                     })}

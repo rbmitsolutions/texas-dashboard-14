@@ -59,9 +59,10 @@ interface BookingButtonProps {
     }
     createBooking?: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>
     isUserAuth: boolean
+    isLoading: boolean
 }
 
-export default function BookingButton({ iconOnly, booking, isUserAuth, createBooking }: BookingButtonProps): JSX.Element {
+export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth, createBooking }: BookingButtonProps): JSX.Element {
     const [isOpen, setIsOpen] = useState(false)
     const { emit } = useSocketIoHooks()
 
@@ -459,6 +460,8 @@ export default function BookingButton({ iconOnly, booking, isUserAuth, createBoo
                             leftIcon="CalendarDays"
                             className='h-16 min-h-16 mb-8'
                             variant={booking ? 'green' : 'yellow'}
+                            isLoading={isLoading}
+                            disabled={isLoading}
                         >
                             {booking ? 'Update Booking' : 'Create Booking'}
                         </Button>

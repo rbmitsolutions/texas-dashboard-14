@@ -9,6 +9,7 @@ import { cn } from "@/common/libs/shadcn/utils";
 import Icon from "@/common/libs/lucida-icon";
 
 //components
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import LinkButton from "@/components/common/linkButton";
 import SendEmail from "@/components/common/sendEmail";
 import SendSms from "@/components/common/sendSms";
@@ -104,13 +105,12 @@ export function RosterTableMemo({ users, duties, shifts, forms, createRosterTask
                             <td>
                                 <div className='flex flex-col p-1'>
                                     <div className='flex items-center gap-2'>
-                                        <Image
-                                            src={user?.profile_image || ImagesPath.NO_IMAGE}
-                                            alt={user?.name}
-                                            width={30}
-                                            height={30}
-                                            className='rounded-full max-h-8 min-w-8'
-                                        />
+                                        <Avatar className='h-12 w-12'>
+                                            <AvatarImage src={user?.profile_image} alt={user?.name} />
+                                            <AvatarFallback>
+                                                {user?.name?.split('')[0]}
+                                            </AvatarFallback>
+                                        </Avatar>
                                         <span className='text-xs line-clamp-1'>{user?.name}</span>
                                     </div>
                                     <div className='flex items-center gap-1 mt-2'>

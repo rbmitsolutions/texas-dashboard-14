@@ -45,10 +45,11 @@ interface BookingDetailsProps {
         timeOpen: IGETBookingPageTimesOpenReturn
         sections: IBookingPageResponse['sections_open']
     }
+    isUpdateBookingLoading: boolean
 }
 
 
-export default function BookingDetails({ booking, isUserAuth, deleteBooking, updateBooking, toTable }: BookingDetailsProps) {
+export default function BookingDetails({ booking, isUserAuth, deleteBooking, updateBooking, toTable, isUpdateBookingLoading }: BookingDetailsProps) {
     const { emit } = useSocketIoHooks()
     const [tableSelected, setTableSelected] = useState<IGETSpareTablesReturn>(booking?.table as unknown as IGETSpareTablesReturn)
     const toSetTable = toTable && (booking?.status === 'confirmed' || booking?.status === 'unconfirmed')
@@ -238,6 +239,7 @@ export default function BookingDetails({ booking, isUserAuth, deleteBooking, upd
                                 ),
                                 updateBooking
                             }}
+                            isLoading={isUpdateBookingLoading}
                         />
                         <DeleteDialogButton
                             onDelete={() => handleDeleteBooking(booking?.id)}

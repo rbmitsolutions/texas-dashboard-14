@@ -36,7 +36,7 @@ export default function Data() {
                     },
                     orderBy: {
                         key: 'created_at',
-                        order: 'asc'
+                        order: 'desc'
                     },
                     pagination: {
                         take: 20,
