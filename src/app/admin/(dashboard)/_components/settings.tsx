@@ -32,6 +32,10 @@ const navigation = [
         title: 'Apis',
         path: '/admin/settings/apis/email'
     },
+    {
+        title: 'History',
+        path: '/admin/settings/history'
+    },
 ]
 
 export default function Settings() {

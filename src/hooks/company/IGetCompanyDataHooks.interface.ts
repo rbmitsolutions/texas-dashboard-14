@@ -1,3 +1,4 @@
+import { IHistory } from "@/common/types/auth/auth.interface";
 import { ICompanyContacts, ICompanyDetails, ICompanyDocuments, ICompanyLinks, IDuties, IRoles, IShifts } from "@/common/types/company/companyDetails.interface";
 import { IDepartments } from "@/common/types/company/departaments.interface";
 import { IFiles, IFilesAs, IFilesType } from "@/common/types/company/files.interface";
@@ -236,7 +237,7 @@ export interface ICompanyDetailsResponse {
   details: ICompanyDetails
   contacts: ICompanyContacts[]
   links: ICompanyLinks[]
-  documents:  IFiles[]
+  documents: IFiles[]
 }
 
 export interface IGETRolesResponse {
@@ -316,7 +317,7 @@ export interface IGETFilesQuery {
     }
     pagination?: IQueryPagination
   }
-  
+
   byId?: {
     id: string
     key?: string
@@ -368,10 +369,28 @@ export interface IGETTransactionsQuery {
   };
 }
 
+export interface IGETHistoryResponse {
+  data: IHistory[];
+  pagination: IPaginationResponse;
+}
+
+export interface IGETHistoryQuery {
+  all: {
+    type?: IHistory["type"];
+    by?: string;
+    pagination: IQueryPagination;
+    orderBy?: {
+      key: keyof IHistory;
+      order: "asc" | "desc";
+    };
+  }
+}
+
+
 
 export type IGETCompanyResponse = IGETCompanyRosterResponse | IHaccpReportsResponse | IHaccpReports | IFormsGetAllResponse | IForm | IFormSectionGetAllResponse | IFormSection | IGETFormDataQuery | IFormData | IFiles | IRequests | IRequestsGetAllResponse | ICompanyDetailsResponse | IGETRolesResponse | IRoles | IGETAllDepartamentsResponse | IDepartments | IGETCompanyAllFilesResponse | IGETShiftsQuery | IGETDutiesQuery | IRosterPageResponse | IGETRosterTaskResponse | IUserExtraPaymentData | IGetAllTransactionsResponse
 
-export type ICompanyDataQueryType = 'ROSTER' | "ROLES" | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "FILES" | "REQUESTS" | 'DETAILS' | "DEPARTAMENTS" | "DUTIES" | "SHIFTS" | 'ROSTER_TASKS' | "TRANSACTIONS"
+export type ICompanyDataQueryType = 'ROSTER' | "ROLES" | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "FILES" | "REQUESTS" | 'DETAILS' | "DEPARTAMENTS" | "DUTIES" | "SHIFTS" | 'ROSTER_TASKS' | "TRANSACTIONS" | "HISTORY"
 
 export interface IGETCompanyDataQuery {
   roster?: IGETCompanyRosterQuery
@@ -388,4 +407,5 @@ export interface IGETCompanyDataQuery {
   shifts?: IGETShiftsQuery
   rosterTask?: IGETCompanyRosterQuery
   transactions?: IGETTransactionsQuery
+  history?: IGETHistoryQuery
 }

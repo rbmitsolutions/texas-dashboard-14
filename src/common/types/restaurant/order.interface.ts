@@ -1,3 +1,4 @@
+import { IAddOnsCreateOrder } from "@/store/texas/order";
 import { IMenuType } from "./menu.interface";
 import { IFinishedTable, ITable } from "./tables.interface";
 
@@ -9,14 +10,17 @@ export interface IOrder {
   status: IOrderStatus;
   quantity: number;
 
-  type: string;
-  menu_type: IMenuType;
+  mn_type: IMenuType;
 
   price: number;
-  description: string;
-
+  
   menu: string;
   menu_id: string;
+  menu_short_title: string
+  
+  add_ons: IAddOnsCreateOrder[]
+
+  to_print_ids: string[];
 
   order_controller: IOrderController;
   order_controller_id: string;

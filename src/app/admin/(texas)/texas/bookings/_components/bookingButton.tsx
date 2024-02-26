@@ -43,17 +43,13 @@ import { cn } from "@/common/libs/shadcn/utils";
 
 //hooks
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
-import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized";
 import { SocketIoEvent } from "@/common/libs/socketIo/types";
 import { useSocketIoHooks } from "@/hooks/useSocketIoHooks";
-import { useAuthHooks } from "@/hooks/useAuthHooks";
 
 //interfaces
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface";
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface";
 import { IBookings } from "@/common/types/restaurant/bookings.interface";
-import { Permissions } from "@/common/types/auth/auth.interface";
-
 interface BookingButtonProps {
     iconOnly?: boolean;
     booking?: {
@@ -62,13 +58,12 @@ interface BookingButtonProps {
         children: React.ReactNode
     }
     createBooking?: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>
+    isUserAuth: boolean
 }
 
-export default function BookingButton({ iconOnly, booking, createBooking }: BookingButtonProps): JSX.Element {
+export default function BookingButton({ iconOnly, booking, isUserAuth, createBooking }: BookingButtonProps): JSX.Element {
     const [isOpen, setIsOpen] = useState(false)
     const { emit } = useSocketIoHooks()
-    const { user } = useAuthHooks()
-    const isUserAuth = isUserAuthorized(user, [Permissions.ADMIN, Permissions.BOOKING_ADM])
 
     const form = useForm<CreateBookingFormSchemaType>({
         mode: "onChange",
@@ -117,7 +112,7 @@ export default function BookingButton({ iconOnly, booking, createBooking }: Book
     } = useGETRestaurantDataHooks({
         query: 'TIMES_OPEN',
         defaultParams: {
-            websiteConfig: {
+            times_open: {
                 websiteConfig: {
                     date: form.watch("date") && new Date(form.watch("date")) || new Date(form.watch('date')),
                     amount_per_table: form.watch("amount_of_people") || 2
@@ -187,7 +182,7 @@ export default function BookingButton({ iconOnly, booking, createBooking }: Book
             })
         } else if (form?.watch('date') && form?.watch('amount_of_people')) {
             setGETWebsiteTimeConfigParams({
-                websiteConfig: {
+                times_open: {
                     websiteConfig: {
                         date: new Date(form?.watch('date')),
                         amount_per_table: form?.watch('amount_of_people')

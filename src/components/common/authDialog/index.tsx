@@ -1,4 +1,13 @@
-import { IToken, Permissions } from "@/common/types/auth/auth.interface";
+import { useEffect, useState } from "react";
+import { parseCookies, setCookie } from "nookies";
+import toast from "react-hot-toast";
+
+//libs
+import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized";
+import { setAuthHeader } from "@/common/utils/tokens";
+import { api } from "@/common/libs/axios/api";
+
+//components
 import {
     Dialog,
     DialogContent,
@@ -6,15 +15,13 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog"
 import { KeyPadDisplay } from "../keyPadDisplay";
-import { useEffect, useState } from "react";
-import { useAuthHooks } from "@/hooks/useAuthHooks";
-import { parseCookies, setCookie } from "nookies";
-import { setAuthHeader } from "@/common/utils/tokens";
-import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized";
-import toast from "react-hot-toast";
-import { api } from "@/common/libs/axios/api";
-import { EndPointsTypes } from "@/common/types/routers/endPoints.types";
 
+//hooks
+import { useAuthHooks } from "@/hooks/useAuthHooks";
+
+//interface
+import { IToken, Permissions } from "@/common/types/auth/auth.interface";
+import { EndPointsTypes } from "@/common/types/routers/endPoints.types";
 
 interface AuthModalPorps {
     handleAuthResponse: (user: IToken) => void
@@ -142,7 +149,7 @@ export default function AuthDialog({
                         <DialogTitle>{title}</DialogTitle>
                     </DialogHeader>
                 }
-                <div className="grid gap-4">
+                <div className="grid gap-4 mt-4">
                     <KeyPadDisplay
                         displayValue={password?.join('')}
                         onChange={handleValueChange}

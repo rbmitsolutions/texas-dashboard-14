@@ -1,4 +1,5 @@
 import { IBookingStatus, IBookings } from "@/common/types/restaurant/bookings.interface";
+import { IGETBookingsPageReturn } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 
 export const BOOKING_PEOPLE = [
     {
@@ -224,3 +225,87 @@ export const bookingBackgroundColor = (
     const bookingStatus = BOOKING_STATUS.find((item) => item.status === status);
     return bookingStatus?.bg
 }
+
+export interface IBookingPageFilter {
+    name: string;
+    contact_number: string;
+    status: IBookingStatus[];
+    orderBy: 'amount_of_people/asc' | 'amount_of_people/desc' | 'status/asc' | 'status/desc';
+}
+
+type ValidSortKey = keyof IGETBookingsPageReturn;
+
+export const bookingPagefilter = (data: IBookingPageFilter, bookings: IGETBookingsPageReturn[]): IGETBookingsPageReturn[] => {
+    let filteredBookings = bookings as IGETBookingsPageReturn[] | [];
+
+    if (data.name) {
+        filteredBookings = filteredBookings.filter(booking =>
+            booking.client.name.toLowerCase().includes(data.name.toLowerCase())
+        );
+    }
+
+    if (data.contact_number) {
+        filteredBookings = filteredBookings.filter(booking =>
+            booking.client.contact_number.includes(data.contact_number)
+        );
+    }
+
+    if (data.status.length > 0) {
+        filteredBookings = filteredBookings.filter(booking =>
+            data.status.includes(booking.status)
+        );
+    }
+
+    if (data.orderBy) {
+        const [sortKey, sortOrder] = data.orderBy.split('/') as [ValidSortKey, 'asc' | 'desc'];
+        const key = sortKey as keyof IGETBookingsPageReturn;
+        const order = sortOrder as 'asc' | 'desc';
+        if (key && order) {
+            filteredBookings.sort((a, b) => {
+                if (order === 'asc') {
+                    return a[key]! > b[key]! ? 1 : -1;
+                } else {
+                    return a[key]! < b[key]! ? 1 : -1;
+                }
+            });
+        }
+    }
+
+    return filteredBookings;
+}
+
+
+export const DEFAULT_TIMES_OPEN = [
+    {
+        id: 1,
+        open: "12:00",
+        close: "13:30",
+        title: "12:00PM TO 13:30PM",
+    },
+];
+
+const incrementTime = (time: string, minutes: number) => {
+    const [hours, minutesPart] = time.split(":").map(Number);
+    const totalMinutes = hours * 60 + minutesPart + minutes;
+    const newHours = Math.floor(totalMinutes / 60) % 24;
+    const newMinutes = totalMinutes % 60;
+    return `${newHours.toString().padStart(2, "0")}:${newMinutes
+        .toString()
+        .padStart(2, "0")}`;
+};
+
+const endTime = "23:30";
+
+let currentTime = DEFAULT_TIMES_OPEN[0].open;
+while (currentTime !== endTime) {
+    currentTime = incrementTime(currentTime, 30);
+    const newEntry = {
+        id: DEFAULT_TIMES_OPEN.length + 1,
+        open: currentTime,
+        close: incrementTime(currentTime, 90),
+        title: `${currentTime}PM TO ${incrementTime(currentTime, 90)}PM`,
+    };
+    DEFAULT_TIMES_OPEN.push(newEntry);
+}
+
+

@@ -6,17 +6,15 @@ import { ITableMealStatus } from "@/common/types/restaurant/tables.interface";
 
 export interface IPUTTablesBody {
     id: string;
-    data: {
-        client_id?: string | null;
-        client_name?: string | null;
-        booking_id?: string | null;
-        start_time?: Date | null;
-        guests?: number;
-        is_open?: boolean;
-        section_id?: string;
-        meal_status?: ITableMealStatus
-        food_ordered_at?: Date;
-    };
+    client_id?: string | null;
+    client_name?: string | null;
+    booking_id?: string | null;
+    start_time?: Date | null;
+    guests?: number;
+    is_open?: boolean;
+    section_id?: string;
+    meal_status?: ITableMealStatus
+    food_ordered_at?: Date;
     close_table?: boolean;
     open_table?: boolean;
 }
@@ -163,14 +161,31 @@ export interface IPUTAuthorizedDevicesBody {
 
 export interface IPUTSpecialDaysBody {
     id: string
-    times_open?: ITimesOpen[]
+    is_disabled?: boolean
+    times?: {
+        connect?: string[],
+        disconnect?: string[]
+    }
+    sections?: {
+        connect?: string[],
+        disconnect?: string[]
+    }
 }
 
 export interface IPUTTimesOpenBody {
     id: string;
-    tables_available: any;
-    active: boolean;
-    close_time?: {
+    active?: boolean;
+    disconnect?: {
+        days_ids?: string[];
+        special_days_ids?: string[];
+    }
+    connect?: {
+        days_ids?: string[];
+        special_days_ids?: string[];
+    }
+    update_time_status?: {
+        day_or_special_day_id: string;
+        active: boolean;
         date: Date
     }
 }
@@ -289,7 +304,7 @@ export interface IPUTRestaurantBody {
     menu?: IPUTMenuBody
     giftcard?: IPUTGiftCardBody
     authorizedDevice?: IPUTAuthorizedDevicesBody
-    specialDays?: IPUTSpecialDaysBody
+    specialDay?: IPUTSpecialDaysBody
     timesOpen?: IPUTTimesOpenBody
     printer?: IPUTPrinterBody
     menu_section?: IPUTMenuSectionsBody

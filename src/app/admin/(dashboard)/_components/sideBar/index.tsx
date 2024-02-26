@@ -24,7 +24,6 @@ import { IUser } from "@/common/types/user/user.interface";
 
 export function Sidebar() {
     const { user } = useAuthHooks()
-    //todo: fetch routers from server
     const { isOpen, toggleSideBar } = useSideBarStore()
     const [preRendered, setPreRendered] = useState(false);
     useEffect(() => {

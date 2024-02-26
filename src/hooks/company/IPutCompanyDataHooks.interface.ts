@@ -110,30 +110,28 @@ export type ITransactionsPut = {
 
 
 export interface IPUTTransactionsBody {
-    transaction: {
-        one?: ITransactionsPut
-        many?: {
-            id: {
-                in: string[];
-            };
-            data: {
-                type?: TransactionsType;
-                method?: TransactionsMethod;
-                direction?: TransactionsDirection;
+    one?: ITransactionsPut
+    many?: {
+        id: {
+            in: string[];
+        };
+        data: {
+            type?: TransactionsType;
+            method?: TransactionsMethod;
+            direction?: TransactionsDirection;
 
-                status?: TransactionsStatus
+            status?: TransactionsStatus
 
-                gift_card_id?: string;
+            gift_card_id?: string;
 
-                total?: number;
-                description?: string;
+            total?: number;
+            description?: string;
 
-                valid_by?: string;
-                valid_by_id?: string;
+            valid_by?: string;
+            valid_by_id?: string;
 
-                payee?: string; // "client`s name" "table`s number" "employee`s name"
-                payee_key?: string; // "client`s id" "tables`s is" "employee`s id"
-            };
+            payee?: string; // "client`s name" "table`s number" "employee`s name"
+            payee_key?: string; // "client`s id" "tables`s is" "employee`s id"
         };
     };
 }
@@ -155,7 +153,7 @@ export interface IPUTCompanyDetailsBody {
 }
 
 
-export type IPUTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "DUTIES" | "SHIFTS" | 'REQUESTS' | "ROLES" | "DETAILS"
+export type IPUTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "DUTIES" | "SHIFTS" | 'REQUESTS' | "ROLES" | "DETAILS" | "TRANSACTIONS"
 export interface IPUTCompanyBody {
     roster?: IPUTRosterBody,
     haccpReport?: IPUTHaccpReportsBody
@@ -166,4 +164,5 @@ export interface IPUTCompanyBody {
     request?: IPUTRequestsBody
     role?: IPUTRolesBody
     info?: IPUTCompanyDetailsBody
+    transaction?: IPUTTransactionsBody
 }

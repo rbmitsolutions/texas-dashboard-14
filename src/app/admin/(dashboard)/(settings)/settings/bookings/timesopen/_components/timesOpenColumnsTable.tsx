@@ -3,18 +3,15 @@ import { Badge } from "@/components/ui/badge"
 import { ColumnDef } from "@tanstack/react-table"
 import { IBookingDays, ITimesOpen } from "@/common/types/restaurant/config.interface"
 import { compareAscDate, parseISODate } from "@/common/libs/date-fns/dateFormat"
+import { UseMutateFunction } from "react-query"
+import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
+import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
 
 interface TimesOpenColumnsTableProps {
-    // daysOpen: IBookingDays[]
-    // addTable: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>
-    // deleteTable: UseMutateFunction<void, any, IDELETERestaurantDataBody, unknown>
-    // deleteSection: UseMutateFunction<void, any, IDELETERestaurantDataBody, unknown>
-    // editSection: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
+    updateTimesOpen: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
 }
 
-const dayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-//todo: finish times open
 const sortByOpenTime = (array: ITimesOpen[]) => {
     array.sort((a, b) => {
         const timeA = parseISODate(`2000-01-01T${a.open}`);
@@ -25,13 +22,8 @@ const sortByOpenTime = (array: ITimesOpen[]) => {
     return array;
 }
 
-
 export const timesOpenColumnsTable = ({
-    // addTable,
-    // deleteTable,
-    // deleteSection,
-    // editSection,
-    // daysOpen
+    updateTimesOpen
 }: TimesOpenColumnsTableProps): ColumnDef<IBookingDays>[] => {
     return [
         {
@@ -51,38 +43,28 @@ export const timesOpenColumnsTable = ({
                         }
                         {sortByOpenTime(row?.original?.times_open)?.map((time) => {
                             return (
-                                <Badge
+                                <DeleteDialogButton
                                     key={time?.id}
+                                    onDelete={async () => await updateTimesOpen({
+                                        timesOpen: {
+                                            id: time?.id,
+                                            disconnect: {
+                                                days_ids: [row?.original?.id]
+                                            }
+                                        }
+                                    })}
                                 >
-                                    {time?.title}
-                                </Badge>
+                                    <div
+                                        key={time?.id}
+                                        className='bg-background-soft p-1 rounded-lg cursor-pointer hover:bg-red-300 dark:hover:bg-red-800'
+                                    >
+                                        <small>
+                                            {time?.title}
+                                        </small>
+                                    </div>
+                                </DeleteDialogButton>
                             )
                         })}
-                        {/* <Button
-                            size='iconExSm'
-                            disabled={row?.original?.priority === 1}
-                            onClick={async () => await editSection({
-                                section: {
-                                    id: row?.original?.id,
-                                    priority: row?.original?.priority - 1
-                                }
-                            })}
-                        >
-                            <Icon name='Minus' />
-                        </Button>
-                        {row?.original?.priority}
-                        <Button
-                            size='iconExSm'
-                            disabled={row?.original?.priority === 3}
-                            onClick={async () => await editSection({
-                                section: {
-                                    id: row?.original?.id,
-                                    priority: row?.original?.priority + 1
-                                }
-                            })}
-                        >
-                            <Icon name='Plus' />
-                        </Button> */}
                     </div>
                 )
             }
@@ -94,23 +76,7 @@ export const timesOpenColumnsTable = ({
             cell: ({ row }) => {
                 return (
                     <div className="flex-container-center">
-                        {/* <AddTable
-                            addTable={addTable}
-                            section={row?.original}
-                        />
-                        <Button
-                            size='iconExSm'
-                            onClick={async () => await deleteSection({
-                                section: {
-                                    id: row?.original?.id
 
-                                }
-                            })}
-                            disabled={row?.original?.tables?.length > 0}
-                            variant='destructive'
-                        >
-                            <Icon name='Trash2' />
-                        </Button> */}
                     </div>
                 )
             },

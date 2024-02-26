@@ -13,14 +13,15 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import { findCurrentTimeSlot, getBookingAmountPerTable } from "./utils";
 import SearchInput from "@/components/common/searchInput";
+import { findCurrentTimeSlot } from "./utils";
 import { Button } from "@/components/ui/button";
+import SelectTable from "./selectTable";
 
 //interfaces
 import { CreateBookingFormSchemaType } from "@/common/libs/zod/forms/restaurant/createBookingForm";
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface";
-import { IGETBookingPageTimesOpenReturn, IGETRestaurantDataQuery } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
+import { IBookingPageResponse, IGETBookingPageTimesOpenReturn, IGETRestaurantDataQuery, IGETSpareTablesReturn } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 import { IClient } from "@/common/types/restaurant/client.interface";
 import { useSocketIoHooks } from "@/hooks/useSocketIoHooks";
 import { SocketIoEvent } from "@/common/libs/socketIo/types";
@@ -32,12 +33,14 @@ interface WalkinButtonProps {
     clients: IClient[],
     setGETClientsParams: Dispatch<SetStateAction<IGETRestaurantDataQuery>>
     GETClientsParams: IGETRestaurantDataQuery
+    sections: IBookingPageResponse['sections_open']
 }
 
 
-export default function WalkinButton({ times_open, iconOnly, createBooking, clients, setGETClientsParams, GETClientsParams }: WalkinButtonProps): JSX.Element {
+export default function WalkinButton({ times_open, iconOnly, sections, createBooking, clients, setGETClientsParams, GETClientsParams }: WalkinButtonProps): JSX.Element {
     const { emit } = useSocketIoHooks()
     const [isOpen, setIsOpen] = useState(false)
+    const [tableSelected, setTableSelected] = useState<IGETSpareTablesReturn>({} as IGETSpareTablesReturn)
     const [currentTimeSlot, setCurrentTimeSlot] = useState<IGETBookingPageTimesOpenReturn | null>(null);
     const [booking, setBooking] = useState<CreateBookingFormSchemaType>({
         date: new Date(),
@@ -48,7 +51,6 @@ export default function WalkinButton({ times_open, iconOnly, createBooking, clie
         surname: '',
         contact_number: '',
         email: '',
-        table_id: ''
     })
 
     const cleanUserDetailsForm = () => {
@@ -72,18 +74,12 @@ export default function WalkinButton({ times_open, iconOnly, createBooking, clie
                 surname: '',
                 contact_number: '',
                 email: '',
-                table_id: ''
             })
+            setTableSelected({} as IGETSpareTablesReturn)
         } else {
-            const currentTimeSlot = findCurrentTimeSlot(times_open)
+            const currentTimeSlot = findCurrentTimeSlot(times_open) as IGETBookingPageTimesOpenReturn
             if (currentTimeSlot) {
-                setCurrentTimeSlot({
-                    ...currentTimeSlot,
-                    tables_available: {
-                        ...currentTimeSlot.tables_available,
-                        spare: currentTimeSlot?.tables_available?.spare?.filter(t => t.guests === getBookingAmountPerTable(booking?.amount_of_people) && !t?.is_open)
-                    }
-                })
+                setCurrentTimeSlot(currentTimeSlot)
                 setBooking(prev => ({
                     ...prev,
                     time: currentTimeSlot.time
@@ -91,23 +87,6 @@ export default function WalkinButton({ times_open, iconOnly, createBooking, clie
             }
         }
         setIsOpen(open)
-    }
-
-    const onAmountOfPeopleChange = (amount_of_people: number) => {
-        const currentTimeSlot = findCurrentTimeSlot(times_open)
-        if (currentTimeSlot) {
-            setCurrentTimeSlot({
-                ...currentTimeSlot,
-                tables_available: {
-                    ...currentTimeSlot.tables_available,
-                    spare: currentTimeSlot?.tables_available?.spare?.filter(t => t.guests === getBookingAmountPerTable(amount_of_people) && !t?.is_open)
-                }
-            })
-        }
-        setBooking(prev => ({
-            ...prev,
-            amount_of_people
-        }))
     }
 
     const onBookingCreate = async (formData: CreateBookingFormSchemaType) => {
@@ -119,12 +98,15 @@ export default function WalkinButton({ times_open, iconOnly, createBooking, clie
                 valid_number: formData?.contact_number ? validator.isMobilePhone(formData?.contact_number, ["en-IE"]) : false,
                 email: formData?.email ? formData?.email : "walkin@walkin.com",
                 contact_number: formData?.contact_number ? formData?.contact_number : '00000',
-                table_id: formData?.table_id ? formData?.table_id : undefined,
+                table_id: tableSelected?.id,
             }
         }, {
-            onSuccess: () => {
-                emit({
+            onSuccess: async () => {
+                await emit({
                     event: SocketIoEvent.BOOKING
+                })
+                await emit({
+                    event: SocketIoEvent.TABLE
                 })
                 onOpenChange(false)
             }
@@ -163,19 +145,6 @@ export default function WalkinButton({ times_open, iconOnly, createBooking, clie
                     <SheetTitle>{currentTimeSlot?.time}</SheetTitle>
                 </SheetHeader>
                 <div className='flex-col-container gap-6 overflow-auto'>
-                    <div className='grid grid-cols-4 gap-2'>
-                        {[1, 2, 3, 4, 5, 6, 7, 8]?.map(p => {
-                            return (
-                                <Button
-                                    key={p}
-                                    variant={booking?.amount_of_people === p ? 'default' : 'outline'}
-                                    onClick={() => onAmountOfPeopleChange(p)}
-                                >
-                                    {p}
-                                </Button>
-                            )
-                        })}
-                    </div>
                     <SearchInput
                         onSearchChange={(e) => {
                             setGETClientsParams(prev => ({
@@ -240,52 +209,25 @@ export default function WalkinButton({ times_open, iconOnly, createBooking, clie
                             })}
                         </div>
                     }
-
-                    {
-                        currentTimeSlot?.tables_available?.spare?.length === 0 ? <div className='flex justify-center items-center h-full w-full bg-background-soft'>No Tables  for {booking?.amount_of_people} people Available</div>
-                            :
-                            <div className='grid grid-cols-2 gap-2 p-2 rounded-lg bg-background-soft overflow-auto scrollbar-thin'>
-                                {currentTimeSlot?.tables_available?.spare?.map(table => {
-                                    return (
-                                        <div
-                                            key={table?.id}
-                                            className={cn('flex-col-container items-center justify-center p-2 rounded-lg border-2 gap-1 min-h-20', booking?.table_id === table?.id ? 'bg-background-soft border-primary' : 'bg-background')}
-                                            onClick={() => {
-                                                if (booking?.table_id === table?.id) {
-                                                    setBooking(prev => ({
-                                                        ...prev,
-                                                        table_id: ''
-                                                    }))
-                                                } else {
-                                                    setBooking(prev => ({
-                                                        ...prev,
-                                                        table_id: table?.id
-                                                    }))
-                                                }
-                                            }}
-                                        >
-                                            <small>
-                                                {table?.section?.title} - {table?.number}
-                                            </small>
-                                            <small>
-                                                {table?.guests} Guests
-                                            </small>
-                                        </div>
-                                    )
-                                })}
-                            </div>
+                    {currentTimeSlot &&
+                        <SelectTable
+                            sections={sections}
+                            tables={currentTimeSlot?.tables_available?.spare}
+                            tableSelected={tableSelected}
+                            setTableSelected={setTableSelected}
+                        />
                     }
 
                 </div>
                 <SheetFooter>
                     <Button
                         leftIcon="Footprints"
-                        className='h-16 min-h-16 mb-8 w-full'
+                        className='h-16 min-h-16 w-full'
                         variant='pink'
                         onClick={() => onBookingCreate(booking)}
-                        disabled={currentTimeSlot?.tables_available?.spare?.length === 0 || !currentTimeSlot}
+                        disabled={currentTimeSlot?.tables_available?.spare?.length === 0 || !currentTimeSlot || !tableSelected?.id}
                     >
-                        Walk in
+                        {!tableSelected?.id ? 'Select a table' : `  ${tableSelected?.section?.title} - ${tableSelected?.number} is Available`}
                     </Button>
                 </SheetFooter>
             </SheetContent>

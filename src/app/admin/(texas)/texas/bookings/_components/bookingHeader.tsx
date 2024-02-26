@@ -1,3 +1,8 @@
+import { UseMutateFunction } from "react-query"
+
+//libs
+import { cn } from "@/common/libs/shadcn/utils"
+
 //components
 import {
     Sheet,
@@ -11,20 +16,25 @@ import IconText from "@/components/common/iconText"
 import { Button } from "@/components/ui/button"
 
 //hooks
+import { useSocketIoHooks } from "@/hooks/useSocketIoHooks"
 import { useAuthHooks } from "@/hooks/useAuthHooks"
 
 //interface
-import { IGETBookingPageTimesOpenReturn } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
+import { IBookingPageResponse, IGETBookingPageTimesOpenReturn } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
+import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized"
 import { Permissions } from "@/common/types/auth/auth.interface"
-import { cn } from "@/common/libs/shadcn/utils"
+import { SocketIoEvent } from "@/common/libs/socketIo/types"
 
 interface BookingHeaderProps {
+    day_id: string
+    day_date: Date
     time: IGETBookingPageTimesOpenReturn
+    updateTimesOpen: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
 }
 
-//todo close times booking
-export default function BookingHeader({ time }: BookingHeaderProps) {
+export default function BookingHeader({ day_id, day_date, time, updateTimesOpen }: BookingHeaderProps) {
+    const { emit } = useSocketIoHooks()
     const { user } = useAuthHooks()
 
     const alertTablesCountBg = (tabFor: 2 | 4 | 6 | 8, qtyTabAvailable: number) => {
@@ -40,9 +50,14 @@ export default function BookingHeader({ time }: BookingHeaderProps) {
         <Sheet>
             <SheetTrigger asChild>
                 <div className='flex flex-col items-center w-full cursor-pointer '>
-                    <small className='text-[10px] font-bold text-primary text-center py-1'>
+                    <small className='text-[10px] font-bold text-primary text-center '>
                         {time?.time}
                     </small>
+                    {!time?.active &&
+                        <strong className='text-red-600 text-xs'>
+                            Closed
+                        </strong>
+                    }
                     <div className='flex justify-between gap-1'>
                         <IconText
                             icon="Dice2"
@@ -114,10 +129,27 @@ export default function BookingHeader({ time }: BookingHeaderProps) {
                         variant={time?.active ? 'destructive' : 'green'}
                         leftIcon={time?.active ? 'CalendarOff' : 'CalendarCheck'}
                         className='w-full h-16'
-                        disabled={isUserAuthorized(
+                        disabled={!isUserAuthorized(
                             user,
                             [Permissions.ADMIN, Permissions.BOOKING_ADM]
                         )}
+                        onClick={async () => await updateTimesOpen({
+                            timesOpen: {
+                                id: time?.id,
+                                active: !time?.active,
+                                update_time_status: {
+                                    active: !time?.active,
+                                    day_or_special_day_id: day_id,
+                                    date: new Date(day_date)
+                                }
+                            }
+                        }, {
+                            onSuccess: () => {
+                                emit({
+                                    event: SocketIoEvent.BOOKING_CONFIG
+                                })
+                            }
+                        })}
                     >
                         {time?.active ? 'Close for Bookings' : 'Open for Bookings'}
                     </Button>

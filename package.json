@@ -60,6 +60,7 @@
     "socket.io-client": "^4.7.4",
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",
+    "use-scan-detection": "^0.2.3",
     "validator": "^13.11.0",
     "zod": "^3.22.4",
     "zustand": "^4.4.7"

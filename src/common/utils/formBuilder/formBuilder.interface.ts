@@ -5,7 +5,6 @@ export interface IConditionalGroupRadiosForm {
     register: string;
     required: boolean;
     description?: string;
-    // propsUi?: RadioGroupProps;
     options: {
         label: string;
         value: string;

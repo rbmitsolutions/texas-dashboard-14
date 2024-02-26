@@ -51,3 +51,15 @@ export interface ITokens {
   type: string;
   expiresIn: number;
 }
+
+export interface IHistory {
+  id: string;
+
+  by: string
+  by_id: string
+  type: 'Close / Open Booking Time' | 'Booking Deleted' | 'Menu Updated' | 'Menu Created';
+  description: string;
+
+  created_at: Date;
+}
+

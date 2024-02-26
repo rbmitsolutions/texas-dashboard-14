@@ -20,41 +20,42 @@ import LinkButton from "@/components/common/linkButton";
 import SendEmail from "@/components/common/sendEmail";
 import IconText from "@/components/common/iconText";
 import { Textarea } from "@/components/ui/textarea";
-import { getBookingAmountPerTable } from "./utils";
 import SendSms from "@/components/common/sendSms";
 import { Button } from "@/components/ui/button";
 import BookingButton from "./bookingButton";
+import SelectTable from "./selectTable";
 
 //hooks
 import { useSocketIoHooks } from "@/hooks/useSocketIoHooks";
-import { useAuthHooks } from "@/hooks/useAuthHooks";
 
 //interface
 import { IDELETERestaurantDataBody } from "@/hooks/restaurant/IDeleteRestaurantDataHooks.interface";
-import { IGETBookingPageTimesOpenReturn, IGETBookingsPageReturn, IGETSpareTablesReturn } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
+import { IBookingPageResponse, IGETBookingPageTimesOpenReturn, IGETBookingsPageReturn, IGETSpareTablesReturn } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface";
 import { IBookings } from "@/common/types/restaurant/bookings.interface";
-import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized";
 import { RedirectTo } from "@/common/types/routers/endPoints.types";
-import { Permissions } from "@/common/types/auth/auth.interface";
 import { SocketIoEvent } from "@/common/libs/socketIo/types";
 
 interface BookingDetailsProps {
     booking: IGETBookingsPageReturn
     deleteBooking: UseMutateFunction<void, any, IDELETERestaurantDataBody, unknown>
     updateBooking: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
-    times_open?: IGETBookingPageTimesOpenReturn
+    isUserAuth: boolean
+    toTable?: {
+        timeOpen: IGETBookingPageTimesOpenReturn
+        sections: IBookingPageResponse['sections_open']
+    }
 }
-export default function BookingDetails({ booking, deleteBooking, updateBooking, times_open }: BookingDetailsProps) {
-    const { user } = useAuthHooks()
+
+
+export default function BookingDetails({ booking, isUserAuth, deleteBooking, updateBooking, toTable }: BookingDetailsProps) {
     const { emit } = useSocketIoHooks()
-    const [gestsFilter, setGestsFilter] = useState([getBookingAmountPerTable(booking?.amount_of_people)])
     const [tableSelected, setTableSelected] = useState<IGETSpareTablesReturn>(booking?.table as unknown as IGETSpareTablesReturn)
+    const toSetTable = toTable && (booking?.status === 'confirmed' || booking?.status === 'unconfirmed')
 
     const bgColor = bookingBackgroundColor(booking?.status)
 
     const onOpenChange = () => {
-        setGestsFilter([getBookingAmountPerTable(booking?.amount_of_people)])
         setTableSelected(booking?.table as unknown as IGETSpareTablesReturn)
     }
 
@@ -90,6 +91,27 @@ export default function BookingDetails({ booking, deleteBooking, updateBooking, 
         })
     }
 
+    const handleArriveBooking = async (booking: IGETBookingsPageReturn, table: IGETSpareTablesReturn) => {
+        await updateBooking({
+            booking: {
+                id: booking?.id,
+                status: 'arrived',
+                date: booking?.date,
+                amount_of_people: booking?.amount_of_people,
+                time: booking?.time,
+                table_id: table?.id
+            }
+        }, {
+            onSuccess: async () => {
+                await emit({
+                    event: SocketIoEvent.BOOKING,
+                })
+                await emit({
+                    event: SocketIoEvent.TABLE,
+                })
+            }
+        })
+    }
     return (
         <Sheet
             onOpenChange={onOpenChange}
@@ -117,7 +139,7 @@ export default function BookingDetails({ booking, deleteBooking, updateBooking, 
                         </div>
                         <small className='text-[10px] capitalize line-clamp-1'>{booking?.client?.name?.toLowerCase()}</small>
                         <div className='flex gap-2'>
-                            {booking?.client?.qnt_of_bookings &&
+                            {booking?.client?.qnt_of_bookings! > 0 &&
                                 <IconText
                                     icon="CalendarCheck"
                                     text={booking?.client?.qnt_of_bookings || 0}
@@ -126,10 +148,10 @@ export default function BookingDetails({ booking, deleteBooking, updateBooking, 
                                     pclass="text-[10px]"
                                 />
                             }
-                            {booking?.client?.restaurant_review &&
+                            {booking?.client?.restaurant_review! > 0 &&
                                 <IconText
                                     icon="Star"
-                                    text={booking?.client?.restaurant_review.toFixed(2) || 0}
+                                    text={booking?.client?.restaurant_review?.toFixed(2) || 0}
                                     className='gap-1'
                                     iconSize={10}
                                     pclass="text-[10px]"
@@ -200,6 +222,7 @@ export default function BookingDetails({ booking, deleteBooking, updateBooking, 
                             Cancel
                         </Button>
                         <BookingButton
+                            isUserAuth={isUserAuth}
                             booking={{
                                 data: booking as unknown as IBookings,
                                 children: (
@@ -218,69 +241,32 @@ export default function BookingDetails({ booking, deleteBooking, updateBooking, 
                         />
                         <DeleteDialogButton
                             onDelete={() => handleDeleteBooking(booking?.id)}
-                            isDisabled={!isUserAuthorized(
-                                user,
-                                [Permissions.ADMIN, Permissions.BOOKING_ADM]
-                            ) || booking?.status === 'canceled' || booking?.status === 'arrived'}
+                            isDisabled={!isUserAuth || booking?.status === 'canceled' || booking?.status === 'arrived'}
                         />
                     </div>
-                    <div className='grid grid-cols-4 gap-2'>
-                        {[2, 4, 6, 8]?.map(g => {
-                            return (
-                                <Button
-                                    key={g}
-                                    variant={gestsFilter.includes(g) ? 'default' : 'outline'}
-                                    onClick={() => {
-                                        if (gestsFilter.includes(g)) {
-                                            setGestsFilter(prev => prev.filter(f => f !== g))
-                                        } else {
-                                            setGestsFilter(prev => [...prev, g])
-                                        }
-                                        setTableSelected(booking?.table as unknown as IGETSpareTablesReturn)
-                                    }}
-                                    className='h-12'
-                                >
-                                    {g} pp
-                                </Button>
-                            )
-                        })}
-                    </div>
-                    <div className='grid grid-cols-2 gap-2 p-2 bg-background-soft scrollbar-thin overflow-auto'>
-                        {times_open?.tables_available?.spare?.map(table => {
-                            if (gestsFilter.includes(table?.guests) && !table?.is_open)
-                                return (
-                                    <div
-                                        key={table?.id}
-                                        className={cn('flex-col-container items-center justify-center p-2 rounded-lg border-2 gap-1 min-h-20 cursor-pointer', tableSelected?.id === table?.id ? 'bg-background-soft border-primary' : 'bg-background')}
-                                        onClick={() => setTableSelected(prev => {
-                                            if (prev?.id === table?.id) {
-                                                return booking?.table as unknown as IGETSpareTablesReturn
-                                            } else {
-                                                return table
-                                            }
-                                        })}
-                                    >
-                                        <small>
-                                            {table?.section?.title} - {table?.number}
-                                        </small>
-                                        <small>
-                                            {table?.guests} Guests
-                                        </small>
-                                    </div>
-                                )
-                        })}
-                    </div>
+                    {toSetTable &&
+                        <SelectTable
+                            sections={toTable?.sections}
+                            booking={booking}
+                            tableSelected={tableSelected}
+                            setTableSelected={setTableSelected}
+                            tables={toTable?.timeOpen?.tables_available?.spare}
+                        />
+                    }
                 </div>
-                <SheetFooter>
-                    <Button
-                        variant={tableSelected?.is_open ? 'destructive' : 'green'}
-                        leftIcon="CheckCircle"
-                        className='w-full h-14'
-                        disabled={tableSelected?.is_open}
-                    >
-                        {tableSelected?.section?.title + ' - ' + tableSelected?.number} {tableSelected?.is_open ? 'Table Is Busy' : 'Table Available'}
-                    </Button>
-                </SheetFooter>
+                {toSetTable &&
+                    <SheetFooter>
+                        <Button
+                            variant={tableSelected?.is_open ? 'destructive' : 'green'}
+                            leftIcon="CheckCircle"
+                            className='w-full h-14'
+                            disabled={tableSelected?.is_open}
+                            onClick={() => handleArriveBooking(booking, tableSelected)}
+                        >
+                            {tableSelected?.is_open ? `${tableSelected?.section?.title} - ${tableSelected?.number} Table Is Busy` : `${tableSelected?.section?.title} - ${tableSelected?.number} is Available`}
+                        </Button>
+                    </SheetFooter>
+                }
             </SheetContent>
         </Sheet>
     )

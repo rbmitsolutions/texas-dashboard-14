@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 //components
-import { IGETMenuOrderSystemResponse, IGETRestaurantResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
+import RightOrderDisplay from "./_components/rightOrderDisplay";
 import { MenuOrderItem } from "./_components/menuOrderItem";
 import LayoutFrame from "../../../_components/layoutFrame";
 import SearchInput from "@/components/common/searchInput";
@@ -10,15 +10,28 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 
 //store
-import { IMenuOrderSystemFilter, useOrderSystemMenuStore } from "@/store/texas/menu";
+import { useOrderSystemOrderControllerStore } from "@/store/texas/orderController";
+import { useOrderTablesNewOrderStore } from "@/store/texas/order";
+import { useOrderSystemTablesStore } from "@/store/texas/tables";
 
 //hooks
-import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
+import { useGETRestaurantDataHooks, usePOSTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
+import { useSocketIoHooks } from "@/hooks/useSocketIoHooks";
+import { useAuthHooks } from "@/hooks/useAuthHooks";
 
 //interfaces
+import { IGETTablesAllResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
+import { IMenuOrderSystemFilter, useOrderSystemHooks } from "@/hooks/useOrderSystemHooks";
 import { Allergens } from "@/common/types/restaurant/menu.interface";
+import { ITable } from "@/common/types/restaurant/tables.interface";
 
 export default function Table({ params }: { params: { id: string } }) {
+    const { getFilteredOrderControllers } = useOrderSystemOrderControllerStore()
+    const { setOrder, order, resetOrder, updateOrderQuantity, deleteOrder, getOrderTotal, getOneOrderTotal, replaceOrder } = useOrderTablesNewOrderStore()
+    const { emit } = useSocketIoHooks()
+    const { getTableById, tables, setTables } = useOrderSystemTablesStore()
+    const { getFilteredOrderSystemMenu } = useOrderSystemHooks()
+    const { user } = useAuthHooks()
     const [filter, setFilter] = useState<IMenuOrderSystemFilter>({
         allergens: [],
         id: [],
@@ -26,14 +39,39 @@ export default function Table({ params }: { params: { id: string } }) {
             options_priority: true
         },
         short_title: '',
-        to_order: true
+        to_order: true,
+        mn_type_id: ''
     })
-    const { menu, setMenu } = useOrderSystemMenuStore()
 
 
     const {
+        refetchRestaurantData: refetchTables
+    } = useGETRestaurantDataHooks({
+        query: 'TABLES',
+        defaultParams: {
+            tables: {
+                all: {
+                    pagination: {
+                        take: 400,
+                        skip: 0
+                    },
+                }
+            }
+        },
+        UseQueryOptions: {
+            onSuccess: (data) => {
+                const tables = data as IGETTablesAllResponse
+                setTables(tables?.data)
+            },
+            refetchOnWindowFocus: false,
+            refetchIntervalInBackground: false,
+            refetchOnMount: false,
+            enabled: tables?.length === 0
+        }
+    })
+
+    const {
         restaurantMenuOrderSystem: menuData,
-        isRestaurantDataLoading: isMenuLoading
     } = useGETRestaurantDataHooks({
         query: 'MENU',
         defaultParams: {
@@ -42,11 +80,6 @@ export default function Table({ params }: { params: { id: string } }) {
             }
         },
         UseQueryOptions: {
-            onSuccess: (data: IGETRestaurantResponse) => {
-                setMenu({
-                    menu: data as IGETMenuOrderSystemResponse[]
-                })
-            },
             refetchOnWindowFocus: false,
             refetchIntervalInBackground: false,
             refetchOnMount: false,
@@ -77,27 +110,22 @@ export default function Table({ params }: { params: { id: string } }) {
         }
     })
 
-    useEffect(() => {
-        if (menuData) {
-            setMenu({
-                menu: menuData
-            })
-        }
-    }, [menuData, setMenu])
+    const {
+        createRestaurantData: createOrder
+    } = usePOSTRestaurantDataHooks({
+        query: 'ORDER'
+    })
+
 
     useEffect(() => {
-        if (menuData) {
-            setMenu({
-                menu: menuData,
-                menuFilter: filter
-            })
+        if (tables?.length === 0) {
+            refetchTables()
         }
-    }, [filter, menuData, setMenu])
-
-    if (isMenuLoading) return <h1>Loading...</h1>
+    }, [refetchTables, tables])
 
     return (
         <LayoutFrame
+            user={user}
             navigation={{
                 content: (
                     <div className='flex flex-col gap-2'>
@@ -111,7 +139,7 @@ export default function Table({ params }: { params: { id: string } }) {
                                                 <Button
                                                     key={t?.id}
                                                     variant={filter?.mn_type_id === t?.id ? 'secondary' : 'outline'}
-                                                    className='h-12 rounded-lg'
+                                                    className='h-12 rounded-lg text-xs'
                                                     onClick={() => {
                                                         setFilter({
                                                             ...filter,
@@ -128,13 +156,28 @@ export default function Table({ params }: { params: { id: string } }) {
                             )
                         })}
                     </div>
-                )
+                ),
+                return: {
+                    path: "/admin/texas/waiters"
+                }
             }}
             rightNavigation={{
                 content: (
-                    <div >
-                        <h1> oi</h1>
-                    </div>
+                    <RightOrderDisplay
+                        menu={menuData}
+                        order={order}
+                        resetOrder={resetOrder}
+                        updateOrderQuantity={updateOrderQuantity}
+                        deleteOrder={deleteOrder}
+                        getOneOrderTotal={getOneOrderTotal}
+                        getOrderTotal={getOrderTotal}
+                        replaceOrder={replaceOrder}
+                        table={getTableById(params?.id) || {} as ITable}
+                        createOrder={createOrder}
+                        emit={emit}
+                        sections={sections?.data}
+                        orderControllers={getFilteredOrderControllers({ table_id: params?.id })}
+                    />
                 ),
                 icon: <div />,
                 title: 'Shopping Cart',
@@ -142,7 +185,7 @@ export default function Table({ params }: { params: { id: string } }) {
             }}
             main={{
                 header: (
-                    <div className='grid grid-row-2 rounded-lg w-full h-full p-2 px-4 bg-background-soft'>
+                    <div className='grid grid-row-2 gap-2 rounded-lg w-full h-full p-2 px-4 bg-background-soft'>
                         <div className='flex gap-4 scrollbar-thin overflow-auto'>
                             {Object.values(Allergens).map(a => {
                                 return (
@@ -173,27 +216,33 @@ export default function Table({ params }: { params: { id: string } }) {
                         <SearchInput
                             value={filter?.short_title || ''}
                             placeholder="Search for a menu item"
-                            onSearchChange={(e) => setMenu({
-                                menu: menuData,
-                                menuFilter: {
-                                    short_title: e
-                                }
+                            onSearchChange={(e) => setFilter({
+                                ...filter,
+                                short_title: e
                             })}
+                            debounceDelay={0}
+                            custom="min-w-full"
                         />
                     </div>
                 )
             }}
         >
-            <div className='grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6'>
-                {menu?.map((m) => (
+            <div className='grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4'>
+                {getFilteredOrderSystemMenu({
+                    menuItems: menuData || [],
+                    menuFilter: filter
+                })?.map((m) => (
                     <MenuOrderItem
                         menu={m}
                         key={m?.id}
-                        bg={''}
                         menuData={menuData}
+                        getFilteredOrderSystemMenu={getFilteredOrderSystemMenu}
+                        setOrder={setOrder}
+                        updateOrderQuantity={updateOrderQuantity}
+                        order={order}
+                        getOneOrderTotal={getOneOrderTotal}
                     />
                 ))}
-
             </div>
         </LayoutFrame>
     )

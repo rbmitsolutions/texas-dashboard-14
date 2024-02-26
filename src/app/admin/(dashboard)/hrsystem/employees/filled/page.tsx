@@ -131,7 +131,7 @@ export default function Filled() {
                     className: 'flex justify-end gap-4 items-center',
                 }}
             >
-                <FilledUserTable data={filledUsers?.data} columns={filledUserColumnsTable} />
+                <FilledUserTable data={filledUsers?.data || []} columns={filledUserColumnsTable} />
             </Wrap>
         </div>
     )

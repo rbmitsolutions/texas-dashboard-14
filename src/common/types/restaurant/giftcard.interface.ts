@@ -3,11 +3,12 @@ export interface IGiftCards {
   id: string;
 
   value: number;
+
   email?: string;
   name?: string;
-  last_name?: string;
   contact_number?: string;
   message?: string;
+  last_name?: string;
 
   name_to?: string;
   address_to?: string;

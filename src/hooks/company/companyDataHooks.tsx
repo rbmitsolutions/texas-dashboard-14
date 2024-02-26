@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { api } from "@/common/libs/axios/api";
 
 //interface
-import { ICompanyAllFormsDataReponse, ICompanyDataQueryType, ICompanyDetailsResponse, IFormSectionGetAllResponse, IFormsGetAllResponse, IGETAllDepartamentsResponse, IGETAllDutiesResponse, IGETAllShiftsResponse, IGETCompanyAllFilesResponse, IGETCompanyDataQuery, IGETCompanyResponse, IGETCompanyRosterResponse, IGETRolesResponse, IGETRosterTaskResponse, IGetAllTransactionsResponse, IHaccpReportsResponse, IRequestsGetAllResponse, IRosterPageResponse, IRosterPaymentPageResponse } from "./IGetCompanyDataHooks.interface";
+import { ICompanyAllFormsDataReponse, ICompanyDataQueryType, ICompanyDetailsResponse, IFormSectionGetAllResponse, IFormsGetAllResponse, IGETAllDepartamentsResponse, IGETAllDutiesResponse, IGETAllShiftsResponse, IGETCompanyAllFilesResponse, IGETCompanyDataQuery, IGETCompanyResponse, IGETCompanyRosterResponse, IGETHistoryResponse, IGETRolesResponse, IGETRosterTaskResponse, IGetAllTransactionsResponse, IHaccpReportsResponse, IRequestsGetAllResponse, IRosterPageResponse, IRosterPaymentPageResponse } from "./IGetCompanyDataHooks.interface";
 import { IDELETECompanyDataBody, IDELETECompanyDataQueryType } from "./IDeleteCompanyDataHooks.interface";
 import { IPOSTCompanyBody, IPOSTCompanyDataQueryType, IPOSTCompanyDataRerturn } from "./IPostCompanyDataHooks.interface";
 import { IPUTCompanyBody, IPUTCompanyDataQueryType } from "./IPutCompanyDataHooks.interface";
@@ -106,6 +106,7 @@ export function useGETCompanyDataHooks({
         companyRosterPaymentPage: data as IRosterPaymentPageResponse,
         companyAllTransacations: data as IGetAllTransactionsResponse,
         compnayTransaction: data as ITransactions,
+        companayAllHistory: data as IGETHistoryResponse,
 
         isCompanyDataFetching: isFetching,
         companyDataError: error ? true : false,

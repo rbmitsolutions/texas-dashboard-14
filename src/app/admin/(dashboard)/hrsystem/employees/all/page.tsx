@@ -110,7 +110,7 @@ export default function Employees() {
                             key={d.id}
                             departament={d}
                             columns={userColumnsTable}
-                            data={users}
+                            data={users || []}
                         />
                     )
                 })}

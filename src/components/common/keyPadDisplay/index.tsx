@@ -33,8 +33,8 @@ export const KeyPadDisplay = ({ displayValue, onChange, buttonClassName, deleteB
     }
 
     return (
-        <div className="p-2 mt-4">
-            <div className={cn("flex justify-center items-center bg-background-soft h-14 rounded-lg shadow-lg", displayClassName)}>
+        <div className="p-2">
+            <div className={cn("flex justify-center items-center bg-background-soft h-16 rounded-lg shadow-lg", displayClassName)}>
                 <h2 className="text-3xl">{displayValue || '  -  '}</h2>
             </div>
             <div className="mt-6">
@@ -64,7 +64,7 @@ export const KeyPadDisplay = ({ displayValue, onChange, buttonClassName, deleteB
                         onClick={() => handleChange(0, true)}
                         onKeyDown={(e) => handleKeyDown(e as React.KeyboardEvent<HTMLButtonElement>)}
                         disabled={isDisabled || isLoading}
-                        className={cn("w-full h-16 text-2xl bg-red-700 hover:bg-red-600 rounded-lg shadow-lg", deleteButtonClassName)}
+                        className={cn("w-full h-16 text-2xl bg-red-500 hover:bg-red-600 rounded-lg shadow-lg", deleteButtonClassName)}
                         isLoading={isLoading}
                     >
                         {!isLoading && 'Del'}

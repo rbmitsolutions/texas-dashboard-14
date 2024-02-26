@@ -5,9 +5,10 @@ import { Badge } from "@/components/ui/badge"
 
 interface InfoBadgeProps {
     status: IBookingStatus | IReviewsType | IRequestsStatus | 'done' | 'pending'
+    className?: string
 }
 
-export default function InfoBadge({ status }: InfoBadgeProps) {
+export default function InfoBadge({ status, className }: InfoBadgeProps) {
 
     const statusColor = (status: InfoBadgeProps['status']) => {
         switch (status.toLocaleLowerCase().replace(" ", "")) {
@@ -38,7 +39,7 @@ export default function InfoBadge({ status }: InfoBadgeProps) {
     }
 
     return (
-        <Badge className={cn('capitalize', statusColor(status))}>
+        <Badge className={cn('capitalize', className, statusColor(status))}>
             {status?.toLowerCase()}
         </Badge>
     )

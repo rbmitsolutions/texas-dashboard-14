@@ -142,26 +142,20 @@ export interface IGETOrderControllerQuery {
 
     table?: "1";
     finished_table?: "1";
-    orders?:
-    | {
-      type: string[];
-      status: IOrderStatus;
+    includes?: {
+      orders?: '1'
     }
-    | "1";
   };
   all?: {
     table_id?: string;
-    finished_table_id?: string
-    orders?:
-    | {
-      status?: IOrderStatus;
-      type?: string[];
-      menu_type?: string[];
+    finished_table_id?: string | null;
+
+    includes?: {
+      orders?: '1'
     }
-    | "1";
 
     orderBy?: {
-      key: keyof IOrderController
+      key: keyof IOrderController;
       order: "asc" | "desc";
     };
 
@@ -172,7 +166,6 @@ export interface IGETOrderControllerQuery {
     pagination?: IQueryPagination;
   };
 }
-
 export interface IGetAllClientsResponse {
   data: IClient[];
   pagination: IPaginationResponse
@@ -244,10 +237,11 @@ export type IGETMenuOrderSystemResponse = {
   to_order: boolean
   f_options: { id: string }[]
   go_with_ids: string[]
+  mn_type: IMenuType
   mn_type_id: string
   options_priority: number
   to_print_ids: string[]
-  value: number //center
+  value: number
   add_ons: IMenuAddOns[]
   allergens: string[]
 }
@@ -530,16 +524,22 @@ export interface IGETBookingPageTimesOpenReturn {
     },
     spare: IGETSpareTablesReturn[]
   }
+
   bookings: {
     bookings: IGETBookingsPageReturn[]
     canceled_not_shown: IBookings[]
   }
 }
 export interface IBookingPageResponse {
+  id: string
   date: Date;
   short_day: string;
   waiting_list: GetBookingsWithNoTablesReturn[]
   times_open: IGETBookingPageTimesOpenReturn[]
+  sections_open: {
+    id: string,
+    title: string
+  }[]
 }
 
 export interface IGETOpenDaysQuery {
@@ -548,7 +548,7 @@ export interface IGETOpenDaysQuery {
   }
   byShortDay?: {
     short_day: string;
-    date?: Date;
+    date: Date;
   };
   all?: {
     pagination?: IQueryPagination
@@ -658,16 +658,18 @@ export interface ITimesOpenWebsiteConfigResponse {
   disabled: boolean;
 }
 
-
 export interface IGETTimesOpenBody {
-  websiteConfig: {
+  all?: {
+    base: '1'
+  }
+  websiteConfig?: {
     date: Date
     amount_per_table: number
   }
 }
 
 
-export type IGETRestaurantResponse = IGETAllBookingsResponse | IBookings | IGETTablesAllResponse | ITable | IAllOrdersResponse | IOrder | IAllOrderControllerResponse | IOrderController | IGetAllClientsResponse | IClient | IGETSectionResponse | ISection | IGETMenuResponse | IMenu | IFinishedTableAllResponse | IFinishedTable | IGETAllReviewsResponse | IReviews | IGiftCardReponse | IGiftCards | IGETAuthorizedQuery | IAllSpecialDaysResponse | ISpecialDays | IOpenDaysGetAllResponse | IBookingDays | IGETPrintersResponse | IGETMenuSectionsResponse | IGETMenuTypesResponse | IGETMenuAddOnsResponse | IGETMenuOrderSystemResponse[] | ITimesOpenWebsiteConfigResponse | IBookingPageResponse
+export type IGETRestaurantResponse = IGETAllBookingsResponse | IBookings | IGETTablesAllResponse | ITable | IAllOrdersResponse | IOrder | IAllOrderControllerResponse | IOrderController | IGetAllClientsResponse | IClient | IGETSectionResponse | ISection | IGETMenuResponse | IMenu | IFinishedTableAllResponse | IFinishedTable | IGETAllReviewsResponse | IReviews | IGiftCardReponse | IGiftCards | IGETAuthorizedQuery | IAllSpecialDaysResponse | ISpecialDays | IOpenDaysGetAllResponse | IBookingDays | IGETPrintersResponse | IGETMenuSectionsResponse | IGETMenuTypesResponse | IGETMenuAddOnsResponse | IGETMenuOrderSystemResponse[] | ITimesOpenWebsiteConfigResponse | IBookingPageResponse | ITimesOpen[]
 
 export type IRestaurantDataQueryType = 'BOOKINGS' | 'TABLES' | "ORDER" | "ORDER_CONTROLLER" | 'CLIENTS' | "SECTIONS" | "MENU" | "FINISHED_TABLE" | "REVIEWS" | "GIFTCARD" | "AUTHORIZED_DEVICES" | 'SPECIAL_DAYS' | 'OPEN_DAYS' | 'PRINTERS' | 'MENU_SECTION' | 'MENU_TYPE' | 'MENU_ADD_ONS' | 'TIMES_OPEN'
 
@@ -689,6 +691,6 @@ export interface IGETRestaurantDataQuery {
   menu_sections?: IGETMenuSectionsQuery
   menu_types?: IGETMenuTypesQuery
   menu_add_ons?: IGETMenuAddOnsQuery
-  websiteConfig?: IGETTimesOpenBody
+  times_open?: IGETTimesOpenBody
 }
 

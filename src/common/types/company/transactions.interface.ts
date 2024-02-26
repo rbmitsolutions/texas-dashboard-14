@@ -31,7 +31,7 @@ export enum TransactionsDirection {
   VOUCHER = "voucher",
 } 
 export enum TransactionsStatus {
-  COMPLETED = "completed",
+  CONFIRMED = "confirmed",
   CANCELLED = "cancelled",
   REFUNDED = "refunded",
 }

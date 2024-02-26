@@ -2,8 +2,7 @@ import { IToken } from "@/common/types/auth/auth.interface";
 import { getAuthToken } from "@/common/utils/tokens";
 import axios from "axios";
 
-//todo: remove ctx
-export function getApiClient(ctx?: any) {
+export function getApiClient() {
   const token: IToken | null = getAuthToken();
 
   const api = axios.create({

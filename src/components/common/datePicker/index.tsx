@@ -128,14 +128,15 @@ DatePickerWithRange.Skeleton = function PaginationSkeleton() {
 }
 
 export interface IDatePicker {
+    value: Date
+    disabled?: boolean
     className?: string
     onConfirm: (date: Date | undefined) => void
     fromDate?: Date
     toDate?: Date
-    value: Date
 }
 
-export function DatePicker({ className, fromDate, toDate, value, onConfirm }: IDatePicker) {
+export function DatePicker({ className, fromDate, disabled = false, toDate, value, onConfirm }: IDatePicker) {
     const [preRendered, setPreRendered] = useState(false);
     const [date, setDate] = useState<Date | undefined>(value)
 
@@ -161,6 +162,7 @@ export function DatePicker({ className, fromDate, toDate, value, onConfirm }: ID
                         "justify-start text-left font-normal",
                         !date && "text-muted-foreground"
                         , className)}
+                    disabled={disabled}
                 >
                     <Icon name='Calendar' size={14} className='mr-2' />
                     {date ? formatDate({

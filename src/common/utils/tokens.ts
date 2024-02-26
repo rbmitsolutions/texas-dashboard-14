@@ -4,9 +4,6 @@ import { api } from "../libs/axios/api";
 //interfaces
 import { IToken } from "../types/auth/auth.interface";
 
-//todo:
-// import { cookies } from 'next/headers'
-
 export function getAuthToken(): IToken | null {
   const data = parseCookies();
 

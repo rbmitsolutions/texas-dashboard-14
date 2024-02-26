@@ -8,6 +8,7 @@ import { ISpecialDays, ITimesOpen } from "@/common/types/restaurant/config.inter
 import { ISection, ITable } from "@/common/types/restaurant/tables.interface";
 import { IAuthorizedDevices } from "@/common/types/restaurant/authorizedDevices.interface";
 import { IPrinters } from "@/common/types/restaurant/printers.interface";
+import { IAddOnsCreateOrder } from "@/store/texas/order";
 
 export interface IPOSTBookingsBody {
   status: IBookingStatus
@@ -39,43 +40,46 @@ export interface IPOSTOrderControllerBody {
 
 
 export interface ICreateOrder {
-  status: IOrderStatus
-  quantity: number;
+  status: IOrderStatus;
+  quantity: number
 
-  // type: IType
-  // menu_type: IMenuType
+  mn_type: string
 
-  price: number;
-  description: string;
+  price: number
 
-  menu: string;
-  menu_id: string;
+  menu: string,
+  menu_id: string
+  menu_short_title: string
+
+  add_ons: IAddOnsCreateOrder[]
+
+  to_print_ids: string[]
 }
 
 
 export interface IPOSTOrderBody {
   order?: {
     status: IOrderStatus;
-    quantity: number;
+    quantity: number
+  
+    mn_type: string
+  
+    price: number
+  
+    menu: string,
+    menu_id: string
+    menu_short_title: string
+  
+    add_ons: IAddOnsCreateOrder[]
+  
+    to_print_ids: string[]
 
-    // type: IType;
-    // menu_type: IMenuType;
-
-    price: number;
-    description: string;
-
-    menu: string;
-    menu_id: string;
-
-    order_controller_id: string;
+    order_controller_id: string
   };
   many?: {
     order_controller: IPOSTOrderControllerBody
     update_table: IPUTTablesBody
     orders: ICreateOrder[]
-    to_print?: {
-      ip: 'All' | string
-    }
   };
 }
 
@@ -104,7 +108,7 @@ export interface IPOSTGiftCardBody {
   stripe_secret?: string;
   status?: IGiftCardStatus
   token?: string;
-  transaction?: IPOSTTransactionsBody
+  transaction?: IPOSTTransactionsBody['one']
 }
 
 export interface IPOSTAuthorizedDevicesBody {
@@ -112,18 +116,20 @@ export interface IPOSTAuthorizedDevicesBody {
 }
 
 export interface IPOSTSpecialDaysBody {
-  date: string;
+  date: Date;
   is_disabled: boolean;
-  times_open: ITimesOpen[];
+  times_open_ids: string[]
+  section_ids: string[]
 }
 
 export interface IPOSTTimesOpenBody {
-  day_id: string;
   open: string;
   close: string;
   real_time: string;
-  tables_available: any;
   title: string;
+  base: boolean
+  days_ids?: string[];
+  special_days_ids?: string[];
 }
 
 export interface IPOSTPrinterBody {
@@ -194,7 +200,7 @@ export interface IPOSTRestaurantBody {
   section?: IPOSTSectionBody
   giftcard?: IPOSTGiftCardBody
   authorizedDevice?: IPOSTAuthorizedDevicesBody
-  specialDays?: IPOSTSpecialDaysBody
+  specialDay?: IPOSTSpecialDaysBody
   timesOpen?: IPOSTTimesOpenBody
   printer?: IPOSTPrinterBody
 

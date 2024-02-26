@@ -14,15 +14,11 @@ export interface ITimesOpen {
   close: string;
   title: string;
   real_time: string;
-  // tables_available: ITablesAvailable[]; //todo: remove it the tables will be taken from the section
 
-  // active: boolean;//todo: remove it
+  active: boolean;
 
-  days_id?: string;
-  days?: IBookingDays;
-
-  special_day_id?: string;
-  special_day?: ISpecialDays;
+  days: IBookingDays[]
+  special_day: ISpecialDays[]
 
   created_at: Date;
   updated_at: Date;
@@ -44,7 +40,7 @@ export interface ISpecialDays {
   date: Date;
   is_disabled: boolean;
   times_open: ITimesOpen[];
-  section: ISection[]
+  sections_open: ISection[]
 
   created_at: Date;
   updated_at: Date;

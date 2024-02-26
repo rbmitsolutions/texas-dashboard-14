@@ -37,7 +37,7 @@ export enum EndPointsTypes {
     RESTAURANT_SPECIAL_DAYS_ENDPOINT = '/restaurant/special-days',
     RESTAURANT_TIMES_OPEN_ENDPOINT = '/restaurant/times-open',
     RESTAURANT_OPEN_DAYS_ENDPOINT = '/restaurant/open-days',
-    RESTAURANT_GIFTCARD_ENDPOINT = '/restaurant/giftcard',
+    RESTAURANT_GIFTCARD_ENDPOINT = '/restaurant/giftcards',
     RESTAURANT_SECTIONS_ENDPOINT = '/restaurant/sections',
     RESTAURANT_BOOKING_ENDPOINT = '/restaurant/bookings',
     RESTAURANT_TABLES_ENDPOINT = '/restaurant/tables',
@@ -80,5 +80,7 @@ export enum EndPointsTypes {
 
 export enum RedirectTo {
     USER_PROFILE = '/admin/hrsystem/employees/all',
-    CLIENT_PROFILE = '/admin/restaurant/clients'
+    CLIENT_PROFILE = '/admin/restaurant/clients',
+    TABLE_ORDER = '/admin/texas/waiters',
+    TABLE_RECEPTION = '/admin/texas/reception'
 }

@@ -30,21 +30,25 @@ const routers: IRoute[] = [
       Permissions.BOOKING_READER
     ],
     collapse: false,
-    auth_device: true,
+    auth_device: true
   },
-  // {
-  //   name: "Reception",
-  //   path: "",
-  //   icon: <Icon name='AArrowDown' size={14} />,
-  //   // icon: <Wrench />,
-  //   layout: "/admin/texas/reception",
-  //   authorization: ["my_profile"],
-  //   collapse: false,
-  // },
+  {
+    name: "Reception",
+    path: "",
+    icon: <Icon name='Computer' size={14} />,
+    layout: "/admin/texas/reception",
+    authorization: [
+      Permissions.ADMIN,
+      Permissions.ADMIN_GHOST,
+      Permissions.RECEPTION,
+    ],
+    collapse: false,
+    auth_device: true
+  },
   {
     name: "Waiters",
     path: "",
-    icon: <Icon name='AArrowDown' size={14} />,
+    icon: <Icon name='CookingPot' size={14} />,
     // icon: <Wrench />,
     layout: "/admin/texas/waiters",
     authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST, Permissions.MENU],

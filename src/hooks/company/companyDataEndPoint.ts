@@ -182,4 +182,14 @@ export const companyEndPoint = {
         createSucess: 'Document created successfully!',
         createError: "Document creation failed!",
     },
+    HISTORY: {
+        url: EndPointsTypes['SERVICES_HISTORY_ENDPOINT'],
+        queryParams: 'history',
+        updateSucess: "History updated successfully!",
+        updateError: "History update failed!",
+        deleteSucess: "History deleted successfully!",
+        deleteError: "History delete failed!",
+        createSucess: 'History created successfully!',
+        createError: "History creation failed!",
+    },
 }

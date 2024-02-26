@@ -162,9 +162,6 @@ export default function CreateRoleForm({ createRole, onUpdate, isLoading, depart
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle className='capitalize'>{form.watch('title') ? form.watch('title') : 'Create Role'}</DialogTitle>
-                    <DialogDescription>
-                        Anyone who has this link will be able to view this.
-                    </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
                     <form
