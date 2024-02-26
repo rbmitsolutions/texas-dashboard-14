@@ -143,20 +143,23 @@ const routers: IRoute[] = [
         ],
         auth_device: true,
       },
-      // {
-      //   name: "Giftcard",
-      //   path: "/giftcard",
-      //   icon: <Icon name='AArrowDown' size={14} />,
-      //   layout: "/admin/restaurant",
-      //   authorization: ["admin", 'admin-ghost'],
-      // },
+      {
+        name: "Giftcard",
+        path: "/giftcard",
+        icon: <Icon name='AArrowDown' size={14} />,
+        layout: "/admin/restaurant",
+        authorization: [
+          Permissions.ADMIN,
+          Permissions.BOOKING_ADM
+        ],
+        auth_device: true,
+      },
       {
         name: "Menu",
         path: "/menu",
         icon: <Icon name='CookingPot' size={14} />,
         layout: "/admin/restaurant",
         collapse: true,
-        // authorization: ["admin", 'admin-ghost', 'menu'],
         authorization: [
           Permissions.ADMIN,
           Permissions.ADMIN_GHOST,
