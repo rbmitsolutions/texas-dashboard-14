@@ -329,13 +329,18 @@ const routers: IRoute[] = [
             ],
             auth_device: true,
           },
-          // {
-          //   name: "Config",
-          //   path: "/config",
-          //   icon: <Icon name='AArrowDown' size={14} />,
-          //   layout: "/admin/hrsystem/forms",
-          //   authorization: ["admin", 'admin-ghost', 'haccp_admin'],
-          // },
+          {
+            name: "Forms",
+            path: "/forms",
+            icon: <Icon name='FileText' size={14} />,
+            layout: "/admin/hrsystem/forms",
+            authorization: [
+              Permissions.ADMIN,
+              Permissions.ADMIN_GHOST,
+              Permissions.HACCP_ADMIN
+            ],
+            auth_device: true
+          },
         ],
       },
       {

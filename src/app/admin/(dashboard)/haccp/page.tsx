@@ -1,36 +1,50 @@
-'use server'
-import { getFormSections } from "@/common/libs/company/actions/formsSections"
-import { getForms } from "@/common/libs/company/actions/forms"
+'use client'
+import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
 import HaccpContainer from "./_components/haccpContainer"
 
-//interface
-import { IFormSectionGetAllResponse, IFormsGetAllResponse } from "@/hooks/company/IGetCompanyDataHooks.interface"
+export default function Haccp() {
+    const {
+        companyAllForms: forms
+    } = useGETCompanyDataHooks({
+        query: 'FORMS',
+        defaultParams: {
+            forms: {
+                all: {
+                    pagination: {
+                        take: 100,
+                        skip: 0
+                    },
+                    orderBy:{
+                         key: 'title',
+                        order: 'asc'
+                    }
+                }
+            }
+        }
+    })
 
-export default async function Haccp() {
-    const forms = await getForms({
-        all: {
-            pagination: {
-                take: 500,
-                skip: 0
+    const {
+        companyAllFormSection: formsSections
+    } = useGETCompanyDataHooks({
+        query: 'FORM_SECTION',
+        defaultParams: {
+            formSections: {
+                all: {
+                    pagination: {
+                        take: 100,
+                        skip: 0
+                    },
+                    include: {
+                        form: '1'
+                    },
+                }
             }
         }
-    }) as IFormsGetAllResponse
-    
-    const formsSections = await getFormSections({
-        all: {
-            pagination: {
-                take: 500,
-                skip: 0
-            },
-            include: {
-                form: '1'
-            }
-        }
-    }) as IFormSectionGetAllResponse
+    })
 
     return (
         <div>
-            <HaccpContainer forms={forms?.data} formsSections={formsSections?.data} />
+            <HaccpContainer forms={forms?.data || []} formsSections={formsSections?.data || []} />
         </div>
     )
 }
