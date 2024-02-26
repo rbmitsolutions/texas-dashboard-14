@@ -136,7 +136,7 @@ export default function CreateTimeOpenForm({ createTimesOpen, isLoading, openDay
                                         <Input
                                             type='time'
                                             min={toMinTime}
-                                            max='23:30'
+                                            max='23:59'
                                             disabled={form.watch('from') === ''}
                                             {...field}
                                         />

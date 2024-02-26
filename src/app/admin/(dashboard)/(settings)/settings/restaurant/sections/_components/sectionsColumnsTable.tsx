@@ -94,7 +94,7 @@ export const sectionsColumnsTable = ({
                                             id: t?.id
                                         }
                                     })}
-                                    isDisabled={t?.is_open}
+                                    isDisabled={true}
                                 >
                                     <div
                                         className='flex items-center bg-background-soft rounded-lg cursor-pointer p-2 hover:bg-red-300 dark:hover:bg-red-800'
