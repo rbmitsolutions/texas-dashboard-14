@@ -118,7 +118,7 @@ export default function BookingDetails({ booking, isUserAuth, deleteBooking, upd
             onOpenChange={onOpenChange}
         >
             <SheetTrigger asChild>
-                <div className={cn('flex rounded-md p-2 cursor-pointer', bgColor)} >
+                <div className={cn('flex relative rounded-md p-2 cursor-pointer', bgColor)} >
                     <div className='flex flex-col gap-[3px] w-full justify-center max-w-[105px] line-clamp-1'>
                         <div className='flex gap-2'>
                             <IconText
@@ -134,7 +134,7 @@ export default function BookingDetails({ booking, isUserAuth, deleteBooking, upd
                                     name='Star'
                                     fill="blue"
                                     size={14}
-                                    className='text-blue-400'
+                                    className='absolute top-0 right-0 text-blue-400'
                                 />
                             }
                         </div>
@@ -262,10 +262,10 @@ export default function BookingDetails({ booking, isUserAuth, deleteBooking, upd
                             variant={tableSelected?.is_open ? 'destructive' : 'green'}
                             leftIcon="CheckCircle"
                             className='w-full h-14'
-                            disabled={tableSelected?.is_open}
+                            disabled={tableSelected?.is_open || !tableSelected}
                             onClick={() => handleArriveBooking(booking, tableSelected)}
                         >
-                            {tableSelected?.is_open ? `${tableSelected?.section?.title} - ${tableSelected?.number} Table Is Busy` : `${tableSelected?.section?.title} - ${tableSelected?.number} is Available`}
+                            {!tableSelected ? 'Slect a Table' : tableSelected?.is_open ? `${tableSelected?.section?.title} - ${tableSelected?.number} Table Is Busy` : `${tableSelected?.section?.title} - ${tableSelected?.number} is Available`}
                         </Button>
                     </SheetFooter>
                 }

@@ -259,7 +259,7 @@ export default function BookingPage() {
                 <div className='flex'>
                     {bookingPage?.times_open?.map(time => {
                         return (
-                            <div key={time?.id} className='flex flex-col w-[120px] min-w-[120px] min-h-[95vh] px-1 odd:bg-background-soft'>
+                            <div key={time?.id} className='flex flex-col w-[120px] min-w-[130px] min-h-[95vh] px-1 odd:bg-background-soft'>
                                 <BookingHeader
                                     day_date={bookingPage?.date}
                                     day_id={bookingPage?.id}
@@ -268,6 +268,22 @@ export default function BookingPage() {
                                 />
                                 <div className='flex-col-container gap-2 mt-4'>
                                     {bookingPagefilter(filter, time?.bookings?.bookings).map(b => {
+                                        return (
+                                            <BookingDetails
+                                                key={b?.id}
+                                                booking={b}
+                                                deleteBooking={deleteBooking}
+                                                updateBooking={updateBooking}
+                                                isUserAuth={isUserAuth}
+                                                toTable={{
+                                                    timeOpen: time,
+                                                    sections: bookingPage?.sections_open || [],
+                                                }}
+                                                isUpdateBookingLoading={isUpdateBookingLoading || isDeleteBookingLoading}
+                                            />
+                                        )
+                                    })}
+                                    {bookingPagefilter(filter, time?.bookings?.with_no_tables  as unknown as IGETBookingsPageReturn[]).map(b => {
                                         return (
                                             <BookingDetails
                                                 key={b?.id}

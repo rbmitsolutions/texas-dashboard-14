@@ -118,9 +118,6 @@ export interface IGETOrdersQuery {
   all?: {
     status?: IOrderStatus
 
-    // type?: IType
-    // menu_type?: IMenuType
-
     menu_id?: string;
     order_controller?: "1";
     orderBy?: {
@@ -528,6 +525,7 @@ export interface IGETBookingPageTimesOpenReturn {
   bookings: {
     bookings: IGETBookingsPageReturn[]
     canceled_not_shown: IBookings[]
+    with_no_tables: IBookings[]
   }
 }
 export interface IBookingPageResponse {
