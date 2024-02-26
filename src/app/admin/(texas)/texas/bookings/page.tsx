@@ -166,6 +166,7 @@ export default function BookingPage() {
                             deleteBooking={deleteBooking}
                             updateBooking={updateBooking}
                             isUserAuth={isUserAuth}
+                            isLoading={isUpdateBookingLoading || isDeleteBookingLoading}
                         />
                         <SearchInput
                             placeholder="Name"

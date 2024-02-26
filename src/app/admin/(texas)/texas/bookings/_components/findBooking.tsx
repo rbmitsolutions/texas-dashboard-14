@@ -29,10 +29,11 @@ interface FindBookingProps {
     deleteBooking: UseMutateFunction<void, any, IDELETERestaurantDataBody, unknown>
     updateBooking: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
     isUserAuth: boolean
+    isLoading: boolean
 }
 
 
-export default function FindBooking({ updateBooking, iconOnly, isUserAuth, deleteBooking }: FindBookingProps): JSX.Element {
+export default function FindBooking({ updateBooking, iconOnly, isUserAuth, deleteBooking, isLoading }: FindBookingProps): JSX.Element {
     const {
         restaurantAllBookings: bookings,
         setGETRestaurantDataParams: setBookingsParams,
@@ -154,6 +155,7 @@ export default function FindBooking({ updateBooking, iconOnly, isUserAuth, delet
                                     updateBooking={updateBooking}
                                     deleteBooking={deleteBooking}
                                     isUserAuth={isUserAuth}
+                                    isUpdateBookingLoading={isLoading}
                                 />
                             )
                         })}
