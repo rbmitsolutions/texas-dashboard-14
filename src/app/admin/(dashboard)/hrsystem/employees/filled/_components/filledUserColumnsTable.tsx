@@ -1,6 +1,7 @@
 "use client"
 
 import Icon from "@/common/libs/lucida-icon"
+import { RedirectTo } from "@/common/types/routers/endPoints.types"
 import { IUser } from "@/common/types/user/user.interface"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ColumnDef } from "@tanstack/react-table"
@@ -61,7 +62,7 @@ export const filledUserColumnsTable: ColumnDef<IUser>[] = [
                 <div className="flex-container-center">
                     <Link
                         className='flex items-center justify-center bg-primary text-primary-foreground shadow hover:bg-primary/80 rounded-md h-7 w-7'
-                        href={`/admin/hrsystem/employees/all/${row?.original?.id}`}>
+                        href={`${RedirectTo.USER_PROFILE}/${row?.original?.id}`}>
                         <Icon name='ChevronRight' size={16} />
                     </Link>
                 </div>

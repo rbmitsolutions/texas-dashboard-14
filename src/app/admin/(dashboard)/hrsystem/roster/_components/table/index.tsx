@@ -26,6 +26,7 @@ import { IDuties, IShifts } from "@/common/types/company/companyDetails.interfac
 import { IForm } from "@/common/types/company/form.interface";
 import { ImagesPath } from "@/common/types/imgs";
 import { IPUTCompanyBody } from "@/hooks/company/IPutCompanyDataHooks.interface";
+import { RedirectTo } from "@/common/types/routers/endPoints.types";
 
 export type IWeekDays = { date: string; day: string; }[]
 
@@ -141,7 +142,7 @@ export function RosterTableMemo({ users, duties, shifts, forms, createRosterTask
                                             size='iconExSm'
                                         />
                                         <LinkButton
-                                            href={`/admin/hrsystem/employees/all/${user?.id}`}
+                                            href={`${RedirectTo.USER_PROFILE}/${user?.id}`}
                                             className="h-6 w-6 bg-background text-black dark:text-white hover:bg-foreground/10"
                                         />
                                     </div>

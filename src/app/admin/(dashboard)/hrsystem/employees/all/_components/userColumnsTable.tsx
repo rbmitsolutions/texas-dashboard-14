@@ -1,4 +1,5 @@
 "use client"
+import { RedirectTo } from "@/common/types/routers/endPoints.types"
 import { IUser } from "@/common/types/user/user.interface"
 import LinkButton from "@/components/common/linkButton"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -77,7 +78,7 @@ export const userColumnsTable: ColumnDef<IUser>[] = [
             return (
                 <div className="flex-container-center">
                     <LinkButton 
-                        href={`/admin/hrsystem/employees/all/${row?.original?.id}`}
+                        href={`${RedirectTo.USER_PROFILE}/${row?.original?.id}`}
                     />
                 </div>
             )

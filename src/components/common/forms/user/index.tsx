@@ -6,6 +6,7 @@ import ProfileForm from "./profileForm";
 //components
 import EmergencyContactForm from "./_components/emergencyContactForm";
 import UpdatePasswordForm from "./_components/updatePasswordForm";
+import { DeleteDialogButton } from "../../deleteDialogButton";
 import VisaDetailsForm from "./_components/visaDetailsForm";
 import BankDetailsForm from "./_components/bankDetailsForm";
 import UpdateRoleForm from "./_components/updateRoleForm";
@@ -45,10 +46,33 @@ export default function UserProfile({ user, isAdmin, roles, onUpdate }: UserProf
                         {roles &&
                             <UpdateRoleForm user={user} onUpdate={onUpdate} roles={roles} />
                         }
-                        <Button
-                            leftIcon="FileArchive"
-                            variant='destructive'
-                        >File Employee</Button>
+                        <DeleteDialogButton
+                            buttonText="File"
+                            onDelete={async () => await onUpdate({
+                                details: {
+                                    id: user?.id,
+                                    status: 'Filled'
+                                }
+                            })}
+                            undo={user?.status === 'Filled' ? {
+                                buttonText: 'Unfile',
+                                onUndo: async () => await onUpdate({
+                                    details: {
+                                        id: user?.id,
+                                        status: 'Working'
+                                    }
+                                }),
+                                description: 'This user will be unfiled and will be able to log in again, his password will be the default when you first log in.'
+                            } : undefined}
+                        >
+                            <Button
+                                leftIcon={user?.status === 'Filled' ? 'Undo' : 'FileArchive'}
+                                variant={user?.status === 'Filled' ? 'green' : 'destructive'}
+                            >
+                                {user?.status === 'Filled' ? 'Unfile' : 'File Employee'}
+                            </Button>
+                        </DeleteDialogButton>
+
                     </>
                 }
             </div>

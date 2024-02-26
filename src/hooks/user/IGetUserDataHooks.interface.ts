@@ -19,7 +19,7 @@ export interface IGetAllUserResponse {
 export interface IUserProfileCompletedResponse {
     id: string
     password_updated: boolean
-  }
+}
 
 export interface IGETUserQuery {
     all?: {
@@ -29,6 +29,7 @@ export interface IGETUserQuery {
         include?: {
             role?: "1";
             contract?: "1";
+            job_application?: "1";
             roster?: {
                 available?: '1'
                 gte: Date;

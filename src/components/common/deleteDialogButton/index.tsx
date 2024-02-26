@@ -14,11 +14,17 @@ import { Button } from "@/components/ui/button"
 
 interface DeleteDialogButtonProps {
     onDelete: () => void
+    buttonText?: string
     isDisabled?: boolean
     children?: React.ReactNode
+    undo?: {
+        buttonText: string
+        onUndo: () => void
+        description: string
+    }
 }
 
-export function DeleteDialogButton({ isDisabled, onDelete, children }: DeleteDialogButtonProps) {
+export function DeleteDialogButton({ isDisabled, onDelete, buttonText, undo, children }: DeleteDialogButtonProps) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -36,20 +42,19 @@ export function DeleteDialogButton({ isDisabled, onDelete, children }: DeleteDia
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This action cannot be undone
+                        {undo ? undo.description : 'This action cannot be undone'}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction asChild>
                         <Button
-                            leftIcon="Trash"
-                            variant='destructive'
-                            onClick={onDelete}
-                            className='bg-red-600'
+                            leftIcon={undo ? 'Undo' : 'Trash'}
+                            onClick={undo ? undo?.onUndo : onDelete}
+                            className={undo ? '!bg-green-400' : '!bg-red-400'}
                             disabled={isDisabled}
                         >
-                            Delete
+                            {undo ? undo.buttonText : buttonText ? buttonText : 'Delete'}
                         </Button>
                     </AlertDialogAction>
                 </AlertDialogFooter>

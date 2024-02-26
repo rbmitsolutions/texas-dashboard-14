@@ -24,9 +24,11 @@ import { Input } from "@/components/ui/input";
 
 //interface
 import { IRoles } from "@/common/types/company/companyDetails.interface";
+import { IUser } from "@/common/types/user/user.interface";
 
 //hooks
 import { usePOSTCompanyDataHooks } from "@/hooks/company/companyDataHooks";
+import UserApplication from "./userApplication";
 
 interface HireFormProps {
     roles: IRoles[]
@@ -60,6 +62,12 @@ export default function HireForm({ roles }: HireFormProps): JSX.Element {
             visa_needed: false,
         },
     });
+
+    const handleSelectUser = (user: IUser) => {
+        form.setValue('name', user.name)
+        form.setValue('email', user.email)
+        window.scrollTo(0, 0)
+    }
 
     const formatIntoPng = () => {
         if (sigCanvas.current) {
@@ -472,6 +480,11 @@ export default function HireForm({ roles }: HireFormProps): JSX.Element {
                     </Button>
                 </form>
             </Form>
+            <div className='w-full mt-4 bg-background-soft p-4 rounded-lg'>
+                <UserApplication
+                    selectUser={handleSelectUser}
+                />
+            </div>
         </div>
     )
 }

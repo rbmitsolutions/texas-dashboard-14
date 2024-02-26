@@ -60,7 +60,7 @@ export interface IUser {
 
     //   contract?: IContract;
 
-    //   job_application?: IJobApplication;
+    job_application?: IJobApplication;
 
     role_id?: string;
     role?: IRoles
@@ -73,4 +73,29 @@ export interface IAvailableDays {
     weekDay: string;
     available: boolean;
     shift: string[];
+}
+
+export interface IJobApplicationValues {
+    position: string,
+    work_permit: string,
+    leaving_certificate: string,
+    experience: string,
+    another_position: string,
+    applied_before: string,
+    health_limitations: string,
+    notice_period: string,
+    start_date: string,
+    additional_information: string,
+}
+
+export interface IJobApplication {
+    id: string;
+    user_id: string;
+    cv_id: string;
+    cv_url: string;
+    date: Date;
+    values: IJobApplicationValues;
+
+    created_at: Date;
+    updated_at: Date;
 }

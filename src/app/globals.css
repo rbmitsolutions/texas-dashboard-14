@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -50,6 +49,9 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
 
 @layer base {
   * {
@@ -82,6 +84,6 @@
   }
 
   .bg-background-soft {
-    @apply bg-zinc-50 dark:bg-foreground/5
+    @apply bg-zinc-50 dark:bg-foreground/5;
   }
 }
