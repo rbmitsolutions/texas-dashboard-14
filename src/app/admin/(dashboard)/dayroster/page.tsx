@@ -25,6 +25,10 @@ export default function DayrosterPage() {
                             lte: new Date()
                         },
                         role: '1'
+                    },
+                    pagination: {
+                        take: 500,
+                        skip: 0
                     }
                 }
             }
@@ -144,7 +148,7 @@ export default function DayrosterPage() {
                             forms: allForms?.data,
                             userParams: GETUserDataParams
                         })}
-                        data={users}
+                        data={users || []}
                         setUsers={setGETUserDataParams}
                         userParams={GETUserDataParams}
                     />

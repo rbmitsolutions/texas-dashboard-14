@@ -19,6 +19,8 @@ import { usePUTCompanyDataHooks } from "@/hooks/company/companyDataHooks"
 //interface
 import { IRequests, IRequestsStatus } from "@/common/types/company/requests.interface"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { formatDate } from "@/common/libs/date-fns/dateFormat"
 
 interface RequestDisplayProps {
     request: IRequests
@@ -37,46 +39,27 @@ export default function RequestDisplay({ request }: RequestDisplayProps): JSX.El
 
     const renderDaysOff = (type: string, dates: string[]) => {
         if (type === 'Day Off') {
-            return (
-                <Calendar
-                    mode="multiple"
-                    selected={dates?.map(date => new Date(date))}
-                    initialFocus
-
-                />
-            )
-            // return dates.map((date) => {
-            //     return (
-            //         <Badge className='flex items-center justify-center' key={date}>{formatDate({
-            //             date: new Date(date),
-            //             f: 'dd/MM/yyyy'
-            //         })}</Badge>
-            //     )
-            // })
+            return dates.map((date) => {
+                return (
+                    <Badge className='flex items-center justify-center' key={date}>{formatDate({
+                        date: new Date(date),
+                        f: 'dd/MM/yyyy'
+                    })}</Badge>
+                )
+            })
         } else {
             return (
-                <Calendar
-                    mode="range"
-                    selected={{
-                        from: dates?.map(date => new Date(date))[0],
-                        to: dates?.map(date => new Date(date))[1]
-                    }}
-                    initialFocus
-
-                />
+                <>
+                    <Badge className='flex items-center justify-center'>From: {formatDate({
+                        date: new Date(dates[0]),
+                        f: 'dd/MM/yyyy'
+                    })}</Badge>
+                    <Badge className='flex items-center justify-center'>To: {formatDate({
+                        date: new Date(dates[1]),
+                        f: 'dd/MM/yyyy'
+                    })}</Badge>
+                </>
             )
-            // return (
-            //     <>
-            //         <Badge className='flex items-center justify-center'>From: {formatDate({
-            //             date: new Date(dates[0]),
-            //             f: 'dd/MM/yyyy'
-            //         })}</Badge>
-            //         <Badge className='flex items-center justify-center'>To: {formatDate({
-            //             date: new Date(dates[1]),
-            //             f: 'dd/MM/yyyy'
-            //         })}</Badge>
-            //     </>
-            // )
         }
     }
 
@@ -92,7 +75,7 @@ export default function RequestDisplay({ request }: RequestDisplayProps): JSX.El
                 router.back()
             }
         })
-      }
+    }
 
     return (
         <div className='flex-col-container-center'>

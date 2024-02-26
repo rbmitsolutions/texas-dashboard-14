@@ -10,7 +10,7 @@ interface LinkButtonProps {
 export default function LinkButton({ href, icon = 'ChevronRight', className }: LinkButtonProps) {
     return (
         <Link
-            className={cn('flex items-center justify-center bg-primary text-primary-foreground shadow hover:bg-primary/80 rounded-md h-7 w-7', className)}
+            className={cn('flex items-center justify-center bg-primary shadow rounded-md h-7 w-7 bg-blue-400 hover:bg-blue-600/80 dark:bg-blue-400 dark:text-black dark:hover:bg-blue-400/80', className)}
             href={href}>
             <Icon name={icon} size={16} />
         </Link>

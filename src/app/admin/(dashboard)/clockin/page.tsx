@@ -39,7 +39,7 @@ export default function ClockInPage() {
     const getRoster = async (password: string) => {
         setIsLoading(true);
         try {
-            const data = await api.get(`${EndPointsTypes['APP_CLOCKIN_ENDPOINT']}?roster_password=${password}`)
+            const data = await api.get(`${EndPointsTypes['APP_CLOCKIN_ENDPOINT']}/user?roster_password=${password}`)
             setRoster(data.data)
             setIsOpen(true)
         } catch (err) {

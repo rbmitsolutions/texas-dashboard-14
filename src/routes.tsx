@@ -296,29 +296,24 @@ const routers: IRoute[] = [
         icon: <Icon name='FileText' size={14} />,
         layout: "/admin/hrsystem",
         collapse: true,
-        // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
         authorization: [
           Permissions.ADMIN,
           Permissions.ADMIN_GHOST,
           Permissions.HACCP_ADMIN
         ],
-        auth_device: true,
-        //need [form-data-list]
+        auth_device: false,
         items: [
           {
             name: "Data",
             path: "/data",
             icon: <Icon name='FileText' size={14} />,
             layout: "/admin/hrsystem/forms",
-            // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
             authorization: [
               Permissions.ADMIN,
               Permissions.ADMIN_GHOST,
               Permissions.HACCP_ADMIN
             ],
             auth_device : true,
-            //rotas [GET-FORM-DATA, GET-FORMS]
-            //need [form-data-list]
           },
           {
             name: "Create",
@@ -330,7 +325,7 @@ const routers: IRoute[] = [
               Permissions.ADMIN_GHOST,
               Permissions.HACCP_ADMIN
             ],
-            auth_device: true,
+            auth_device: false,
           },
           {
             name: "Forms",
@@ -342,7 +337,7 @@ const routers: IRoute[] = [
               Permissions.ADMIN_GHOST,
               Permissions.HACCP_ADMIN
             ],
-            auth_device: true
+            auth_device: false
           },
         ],
       },
@@ -352,14 +347,11 @@ const routers: IRoute[] = [
         icon: <Icon name='Siren' size={14} />,
         layout: "/admin/hrsystem",
         collapse: true,
-        // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
         authorization: [
           Permissions.ADMIN,
           Permissions.ADMIN_GHOST,
           Permissions.HACCP_ADMIN
         ],
-        
-        //need [haccp-list, haccp-create]
         auth_device: true,
         items: [
           {
@@ -367,30 +359,24 @@ const routers: IRoute[] = [
             path: "/all",
             icon: <Icon name='FileSearch' size={14} />,
             layout: "/admin/hrsystem/reports",
-            // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
             authorization: [
               Permissions.ADMIN,
               Permissions.ADMIN_GHOST,
               Permissions.HACCP_ADMIN
             ],
             auth_device: true,
-            //rotas [GET-HACCP-REPORTS, DELETE-HACCP-REPORTS]
-            //need [haccp-list, haccp-delete]
           },
           {
             name: "Create",
             path: "/create",
             icon: <Icon name='FilePlus' size={14} />,
             layout: "/admin/hrsystem/reports",
-            // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
             authorization: [
               Permissions.ADMIN,
               Permissions.ADMIN_GHOST,
               Permissions.HACCP_ADMIN
             ],
             auth_device: true,
-            //rotas [GET-FORMS, GET-FORMS_SECTION, POST-HACCP_REPORTS]
-            //need [haccp-create]
           },
 
         ],
@@ -442,14 +428,13 @@ const routers: IRoute[] = [
     authorization: [
       Permissions.MY_PROFILE
     ],
-    auth_device: true,
+    auth_device: false,
   },
   {
     name: "My Roster",
     path: "",
     icon: <Icon name='Network' size={14} />,
     layout: "/admin/roster",
-    // authorization: ["my_profile"],
     authorization: [Permissions.MY_PROFILE],
     auth_device: false,
     collapse: false,

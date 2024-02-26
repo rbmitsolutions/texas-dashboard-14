@@ -13,7 +13,7 @@ interface IKeyPadDisplay {
 }
 
 const styles = {
-    button: 'w-full h-16 text-2xl bg-background-soft rounded-lg shadow-lg text-black hover:bg-background-soft dark:text-white'
+    button: 'w-full h-16 text-2xl bg-background-soft rounded-lg shadow-lg text-black hover:bg-background-soft'
 }
 
 export const KeyPadDisplay = ({ displayValue, onChange, buttonClassName, deleteButtonClassName, displayClassName, isDisabled = false, isLoading = false }: IKeyPadDisplay): JSX.Element => {
@@ -64,7 +64,7 @@ export const KeyPadDisplay = ({ displayValue, onChange, buttonClassName, deleteB
                         onClick={() => handleChange(0, true)}
                         onKeyDown={(e) => handleKeyDown(e as React.KeyboardEvent<HTMLButtonElement>)}
                         disabled={isDisabled || isLoading}
-                        className={cn("w-full h-16 text-2xl bg-red-500 hover:bg-red-600 rounded-lg shadow-lg", deleteButtonClassName)}
+                        className={cn("w-full h-16 text-2xl !bg-red-500 !hover:bg-red-600 rounded-lg shadow-lg ", deleteButtonClassName)}
                         isLoading={isLoading}
                     >
                         {!isLoading && 'Del'}
