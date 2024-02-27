@@ -5,7 +5,7 @@ import { cn } from "@/common/libs/shadcn/utils";
 
 //libs
 import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types";
-import { formatDate } from "@/common/libs/date-fns/dateFormat";
+import { formatDate, getFirstTimeOfTheDay, getLastTimeOfTheDay } from "@/common/libs/date-fns/dateFormat";
 
 //components
 import {
@@ -31,18 +31,19 @@ import Wrap from "@/components/common/wrap";
 import { useDELETERestaurantDataHooks, useGETRestaurantDataHooks, usePOSTRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
 
 //interfaces
-import { IGETBookingsPageReturn } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
-import { BOOKING_STATUS, IBookingPageFilter, bookingPagefilter } from "@/common/libs/restaurant/bookings";
+import { BOOKING_STATUS, IBookingPageFilter } from "@/common/libs/restaurant/bookings";
 import { DatePicker } from "@/components/common/datePicker";
 import { useAuthHooks } from "@/hooks/useAuthHooks";
 import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized";
 import { Permissions } from "@/common/types/auth/auth.interface";
+import { Button } from "@/components/ui/button";
 
 const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
 export default function BookingPage() {
     const { user } = useAuthHooks()
     const isUserAuth = isUserAuthorized(user, [Permissions.ADMIN, Permissions.BOOKING_ADM])
+    const [date, setDate] = useState(new Date())
     const [filter, setFilter] = useState<IBookingPageFilter>({
         name: '',
         contact_number: '',
@@ -51,26 +52,49 @@ export default function BookingPage() {
     })
 
     const {
-        restaurantBookingPageData: bookingPage,
-        GETRestaurantDataParams: bookingPageParams,
-        setGETRestaurantDataParams: setBookingPageParams,
-        refetchRestaurantData: refetchBookingPage,
+        restaurantOpenDay: openDay,
+        refetchRestaurantData: refetchOpenDay,
+        setGETRestaurantDataParams: setOpenDayParams,
     } = useGETRestaurantDataHooks({
         query: 'OPEN_DAYS',
-        keepParmas: true,
         defaultParams: {
             openDays: {
-                bookingPage: {
+                byShortDay: {
+                    date,
                     short_day: formatDate({
-                        date: new Date(),
+                        date,
                         f: 'ccc'
                     }),
-                    date: new Date(),
+                }
+            }
+        },
+    })
+
+    const {
+        restaurantAllBookings: bookings,
+        refetchRestaurantData: refetchBookings,
+        setGETRestaurantDataParams: setBookingsParams,
+    } = useGETRestaurantDataHooks({
+        query: 'BOOKINGS',
+        defaultParams: {
+            bookings: {
+                all: {
+                    date: {
+                        gte: getFirstTimeOfTheDay(date),
+                        lte: getLastTimeOfTheDay(date)
+                    },
+                    pagination: {
+                        take: 1000,
+                        skip: 0
+                    },
+                    include: {
+                        client: '1',
+                        table: '1'
+                    }
                 }
             }
         }
     })
-
 
     const {
         restaurantAllClients: clients,
@@ -118,15 +142,50 @@ export default function BookingPage() {
     })
 
     useEffect(() => {
+        setOpenDayParams(({
+            openDays: {
+                byShortDay: {
+                    date,
+                    short_day: formatDate({
+                        date,
+                        f: 'ccc'
+                    })
+                }
+            }
+        }))
+        setBookingsParams({
+            bookings: {
+                all: {
+                    date: {
+                        gte: getFirstTimeOfTheDay(date),
+                        lte: getLastTimeOfTheDay(date)
+                    },
+                    pagination: {
+                        take: 1000,
+                        skip: 0
+                    },
+                    include: {
+                        client: '1',
+                        table: '1'
+                    }
+                }
+            }
+        })
+    }, [date, setBookingsParams, setOpenDayParams])
+
+    useEffect(() => {
         socket.on("message", (message: ISocketMessage) => {
-            if (message?.event === SocketIoEvent.BOOKING || message?.event === SocketIoEvent.BOOKING_CONFIG) {
-                refetchBookingPage()
+            if (message?.event === SocketIoEvent.BOOKING) {
+                refetchBookings()
+            }
+            if (message?.event === SocketIoEvent.TABLE || message?.event === SocketIoEvent.BOOKING_CONFIG) {
+                refetchOpenDay()
             }
         });
         () => {
             socket.off("message");
         }
-    }, [refetchBookingPage]);
+    }, [refetchBookings, refetchOpenDay]);
 
     return (
         <LayoutFrame
@@ -135,28 +194,17 @@ export default function BookingPage() {
                 content: (
                     <div className='flex-col-container'>
                         <DatePicker
-                            onConfirm={(date) => setBookingPageParams(prev => ({
-                                openDays: {
-                                    bookingPage: {
-                                        short_day: formatDate({
-                                            date: new Date(date!),
-                                            f: 'ccc'
-                                        }),
-                                        date: new Date(date!),
-                                    }
-                                }
-                            }))}
-                            value={bookingPageParams?.openDays?.bookingPage?.date as Date || new Date()}
+                            onConfirm={(date) => setDate(date!)}
+                            value={new Date(date) || new Date()}
                             disabled={!isUserAuth}
                         />
                         <WalkinButton
-                            times_open={bookingPage?.times_open || []}
+                            openDay={openDay}
                             createBooking={createBooking}
                             clients={clients?.data || []}
                             setGETClientsParams={setGETClientsParams}
                             GETClientsParams={GETClientsParams}
-                            sections={bookingPage?.sections_open || []}
-                        />
+                        /> 
                         <BookingButton
                             createBooking={createBooking}
                             isUserAuth={isUserAuth}
@@ -257,17 +305,16 @@ export default function BookingPage() {
                 className='max-h-[95vh] w-full overflow-auto scrollbar-thin md:max-w-[calc(100vw-240px)]'
             >
                 <div className='flex'>
-                    {bookingPage?.times_open?.map(time => {
+                    {openDay?.times_open?.map(time => {
                         return (
-                            <div key={time?.id} className='flex flex-col w-[120px] min-w-[130px] min-h-[95vh] px-1 odd:bg-background-soft'>
+                            <div key={time?.id} className='flex flex-col gap-2 w-[120px] min-w-[130px] min-h-[95vh] px-1 odd:bg-background-soft'>
                                 <BookingHeader
-                                    day_date={bookingPage?.date}
-                                    day_id={bookingPage?.id}
+                                    openDay={openDay}
                                     time={time}
                                     updateTimesOpen={updateTimesOpen}
                                 />
-                                <div className='flex-col-container gap-2 mt-4'>
-                                    {bookingPagefilter(filter, time?.bookings?.bookings).map(b => {
+                                {bookings?.data?.map(b => {
+                                    if (b?.time === time?.title) {
                                         return (
                                             <BookingDetails
                                                 key={b?.id}
@@ -275,43 +322,15 @@ export default function BookingPage() {
                                                 deleteBooking={deleteBooking}
                                                 updateBooking={updateBooking}
                                                 isUserAuth={isUserAuth}
+
                                                 toTable={{
-                                                    timeOpen: time,
-                                                    sections: bookingPage?.sections_open || [],
+                                                    sections: openDay?.section || [],
                                                 }}
                                                 isUpdateBookingLoading={isUpdateBookingLoading || isDeleteBookingLoading}
                                             />
                                         )
-                                    })}
-                                    {bookingPagefilter(filter, time?.bookings?.with_no_tables  as unknown as IGETBookingsPageReturn[]).map(b => {
-                                        return (
-                                            <BookingDetails
-                                                key={b?.id}
-                                                booking={b}
-                                                deleteBooking={deleteBooking}
-                                                updateBooking={updateBooking}
-                                                isUserAuth={isUserAuth}
-                                                toTable={{
-                                                    timeOpen: time,
-                                                    sections: bookingPage?.sections_open || [],
-                                                }}
-                                                isUpdateBookingLoading={isUpdateBookingLoading || isDeleteBookingLoading}
-                                            />
-                                        )
-                                    })}
-                                    {bookingPagefilter(filter, time?.bookings?.canceled_not_shown as unknown as IGETBookingsPageReturn[]).map(b => {
-                                        return (
-                                            <BookingDetails
-                                                key={b?.id}
-                                                booking={b as any}
-                                                deleteBooking={deleteBooking}
-                                                updateBooking={updateBooking}
-                                                isUserAuth={isUserAuth}
-                                                isUpdateBookingLoading={isUpdateBookingLoading || isDeleteBookingLoading}
-                                            />
-                                        )
-                                    })}
-                                </div>
+                                    }
+                                })}
                             </div>
                         )
                     })}

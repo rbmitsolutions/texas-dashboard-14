@@ -235,7 +235,7 @@ export interface IBookingPageFilter {
 
 type ValidSortKey = keyof IGETBookingsPageReturn;
 
-export const bookingPagefilter = (data: IBookingPageFilter, bookings: IGETBookingsPageReturn[]): IGETBookingsPageReturn[] => {
+export const bookingPagefilter = (data: IBookingPageFilter, bookings: IBookings[]): IGETBookingsPageReturn[] => {
     let filteredBookings = bookings as IGETBookingsPageReturn[] | [];
 
     if (data.name) {

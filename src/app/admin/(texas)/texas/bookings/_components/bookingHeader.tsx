@@ -25,15 +25,16 @@ import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.i
 import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized"
 import { Permissions } from "@/common/types/auth/auth.interface"
 import { SocketIoEvent } from "@/common/libs/socketIo/types"
+import { IBookingDays, ITimesOpen } from "@/common/types/restaurant/config.interface"
 
 interface BookingHeaderProps {
-    day_id: string
-    day_date: Date
-    time: IGETBookingPageTimesOpenReturn
+    openDay: IBookingDays
+    // day_date: Date
+    time: ITimesOpen
     updateTimesOpen: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
 }
 
-export default function BookingHeader({ day_id, day_date, time, updateTimesOpen }: BookingHeaderProps) {
+export default function BookingHeader({ openDay, time, updateTimesOpen }: BookingHeaderProps) {
     const { emit } = useSocketIoHooks()
     const { user } = useAuthHooks()
 
@@ -49,16 +50,16 @@ export default function BookingHeader({ day_id, day_date, time, updateTimesOpen 
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <div className='flex flex-col items-center w-full cursor-pointer '>
+                <div className='flex flex-col items-center w-full cursor-pointer h-8'>
                     <small className='text-[10px] font-bold text-primary text-center '>
-                        {time?.time}
+                        {time?.title}
                     </small>
                     {!time?.active &&
                         <strong className='text-red-600 text-xs'>
                             Closed
                         </strong>
                     }
-                    <div className='flex justify-between gap-1'>
+                    {/* <div className='flex justify-between gap-1'>
                         <IconText
                             icon="Dice2"
                             text={time?.tables_available?.count?.[2]}
@@ -89,18 +90,18 @@ export default function BookingHeader({ day_id, day_date, time, updateTimesOpen 
                             className={cn('gap-1', alertTablesCountBg(8, time?.tables_available?.count?.[8]))}
                             pclass='text-[10px]'
                         />
-                    </div>
+                    </div> */}
                 </div>
             </SheetTrigger>
             <SheetContent
                 className="w-[400px] sm:w-[540px]"
             >
                 <SheetHeader>
-                    <SheetTitle>{time?.time}</SheetTitle>
-                    <SheetTitle className='text-primary'>Tables Available</SheetTitle>
+                    <SheetTitle>{time?.title}</SheetTitle>
+                    {/* <SheetTitle className='text-primary'>Tables Available</SheetTitle> */}
                 </SheetHeader>
                 <div className='flex-col-container overflow-auto scrollbar-thin'>
-                    {[2, 4, 6, 8]?.map(g => {
+                    {/* {[2, 4, 6, 8]?.map(g => {
                         return (
                             <div key={g} className=' bg-background-soft p-2 rounded-lg'>
                                 <small className='text-primary'>For {g} Guests</small>
@@ -122,7 +123,7 @@ export default function BookingHeader({ day_id, day_date, time, updateTimesOpen 
                                 </div>
                             </div>
                         )
-                    })}
+                    })} */}
                 </div>
                 <SheetFooter>
                     <Button
@@ -133,23 +134,23 @@ export default function BookingHeader({ day_id, day_date, time, updateTimesOpen 
                             user,
                             [Permissions.ADMIN, Permissions.BOOKING_ADM]
                         )}
-                        onClick={async () => await updateTimesOpen({
-                            timesOpen: {
-                                id: time?.id,
-                                active: !time?.active,
-                                update_time_status: {
-                                    active: !time?.active,
-                                    day_or_special_day_id: day_id,
-                                    date: new Date(day_date)
-                                }
-                            }
-                        }, {
-                            onSuccess: () => {
-                                emit({
-                                    event: SocketIoEvent.BOOKING_CONFIG
-                                })
-                            }
-                        })}
+                        // onClick={async () => await updateTimesOpen({
+                        //     timesOpen: {
+                        //         id: time?.id,
+                        //         active: !time?.active,
+                        //         update_time_status: {
+                        //             active: !time?.active,
+                        //             day_or_special_day_id: day_id,
+                        //             date: new Date(day_date)
+                        //         }
+                        //     }
+                        // }, {
+                        //     onSuccess: () => {
+                        //         emit({
+                        //             event: SocketIoEvent.BOOKING_CONFIG
+                        //         })
+                        //     }
+                        // })}
                     >
                         {time?.active ? 'Close for Bookings' : 'Open for Bookings'}
                     </Button>

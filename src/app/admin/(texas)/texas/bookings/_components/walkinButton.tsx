@@ -18,30 +18,33 @@ import { findCurrentTimeSlot } from "./utils";
 import { Button } from "@/components/ui/button";
 import SelectTable from "./selectTable";
 
+//hooks
+import { useSocketIoHooks } from "@/hooks/useSocketIoHooks";
+
 //interfaces
 import { CreateBookingFormSchemaType } from "@/common/libs/zod/forms/restaurant/createBookingForm";
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface";
-import { IBookingPageResponse, IGETBookingPageTimesOpenReturn, IGETRestaurantDataQuery, IGETSpareTablesReturn } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
+import { IGETRestaurantDataQuery } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
+import { IBookingDays, ITimesOpen } from "@/common/types/restaurant/config.interface";
 import { IClient } from "@/common/types/restaurant/client.interface";
-import { useSocketIoHooks } from "@/hooks/useSocketIoHooks";
+import { ITable } from "@/common/types/restaurant/tables.interface";
 import { SocketIoEvent } from "@/common/libs/socketIo/types";
 
 interface WalkinButtonProps {
+    openDay: IBookingDays
     iconOnly?: boolean;
-    times_open: IGETBookingPageTimesOpenReturn[]
     createBooking: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>
     clients: IClient[],
     setGETClientsParams: Dispatch<SetStateAction<IGETRestaurantDataQuery>>
     GETClientsParams: IGETRestaurantDataQuery
-    sections: IBookingPageResponse['sections_open']
 }
 
 
-export default function WalkinButton({ times_open, iconOnly, sections, createBooking, clients, setGETClientsParams, GETClientsParams }: WalkinButtonProps): JSX.Element {
+export default function WalkinButton({ openDay, iconOnly, createBooking, clients, setGETClientsParams, GETClientsParams }: WalkinButtonProps): JSX.Element {
     const { emit } = useSocketIoHooks()
     const [isOpen, setIsOpen] = useState(false)
-    const [tableSelected, setTableSelected] = useState<IGETSpareTablesReturn>({} as IGETSpareTablesReturn)
-    const [currentTimeSlot, setCurrentTimeSlot] = useState<IGETBookingPageTimesOpenReturn | null>(null);
+    const [tableSelected, setTableSelected] = useState<ITable | undefined>(undefined)
+    const [currentTimeSlot, setCurrentTimeSlot] = useState<ITimesOpen | null>(null);
     const [booking, setBooking] = useState<CreateBookingFormSchemaType>({
         date: new Date(),
         amount_of_people: 2,
@@ -75,14 +78,14 @@ export default function WalkinButton({ times_open, iconOnly, sections, createBoo
                 contact_number: '',
                 email: '',
             })
-            setTableSelected({} as IGETSpareTablesReturn)
+            setTableSelected(undefined)
         } else {
-            const currentTimeSlot = findCurrentTimeSlot(times_open) as IGETBookingPageTimesOpenReturn
+            const currentTimeSlot = findCurrentTimeSlot(openDay?.times_open)
             if (currentTimeSlot) {
                 setCurrentTimeSlot(currentTimeSlot)
                 setBooking(prev => ({
                     ...prev,
-                    time: currentTimeSlot.time
+                    time: currentTimeSlot.title
                 }))
             }
         }
@@ -142,7 +145,7 @@ export default function WalkinButton({ times_open, iconOnly, sections, createBoo
                 className="w-[400px] sm:w-[540px]"
             >
                 <SheetHeader>
-                    <SheetTitle>{currentTimeSlot?.time}</SheetTitle>
+                    <SheetTitle>{currentTimeSlot?.title}</SheetTitle>
                 </SheetHeader>
                 <div className='flex-col-container gap-6 overflow-auto'>
                     <SearchInput
@@ -211,13 +214,11 @@ export default function WalkinButton({ times_open, iconOnly, sections, createBoo
                     }
                     {currentTimeSlot &&
                         <SelectTable
-                            sections={sections}
-                            tables={currentTimeSlot?.tables_available?.spare}
                             tableSelected={tableSelected}
                             setTableSelected={setTableSelected}
+                            sections={openDay?.section}
                         />
                     }
-
                 </div>
                 <SheetFooter>
                     <Button
@@ -225,9 +226,9 @@ export default function WalkinButton({ times_open, iconOnly, sections, createBoo
                         className='h-16 min-h-16 w-full'
                         variant='pink'
                         onClick={() => onBookingCreate(booking)}
-                        disabled={currentTimeSlot?.tables_available?.spare?.length === 0 || !currentTimeSlot || !tableSelected?.id}
+                        disabled={!currentTimeSlot || !tableSelected?.id}
                     >
-                        {!tableSelected?.id ? 'Select a table' : `  ${tableSelected?.section?.title} - ${tableSelected?.number} is Available`}
+                        {!tableSelected?.id ? 'Select a table' : `Table - ${tableSelected?.number} is Available`}
                     </Button>
                 </SheetFooter>
             </SheetContent>

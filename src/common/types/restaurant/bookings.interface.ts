@@ -1,4 +1,5 @@
 import { IClient } from "./client.interface";
+import { ITable } from "./tables.interface";
 
 export type IBookingStatus =
   | "confirmed"
@@ -22,7 +23,8 @@ export interface IBookings {
   request?: string;
   review_id?: string;
   table_id?: string;
-
+  table?: ITable
+  
   status: IBookingStatus;
   has_request: boolean;
 

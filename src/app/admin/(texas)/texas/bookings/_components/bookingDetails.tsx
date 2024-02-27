@@ -30,37 +30,43 @@ import { useSocketIoHooks } from "@/hooks/useSocketIoHooks";
 
 //interface
 import { IDELETERestaurantDataBody } from "@/hooks/restaurant/IDeleteRestaurantDataHooks.interface";
-import { IBookingPageResponse, IGETBookingPageTimesOpenReturn, IGETBookingsPageReturn, IGETSpareTablesReturn } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface";
+import { ISection, ITable } from "@/common/types/restaurant/tables.interface";
 import { IBookings } from "@/common/types/restaurant/bookings.interface";
 import { RedirectTo } from "@/common/types/routers/endPoints.types";
 import { SocketIoEvent } from "@/common/libs/socketIo/types";
 
 interface BookingDetailsProps {
-    booking: IGETBookingsPageReturn
+    booking: IBookings
     deleteBooking: UseMutateFunction<void, any, IDELETERestaurantDataBody, unknown>
     updateBooking: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
     isUserAuth: boolean
     toTable?: {
-        timeOpen: IGETBookingPageTimesOpenReturn
-        sections: IBookingPageResponse['sections_open']
+        sections: ISection[]
     }
     isUpdateBookingLoading: boolean
 }
 
 
-export default function BookingDetails({ booking, isUserAuth, deleteBooking, updateBooking, toTable, isUpdateBookingLoading }: BookingDetailsProps) {
+export default function BookingDetails({
+    booking,
+    deleteBooking,
+    updateBooking,
+    isUserAuth,
+    toTable,
+    isUpdateBookingLoading }: BookingDetailsProps) {
     const { emit } = useSocketIoHooks()
-    const [tableSelected, setTableSelected] = useState<IGETSpareTablesReturn>(booking?.table as unknown as IGETSpareTablesReturn)
+    const [tableSelected, setTableSelected] = useState<ITable | undefined>(booking?.table || undefined)
+
     const toSetTable = toTable && (booking?.status === 'confirmed' || booking?.status === 'unconfirmed')
 
     const bgColor = bookingBackgroundColor(booking?.status)
 
     const onOpenChange = () => {
-        setTableSelected(booking?.table as unknown as IGETSpareTablesReturn)
+        setTableSelected(booking?.table || undefined)
     }
 
-    const handleCancelBooking = async (booking: IGETBookingsPageReturn) => {
+    const handleCancelBooking = async (booking: IBookings) => {
         await updateBooking({
             booking: {
                 id: booking?.id,
@@ -92,7 +98,8 @@ export default function BookingDetails({ booking, isUserAuth, deleteBooking, upd
         })
     }
 
-    const handleArriveBooking = async (booking: IGETBookingsPageReturn, table: IGETSpareTablesReturn) => {
+    const handleArriveBooking = async (booking: IBookings, table: ITable | undefined) => {
+        if (!table) return
         await updateBooking({
             booking: {
                 id: booking?.id,
@@ -113,6 +120,7 @@ export default function BookingDetails({ booking, isUserAuth, deleteBooking, upd
             }
         })
     }
+
     return (
         <Sheet
             onOpenChange={onOpenChange}
@@ -120,10 +128,10 @@ export default function BookingDetails({ booking, isUserAuth, deleteBooking, upd
             <SheetTrigger asChild>
                 <div className={cn('flex relative rounded-md p-2 cursor-pointer', bgColor)} >
                     <div className='flex flex-col gap-[3px] w-full justify-center max-w-[105px] line-clamp-1'>
-                        <div className='flex gap-2'>
+                        <div className='flex justify-between w-full gap-2'>
                             <IconText
                                 icon="Dice2"
-                                text={booking?.table ? booking?.table?.section?.title + ' - ' + booking?.table?.number : 'No Table'}
+                                text={tableSelected ? 'Table - ' + tableSelected?.number : 'No Table'}
                                 className='gap-1'
                                 iconSize={12}
                                 pclass="text-[10px] font-bold"
@@ -172,7 +180,7 @@ export default function BookingDetails({ booking, isUserAuth, deleteBooking, upd
                     <div className='flex-col-container'>
                         <IconText
                             icon='Dice2'
-                            text={tableSelected?.section?.title + ' - ' + tableSelected?.number}
+                            text={tableSelected ? 'Table - ' + tableSelected?.number : 'No Table'}
                         />
                         <div className='flex-container'>
                             <IconText
@@ -193,16 +201,16 @@ export default function BookingDetails({ booking, isUserAuth, deleteBooking, upd
                         <div className="space-x-2">
                             <SendEmail
                                 contacts={[{
-                                    email: booking?.client?.email,
-                                    id: booking?.client?.id,
-                                    name: booking?.client?.name
+                                    email: booking?.client?.email || '',
+                                    id: booking?.client?.id || '',
+                                    name: booking?.client?.name || ''
                                 }]}
                             />
                             <SendSms
                                 contacts={[{
-                                    contact_number: booking?.client?.contact_number,
-                                    id: booking?.client?.id,
-                                    name: booking?.client?.name
+                                    contact_number: booking?.client?.contact_number || '',
+                                    id: booking?.client?.id || '',
+                                    name: booking?.client?.name || ''
                                 }]}
                             />
                         </div>
@@ -248,11 +256,10 @@ export default function BookingDetails({ booking, isUserAuth, deleteBooking, upd
                     </div>
                     {toSetTable &&
                         <SelectTable
-                            sections={toTable?.sections}
                             booking={booking}
                             tableSelected={tableSelected}
                             setTableSelected={setTableSelected}
-                            tables={toTable?.timeOpen?.tables_available?.spare}
+                            sections={toTable?.sections}
                         />
                     }
                 </div>
@@ -265,7 +272,7 @@ export default function BookingDetails({ booking, isUserAuth, deleteBooking, upd
                             disabled={tableSelected?.is_open || !tableSelected}
                             onClick={() => handleArriveBooking(booking, tableSelected)}
                         >
-                            {!tableSelected ? 'Slect a Table' : tableSelected?.is_open ? `${tableSelected?.section?.title} - ${tableSelected?.number} Table Is Busy` : `${tableSelected?.section?.title} - ${tableSelected?.number} is Available`}
+                            {!tableSelected ? 'Slect a Table' : tableSelected?.is_open ? `Table - ${tableSelected?.number} Table Is Busy` : `Table - ${tableSelected?.number} is Available`}
                         </Button>
                     </SheetFooter>
                 }
