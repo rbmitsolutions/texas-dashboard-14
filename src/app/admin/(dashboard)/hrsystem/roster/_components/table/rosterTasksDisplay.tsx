@@ -1,18 +1,18 @@
 import { UseMutateFunction } from "react-query"
-import Icon from "@/common/libs/lucida-icon"
 
 //libs
 import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized"
 
 //components
-import { Permissions } from "@/common/types/auth/auth.interface"
+import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
 import { IRosterTasks } from "@/common/types/company/roster.interface"
+import { Permissions } from "@/common/types/auth/auth.interface"
 import InfoBadge from "@/components/common/infoBadge"
-import { Button } from "@/components/ui/button"
 
 //hooks
 import { IDELETECompanyDataBody } from "@/hooks/company/IDeleteCompanyDataHooks.interface"
 import { useAuthHooks } from "@/hooks/useAuthHooks"
+import { isDateBeforeDate, subDaysToDate } from "@/common/libs/date-fns/dateFormat"
 
 interface RosterTasksDisplayProps {
     task: IRosterTasks
@@ -28,24 +28,23 @@ export default function RosterTasksDisplay({ task, deleteRosterTask }: RosterTas
             </small>
             <div className='flex gap-2'>
                 {task?.done ? <InfoBadge status="done" /> : <InfoBadge status="pending" />}
-                <Button
-                    size='iconExSm'
-                    variant='destructive'
-                    onClick={async () => {
+                <DeleteDialogButton
+                    onDelete={async () => {
                         await deleteRosterTask({
                             rosterTask: {
                                 id: task?.id
                             }
                         })
                     }}
-                    disabled={!isUserAuthorized(
+                    isDisabled={!isUserAuthorized(
                         user,
                         [Permissions.ROSTER_TASKS]
                     ) || task?.done}
-                    type='button'
-                >
-                    <Icon name='Trash' size={8} />
-                </Button>
+                    buttonProps={{
+                        size: 'iconSm',
+                        type: 'button'
+                    }}
+                />
             </div>
         </div>
     )

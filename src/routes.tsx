@@ -51,7 +51,7 @@ const routers: IRoute[] = [
     icon: <Icon name='CookingPot' size={14} />,
     // icon: <Wrench />,
     layout: "/admin/texas/waiters",
-    authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST, Permissions.MENU],
+    authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST, Permissions.WAITERS],
     collapse: false,
     auth_device: true,
   },

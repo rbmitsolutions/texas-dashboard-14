@@ -35,6 +35,7 @@ import { ISection, ITable } from "@/common/types/restaurant/tables.interface";
 import { IBookings } from "@/common/types/restaurant/bookings.interface";
 import { RedirectTo } from "@/common/types/routers/endPoints.types";
 import { SocketIoEvent } from "@/common/libs/socketIo/types";
+import { formatDate } from "@/common/libs/date-fns/dateFormat";
 
 interface BookingDetailsProps {
     booking: IBookings
@@ -177,11 +178,20 @@ export default function BookingDetails({
                     <SheetTitle className='capitalize line-clamp-1'>{booking?.client?.name?.toLowerCase()}</SheetTitle>
                 </SheetHeader>
                 <div className='flex-col-container overflow-auto'>
-                    <div className='flex-col-container'>
-                        <IconText
-                            icon='Dice2'
-                            text={tableSelected ? 'Table - ' + tableSelected?.number : 'No Table'}
-                        />
+                    <div className='flex-col-container gap-2'>
+                        <div className='flex-container'>
+                            <IconText
+                                icon='CalendarCheck'
+                                text={formatDate({
+                                    date: booking?.date,
+                                    f: 'dd, LLL, yy'
+                                })}
+                            />
+                            <IconText
+                                icon='Dice2'
+                                text={tableSelected ? 'Table - ' + tableSelected?.number : 'No Table'}
+                            />
+                        </div>
                         <div className='flex-container'>
                             <IconText
                                 icon='Armchair'
@@ -190,6 +200,16 @@ export default function BookingDetails({
                             <IconText
                                 icon='Clock'
                                 text={booking?.time}
+                            />
+                        </div>
+                        <div className='flex-container'>
+                            <IconText
+                                icon='Phone'
+                                text={booking?.client?.contact_number || 'No Contact Number'}
+                            />
+                            <IconText
+                                icon='Mail'
+                                text={booking?.client?.email || 'No Email'}
                             />
                         </div>
                     </div>
@@ -218,7 +238,7 @@ export default function BookingDetails({
                     <Textarea
                         defaultValue={booking?.request || 'No Request'}
                         readOnly
-                        className='min-h-40 resize-none'
+                        className='min-h-36 resize-none'
                     />
                     <div className='grid grid-cols-[1fr,1fr,auto] items-center gap-4'>
                         <Button

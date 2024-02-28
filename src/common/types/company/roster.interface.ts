@@ -10,7 +10,7 @@ export type IRosterStatus =
 
 export interface IRoster {
     id: string;
-    date?: Date;
+    date: Date;
     duty?: string;
     shift?: string;
     confirmed: boolean;

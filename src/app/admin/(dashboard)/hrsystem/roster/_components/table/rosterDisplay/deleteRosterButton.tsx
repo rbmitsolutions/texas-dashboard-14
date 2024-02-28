@@ -1,15 +1,14 @@
 import { UseMutateFunction } from "react-query"
 
 //libs
-import { subDaysToDate } from "@/common/libs/date-fns/dateFormat"
+import { isDateBeforeDate, subDaysToDate } from "@/common/libs/date-fns/dateFormat"
 
 //compoenents
-import Icon from "@/common/libs/lucida-icon"
 import { IRoster } from "@/common/types/company/roster.interface"
-import { Button } from "@/components/ui/button"
 
 //hooks
 import { IDELETECompanyDataBody } from "@/hooks/company/IDeleteCompanyDataHooks.interface"
+import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
 
 interface DeleteRosterButtonProps {
     roster: IRoster
@@ -17,21 +16,23 @@ interface DeleteRosterButtonProps {
 }
 
 export default function DeleteRosterButton({ roster, deleteRoster }: DeleteRosterButtonProps): JSX.Element {
+    const isBeforeYesterday = isDateBeforeDate(new Date(roster?.date!), subDaysToDate(new Date(), 1))
+
+    const disableButton = isBeforeYesterday && (roster?.status === 'confirmed' || roster?.status === 'unconfirmed')
     return (
-        <Button
-            className='h-4 w-4 p-1'
-            variant='destructive'
-            type='button'
-            disabled={new Date(roster?.date!) < subDaysToDate(new Date(), 1) || roster?.status === 'dayoff' || roster?.status === 'holiday' || roster?.status === 'sickday'}
-            onClick={async () => {
+        <DeleteDialogButton
+            onDelete={async () => {
                 await deleteRoster({
                     roster: {
                         id: roster?.id
                     }
                 })
             }}
-        >
-            <Icon name='X' size={8} />
-        </Button>
+            isDisabled={disableButton}
+            buttonProps={{
+                className: 'h-4 w-4 p-1',
+            }}
+        />
+
     )
 }

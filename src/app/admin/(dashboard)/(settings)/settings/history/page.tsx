@@ -36,8 +36,8 @@ export default function Roles() {
         <Wrap
             header={{
                 title: {
-                    icon: 'Clock2',
-                    title: 'Shifts'
+                    icon: 'History',
+                    title: 'History'
                 },
                 pagination: {
                     onPageChange: (pagination: IQueryPagination) => setHistoryParams(prev => ({

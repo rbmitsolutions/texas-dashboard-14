@@ -1,31 +1,23 @@
 import { ITimesOpen } from "@/common/types/restaurant/config.interface";
 
-export const findCurrentTimeSlot = (array: ITimesOpen[]): ITimesOpen => {
-    const currentTime = new Date();
-    const currentHour = currentTime.getHours();
-    const currentMinutes = currentTime.getMinutes();
-    const currentTimeString = `${currentHour}:${currentMinutes < 10 ? '0' : ''}${currentMinutes}`;
+export const getCurretBookingTime = (timesOpen: ITimesOpen[]): ITimesOpen | undefined => {
+    const hours =  new Date().getHours();
+    let minutes =  new Date().getMinutes();
 
-    for (let i = 0; i < array.length; i++) {
-        const slot = array[i];
-        const openTime = slot.open;
-        const closeTime = slot.close;
-
-        if (currentTimeString < array[array.length - 1].open) {
-            return array[array.length - 1];
-        }
-
-        if (currentTimeString > array[0].open) {
-            return array[0];
-        }
-
-        if (currentTimeString >= openTime && currentTimeString <= closeTime) {
-            return slot;
-        }
+    if (minutes < 30) {
+        minutes = 0;
+    } else {
+        minutes = 30;
     }
 
-    return array[0];
-}
+    const formattedHours = String(hours).padStart(2, '0');
+    const formattedMinutes = String(minutes).padStart(2, '0');
+    const formated = `${formattedHours}:${formattedMinutes}`
+
+    const currentTime = timesOpen?.find(t => t.open === formated)
+
+    return currentTime;
+  }
 
 export const getBookingAmountPerTable = (amount_of_people: number): number => {
     if (amount_of_people <= 2) {

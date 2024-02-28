@@ -12,6 +12,7 @@ import Icon from "@/common/libs/lucida-icon";
 
 export interface SearchInputProps {
     onSearchChange: (e: string) => void;
+    inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
     cleanSearch?: () => void;
     debounceDelay?: number;
     value: string;
@@ -20,7 +21,7 @@ export interface SearchInputProps {
     isFetching?: boolean;
 }
 
-export default function SearchInput({ onSearchChange, cleanSearch, value, isFetching, placeholder = 'Search ...', debounceDelay = 600, custom }: SearchInputProps) {
+export default function SearchInput({ onSearchChange, inputProps, cleanSearch, value, isFetching, placeholder = 'Search ...', debounceDelay = 600, custom }: SearchInputProps) {
     const [preRendered, setPreRendered] = useState(false);
     const [displayValue, setDisplayValue] = useState<string>(value || '');
     const debouncedChange = useDebounce(onSearchChange, debounceDelay);
@@ -54,6 +55,7 @@ export default function SearchInput({ onSearchChange, cleanSearch, value, isFetc
                 onChange={(e: any) => handleChange(e.target.value)}
                 value={displayValue || ''}
                 placeholder={placeholder}
+                {...inputProps}
             />
             {displayValue?.length > 0 ? (
                 <Button className='absolute h-6 w-6 top-[6px] p-0 right-2' variant='ghost'>

@@ -1,4 +1,4 @@
-import { isToday as isTodayFns, format, addDays, subDays, startOfMonth, endOfMonth, startOfDay, endOfDay, startOfWeek, parse, formatDuration, parseISO, addMinutes, isWithinInterval } from "date-fns";
+import { isToday as isTodayFns, format, addDays, subDays, startOfMonth, endOfMonth, startOfDay, endOfDay, startOfWeek, parse, formatDuration, parseISO, addMinutes, isWithinInterval, isBefore } from "date-fns";
 
 export const parseDate = (date: string, format: 'dd/MM/yy' | 'h:mma'): Date => {
     return parse(date, format, new Date())
@@ -76,6 +76,10 @@ export const isToday = (date: Date): boolean => {
 
 export const parseISODate = (date: string): Date => {
     return parseISO(date)
+}
+
+export const isDateBeforeDate = (dateA: Date, dateB: Date): boolean => {
+    return isBefore(dateA, dateB)
 }
 
 export const compareAscDate = (dateA: Date, dateB: Date): number => {

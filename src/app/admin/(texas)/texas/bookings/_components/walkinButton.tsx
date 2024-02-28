@@ -14,7 +14,7 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import SearchInput from "@/components/common/searchInput";
-import { findCurrentTimeSlot } from "./utils";
+import { getCurretBookingTime } from "./utils";
 import { Button } from "@/components/ui/button";
 import SelectTable from "./selectTable";
 
@@ -80,7 +80,7 @@ export default function WalkinButton({ openDay, iconOnly, createBooking, clients
             })
             setTableSelected(undefined)
         } else {
-            const currentTimeSlot = findCurrentTimeSlot(openDay?.times_open)
+            const currentTimeSlot = getCurretBookingTime(openDay?.times_open)
             if (currentTimeSlot) {
                 setCurrentTimeSlot(currentTimeSlot)
                 setBooking(prev => ({
@@ -228,7 +228,7 @@ export default function WalkinButton({ openDay, iconOnly, createBooking, clients
                         onClick={() => onBookingCreate(booking)}
                         disabled={!currentTimeSlot || !tableSelected?.id}
                     >
-                        {!tableSelected?.id ? 'Select a table' : `Table - ${tableSelected?.number} is Available`}
+                        {!currentTimeSlot ? 'Restaurant Is Closed' : !tableSelected?.id ? 'Select a table' : `Table - ${tableSelected?.number} is Available`}
                     </Button>
                 </SheetFooter>
             </SheetContent>

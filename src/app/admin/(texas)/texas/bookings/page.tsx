@@ -29,14 +29,13 @@ import Wrap from "@/components/common/wrap";
 
 //hooks
 import { useDELETERestaurantDataHooks, useGETRestaurantDataHooks, usePOSTRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
+import { useAuthHooks } from "@/hooks/useAuthHooks";
 
 //interfaces
-import { BOOKING_STATUS, IBookingPageFilter } from "@/common/libs/restaurant/bookings";
-import { DatePicker } from "@/components/common/datePicker";
-import { useAuthHooks } from "@/hooks/useAuthHooks";
+import { BOOKING_STATUS, IBookingPageFilter, bookingPagefilter } from "@/common/libs/restaurant/bookings";
 import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized";
 import { Permissions } from "@/common/types/auth/auth.interface";
-import { Button } from "@/components/ui/button";
+import { DatePicker } from "@/components/common/datePicker";
 
 const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
@@ -196,7 +195,7 @@ export default function BookingPage() {
                         <DatePicker
                             onConfirm={(date) => setDate(date!)}
                             value={new Date(date) || new Date()}
-                            disabled={!isUserAuth}
+                            disabled={!isUserAuthorized(user, [Permissions.ADMIN, Permissions.BOOKING_ADM, Permissions.BOOKING_PAGINATION, Permissions.ADMIN_GHOST])}
                         />
                         <WalkinButton
                             openDay={openDay}
@@ -204,7 +203,7 @@ export default function BookingPage() {
                             clients={clients?.data || []}
                             setGETClientsParams={setGETClientsParams}
                             GETClientsParams={GETClientsParams}
-                        /> 
+                        />
                         <BookingButton
                             createBooking={createBooking}
                             isUserAuth={isUserAuth}
@@ -313,7 +312,7 @@ export default function BookingPage() {
                                     time={time}
                                     updateTimesOpen={updateTimesOpen}
                                 />
-                                {bookings?.data?.map(b => {
+                                {bookingPagefilter(filter, bookings?.data)?.map(b => {
                                     if (b?.time === time?.title) {
                                         return (
                                             <BookingDetails

@@ -160,9 +160,6 @@ export function RosterTableMemo({ users, duties, shifts, forms, createRosterTask
                                             roster={user?.roster?.filter(
                                                 (x) => x.week_day === date?.day
                                             ) || []}
-                                        // available={user?.available_days?.find(
-                                        //     (x) => x.weekDay === date?.day
-                                        // )}
                                         />
                                     </td>
                                 );

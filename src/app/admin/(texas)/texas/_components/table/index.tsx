@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 
 //libs
-import { findCurrentTimeSlot } from "../../bookings/_components/utils"
 import { convertCentsToEuro } from "@/common/utils/convertToEuro"
 import { formatDate } from "@/common/libs/date-fns/dateFormat"
 import { cn } from "@/common/libs/shadcn/utils"
@@ -36,6 +35,8 @@ import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types"
 import { ITimesOpen } from "@/common/types/restaurant/config.interface"
 import { ITable } from "@/common/types/restaurant/tables.interface"
 import { TransactionsStatus } from "@/common/types/company/transactions.interface"
+import { getCurretBookingTime } from "../../bookings/_components/utils"
+import toast from "react-hot-toast"
 
 interface TableProps {
     table: ITable
@@ -57,7 +58,10 @@ export default function Table({ table, waitres, reception }: TableProps) {
     const handleOpenTable = async () => {
         if (waitres) {
             const walkInClient = await getWalkInClient()
-            const currentTime = findCurrentTimeSlot(waitres?.timesOpen) as ITimesOpen
+            const currentTime = getCurretBookingTime(waitres?.timesOpen)
+
+            if(!currentTime) return toast.error('Restaurant is closed')
+
             await waitres.createBooking({
                 booking: {
                     amount_of_people: table?.guests,
@@ -66,7 +70,7 @@ export default function Table({ table, waitres, reception }: TableProps) {
                     email: walkInClient?.email,
                     name: walkInClient?.name,
                     status: 'walk_in',
-                    time: currentTime.title,
+                    time: currentTime?.title,
                     valid_number: false,
                     table_id: table?.id,
                 },

@@ -2,7 +2,7 @@ import { IAuthorizedDevices } from "@/common/types/restaurant/authorizedDevices.
 import { IBookingStatus, IBookings, IReviews, IReviewsType } from "@/common/types/restaurant/bookings.interface";
 import { IClient } from "@/common/types/restaurant/client.interface";
 import { IBookingDays, ISpecialDays, ITimesOpen } from "@/common/types/restaurant/config.interface";
-import { IGiftCards } from "@/common/types/restaurant/giftcard.interface";
+import { IGiftCardStatus, IGiftCards } from "@/common/types/restaurant/giftcard.interface";
 import { IMenu, IMenuAddOns, IMenuSection, IMenuType } from "@/common/types/restaurant/menu.interface";
 import { IOrder, IOrderController, IOrderStatus } from "@/common/types/restaurant/order.interface";
 import { IPrinters } from "@/common/types/restaurant/printers.interface";
@@ -363,7 +363,7 @@ export interface IGETGiftCardQuery {
     name_to?: string;
     value?: string;
     contact_number?: string;
-    status?: string;
+    status?: IGiftCardStatus;
     payed?: "1";
     code?: string;
 

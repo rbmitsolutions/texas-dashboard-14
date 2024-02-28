@@ -10,13 +10,14 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
+import { Button, ButtonProps } from "@/components/ui/button"
 
 interface DeleteDialogButtonProps {
     onDelete: () => void
     buttonText?: string
     isDisabled?: boolean
     children?: React.ReactNode
+    buttonProps?: ButtonProps
     undo?: {
         buttonText: string
         onUndo: () => void
@@ -24,14 +25,14 @@ interface DeleteDialogButtonProps {
     }
 }
 
-export function DeleteDialogButton({ isDisabled, onDelete, buttonText, undo, children }: DeleteDialogButtonProps) {
+export function DeleteDialogButton({ isDisabled, onDelete, buttonText, buttonProps, undo, children }: DeleteDialogButtonProps) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
                 {children ? children :
                     <Button
+                        {...buttonProps}
                         variant='destructive'
-                        size='iconSm'
                         disabled={isDisabled}
                     >
                         <Icon name='Trash' size={14} />

@@ -6,7 +6,7 @@ import { IForm, IFormData, IFormSection } from "@/common/types/company/form.inte
 import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
 import { IRequests, IRequestsStatus, IRequestsType } from "@/common/types/company/requests.interface";
 import { IRoster, IRosterStatus, IRosterTasks } from "@/common/types/company/roster.interface";
-import { ITransactions, TransactionsMethod, TransactionsStatus, TransactionsType } from "@/common/types/company/transactions.interface";
+import { ITransactions, TransactionsDirection, TransactionsMethod, TransactionsStatus, TransactionsType } from "@/common/types/company/transactions.interface";
 import { IPaginationResponse, IQueryPagination } from "@/common/types/settings.interface";
 import { IUser, IUserStatus } from "@/common/types/user/user.interface";
 
@@ -342,6 +342,9 @@ export interface IGETTransactionsQuery {
     };
     method?: {
       in: TransactionsMethod[];
+    };
+    direction?: {
+      in: TransactionsDirection[];
     };
 
     status?: TransactionsStatus

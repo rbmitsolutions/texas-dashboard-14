@@ -5,15 +5,14 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 //components
-import { NavbarButton } from "./_components/navBarButtons";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import Icon from "@/common/libs/lucida-icon";
 
 //store
 import { useSideBarStore } from "@/store/sideBar";
+import { NavbarButton } from "@/app/admin/(dashboard)/_components/sideBar/_components/navBarButtons";
 
 export function Sidebar() {
     //todo: fetch routers from server
@@ -42,7 +41,6 @@ export function Sidebar() {
                     {routers?.map(r => {
                         return <div key={r.name}>
                             <NavbarButton key={r.name} router={r} />
-                            <Separator className="my-2" />
                         </div>
                     })}
                 </ScrollArea>

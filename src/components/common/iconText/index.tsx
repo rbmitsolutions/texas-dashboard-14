@@ -13,7 +13,7 @@ export default function IconText({ icon, text, iconSize = 18, pclass, className 
     return (
         <div className={cn('flex items-center gap-2', className)}>
             <Icon name={icon} size={iconSize}/>
-            <p className={cn('text-sm', pclass)}>{text}</p>
+            <p className={cn('text-sm capitalize', pclass)}>{String(text)?.toLowerCase()}</p>
         </div>
     )
 }

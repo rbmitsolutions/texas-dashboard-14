@@ -235,33 +235,33 @@ export interface IBookingPageFilter {
 
 type ValidSortKey = keyof IGETBookingsPageReturn;
 
-export const bookingPagefilter = (data: IBookingPageFilter, bookings: IBookings[]): IGETBookingsPageReturn[] => {
-    let filteredBookings = bookings as IGETBookingsPageReturn[] | [];
+export const bookingPagefilter = (data: IBookingPageFilter, bookings: IBookings[]): IBookings[] => {
+    let filteredBookings = bookings;
 
-    if (data.name) {
-        filteredBookings = filteredBookings.filter(booking =>
-            booking.client.name.toLowerCase().includes(data.name.toLowerCase())
+    if (data?.name) {
+        filteredBookings = filteredBookings?.filter(booking =>
+            booking?.client?.name.toLowerCase().includes(data.name.toLowerCase())
         );
     }
 
-    if (data.contact_number) {
-        filteredBookings = filteredBookings.filter(booking =>
-            booking.client.contact_number.includes(data.contact_number)
+    if (data?.contact_number) {
+        filteredBookings = filteredBookings?.filter(booking =>
+            booking?.client?.contact_number.includes(data.contact_number)
         );
     }
 
-    if (data.status.length > 0) {
-        filteredBookings = filteredBookings.filter(booking =>
+    if (data?.status.length > 0) {
+        filteredBookings = filteredBookings?.filter(booking =>
             data.status.includes(booking.status)
         );
     }
 
-    if (data.orderBy) {
+    if (data?.orderBy) {
         const [sortKey, sortOrder] = data.orderBy.split('/') as [ValidSortKey, 'asc' | 'desc'];
-        const key = sortKey as keyof IGETBookingsPageReturn;
+        const key = sortKey as keyof IBookings;
         const order = sortOrder as 'asc' | 'desc';
         if (key && order) {
-            filteredBookings.sort((a, b) => {
+            filteredBookings?.sort((a, b) => {
                 if (order === 'asc') {
                     return a[key]! > b[key]! ? 1 : -1;
                 } else {
