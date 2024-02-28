@@ -125,25 +125,51 @@ export default function RosterPaymentsPageComponents({ departments }: RosterPaym
                 isCreateTransactionsLoading={isCreateTransactionsLoading}
                 updateRoster={updateRoster}
             />
+            <div className='flex-col-container gap-8 mt-4'>
             {departments?.map(d => {
                 return (
                     <Wrap
-                        key={d?.id}
-                        header={{
-                            title: {
-                                icon: 'SquareStack',
-                                title: d?.title
+                    key={d?.id}
+                    header={{
+                        title: {
+                            icon: 'SquareStack',
+                            title: d?.title
+                        }
+                    }}
+                    actions={{
+                        dateChange:{
+                            datePickerWithRange: {
+                                onConfirm: (data) => {
+                                    setUsersParams(() => ({
+                                        roster: {
+                                            rosterPayment: {
+                                                date: {
+                                                    gte: new Date(data?.from!),
+                                                    lte: new Date(data?.to!)
+                                                },
+                                                status: 'Working'
+                                            }
+                                        }
+                                    }))
+                                },
+                                value: {
+                                    from: usersParams?.roster?.rosterPayment?.date?.gte,
+                                    to: usersParams?.roster?.rosterPayment?.date?.lte
+                                },
+                                className: 'w-64'
                             }
-                        }}
+                        }
+                    }}
                     >
                         <RosterPaymentTable
                             users={users?.users?.filter(u => u?.role?.departament_id === d?.id)}
                             createTransaction={createTransaction}
                             transactions={transaction}
-                        />
+                            />
                     </Wrap>
                 )
             })}
+            </div>
         </div>
     )
 
