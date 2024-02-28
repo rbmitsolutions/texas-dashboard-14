@@ -295,6 +295,21 @@ const data: IData[] = [
             //     key_words: ['create form', 'create forms', 'create frm', 'create frms', 'create form data', 'create forms data', 'create form data']
             // }
         ]
+    },
+    {
+        id: 7,
+        title: 'Gift Cards',
+        icon: 'Gift',
+        key_words: ['gift', 'gifts', 'gift card', 'gift cards', 'gift card list', 'gift cards list', 'create gift card', 'create gift cards', 'create gift card list', 'create gift cards list'],
+        links: [
+            {
+                id: 1,
+                title: 'Gift Cards',
+                description: 'List of Gift Cards',
+                path: '/admin/restaurant/giftcard',
+                key_words: ['gift', 'gifts', 'gift card', 'gift cards', 'gift card list', 'gift cards list'],
+            },
+        ]
     }
 ]
 
