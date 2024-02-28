@@ -35,7 +35,7 @@ export function DeleteDialogButton({ isDisabled, onDelete, buttonText, buttonPro
                         variant='destructive'
                         disabled={isDisabled}
                     >
-                        <Icon name='Trash' size={14} />
+                        <Icon name='Trash2' size={14} />
                     </Button>
                 }
             </AlertDialogTrigger>

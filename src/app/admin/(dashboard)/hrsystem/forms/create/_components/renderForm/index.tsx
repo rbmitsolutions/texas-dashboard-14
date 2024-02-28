@@ -19,6 +19,8 @@ import { useAuthHooks } from '@/hooks/useAuthHooks';
 import { IPOSTCompanyBody, IPOSTCompanyDataRerturn } from '@/hooks/company/IPostCompanyDataHooks.interface';
 import { IForm, IFormSection } from "@/common/types/company/form.interface"
 import { IFormBuildInput } from "@/common/utils/formBuilder"
+import { useEffect } from 'react';
+import { IPUTCompanyBody } from '@/hooks/company/IPutCompanyDataHooks.interface';
 
 interface RenderFormProps {
     inputs: IFormBuildInput[][]
@@ -30,10 +32,14 @@ interface RenderFormProps {
     replaceInputs: (page: number, inputs: IFormBuildInput[]) => void
     removePage: () => void
     formSections: IFormSection[]
-    createForm: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
+    createForm?: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
+    updateForm?: {
+        updateForm: UseMutateFunction<any, any, IPUTCompanyBody, unknown>,
+        form: IForm
+    }
 }
 
-export default function RenderForm({ inputs, setInputs, page, setPage, setField, replaceInputs, deleteField, removePage, formSections, createForm }: RenderFormProps) {
+export default function RenderForm({ inputs, setInputs, page, setPage, setField, replaceInputs, deleteField, removePage, formSections, createForm, updateForm }: RenderFormProps) {
     const { user } = useAuthHooks()
 
     const handleDragEnd = (event: any) => {
@@ -53,8 +59,8 @@ export default function RenderForm({ inputs, setInputs, page, setPage, setField,
         mode: "onChange",
         resolver: zodResolver(CreateFormFormSchema),
         defaultValues: {
-            form_section_id: '',
-            title: 'Form',
+            form_section_id: updateForm?.form?.form_section_id || '',
+            title: updateForm?.form?.title || '',
         },
     });
 
@@ -67,7 +73,7 @@ export default function RenderForm({ inputs, setInputs, page, setPage, setField,
             created_by: user?.name,
             created_by_id: user?.user_id
         }
-        await createForm({
+        createForm && await createForm({
             form
         }, {
             onSuccess: () => {
@@ -78,7 +84,25 @@ export default function RenderForm({ inputs, setInputs, page, setPage, setField,
             }
         })
 
+        updateForm && updateForm.updateForm({
+            form: {
+                ...updateForm.form,
+                id: updateForm.form.id,
+                inputs: fields,
+                title: formData?.title,
+                form_section_id: formData?.form_section_id === 'none' ? undefined : formData?.form_section_id,
+            }
+        })
     };
+
+    useEffect(() => {
+        if (updateForm?.form) {
+            f.reset({
+                form_section_id: updateForm?.form?.form_section_id || undefined,
+                title: updateForm?.form?.title
+            })
+        }
+    }, [f, updateForm, formSections])
 
     return (
         <div className='p-2 rounded-xl bg-background-soft'>

@@ -75,7 +75,6 @@ export default function CreateUpdateOrder({ menu, setOrder: setToOrders, getOneO
                 getOneOrderTotal={getOneOrderTotal}
                 setOrder={(order) => {
                     setToOrders(order)
-                    console.log('clicopu')
                     handleOpen && handleOpen()
                 }}
             />

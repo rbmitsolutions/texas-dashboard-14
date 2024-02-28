@@ -116,7 +116,7 @@ export function fieldBuilder(
               <Select
                 onValueChange={field?.onChange}
                 defaultValue={field?.value}
-                value={field?.value}
+                value={field?.value || ''}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -125,9 +125,11 @@ export function fieldBuilder(
                 </FormControl>
                 <SelectContent>
                   {input?.options?.map(opt => {
-                    return (
-                      <SelectItem key={opt?.label} value={opt?.value}>{opt?.label}</SelectItem>
-                    )
+                    return opt?.options?.map(o => {
+                      return (
+                        <SelectItem key={o?.label} value={o.value}>{o?.label}</SelectItem>
+                      )
+                    })
                   })}
                 </SelectContent>
               </Select>

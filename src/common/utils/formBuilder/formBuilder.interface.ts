@@ -18,7 +18,11 @@ export interface IConditionalSelectForm {
     register: string;
     required: boolean;
     description?: string;
-    options: { value: string; label: string }[];
+    options: {
+        isOptionGroup: boolean
+        label: string
+        options: { value: string; label: string }[]
+    }[];
 }
 
 export interface IConditionalTextareaForm {

@@ -27,8 +27,9 @@ export default function AddNewOption({ form, onSave, onRemove }: AddNewOptionPro
 
     const handleAddOption = () => {
         const options = form.getValues('options')
+        const findOption = options?.find(o => o.toLowerCase().trim() === option.toLowerCase().trim())
 
-        if (options.includes(option)) {
+        if (findOption) {
             toast.error('Option already exists')
             return
         }

@@ -152,13 +152,6 @@ const data: IData[] = [
                 path: '/admin/hrsystem/forms/create',
                 key_words: ['forms', 'form', 'frm', 'frms', 'form ', 'create forms ', 'create form ']
             },
-            // {
-            //     id: 2,
-            //     title: 'Create Form',
-            //     description: 'Create a new form',
-            //     path: '/admin/hrsystem/forms/create',
-            //     key_words: ['create form', 'create forms', 'create frm', 'create frms', 'create form data', 'create forms data', 'create form data']
-            // }
         ]
     },
     {

@@ -33,7 +33,7 @@ export default function SelectUpdate({ field, onSave }: SelectUpdateProps) {
             label: field?.label,
             description: field?.description,
             required: field?.required,
-            options: field?.options?.map(option => option.value) || []
+            options: field?.options?.map(o => o.options?.map(op => op.value)).flat() || []
         },
     });
 
@@ -43,21 +43,21 @@ export default function SelectUpdate({ field, onSave }: SelectUpdateProps) {
             label: formData.label,
             description: formData.description,
             required: formData.required,
-            options: formData.options.map(option => ({
-                label: option?.toLowerCase(),
-                value: option?.toLowerCase()
-            }))
+            options:[{
+                isOptionGroup: false,
+                label: formData.label,
+                options: formData.options.map(o => ({ label: o, value: o }))
+            }]
         })
         form.reset()
     };
 
     useEffect(() => {
-       
         form.reset({
             label: field?.label,
             description: field?.description,
             required: field?.required,
-            options: field?.options?.map(option => option.value) || []
+            options: field?.options?.map(o => o.options?.map(op => op.value)).flat() || []
         })
     }, [field, form])
 
@@ -120,7 +120,8 @@ export default function SelectUpdate({ field, onSave }: SelectUpdateProps) {
                     form={form}
                     onSave={(option) => {
                         const options = form.getValues('options')
-                        form.setValue('options', [...options, option])
+                        const sortedOptions = [...options, option].sort()
+                        form.setValue('options', sortedOptions)
                     }}
                     onRemove={(option) => {
                         const options = form.getValues('options')
@@ -131,7 +132,9 @@ export default function SelectUpdate({ field, onSave }: SelectUpdateProps) {
                 <Button
                     className='mt-4 self-end'
                     leftIcon='Save'
-                >Update </Button>
+                >
+                    Update
+                </Button>
             </form>
         </Form>
     )

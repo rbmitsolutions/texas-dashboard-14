@@ -18,7 +18,6 @@ export default function RequestsPage() {
     const {
         companyAllRequests: requests,
         setGETCompanyDataParams: setRequestsParams,
-        isCompanyDataLoading: isRequestsLoading,
         GETCompanyDataParams: requestsParams
     } = useGETCompanyDataHooks({
         query: 'REQUESTS',
@@ -52,7 +51,6 @@ export default function RequestsPage() {
 
     return (
         <Wrap
-            isLoading={isRequestsLoading}
             header={{
                 title: {
                     title: 'Requests',

@@ -55,11 +55,15 @@ export default function RenderAddFields({ inputs, addField, addNewPage }: Render
                     description: '',
                     title: 'Select' + Math.round(Math.random() * 10),
                     options: [{
-                        label: 'Option 1',
-                        value: 'option1'
-                    }, {
-                        label: 'Option 2',
-                        value: 'option2'
+                        isOptionGroup: false,
+                        label: 'Select' + Math.round(Math.random() * 10),
+                        options: [{
+                            label: 'Option 1',
+                            value: 'option1'
+                        }, {
+                            label: 'Option 2',
+                            value: 'option2'
+                        }]
                     }],
                     required: true,
                 }}

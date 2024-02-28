@@ -18,6 +18,7 @@ import { IFiles } from "@/common/types/company/files.interface"
 import { formatDate } from "@/common/libs/date-fns/dateFormat"
 import { IToken } from "@/common/types/auth/auth.interface"
 import { api } from "@/common/libs/axios/api"
+import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
 
 const onDownload = async (file_id: string) => {
     try {
@@ -146,23 +147,22 @@ export const columnsReports = ({
             cell: ({ row }) => {
                 return (
                     <div className='flex-container px-2'>
-                        <Button
-                            size='iconSm'
-                            variant='destructive'
-                            onClick={() => deleteHaccpReport({
+                        <DeleteDialogButton
+                            onDelete={() => deleteHaccpReport({
                                 haccpReport: {
                                     id: row.original.id,
                                     file_id: row.original.file_id
                                 }
                             })}
-                            disabled={isDeleteLoading || user?.user_id !== row.original.created_by_id}
-                        >
-                            <Icon name='Trash2' size={18} />
-                        </Button>
+                            isDisabled={isDeleteLoading || user?.user_id !== row.original.created_by_id}
+                            buttonProps={{
+                                size:'iconSm'
+                            }}
+                        />
                         <Button
                             size='iconSm'
                             onClick={() => onDownload(row.original.file_id)}
-                           
+
                         >
                             <Icon name='FileText' size={18} />
                         </Button>

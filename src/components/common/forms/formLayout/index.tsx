@@ -30,7 +30,7 @@ export default function FormLayout({ form, onSubmit, toReset = false }: FormLayo
     const f = useForm();
 
     const resetForm = () => {
-        f.reset()
+        f.reset({})
         setPage({
             page: 0,
             maxPage: form?.inputs?.length

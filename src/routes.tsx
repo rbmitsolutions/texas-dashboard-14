@@ -146,7 +146,7 @@ const routers: IRoute[] = [
       {
         name: "Giftcard",
         path: "/giftcard",
-        icon: <Icon name='AArrowDown' size={14} />,
+        icon: <Icon name='Gift' size={14} />,
         layout: "/admin/restaurant",
         authorization: [
           Permissions.ADMIN,
@@ -329,7 +329,7 @@ const routers: IRoute[] = [
           },
           {
             name: "Forms",
-            path: "/forms",
+            path: "/all",
             icon: <Icon name='FileText' size={14} />,
             layout: "/admin/hrsystem/forms",
             authorization: [
