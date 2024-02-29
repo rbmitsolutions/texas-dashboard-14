@@ -141,6 +141,7 @@ export function DatePicker({ className, fromDate, disabled = false, toDate, valu
     const [date, setDate] = useState<Date | undefined>(value)
 
     const onDateChange = (date: Date | undefined) => {
+        if(!date) return
         setDate(date)
         onConfirm(date)
     }
