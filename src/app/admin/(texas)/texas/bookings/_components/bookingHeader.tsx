@@ -53,7 +53,7 @@ export default function BookingHeader({ openDay, date, time, updateTimesOpen, se
 
     const alertTablesCountBg = (tabFor: 2 | 4 | 6 | 8, qtyTabAvailable: number) => {
         if (tabFor === 2 || tabFor === 4 || tabFor === 6) {
-            return qtyTabAvailable > 8 ? 'text-foreground' : qtyTabAvailable <= 12 && qtyTabAvailable >= 4 ? 'text-yellow-600' : 'text-red-600'
+            return qtyTabAvailable > 5 ? 'text-foreground' : qtyTabAvailable <= 8 && qtyTabAvailable >= 2 ? 'text-yellow-600' : 'text-red-600'
         } else if (tabFor === 8) {
             return qtyTabAvailable > 3 ? 'text-foreground' : qtyTabAvailable <= 2 && qtyTabAvailable >= 2 ? 'text-yellow-600' : 'text-red-600'
         }
@@ -74,19 +74,30 @@ export default function BookingHeader({ openDay, date, time, updateTimesOpen, se
             return acc;
         }, {} as { [key: number]: number });
 
+
+        //the amount of tables available per "time" has to be divided by 3 because an avrage client stays 1.5 hours in the restaurant
+        const tables2 = Number((getTablesFiltered({
+            guests: [2]
+        })?.length / 3).toFixed(0)) || 0;
+
+        const tables4 = Number((getTablesFiltered({
+            guests: [4]
+        })?.length / 3).toFixed(0)) || 0;
+
+        const tables6 = Number((getTablesFiltered({
+            guests: [6]
+        })?.length / 3).toFixed(0)) || 0;
+
+        const tables8 = Number((getTablesFiltered({
+            guests: [8]
+        })?.length / 3).toFixed(0)) || 0;
+
+
         const spareTables = {
-            2: (getTablesFiltered({
-                guests: [2]
-            })?.length || 0) - bookingsCount[2],
-            4: (getTablesFiltered({
-                guests: [4]
-            })?.length || 0) - bookingsCount[4],
-            6: (getTablesFiltered({
-                guests: [6]
-            })?.length || 0) - bookingsCount[6],
-            8: (getTablesFiltered({
-                guests: [8]
-            })?.length || 0) - bookingsCount[8]
+            2: tables2 - bookingsCount[2],
+            4: tables4 - bookingsCount[4],
+            6: tables6 - bookingsCount[6],
+            8: tables8 - bookingsCount[8]
         };
 
         setSpareTables(spareTables);
@@ -143,9 +154,12 @@ export default function BookingHeader({ openDay, date, time, updateTimesOpen, se
             >
                 <SheetHeader>
                     <SheetTitle>{time?.title}</SheetTitle>
-                    {/* <SheetTitle className='text-primary'>Tables Available</SheetTitle> */}
                 </SheetHeader>
                 <div className='flex-col-container overflow-auto scrollbar-thin'>
+                    <IconText
+                        icon="Users"
+                        text={`${bookings?.reduce((acc, b) => acc + b?.amount_of_people, 0) || 0} Guests`}
+                    />
                     {/* {[2, 4, 6, 8]?.map(g => {
                         return (
                             <div key={g} className=' bg-background-soft p-2 rounded-lg'>
