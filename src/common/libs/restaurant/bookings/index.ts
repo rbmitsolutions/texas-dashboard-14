@@ -227,10 +227,12 @@ export const bookingBackgroundColor = (
 }
 
 export interface IBookingPageFilter {
-    name: string;
-    contact_number: string;
-    status: IBookingStatus[];
-    orderBy: 'amount_of_people/asc' | 'amount_of_people/desc' | 'status/asc' | 'status/desc';
+    name?: string;
+    contact_number?: string;
+    status?: IBookingStatus[];
+    orderBy?: 'amount_of_people/asc' | 'amount_of_people/desc' | 'status/asc' | 'status/desc';
+    time?: string
+    amount_per_table?: number
 }
 
 type ValidSortKey = keyof IGETBookingsPageReturn;
@@ -238,21 +240,33 @@ type ValidSortKey = keyof IGETBookingsPageReturn;
 export const bookingPagefilter = (data: IBookingPageFilter, bookings: IBookings[]): IBookings[] => {
     let filteredBookings = bookings;
 
-    if (data?.name) {
+    if (data?.name ) {
         filteredBookings = filteredBookings?.filter(booking =>
-            booking?.client?.name.toLowerCase().includes(data.name.toLowerCase())
+            booking?.client?.name.toLowerCase().includes(data?.name!.toLowerCase())
         );
     }
 
     if (data?.contact_number) {
         filteredBookings = filteredBookings?.filter(booking =>
-            booking?.client?.contact_number.includes(data.contact_number)
+            booking?.client?.contact_number.includes(data?.contact_number!)
         );
     }
 
-    if (data?.status.length > 0) {
+    if (data?.status && data?.status?.length > 0) {
         filteredBookings = filteredBookings?.filter(booking =>
-            data.status.includes(booking.status)
+            data.status?.includes(booking.status)
+        );
+    }
+
+    if (data?.amount_per_table) {
+        filteredBookings = filteredBookings?.filter(booking =>
+            booking.amount_of_people === data.amount_per_table
+        );
+    }
+
+    if(data?.time) {
+        filteredBookings = filteredBookings?.filter(booking =>
+            booking.time === data.time
         );
     }
 

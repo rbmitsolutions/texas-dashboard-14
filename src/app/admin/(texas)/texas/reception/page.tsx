@@ -197,6 +197,10 @@ export default function Reception() {
         <LayoutFrame
             user={user}
             navigation={{
+                icon: {
+                    icon: 'Filter',
+                    title: 'Tables'
+                },
                 content: (
                     <div className='flex-col-container overflow-auto'>
                         <div className='grid grid-cols-2 gap-2'>
@@ -248,7 +252,7 @@ export default function Reception() {
                                         onClick={() => {
                                             setTablesFilter({
                                                 ...tablesFilter,
-                                                section_ids: tablesFilter?.section_ids?.includes(section?.id) ? tablesFilter?.section_ids?.filter(section_id => section_id !== section?.id) : [...tablesFilter?.section_ids, section?.id]
+                                                section_ids: tablesFilter?.section_ids?.includes(section?.id) ? tablesFilter?.section_ids?.filter(section_id => section_id !== section?.id) : [...tablesFilter?.section_ids || [], section?.id]
                                             })
                                         }}
                                         className='p-1 h-10 text-sm'
@@ -269,7 +273,7 @@ export default function Reception() {
                                         onClick={() => {
                                             setTablesFilter({
                                                 ...tablesFilter,
-                                                guests: tablesFilter?.guests?.includes(g) ? tablesFilter?.guests?.filter(guest => guest !== g) : [...tablesFilter?.guests, g]
+                                                guests: tablesFilter?.guests?.includes(g) ? tablesFilter?.guests?.filter(guest => guest !== g) : [...tablesFilter?.guests || [], g]
                                             })
                                         }}
 

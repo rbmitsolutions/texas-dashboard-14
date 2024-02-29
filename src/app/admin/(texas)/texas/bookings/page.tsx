@@ -1,6 +1,6 @@
 'use client'
 import { io } from "socket.io-client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { cn } from "@/common/libs/shadcn/utils";
 
 //libs
@@ -36,11 +36,14 @@ import { BOOKING_STATUS, IBookingPageFilter, bookingPagefilter } from "@/common/
 import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized";
 import { Permissions } from "@/common/types/auth/auth.interface";
 import { DatePicker } from "@/components/common/datePicker";
+import { useOrderSystemTablesStore } from "@/store/texas/tables";
+import { IBookingDays } from "@/common/types/restaurant/config.interface";
 
 const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
 export default function BookingPage() {
     const { user } = useAuthHooks()
+    const { setTables, getTablesFiltered } = useOrderSystemTablesStore()
     const isUserAuth = isUserAuthorized(user, [Permissions.ADMIN, Permissions.BOOKING_ADM])
     const [date, setDate] = useState(new Date())
     const [filter, setFilter] = useState<IBookingPageFilter>({
@@ -67,6 +70,12 @@ export default function BookingPage() {
                 }
             }
         },
+        UseQueryOptions: {
+            onSuccess: (data: any) => {
+                const openDay: IBookingDays = data
+                setTables(openDay?.section?.map(s => s?.tables).flat())
+            }
+        }
     })
 
     const {
@@ -190,6 +199,10 @@ export default function BookingPage() {
         <LayoutFrame
             user={user}
             navigation={{
+                icon: {
+                    icon: 'Filter',
+                    title: 'Bookings'
+                },
                 content: (
                     <div className='flex-col-container'>
                         <DatePicker
@@ -246,7 +259,7 @@ export default function BookingPage() {
                                                     return {
                                                         ...prev,
                                                         status: [
-                                                            ...prev?.status,
+                                                            ...prev?.status || [],
                                                             s?.status
                                                         ]
                                                     }
@@ -306,29 +319,33 @@ export default function BookingPage() {
                 <div className='flex'>
                     {openDay?.times_open?.map(time => {
                         return (
-                            <div key={time?.id} className='flex flex-col gap-2 w-[120px] min-w-[130px] min-h-[95vh] px-1 odd:bg-background-soft'>
+                            <div key={time?.id} className='flex flex-col gap-2 w-[120px] min-w-[130px] min-h-[50vh] px-1 odd:bg-background-soft'>
                                 <BookingHeader
+                                    date={date}
                                     openDay={openDay}
                                     time={time}
                                     updateTimesOpen={updateTimesOpen}
+                                    sectionsOpen={openDay?.section}
+                                    bookings={bookingPagefilter({ time: time?.title }, bookings?.data || [])}
+                                    getTablesFiltered={getTablesFiltered}
                                 />
-                                {bookingPagefilter(filter, bookings?.data)?.map(b => {
-                                    if (b?.time === time?.title) {
-                                        return (
-                                            <BookingDetails
-                                                key={b?.id}
-                                                booking={b}
-                                                deleteBooking={deleteBooking}
-                                                updateBooking={updateBooking}
-                                                isUserAuth={isUserAuth}
-
-                                                toTable={{
-                                                    sections: openDay?.section || [],
-                                                }}
-                                                isUpdateBookingLoading={isUpdateBookingLoading || isDeleteBookingLoading}
-                                            />
-                                        )
-                                    }
+                                {bookingPagefilter({
+                                    ...filter,
+                                    time: time?.title
+                                }, bookings?.data || [])?.map(b => {
+                                    return (
+                                        <BookingDetails
+                                            key={b?.id}
+                                            booking={b}
+                                            deleteBooking={deleteBooking}
+                                            updateBooking={updateBooking}
+                                            isUserAuth={isUserAuth}
+                                            toTable={{
+                                                sections: openDay?.section || [],
+                                            }}
+                                            isUpdateBookingLoading={isUpdateBookingLoading || isDeleteBookingLoading}
+                                        />
+                                    )
                                 })}
                             </div>
                         )

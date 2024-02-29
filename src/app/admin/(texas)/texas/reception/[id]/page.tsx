@@ -161,7 +161,7 @@ export default function Table({ params }: { params: { id: string } }) {
         }
     })
 
-    
+
     const {
         restaurantGiftCard: giftCard,
         setGETRestaurantDataParams: setGiftCardParams,
@@ -221,6 +221,10 @@ export default function Table({ params }: { params: { id: string } }) {
         <LayoutFrame
             user={user}
             navigation={{
+                icon: {
+                    icon: 'Filter',
+                    title: 'Tables'
+                },
                 content: (
                     <div className='flex-col-container overflow-auto'>
 
@@ -259,8 +263,10 @@ export default function Table({ params }: { params: { id: string } }) {
                         user={user}
                     />
                 ),
-                icon: <div />,
-                title: 'Table Transactions',
+                icon: {
+                    title: 'Order',
+                    icon: 'ShoppingCart'
+                }
             }}
         >
             <div className='grid grid-rows-2 gap-4 h-full'>
