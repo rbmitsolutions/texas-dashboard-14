@@ -43,7 +43,7 @@ export default function ClockDialog({ roster, onClose, isOpen, isLoading }: Cloc
         }
 
         await api
-            .put(`${EndPointsTypes['APP_CLOCKIN_ENDPOINT']}/user?id=${roster?.id}`, obj)
+            .put(`${EndPointsTypes['APP_CLOCKIN_ENDPOINT']}?id=${roster?.id}`, obj)
             .then(() => {
                 toast.success('Thank you')
             })
