@@ -2,6 +2,7 @@ import { UseMutateFunction } from "react-query"
 import { useEffect, useState } from "react"
 
 //libs
+import { bookingPagefilter } from "@/common/libs/restaurant/bookings"
 import { cn } from "@/common/libs/shadcn/utils"
 
 //components
@@ -23,10 +24,10 @@ import { useAuthHooks } from "@/hooks/useAuthHooks"
 //interface
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 import { IBookingDays, ITimesOpen } from "@/common/types/restaurant/config.interface"
-import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized"
-import { Permissions } from "@/common/types/auth/auth.interface"
 import { ISection, ITable } from "@/common/types/restaurant/tables.interface"
 import { IBookings } from "@/common/types/restaurant/bookings.interface"
+import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized"
+import { Permissions } from "@/common/types/auth/auth.interface"
 import { OrderSystemTablesState } from "@/store/texas/tables"
 import { SocketIoEvent } from "@/common/libs/socketIo/types"
 
@@ -50,8 +51,6 @@ export default function BookingHeader({ openDay, date, time, updateTimesOpen, se
     const { emit } = useSocketIoHooks()
     const { user } = useAuthHooks()
 
-
-
     const alertTablesCountBg = (tabFor: 2 | 4 | 6 | 8, qtyTabAvailable: number) => {
         if (tabFor === 2 || tabFor === 4 || tabFor === 6) {
             return qtyTabAvailable > 8 ? 'text-foreground' : qtyTabAvailable <= 12 && qtyTabAvailable >= 4 ? 'text-yellow-600' : 'text-red-600'
@@ -62,7 +61,11 @@ export default function BookingHeader({ openDay, date, time, updateTimesOpen, se
     }
     useEffect(() => {
         const getBookingsCount = (amount_per_table: number): number => {
-            return bookings?.filter(b => b?.amount_per_table === amount_per_table)?.length || 0;
+            const b = bookingPagefilter({
+                amount_per_table,
+                status: ['confirmed', 'arrived', 'unconfirmed', 'walk_in']
+            }, bookings || [])
+            return b?.length || 0;
         };
 
         const guests = [2, 4, 6, 8];

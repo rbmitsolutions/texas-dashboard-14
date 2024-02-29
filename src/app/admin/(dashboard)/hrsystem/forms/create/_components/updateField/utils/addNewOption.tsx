@@ -46,11 +46,10 @@ export default function AddNewOption({ form, onSave, onRemove }: AddNewOptionPro
         <>
             <div>
                 <strong className='text-sm'>Options</strong>
-                <ul className='list-disc pl-4'>
+                <ul className='list-disc pl-4 max-h-40 overflow-auto scrollbar-thin'>
                     {form.watch('options').map((option: string, index: number) => (
                         <li key={index}
                             className='mt-1'
-
                         ><Badge className='cursor-pointer hover:bg-red-600' onClick={() => onRemove(option)}>{option}</Badge></li>
                     ))}
                 </ul>

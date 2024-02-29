@@ -319,7 +319,7 @@ export default function BookingPage() {
                 <div className='flex'>
                     {openDay?.times_open?.map(time => {
                         return (
-                            <div key={time?.id} className='flex flex-col gap-2 w-[120px] min-w-[130px] min-h-[50vh] px-1 odd:bg-background-soft'>
+                            <div key={time?.id} className='flex flex-col gap-2 w-[120px] min-w-[130px] min-h-[85vh] px-1 odd:bg-background-soft'>
                                 <BookingHeader
                                     date={date}
                                     openDay={openDay}
