@@ -46,6 +46,8 @@ export default function PaymentInputDescription({
                 value={displayValue / 100}
                 onChange={(e) => setDisplayValue(Number(e.target.value) * 100)}
                 onBlur={(e) => onBlur(e)}
+                type='number'
+                step='0.01'
             />
         </>
     )

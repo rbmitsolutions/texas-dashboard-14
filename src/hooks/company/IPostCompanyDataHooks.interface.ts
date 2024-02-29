@@ -11,6 +11,7 @@ export interface IPOSTTransaction {
     type: TransactionsType;
     method: TransactionsMethod;
     direction: TransactionsDirection;
+    date?: Date;
 
     gift_card_id?: string;
     client_id?: string;

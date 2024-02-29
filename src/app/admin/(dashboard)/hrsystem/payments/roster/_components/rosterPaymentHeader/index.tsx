@@ -34,6 +34,7 @@ interface RosterPaymentHeaderProps {
 }
 
 export default function RosterPaymentHeader({ transactions, setTransactions, users, setUsersParams, usersParams, createTransactions, isCreateTransactionsLoading, updateRoster }: RosterPaymentHeaderProps): JSX.Element {
+    const [isLoading, setIsLoading] = useState(false)
     const [csvDownload, setCsvDownload] = useState<any[]>([]);
     const csvRef = useRef(null);
 
@@ -44,6 +45,8 @@ export default function RosterPaymentHeader({ transactions, setTransactions, use
 
 
     const handleCreatePayments = async () => {
+        setIsLoading(true)
+
         const payments = users?.map((user) => {
             const payments = transactions?.filter((p) => p.payee_key === user?.id);
             const p = Object.values(PayrollTransactionsType).map((option) => {
@@ -63,7 +66,7 @@ export default function RosterPaymentHeader({ transactions, setTransactions, use
                 ...testObj,
                 total: payments?.reduce((a, b) => a + b.total, 0) / 100 || 0,
             };
-        });
+        })
 
         setCsvDownload(payments);
 
@@ -78,6 +81,10 @@ export default function RosterPaymentHeader({ transactions, setTransactions, use
             }
         });
 
+        setTimeout(() => {
+            setIsLoading(false)
+        }, 1000)
+
         await updateRoster({
             roster: {
                 many: {
@@ -89,6 +96,10 @@ export default function RosterPaymentHeader({ transactions, setTransactions, use
                 }
             }
         })
+
+        sessionStorage.removeItem(`payments-${formatDate({
+            date: usersParams?.roster?.rosterPayment?.date?.gte!
+        })}`)
     }
 
     return (
@@ -148,19 +159,41 @@ export default function RosterPaymentHeader({ transactions, setTransactions, use
                 </div>
                 <Popover>
                     <PopoverTrigger asChild>
-                        <Button leftIcon="Banknote" isLoading={isCreateTransactionsLoading}>
+                        <Button
+                            leftIcon="Banknote"
+                            isLoading={isCreateTransactionsLoading || isLoading}
+                            disabled={isCreateTransactionsLoading || isLoading}
+                        >
                             Pay
                         </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-4" align="start">
-                        <Button
-                            leftIcon="Banknote"
-                            variant='green'
-                            onClick={handleCreatePayments}
-                        >
-                            Create Payments
-                        </Button>
-
+                    <PopoverContent
+                        className="w-auto p-4" align="end">
+                        <div className='flex-col-container gap-2'>
+                            <strong>Payment</strong>
+                            <small>
+                                From: {formatDate({
+                                    date: usersParams?.roster?.rosterPayment?.date?.gte!,
+                                    f: 'dd, LLL, yy'
+                                })}
+                            </small>
+                            <small>
+                                To: {formatDate({
+                                    date: usersParams?.roster?.rosterPayment?.date?.lte!,
+                                    f: 'dd, LLL, yy'
+                                })}
+                            </small>
+                            <Button
+                                leftIcon="Banknote"
+                                variant='green'
+                                className='mt-4'
+                                onClick={handleCreatePayments}
+                                isLoading={isCreateTransactionsLoading || isLoading}
+                                disabled={isCreateTransactionsLoading || isLoading}
+                            >
+                                Create Payments
+                            </Button>
+                        </div>
                     </PopoverContent>
                 </Popover>
             </div>

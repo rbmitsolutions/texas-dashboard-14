@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 //components
 import { RosterPaymentTable } from "./table/rosterPaymentTable";
@@ -19,6 +19,7 @@ import { PayrollTransactionsType, TransactionsDirection, TransactionsMethod } fr
 import { IPOSTTransaction, IPOSTTransactionsBody } from "@/hooks/company/IPostCompanyDataHooks.interface";
 import { IUserExtraPaymentData } from "@/hooks/company/IGetCompanyDataHooks.interface";
 import { IDepartments } from "@/common/types/company/departaments.interface";
+import { useDebounce } from "@/common/utils/useDebouce";
 
 export interface ICreateTransaction {
     value: number,
@@ -39,7 +40,6 @@ export default function RosterPaymentsPageComponents({ departments }: RosterPaym
         companyRosterPaymentPage: users,
         setGETCompanyDataParams: setUsersParams,
         GETCompanyDataParams: usersParams,
-        isCompanyDataLoading: isLoading,
         refetchCompanyData: toRefetch
     } = useGETCompanyDataHooks({
         query: 'ROSTER',
@@ -81,7 +81,7 @@ export default function RosterPaymentsPageComponents({ departments }: RosterPaym
             type: data?.type,
             method: TransactionsMethod.PAYROLL,
             direction: TransactionsDirection.OUT,
-
+            date: usersParams?.roster?.rosterPayment?.date?.gte,
             total: data?.value,
             description,
 
@@ -111,64 +111,88 @@ export default function RosterPaymentsPageComponents({ departments }: RosterPaym
         return newTransaction
     }
 
-    if (isLoading) return <div />
+    const saveSession = useDebounce(() => {
+        sessionStorage.setItem(`payments-${formatDate({
+            date: usersParams?.roster?.rosterPayment?.date?.gte!
+        })}`, JSON.stringify(transaction))
+    }, 2000)
+
+    const getSession = () => {
+        const local = sessionStorage.getItem(`payments-${formatDate({
+            date: usersParams?.roster?.rosterPayment?.date?.gte!
+        })}`)
+        if (!local) return
+        setTransaction(JSON.parse(local))
+    }
+
+
+    useEffect(() => {
+        saveSession()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [transaction])
+
+    useEffect(() => {
+        setTransaction([])
+        getSession()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [usersParams?.roster?.rosterPayment?.date?.gte])
 
     return (
         <div className='flex-col-container'>
             <RosterPaymentHeader
-                transactions={transaction}
+                transactions={transaction || []}
                 setTransactions={setTransaction}
                 setUsersParams={setUsersParams}
                 usersParams={usersParams}
-                users={users?.users}
+                users={users?.users || []}
                 createTransactions={createTransactions}
                 isCreateTransactionsLoading={isCreateTransactionsLoading}
                 updateRoster={updateRoster}
             />
             <div className='flex-col-container gap-8 mt-4'>
-            {departments?.map(d => {
-                return (
-                    <Wrap
-                    key={d?.id}
-                    header={{
-                        title: {
-                            icon: 'SquareStack',
-                            title: d?.title
-                        }
-                    }}
-                    actions={{
-                        dateChange:{
-                            datePickerWithRange: {
-                                onConfirm: (data) => {
-                                    setUsersParams(() => ({
-                                        roster: {
-                                            rosterPayment: {
-                                                date: {
-                                                    gte: new Date(data?.from!),
-                                                    lte: new Date(data?.to!)
-                                                },
-                                                status: 'Working'
-                                            }
-                                        }
-                                    }))
-                                },
-                                value: {
-                                    from: usersParams?.roster?.rosterPayment?.date?.gte,
-                                    to: usersParams?.roster?.rosterPayment?.date?.lte
-                                },
-                                className: 'w-64'
-                            }
-                        }
-                    }}
-                    >
-                        <RosterPaymentTable
-                            users={users?.users?.filter(u => u?.role?.departament_id === d?.id)}
-                            createTransaction={createTransaction}
-                            transactions={transaction}
+                {departments?.map(d => {
+                    return (
+                        <Wrap
+                            key={d?.id}
+                            header={{
+                                title: {
+                                    icon: 'SquareStack',
+                                    title: d?.title
+                                }
+                            }}
+                            actions={{
+                                dateChange: {
+                                    datePickerWithRange: {
+                                        onConfirm: (data) => {
+                                            setUsersParams(() => ({
+                                                roster: {
+                                                    rosterPayment: {
+                                                        date: {
+                                                            gte: new Date(data?.from!),
+                                                            lte: new Date(data?.to!)
+                                                        },
+                                                        status: 'Working'
+                                                    }
+                                                }
+                                            }))
+                                        },
+                                        value: {
+                                            from: usersParams?.roster?.rosterPayment?.date?.gte,
+                                            to: usersParams?.roster?.rosterPayment?.date?.lte
+                                        },
+                                        className: 'w-64'
+                                    }
+                                }
+                            }}
+                        >
+                            <RosterPaymentTable
+                                users={users?.users?.filter(u => u?.role?.departament_id === d?.id) || []}
+                                createTransaction={createTransaction}
+                                transactions={transaction || []}
                             />
-                    </Wrap>
-                )
-            })}
+                        </Wrap>
+                    )
+                })}
             </div>
         </div>
     )

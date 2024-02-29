@@ -9,6 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import PaymentInputDescription from "./paymentInputDescription"
 
@@ -21,6 +26,7 @@ import { IUserExtraPaymentData } from "@/hooks/company/IGetCompanyDataHooks.inte
 import { IPOSTTransaction } from "@/hooks/company/IPostCompanyDataHooks.interface"
 import { ImagesPath } from "@/common/types/imgs"
 import { ICreateTransaction } from ".."
+import { Button } from "@/components/ui/button"
 
 interface RosterPaymentTableProps {
   users: IUserExtraPaymentData[]
@@ -39,8 +45,8 @@ export function RosterPaymentTable({
       <TableHeader >
         <TableRow>
           <TableHead className='w-56 py-4'>Employee</TableHead>
-          <TableHead className='w-28'>Schedule payment</TableHead>
-          <TableHead className='w-28'>Wages By Roster</TableHead>
+          <TableHead className='w-24'>Schedule payment</TableHead>
+          <TableHead className='w-24'>Wages By Roster</TableHead>
           {Object.values(PayrollTransactionsType).map(t => {
             return (
               <TableHead
@@ -49,6 +55,7 @@ export function RosterPaymentTable({
               >{t}</TableHead>
             )
           })}
+          <TableHead className='w-24'>Total To Pay</TableHead>
 
           <TableHead className='w-24'>Total By Clock In</TableHead>
           <TableHead className='w-24'>Total Paid</TableHead>
@@ -56,6 +63,12 @@ export function RosterPaymentTable({
       </TableHeader>
       <TableBody>
         {users?.map(user => {
+          const userTransactionsTotal = transactions?.filter(t => t.payee_key === user.id).reduce((acc, t) => {
+            acc += t.total
+            return acc
+          }, 0)
+
+          const userPaidTotal = user?.transactions?.reduce((a, b) => a + b.total, 0) || 0
           return (
             <TableRow key={user.id}>
               <TableCell>
@@ -90,13 +103,49 @@ export function RosterPaymentTable({
                   </TableCell>
                 )
               })}
-              <TableCell>
+              <TableCell className={userTransactionsTotal > 0 ? 'text-green-600 dark:text-green-500' : ''}>
+                {convertCentsToEuro(userTransactionsTotal)}
+              </TableCell>
+              <TableCell className={user?.total_roster > 0 ? 'text-yellow-600 dark:text-yellow-500' : ''}>
                 {convertCentsToEuro(user?.total_roster * 100)}
               </TableCell>
-              <TableCell>
-                {convertCentsToEuro(
-                  user?.transactions?.reduce((a, b) => a + b.total, 0) || 0
-                )}
+              <TableCell className={userPaidTotal > 0 ? 'text-red-600 dark:text-red-500' : ''}>
+
+                {userPaidTotal > 0 ?
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        className='p-2 w-full'
+                        variant='outline'
+                      >
+                        {convertCentsToEuro(
+                          userPaidTotal || 0
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="w-auto p-4" align="end">
+                      <div className='flex-col-container gap-2 w-56'>
+                        {user?.transactions?.map(t => {
+                          return (
+                            <div key={t.id} className='flex-container justify-between gap-4 border-b-2 pb-2'>
+                              <span className='capitalize'>{t.type}</span>
+                              <span>{convertCentsToEuro(t.total)}</span>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+
+
+                  :
+                  <>
+                    {convertCentsToEuro(
+                      0
+                    )}
+                  </>
+                }
               </TableCell>
             </TableRow>
           )

@@ -41,7 +41,8 @@ export interface ITransactions {
   type: TransactionsType;
   method: TransactionsMethod;
   direction: TransactionsDirection;
-
+  date?: Date;
+  
   status: TransactionsStatus;
 
   gift_card_id?: string;

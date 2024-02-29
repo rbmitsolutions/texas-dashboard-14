@@ -347,6 +347,11 @@ export interface IGETTransactionsQuery {
       in: TransactionsDirection[];
     };
 
+    date?: {
+      gte: Date;
+      lte: Date;
+    };
+
     status?: TransactionsStatus
 
     gift_card_id?: string;
@@ -356,7 +361,7 @@ export interface IGETTransactionsQuery {
 
     payee_key?: string;
 
-    date?: {
+    created_at?: {
       gte: Date;
       lte: Date;
     };
