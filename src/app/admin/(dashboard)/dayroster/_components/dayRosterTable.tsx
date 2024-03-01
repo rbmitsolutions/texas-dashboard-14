@@ -101,8 +101,7 @@ export function DayRosterTable<TData, TValue>({
               }))
             },
             value: userParams?.user?.all?.include?.roster?.gte || new Date(),
-            fromDate: new Date(),
-            toDate: addDaysToDate(new Date(), 14)
+            toDate: addDaysToDate(new Date(), 30)
           }
         },
         toRight: (

@@ -402,7 +402,6 @@ const routers: IRoute[] = [
     authorization: [
       Permissions.ADMIN,
       Permissions.ADMIN_GHOST,
-      Permissions.MY_PROFILE
     ],
     auth_device: true,
   },
@@ -428,7 +427,7 @@ const routers: IRoute[] = [
     authorization: [
       Permissions.MY_PROFILE
     ],
-    auth_device: false,
+    auth_device: true,
   },
   {
     name: "My Roster",

@@ -18,6 +18,7 @@ export default function DayrosterPage() {
         refetchUserData: toRefetch
     } = useGETUserDataHooks({
         query: 'USER_COMPANY',
+        keepParmas: true,
         defaultParams: {
             user: {
                 all: {
