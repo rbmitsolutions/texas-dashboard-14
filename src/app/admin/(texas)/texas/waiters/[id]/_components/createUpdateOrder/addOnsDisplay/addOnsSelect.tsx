@@ -145,8 +145,9 @@ export default function AddOnsSelect({ addOn, handleAddOns, handleAddFlag, addOn
                     return (
                         <Button
                             key={opt?.id}
-                            className={cn('text-foreground h-16 min-w-28 bg-transparent hover:bg-transparent focus:bg-transparent border-2 text-wrap text-xs', addOnsOrder?.find(a => a?.add_ons_opt_id === opt?.id) && 'border-primary')}
+                            className={cn('text-foreground h-16 min-w-28 bg-transparent hover:bg-transparent focus:bg-transparent border-2 text-wrap text-xs', addOnsOrder?.find(a => a?.add_ons_opt_id === opt?.id) && 'border-primary bg-primary/20')}
                             onClick={() => handleAddOnsChange(opt)}
+                            variant='ghost'
                         >
                             {opt?.title}
                         </Button>

@@ -1,13 +1,14 @@
 "use client"
 import { ColumnDef } from "@tanstack/react-table"
 import { formatDate } from "@/common/libs/date-fns/dateFormat"
-import { ITransactions, TransactionsMethod, TransactionsStatus } from "@/common/types/company/transactions.interface";
+import { ITransactions, TransactionsDirection, TransactionsMethod, TransactionsStatus } from "@/common/types/company/transactions.interface";
 import IconText from "@/components/common/iconText";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { UseMutateFunction } from "react-query";
 import { IPUTCompanyBody } from "@/hooks/company/IPutCompanyDataHooks.interface";
 import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types";
+import { convertCentsToEuro } from "@/common/utils/convertToEuro";
 
 interface TransactionsColumnsTableProps {
     updateTransaction: UseMutateFunction<any, any, IPUTCompanyBody, unknown>
@@ -30,6 +31,18 @@ export const transactionsColumnsTable = ({
                         f: 'dd, LLL, yy'
                     })}
                 </div>
+            }
+        },
+        {
+            accessorKey: "total",
+            header: () => <div className="text-left max-w-48">Paid</div>,
+            size: 60,
+            cell: ({ row }) => {
+                return (
+                    <div className="text-left max-w-48">
+                        {convertCentsToEuro(row?.original?.total)}
+                    </div>
+                )
             }
         },
         {
@@ -79,7 +92,7 @@ export const transactionsColumnsTable = ({
                             </PopoverTrigger>
                             <PopoverContent className="flex-col-container w-auto p-4" align="end">
                                 <div className='flex-col-container'>
-                                    <strong>Cancel Transaction</strong>
+                                    <strong>Cancel / Refunded</strong>
                                     <Button
                                         variant="yellow"
                                         size="sm"
@@ -106,6 +119,34 @@ export const transactionsColumnsTable = ({
                                     >
                                         Cancel
                                     </Button>
+                                    {row?.original?.direction !== TransactionsDirection.VOUCHER &&
+                                        <Button
+                                            variant="destructive"
+                                            size="sm"
+                                            className="mt-2"
+                                            leftIcon="Undo"
+                                            onClick={() => {
+                                                updateTransaction({
+                                                    transaction: {
+                                                        one: {
+                                                            id: row?.original?.id,
+                                                            total: row?.original?.total,
+                                                            status: TransactionsStatus.REFUNDED
+                                                        }
+                                                    }
+                                                }, {
+                                                    onSuccess: async () => {
+                                                        await emit({
+                                                            event: SocketIoEvent.TABLE_PAYMENT,
+                                                            message: row?.original?.payee_key
+                                                        })
+                                                    }
+                                                })
+                                            }}
+                                        >
+                                            Refunded
+                                        </Button>}
+
                                 </div>
                             </PopoverContent>
                         </Popover >

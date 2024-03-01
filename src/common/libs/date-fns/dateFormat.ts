@@ -34,7 +34,7 @@ export const getLastDayOfMonth = (date: Date): Date => {
 
 interface IFormatDate {
     date: Date,
-    f?: 'dd/MM/yyyy' | 'dd/MM/yyyy HH:mm' | 'LLL dd, yy' | 'PPP' | 'dd, LLL, yy' | 'yyyy-MM-dd' | 'dd LLL, yy' | 'HH:mm:ss' | 'HH:mm' | 'ccc' | 'h:mma'
+    f?: 'dd/MM/yyyy' | 'dd/MM/yyyy HH:mm' | 'LLL dd, yy' | 'PPP' | 'dd, LLL, yy' | 'yyyy-MM-dd' | 'dd LLL, yy' | 'HH:mm:ss' | 'HH:mm' | 'ccc' | 'h:mma' | 'LLL dd, yy HH:mm' 
 }
 
 export const formatDate = ({ date, f = 'dd/MM/yyyy' }: IFormatDate): string => {

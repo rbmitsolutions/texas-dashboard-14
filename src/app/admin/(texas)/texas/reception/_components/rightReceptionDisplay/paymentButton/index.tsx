@@ -89,6 +89,7 @@ export default function PaymentButton({
 
                         valid_by: user?.name,
                         valid_by_id: user?.user_id,
+                        date: new Date(),
 
                         client_id: table?.client_id || undefined,
 

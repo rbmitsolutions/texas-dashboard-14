@@ -109,7 +109,8 @@ export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuan
             <AlertDialogTrigger asChild>
                 <Button
                     type='button'
-                    className='flex-container-center justify-center min-h-40 max-h-60 h-full rounded-xl border-2 bg-background-soft text-black dark:text-white hover:bg-background-soft'
+                    className='flex-container-center justify-center min-h-40 max-h-60 h-full rounded-xl border-2'
+                    variant='default'
                 >
                     <h1>{menuItem?.short_title}</h1>
                 </Button>

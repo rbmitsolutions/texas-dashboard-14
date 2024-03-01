@@ -188,7 +188,7 @@ export default function Table({ table, waitres, reception }: TableProps) {
                             status: TransactionsStatus.CONFIRMED
                         }))} - Paid</small>
                     </div>
-                    <strong className='text-xl'>{convertCentsToEuro(reception?.getTotalOfOrdersByTableId(table?.id) - reception?.getTransactionsTotalByFilter({
+                    <strong className='text-xl'>{convertCentsToEuro(reception?.getTotalOfOrdersByTableId(table?.id) + reception?.getTransactionsTotalByFilter({
                         payee_key: table?.id,
                         status: TransactionsStatus.CONFIRMED
                     }))}</strong>

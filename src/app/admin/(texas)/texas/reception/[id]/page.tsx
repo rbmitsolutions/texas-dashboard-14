@@ -46,7 +46,10 @@ export default function Table({ params }: { params: { id: string } }) {
     const table = getTableById(params.id)
     const tableTransactions = getTransactionsByFilter({ payee_key: params.id })
     const orderControllers = getFilteredOrderControllers({ table_id: params.id })
-
+    const remaining = getTotalOfOrdersByTableId(params.id) + getTransactionsTotalByFilter({
+        payee_key: params.id,
+        status: TransactionsStatus.CONFIRMED
+    })
     const {
         refetchCompanyData: refetchTransactions
     } = useGETCompanyDataHooks({
@@ -70,6 +73,7 @@ export default function Table({ params }: { params: { id: string } }) {
         },
         UseQueryOptions: {
             onSuccess: (data) => {
+                console.log(data)
                 const transactions = data as IGetAllTransactionsResponse
                 setTransactions(transactions?.data)
             },
@@ -233,6 +237,7 @@ export default function Table({ params }: { params: { id: string } }) {
                 ),
                 return: {
                     path: '/admin/texas/reception',
+                    action: () => {}
                 }
             }}
             rightNavigation={{
@@ -248,10 +253,7 @@ export default function Table({ params }: { params: { id: string } }) {
                                 payee_key: params.id,
                                 status: TransactionsStatus.CONFIRMED
                             }),
-                            remaining: getTotalOfOrdersByTableId(params.id) - getTransactionsTotalByFilter({
-                                payee_key: params.id,
-                                status: TransactionsStatus.CONFIRMED
-                            })
+                            remaining
                         }}
                         giftCard={{
                             card: giftCard,
@@ -290,7 +292,7 @@ export default function Table({ params }: { params: { id: string } }) {
                             title: 'Transactions'
                         }
                     }}
-                    className='p-4 rounded-xl bg-background-soft overflow-auto'
+                    className='p-4 rounded-xl bg-background-soft overflow-auto scrollbar-thin'
                 >
                     <TransactionsTable
                         columns={transactionsColumnsTable({
