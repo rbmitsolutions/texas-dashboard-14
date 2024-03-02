@@ -5,7 +5,7 @@ import { cn } from "@/common/libs/shadcn/utils";
 
 //libs
 import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types";
-import { formatDate, getFirstTimeOfTheDay, getLastTimeOfTheDay } from "@/common/libs/date-fns/dateFormat";
+import { dateFormatIso, formatDate, getFirstTimeOfTheDay, getLastTimeOfTheDay } from "@/common/libs/date-fns/dateFormat";
 
 //components
 import {
@@ -62,7 +62,7 @@ export default function BookingPage() {
         defaultParams: {
             openDays: {
                 byShortDay: {
-                    date,
+                    date: dateFormatIso(new Date()),
                     short_day: formatDate({
                         date,
                         f: 'ccc'

@@ -38,7 +38,7 @@ import Icon from "@/common/libs/lucida-icon";
 //libs
 import { CreateBookingFormSchema, CreateBookingFormSchemaType } from "@/common/libs/zod/forms/restaurant/createBookingForm";
 import { BOOKING_PEOPLE, BOOKING_PEOPLE_AUTH } from "@/common/libs/restaurant/bookings";
-import { formatDate } from "@/common/libs/date-fns/dateFormat";
+import { dateFormatIso, formatDate } from "@/common/libs/date-fns/dateFormat";
 import { cn } from "@/common/libs/shadcn/utils";
 
 //hooks
@@ -95,10 +95,10 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
             openDays: {
                 byShortDay: {
                     short_day: formatDate({
-                        date: booking ? new Date(booking?.data?.date) : new Date(),
+                        date: booking ? dateFormatIso(booking?.data?.date) : dateFormatIso(new Date()),
                         f: 'ccc'
                     }),
-                    date: booking ? new Date(booking?.data?.date) : new Date()
+                    date: booking ? dateFormatIso(booking?.data?.date) : dateFormatIso(new Date())
                 }
             }
         },
@@ -115,7 +115,7 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
         defaultParams: {
             times_open: {
                 websiteConfig: {
-                    date: form.watch("date") && new Date(form.watch("date")) || new Date(form.watch('date')),
+                    date: form.watch("date") && dateFormatIso(form.watch("date")) || dateFormatIso(form.watch('date')),
                     amount_per_table: form.watch("amount_of_people") || 2
                 }
             }
@@ -134,7 +134,7 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
                 status: 'confirmed',
                 valid_number: validator.isMobilePhone(formData?.contact_number, ["en-IE"]),
                 amount_of_people: formData.amount_of_people,
-                date: new Date(formData.date),
+                date: dateFormatIso(formData.date),
             }
         }, {
             onSuccess: async () => {
@@ -149,6 +149,7 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
             await booking.updateBooking({
                 booking: {
                     ...formData,
+                    date: dateFormatIso(formData.date),
                     id: booking?.data?.id,
                     status: 'confirmed'
                 }
@@ -199,7 +200,7 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
         if (booking) {
             form.reset({
                 amount_of_people: booking?.data?.amount_of_people,
-                date: new Date(booking?.data?.date),
+                date: dateFormatIso(booking?.data?.date),
                 time: booking?.data?.time,
                 request: booking?.data?.request,
                 name: booking?.data?.client?.name.trim().split(/\s+/)[0] || '',

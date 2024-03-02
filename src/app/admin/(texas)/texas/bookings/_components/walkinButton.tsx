@@ -29,6 +29,7 @@ import { IBookingDays, ITimesOpen } from "@/common/types/restaurant/config.inter
 import { IClient } from "@/common/types/restaurant/client.interface";
 import { ITable } from "@/common/types/restaurant/tables.interface";
 import { SocketIoEvent } from "@/common/libs/socketIo/types";
+import { dateFormatIso } from "@/common/libs/date-fns/dateFormat";
 
 interface WalkinButtonProps {
     openDay: IBookingDays
@@ -96,7 +97,7 @@ export default function WalkinButton({ openDay, iconOnly, createBooking, clients
         await createBooking({
             booking: {
                 ...formData,
-                date: new Date(formData.date),
+                date: dateFormatIso(formData.date),
                 status: 'walk_in',
                 valid_number: formData?.contact_number ? validator.isMobilePhone(formData?.contact_number, ["en-IE"]) : false,
                 email: formData?.email ? formData?.email : "walkin@walkin.com",

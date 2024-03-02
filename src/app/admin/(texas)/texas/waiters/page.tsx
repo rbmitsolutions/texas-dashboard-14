@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 import { useEffect } from 'react';
 
 //libs
-import { addDaysToDate, formatDate, getFirstTimeOfTheDay } from '@/common/libs/date-fns/dateFormat';
+import { addDaysToDate, dateFormatIso, formatDate, getFirstTimeOfTheDay } from '@/common/libs/date-fns/dateFormat';
 
 //components
 import SearchInput from '@/components/common/searchInput';
@@ -89,7 +89,7 @@ export default function Tables() {
                         date: new Date(),
                         f: 'ccc'
                     }),
-                    date: new Date()
+                    date: dateFormatIso(new Date())
                 }
             }
         },
