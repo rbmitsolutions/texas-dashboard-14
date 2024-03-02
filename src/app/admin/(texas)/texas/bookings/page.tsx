@@ -78,6 +78,7 @@ export default function BookingPage() {
         }
     })
 
+
     const {
         restaurantAllBookings: bookings,
         refetchRestaurantData: refetchBookings,
@@ -153,7 +154,7 @@ export default function BookingPage() {
         setOpenDayParams(({
             openDays: {
                 byShortDay: {
-                    date,
+                    date: dateFormatIso(date),
                     short_day: formatDate({
                         date,
                         f: 'ccc'

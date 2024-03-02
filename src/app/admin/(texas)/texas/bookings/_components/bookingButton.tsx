@@ -177,7 +177,7 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
                             date: new Date(form?.watch('date')),
                             f: 'ccc'
                         }),
-                        date: new Date(form?.watch('date'))
+                        date: dateFormatIso(form?.watch('date'))
                     }
                 }
 
@@ -186,7 +186,7 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
             setGETWebsiteTimeConfigParams({
                 times_open: {
                     websiteConfig: {
-                        date: new Date(form?.watch('date')),
+                        date: dateFormatIso(form?.watch('date')),
                         amount_per_table: form?.watch('amount_of_people')
                     }
                 }
