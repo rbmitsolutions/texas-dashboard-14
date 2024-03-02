@@ -207,7 +207,7 @@ export default function BookingPage() {
                 content: (
                     <div className='flex-col-container'>
                         <DatePicker
-                            onConfirm={(date) => setDate(date!)}
+                            onConfirm={(date) => setDate(dateFormatIso(date!))}
                             value={new Date(date) || new Date()}
                             disabled={!isUserAuthorized(user, [Permissions.ADMIN, Permissions.BOOKING_ADM, Permissions.BOOKING_PAGINATION, Permissions.ADMIN_GHOST])}
                         />
