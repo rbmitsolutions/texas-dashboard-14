@@ -73,7 +73,6 @@ export default function Table({ params }: { params: { id: string } }) {
         },
         UseQueryOptions: {
             onSuccess: (data) => {
-                console.log(data)
                 const transactions = data as IGetAllTransactionsResponse
                 setTransactions(transactions?.data)
             },

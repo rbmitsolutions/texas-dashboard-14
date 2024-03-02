@@ -1,44 +1,52 @@
-import { isToday as isTodayFns, format, addDays, subDays, startOfMonth, endOfMonth, startOfDay, endOfDay, startOfWeek, parse, formatDuration, parseISO, addMinutes, isWithinInterval, isBefore } from "date-fns";
+import { isToday as isTodayFns, format, addDays, subDays, startOfMonth, endOfMonth, startOfDay, endOfDay, startOfWeek, parse, parseISO, addMinutes, isWithinInterval, isBefore, formatISO, eachDayOfInterval } from "date-fns";
+
+const dateFormatIso = (date: Date): Date => {
+    return new Date(formatISO(new Date(date), { representation: 'date' }) + "T00:00:00.000Z")
+}
 
 export const parseDate = (date: string, format: 'dd/MM/yy' | 'h:mma'): Date => {
     return parse(date, format, new Date())
 }
 
 export const isWithinIntervalDate = (date: Date, interval: { start: Date, end: Date }): boolean => {
-    return isWithinInterval(date, interval)
+    return isWithinInterval(dateFormatIso(date), interval)
 }
 
 export const getMondayOfTheWeek = (date: Date): Date => {
-    return addDays(startOfWeek(date), 1)
+    return addDays(startOfWeek(dateFormatIso(date)), 1)
 }
 
 export const getSundayOfTheWeek = (date: Date): Date => {
-    return addDays(startOfWeek(date), 7)
+    return addDays(startOfWeek(dateFormatIso(date)), 7)
 }
 
 export const getFistDayOfTheWeek = (date: Date): Date => {
-    return startOfWeek(date)
+    return startOfWeek(dateFormatIso(date))
 }
 
 export const getLastDayOfTheWeek = (date: Date): Date => {
-    return addDays(startOfWeek(date), 6)
+    return addDays(startOfWeek(dateFormatIso(date)), 6)
 }
 
 export const getFirstDayOfMonth = (date: Date): Date => {
-    return startOfMonth(date)
+    return startOfMonth(dateFormatIso(date))
 }
 
 export const getLastDayOfMonth = (date: Date): Date => {
-    return endOfMonth(date)
+    return endOfMonth(dateFormatIso(date))
+}
+
+export const getEachDayOfInterval = (start: Date, end: Date): Date[] => {
+    return eachDayOfInterval({ start: dateFormatIso(start), end: dateFormatIso(end) })
 }
 
 interface IFormatDate {
     date: Date,
-    f?: 'dd/MM/yyyy' | 'dd/MM/yyyy HH:mm' | 'LLL dd, yy' | 'PPP' | 'dd, LLL, yy' | 'yyyy-MM-dd' | 'dd LLL, yy' | 'HH:mm:ss' | 'HH:mm' | 'ccc' | 'h:mma' | 'LLL dd, yy HH:mm' 
+    f?: 'dd/MM/yyyy' | 'dd/MM/yyyy HH:mm' | 'LLL dd, yy' | 'PPP' | 'dd, LLL, yy' | 'yyyy-MM-dd' | 'dd LLL, yy' | 'HH:mm:ss' | 'HH:mm' | 'ccc' | 'h:mma' | 'LLL dd, yy HH:mm' | 'dd/MM/yy' | 'EEE'
 }
 
 export const formatDate = ({ date, f = 'dd/MM/yyyy' }: IFormatDate): string => {
-    return format(date, f)
+    return format(dateFormatIso(date), f)
 }
 
 export const convertMinutesToHoursAndMinutes = (minutes: number): string => {
@@ -51,27 +59,27 @@ export const convertMinutesToHoursAndMinutes = (minutes: number): string => {
 
 
 export const addDaysToDate = (date: Date, days: number): Date => {
-    return addDays(date, days)
+    return addDays(dateFormatIso(date), days)
 }
 
 export const addMinutesToDate = (date: Date, minutes: number): Date => {
-    return addMinutes(date, minutes)
+    return addMinutes(dateFormatIso(date), minutes)
 }
 
 export const subDaysToDate = (date: Date, days: number): Date => {
-    return subDays(date, days)
+    return subDays(dateFormatIso(date), days)
 }
 
 export const getFirstTimeOfTheDay = (date: Date): Date => {
-    return startOfDay(date)
+    return startOfDay(dateFormatIso(date))
 }
 
 export const getLastTimeOfTheDay = (date: Date): Date => {
-    return endOfDay(date)
+    return endOfDay(dateFormatIso(date))
 }
 
 export const isToday = (date: Date): boolean => {
-    return isTodayFns(date);
+    return isTodayFns(dateFormatIso(date));
 }
 
 export const parseISODate = (date: string): Date => {
@@ -79,9 +87,9 @@ export const parseISODate = (date: string): Date => {
 }
 
 export const isDateBeforeDate = (dateA: Date, dateB: Date): boolean => {
-    return isBefore(dateA, dateB)
+    return isBefore(dateFormatIso(dateA), dateFormatIso(dateB))
 }
 
 export const compareAscDate = (dateA: Date, dateB: Date): number => {
-    return dateA.getTime() - dateB.getTime()
+    return dateFormatIso(dateA).getTime() - dateFormatIso(dateB).getTime()
 }

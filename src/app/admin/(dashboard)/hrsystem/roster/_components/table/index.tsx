@@ -1,7 +1,5 @@
 import { UseMutateFunction } from "react-query";
 import { memo, useEffect, useState } from "react";
-import { eachDayOfInterval, format } from "date-fns";
-import Image from "next/image";
 
 //libs
 import { convertCentsToEuro } from "@/common/utils/convertToEuro";
@@ -25,9 +23,9 @@ import { IDELETECompanyDataBody } from "@/hooks/company/IDeleteCompanyDataHooks.
 //interface
 import { IDuties, IShifts } from "@/common/types/company/companyDetails.interface";
 import { IForm } from "@/common/types/company/form.interface";
-import { ImagesPath } from "@/common/types/imgs";
 import { IPUTCompanyBody } from "@/hooks/company/IPutCompanyDataHooks.interface";
 import { RedirectTo } from "@/common/types/routers/endPoints.types";
+import { formatDate, getEachDayOfInterval } from "@/common/libs/date-fns/dateFormat";
 
 export type IWeekDays = { date: string; day: string; }[]
 
@@ -43,12 +41,17 @@ interface RosterTableProps {
     updateRoster: UseMutateFunction<any, any, IPUTCompanyBody, unknown>
     createRosterTask: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
 }
-
 const getWeekdaysBetweenDates = (startDate: Date, endDate: Date) => {
-    const days = eachDayOfInterval({ start: startDate, end: endDate });
+    const days = getEachDayOfInterval(startDate, endDate);
     return days.map(day => ({
-        date: format(day, 'dd/MM/yy'),
-        day: format(day, 'EEE')
+        date: formatDate({
+            date: day,
+            f: 'dd/MM/yy'
+        }),
+        day: formatDate({
+            date: day,
+            f: 'EEE'
+        })
     }));
 };
 
