@@ -12,6 +12,7 @@ import { usePOSTCompanyDataHooks } from "@/hooks/company/companyDataHooks";
 import { IToken, Permissions } from "@/common/types/auth/auth.interface";
 import { IForm } from "@/common/types/company/form.interface";
 import { IFormBuildInput } from "@/common/utils/formBuilder";
+import toast from "react-hot-toast";
 
 interface FormRenderProps {
     form: IForm
@@ -57,8 +58,12 @@ export default function FormRender({ form }: FormRenderProps): JSX.Element {
             }
         }, {
             onSuccess: () => {
+                toast.success('Form submitted successfully')
                 //call the resetForm function inside the formLayout component
                 resetForm();
+            },
+            onError: () => {
+                toast.error('Form submission failed')
             }
         })
     }
