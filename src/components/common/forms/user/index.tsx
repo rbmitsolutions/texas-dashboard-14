@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { IRoles } from "@/common/types/company/companyDetails.interface";
 import { IPUTUserBody } from "@/hooks/user/IPutUserDataHooks.interface";
 import { IUser } from "@/common/types/user/user.interface";
+import PaymentDetails from "./_components/paymentDetails";
 
 interface UserProfileProps {
     user: IUser
@@ -28,7 +29,7 @@ export default function UserProfile({ user, isAdmin, roles, onUpdate }: UserProf
     return (
         <div className='flex-col-container gap-4'>
             <ProfileForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
-            <div className='grid-container grid-cols-2 md:pl-64 md:grid-cols-[repeat(auto-fit,minmax(200px,200px))]'>
+            <div className='grid-container grid-cols-2 md:pl-64 md:grid-cols-[repeat(auto-fit,minmax(200px,200px))] md:mb-6'>
                 <UpdatePasswordForm user={user} onUpdate={onUpdate} />
                 {isAdmin &&
                     <>
@@ -76,7 +77,10 @@ export default function UserProfile({ user, isAdmin, roles, onUpdate }: UserProf
                     </>
                 }
             </div>
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-2 md:mt-6 lg:grid-cols-3'>
+            {isAdmin &&
+                <PaymentDetails user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
+            }
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
                 <DetailsForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
                 <EmergencyContactForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
                 <BankDetailsForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />

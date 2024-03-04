@@ -17,6 +17,7 @@ export interface IUser {
     salary?: number;
     rate_per_hour?: number;
     rate_per_hour_weekend?: number;
+    payment_id?: string;
 
     date_of_birthday?: Date;
     sex?: string;
@@ -34,8 +35,6 @@ export interface IUser {
     account_number?: string;
     bic?: string;
     notes?: string;
-
-    payment_id?: string;
 
     emergency_name?: string;
     emergency_contact_number?: string;
