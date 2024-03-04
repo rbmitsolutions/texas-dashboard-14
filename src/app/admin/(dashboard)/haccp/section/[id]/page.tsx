@@ -14,9 +14,9 @@ export default async function SectionPage(params: { params: { id: string } }) {
     }) as IFormSection
 
     return (
-        <div className='flex-col-container items-center ga-4'>
-            <h1 className='text-3xl mt-8 capitalize'>{formSection?.title?.toLowerCase()}</h1>
-            <div className='grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-4 max-w-xl m-auto mt-4'>
+        <div className=''>
+            <h1 className='text-3xl text-center mt-8 capitalize'>{formSection?.title?.toLowerCase()}</h1>
+            <div className='grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-4 max-w-xl m-auto mt-8'>
                 {formSection?.forms?.map(form => {
                     return (
                         <Link
