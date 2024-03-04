@@ -83,7 +83,8 @@ export default function ClockDialog({ roster, onClose, isOpen, isLoading }: Cloc
                         {roster?.clock_in
                             ? formatDate({
                                 date: new Date(roster?.clock_in),
-                                f: "HH:mm:ss"
+                                f: "HH:mm:ss",
+                                iso: false
                             })
                             : "Clock in"}
                     </Button>
@@ -102,7 +103,8 @@ export default function ClockDialog({ roster, onClose, isOpen, isLoading }: Cloc
                         {roster?.break_in
                             ? formatDate({
                                 date: new Date(roster?.break_in),
-                                f: "HH:mm:ss"
+                                f: "HH:mm:ss",
+                                iso: false
                             })
                             : "Break Start"}
                     </Button>
@@ -121,7 +123,8 @@ export default function ClockDialog({ roster, onClose, isOpen, isLoading }: Cloc
                         {roster?.break_out
                             ? formatDate({
                                 date: new Date(roster?.break_out),
-                                f: "HH:mm:ss"
+                                f: "HH:mm:ss",
+                                iso: false
                             })
                             : "Break Finished"}
                     </Button>
@@ -138,7 +141,8 @@ export default function ClockDialog({ roster, onClose, isOpen, isLoading }: Cloc
                         {roster?.clock_out
                             ? formatDate({
                                 date: new Date(roster?.clock_out),
-                                f: "HH:mm:ss"
+                                f: "HH:mm:ss",
+                                iso: false
                             })
                             : "Clock Out"}
                     </Button>
