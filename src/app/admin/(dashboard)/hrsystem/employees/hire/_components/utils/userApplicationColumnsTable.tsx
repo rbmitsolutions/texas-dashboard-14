@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button"
 
 //interface
 import { EndPointsTypes, RedirectTo } from "@/common/types/routers/endPoints.types"
-import { IJobApplicationValues, IUser } from "@/common/types/user/user.interface"
+import { IAvailableDays, IJobApplicationValues, IUser } from "@/common/types/user/user.interface"
 import { IFiles } from "@/common/types/company/files.interface"
 import UserDisplay from "@/components/common/userDisplay"
 
@@ -61,7 +61,6 @@ export const userApplicationColumnsTable = ({
             size: 100,
             header: () => <div className="text-left">Applied</div>,
             cell: ({ row }) => {
-                const name = row.getValue('name') as string || ''
                 return (
                     <div>
                         {formatDate({
@@ -73,8 +72,8 @@ export const userApplicationColumnsTable = ({
             }
         },
         {
-            accessorKey: "profile_image",
-            size: 200,
+            accessorKey: "name",
+            size: 140,
             header: () => <div className="text-left">Avatar</div>,
             cell: ({ row }) => {
                 return (
@@ -83,7 +82,7 @@ export const userApplicationColumnsTable = ({
                             name: row?.original?.name || '',
                             profile_image: row?.original?.profile_image as string
                         }}
-                        displayClass="h-12 w-12"
+                        displayClass="h-8 w-8"
                     />
                 )
             }
@@ -94,17 +93,28 @@ export const userApplicationColumnsTable = ({
             size: 200
         },
         {
-            accessorKey: "health_limitations",
-            header: () => <div className="text-left max-w-48">Heath Limitations</div>,
-            size: 100,
+            accessorKey: "Available",
+            header: () => <div className="text-left">Available</div>,
             cell: ({ row }) => {
-                const values: IJobApplicationValues = JSON.parse(row?.original?.job_application?.values as any || '{}')
+                const available: IAvailableDays[] = JSON.parse(row?.original?.available_days as any)
                 return (
-                    <div className="flex-container-center">
-                        {values?.health_limitations}
+                    <div className="flex-container-center gap-2">
+                        {available?.map(day => {
+                            return (
+                                <Button
+                                    key={day?.weekDay}
+                                    className="flex-container-center w-10"
+                                    size='sm'
+                                    variant={day?.available ? 'green' : 'destructive'}
+                                >
+                                    {day?.weekDay}
+                                </Button>
+                            )
+                        })}
                     </div>
                 )
             },
+            size: 200
         },
         {
             accessorKey: "work_permit",

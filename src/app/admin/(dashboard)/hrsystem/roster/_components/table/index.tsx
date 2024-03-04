@@ -154,6 +154,7 @@ export function RosterTableMemo({ users, duties, shifts, forms, createRosterTask
                                 </div>
                             </td>
                             {weekDays?.map((date) => {
+                                const available = user?.available_days?.find(day => day?.weekDay === date?.day)
                                 return (
                                     <td key={date?.date} className='h-20'>
                                         <RosterDisplay
@@ -165,6 +166,7 @@ export function RosterTableMemo({ users, duties, shifts, forms, createRosterTask
                                             roster={user?.roster?.filter(
                                                 (x) => x.week_day === date?.day
                                             ) || []}
+                                            available={available}
                                         />
                                     </td>
                                 );

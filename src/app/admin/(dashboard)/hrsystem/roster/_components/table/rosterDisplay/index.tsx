@@ -17,6 +17,7 @@ import { IDELETECompanyDataBody } from "@/hooks/company/IDeleteCompanyDataHooks.
 import { IPUTCompanyBody } from "@/hooks/company/IPutCompanyDataHooks.interface"
 import { IRoster } from "@/common/types/company/roster.interface"
 import { IForm } from "@/common/types/company/form.interface"
+import { IAvailableDays } from "@/common/types/user/user.interface"
 
 interface RosterDisplayProps {
     forms: IForm[]
@@ -25,15 +26,29 @@ interface RosterDisplayProps {
     deleteRoster: UseMutateFunction<void, any, IDELETECompanyDataBody, unknown>
     deleteRosterTask: UseMutateFunction<void, any, IDELETECompanyDataBody, unknown>
     updateRoster: UseMutateFunction<any, any, IPUTCompanyBody, unknown>
+    available: IAvailableDays | undefined
 }
 
-export default function RosterDisplay({ roster, forms, createRosterTask, deleteRoster, deleteRosterTask, updateRoster }: RosterDisplayProps): JSX.Element {
+export default function RosterDisplay({ roster, forms, createRosterTask, deleteRoster, deleteRosterTask, updateRoster, available }: RosterDisplayProps): JSX.Element {
     return (
         <div className='p-1 h-full'>
             {roster?.length === 0 ?
-                <div className='flex items-center justify-center h-full w-full '>
-                    <p className='text-[10px] text-foreground/30'><i>No roster available</i></p>
-                </div>
+                available ?
+                    <div className='flex flex-col items-center justify-center h-full w-full'>
+                        {available?.shift?.map(s => {
+                            return (
+                                <small key={s} className='text-[10px] text-foreground/50'>
+                                    <i>
+                                        {s}
+                                    </i>
+                                </small>
+                            )
+                        })}
+                    </div>
+                    :
+                    <div className='flex items-center justify-center h-full w-full '>
+                        <p className='text-[10px] text-foreground/50'><i>No roster available</i></p>
+                    </div>
                 :
                 <div className='flex flex-col gap-2'>
                     {roster?.map(r => {
@@ -94,6 +109,6 @@ export default function RosterDisplay({ roster, forms, createRosterTask, deleteR
                     })}
                 </div>
             }
-        </div>
+        </div >
     )
 }
