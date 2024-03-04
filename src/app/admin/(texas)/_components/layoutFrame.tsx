@@ -10,6 +10,7 @@ import { Sidebar } from "../../(dashboard)/_components/sideBar";
 import { ThemeToggle } from "@/common/providers/theme/toggle";
 import SignOut from "../../../../components/common/signOut";
 import { Button } from "@/components/ui/button";
+import ExtraSideBar from "./extraSideBar";
 
 //store
 import { useSideBarStore } from "@/store/sideBar";
@@ -17,7 +18,6 @@ import { useSideBarStore } from "@/store/sideBar";
 //hooks
 import { IToken } from "@/common/types/auth/auth.interface";
 import { useRouter } from "next/navigation";
-import ExtraSideBar from "./extraSideBar";
 interface LayoutFrameProps {
     navigation: {
         icon: {

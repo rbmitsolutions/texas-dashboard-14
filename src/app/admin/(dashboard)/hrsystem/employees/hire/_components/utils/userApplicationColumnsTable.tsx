@@ -1,16 +1,22 @@
 "use client"
-import { api } from "@/common/libs/axios/api"
-import { formatDate } from "@/common/libs/date-fns/dateFormat"
+import toast from "react-hot-toast"
+import { ColumnDef } from "@tanstack/react-table"
 import Icon from "@/common/libs/lucida-icon"
-import { IFiles } from "@/common/types/company/files.interface"
+
+//libs
+import { formatDate } from "@/common/libs/date-fns/dateFormat"
+import { api } from "@/common/libs/axios/api"
+
+//components
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import LinkButton from "@/components/common/linkButton"
+import { Button } from "@/components/ui/button"
+
+//interface
 import { EndPointsTypes, RedirectTo } from "@/common/types/routers/endPoints.types"
 import { IJobApplicationValues, IUser } from "@/common/types/user/user.interface"
-import LinkButton from "@/components/common/linkButton"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { ColumnDef } from "@tanstack/react-table"
-import toast from "react-hot-toast"
+import { IFiles } from "@/common/types/company/files.interface"
+import UserDisplay from "@/components/common/userDisplay"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -68,24 +74,19 @@ export const userApplicationColumnsTable = ({
         },
         {
             accessorKey: "profile_image",
-            size: 40,
+            size: 200,
             header: () => <div className="text-left">Avatar</div>,
             cell: ({ row }) => {
-                const name = row.getValue('name') as string || ''
                 return (
-                    <Avatar className='h-12 w-12'>
-                        <AvatarImage src={row.getValue('profile_image')} alt={row.getValue('name')} />
-                        <AvatarFallback>
-                            {name?.split('')[0]}
-                        </AvatarFallback>
-                    </Avatar>
+                    <UserDisplay
+                        user={{
+                            name: row?.original?.name || '',
+                            profile_image: row?.original?.profile_image as string
+                        }}
+                        displayClass="h-12 w-12"
+                    />
                 )
             }
-        },
-        {
-            accessorKey: "name",
-            header: () => <div className="text-left max-w-48">Name</div>,
-            size: 150
         },
         {
             accessorKey: "email",
@@ -170,7 +171,7 @@ export const userApplicationColumnsTable = ({
                             onClick={() => selectUser(row.original)}
                             variant='green'
                         >
-                            <Icon name='UserPlus'/>
+                            <Icon name='UserPlus' />
                         </Button>
                         <Button
                             size='sm'
@@ -179,7 +180,7 @@ export const userApplicationColumnsTable = ({
                             leftIcon="Download"
                         >CV</Button>
                         <LinkButton
-                           href={`${RedirectTo.USER_PROFILE}/${row?.original?.id}`}
+                            href={`${RedirectTo.USER_PROFILE}/${row?.original?.id}`}
                         />
                     </div>
                 )

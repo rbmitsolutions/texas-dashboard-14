@@ -4,14 +4,16 @@ import { Dispatch, SetStateAction, useState } from "react"
 import {
   ColumnDef,
   ColumnFiltersState,
+  SortingState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
 
 //libs
-import { addDaysToDate } from "@/common/libs/date-fns/dateFormat"
+import { addDaysToDate, getFirstTimeOfTheDay, getLastTimeOfTheDay } from "@/common/libs/date-fns/dateFormat"
 
 //components
 import {
@@ -27,37 +29,36 @@ import SendSms from "@/components/common/sendSms"
 import Wrap from "@/components/common/wrap"
 
 //interfaces
+import { IGETCompanyDataQuery } from "@/hooks/company/IGetCompanyDataHooks.interface"
 import { IDepartments } from "@/common/types/company/departaments.interface"
-import { IGETUserDataQuery } from "@/hooks/user/IGetUserDataHooks.interface"
 import { IUser } from "@/common/types/user/user.interface"
 
 interface DayRosterTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   departament: IDepartments
-  setUsers: Dispatch<SetStateAction<IGETUserDataQuery>>
-  userParams: IGETUserDataQuery
+  setRosterParams: Dispatch<SetStateAction<IGETCompanyDataQuery>>
+  GetRosterParams: IGETCompanyDataQuery
 }
 
 export function DayRosterTable<TData, TValue>({
   columns,
   data,
   departament,
-  setUsers,
-  userParams
+  setRosterParams,
+  GetRosterParams
 }: DayRosterTableProps<TData, TValue>) {
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    []
-  )
+  const [sorting, setSorting] = useState<SortingState>([])
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
     state: {
-      columnFilters,
+      sorting,
     },
   })
 
@@ -84,23 +85,25 @@ export function DayRosterTable<TData, TValue>({
         dateChange: {
           datePicker: {
             onConfirm: (date) => {
-              setUsers(prev => ({
-                user: {
+              setRosterParams(() => ({
+                roster: {
                   all: {
-                    ...prev?.user?.all,
-                    include: {
-                      ...prev?.user?.all?.include,
-                      roster: {
-                        available: '1',
-                        gte: new Date(date || new Date()),
-                        lte: new Date(date || new Date())
-                      }
+                    pagination: {
+                      take: 500,
+                      skip: 0
+                    },
+                    date: {
+                      gte: getFirstTimeOfTheDay(date!),
+                      lte: getLastTimeOfTheDay(date!)
+                    },
+                    includes: {
+                      user: '1'
                     }
                   }
                 }
               }))
             },
-            value: userParams?.user?.all?.include?.roster?.gte || new Date(),
+            value: GetRosterParams?.roster?.all?.date?.gte || new Date(),
             toDate: addDaysToDate(new Date(), 30)
           }
         },

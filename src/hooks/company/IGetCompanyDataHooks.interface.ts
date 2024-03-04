@@ -69,6 +69,7 @@ export interface IGETCompanyRosterQuery {
     user_id?: string
     includes?: {
       user?: "1"
+      task?: '1'
     }
     pagination?: IQueryPagination
     orderBy?: {

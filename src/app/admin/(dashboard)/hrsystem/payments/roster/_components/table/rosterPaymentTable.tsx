@@ -27,6 +27,7 @@ import { IPOSTTransaction } from "@/hooks/company/IPostCompanyDataHooks.interfac
 import { ImagesPath } from "@/common/types/imgs"
 import { ICreateTransaction } from ".."
 import { Button } from "@/components/ui/button"
+import UserDisplay from "@/components/common/userDisplay"
 
 interface RosterPaymentTableProps {
   users: IUserExtraPaymentData[]
@@ -73,13 +74,13 @@ export function RosterPaymentTable({
             <TableRow key={user.id}>
               <TableCell>
                 <div className='flex-container items-center'>
-                  <Avatar className='h-8 w-8'>
-                    <AvatarImage src={user?.profile_image || ImagesPath.NO_IMAGE} alt={user?.name} />
-                    <AvatarFallback>
-                      {user?.name?.split('')[0]}
-                    </AvatarFallback>
-                  </Avatar>
-                  {user?.name}
+                  <UserDisplay
+                    user={{
+                      name: user?.name || '',
+                      profile_image: user?.profile_image as string
+                    }}
+                    displayClass="h-9 w-9"
+                  />
                 </div>
               </TableCell>
 

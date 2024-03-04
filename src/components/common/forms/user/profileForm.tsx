@@ -11,9 +11,6 @@ import IconText from "../../iconText";
 import { IPUTUserBody } from "@/hooks/user/IPutUserDataHooks.interface";
 import { useAuthHooks } from "@/hooks/useAuthHooks";
 
-//interface
-import { IRoles } from "@/common/types/company/companyDetails.interface";
-
 interface ProfileFormProps {
     user: IUser
     isAdmin: boolean

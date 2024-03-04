@@ -2,6 +2,7 @@ import { UseMutateFunction } from "react-query";
 import { memo, useEffect, useState } from "react";
 
 //libs
+import { formatDate, getEachDayOfInterval } from "@/common/libs/date-fns/dateFormat";
 import { convertCentsToEuro } from "@/common/utils/convertToEuro";
 import { cn } from "@/common/libs/shadcn/utils";
 import Icon from "@/common/libs/lucida-icon";
@@ -22,10 +23,10 @@ import { IDELETECompanyDataBody } from "@/hooks/company/IDeleteCompanyDataHooks.
 
 //interface
 import { IDuties, IShifts } from "@/common/types/company/companyDetails.interface";
-import { IForm } from "@/common/types/company/form.interface";
 import { IPUTCompanyBody } from "@/hooks/company/IPutCompanyDataHooks.interface";
 import { RedirectTo } from "@/common/types/routers/endPoints.types";
-import { formatDate, getEachDayOfInterval } from "@/common/libs/date-fns/dateFormat";
+import { IForm } from "@/common/types/company/form.interface";
+import UserDisplay from "@/components/common/userDisplay";
 
 export type IWeekDays = { date: string; day: string; }[]
 
@@ -71,7 +72,7 @@ export function RosterTableMemo({ users, duties, shifts, forms, createRosterTask
         <table className='bg-slate-100 dark:bg-slate-900'>
             <thead>
                 <tr>
-                    <th className={cn(styles.th, 'min-w-32 max-w-32 w-full text-left')}>
+                    <th className={cn(styles.th, 'min-w-36 max-w-36 w-full text-left')}>
                         Employee
                     </th>
                     {weekDays?.map((date) => {
@@ -108,13 +109,14 @@ export function RosterTableMemo({ users, duties, shifts, forms, createRosterTask
                             <td>
                                 <div className='flex flex-col p-1'>
                                     <div className='flex items-center gap-2'>
-                                        <Avatar className='h-12 w-12'>
-                                            <AvatarImage src={user?.profile_image} alt={user?.name} />
-                                            <AvatarFallback>
-                                                {user?.name?.split('')[0]}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        <span className='text-xs line-clamp-1'>{user?.name}</span>
+                                        <UserDisplay
+                                            user={{
+                                                name: user?.name || '',
+                                                profile_image: user?.profile_image as string
+                                            }}
+                                            displayClass="h-7 w-7"
+                                            titleClass="text-[12px] font-bold"
+                                        />
                                     </div>
                                     <div className='flex items-center gap-1 mt-2'>
                                         <AddToRoster

@@ -1,5 +1,6 @@
 'use client'
 
+import { getFirstTimeOfTheDay, getLastTimeOfTheDay } from "@/common/libs/date-fns/dateFormat"
 //components
 import { dayRosterColumnsTable } from "./_components/dayRosterColumnsTable"
 import { DayRosterTable } from "./_components/dayRosterTable"
@@ -7,33 +8,32 @@ import Wrap from "@/components/common/wrap"
 
 //hooks
 import { useDELETECompanyDataHooks, useGETCompanyDataHooks, usePOSTCompanyDataHooks, usePUTCompanyDataHooks } from "@/hooks/company/companyDataHooks"
-import { useGETUserDataHooks } from "@/hooks/user/useUserDataHooks"
 
 export default function DayrosterPage() {
+
     const {
-        allUsers,
-        isUserDataFetching: isUserDataLoading,
-        setGETUserDataParams,
-        GETUserDataParams,
-        refetchUserData: toRefetch
-    } = useGETUserDataHooks({
-        query: 'USER_COMPANY',
-        keepParmas: true,
+        companyAllRoster: roster,
+        isCompanyDataFetching: isRosterLoading,
+        companyDataError: error,
+        setGETCompanyDataParams: setRosterParams,
+        GETCompanyDataParams: GetRosterParams,
+        refetchCompanyData: toRefetch
+    } = useGETCompanyDataHooks({
+        query: 'ROSTER',
         defaultParams: {
-            user: {
+            roster: {
                 all: {
-                    status: 'Working',
-                    include: {
-                        roster: {
-                            available: '1',
-                            gte: new Date(),
-                            lte: new Date()
-                        },
-                        role: '1'
-                    },
                     pagination: {
                         take: 500,
                         skip: 0
+                    },
+                    date: {
+                        gte: getFirstTimeOfTheDay(new Date()),
+                        lte: getLastTimeOfTheDay(new Date())
+                    },
+                    includes:{
+                        user: '1',
+                        task: '1'
                     }
                 }
             }
@@ -133,13 +133,14 @@ export default function DayrosterPage() {
         toRefetch
     })
 
+    console.log(roster)
 
     return (
         <Wrap
-            isLoading={isDepartamentsLoading || isFormsLoading || isUserDataLoading || isShiftsLoading || isDutiesLoading}
+            isLoading={isDepartamentsLoading || isFormsLoading || isRosterLoading || isShiftsLoading || isDutiesLoading}
         >
             {allDepartaments?.data?.map(d => {
-                const users = allUsers?.data?.filter(u => u?.role?.departament_id === d.id && u?.roster?.length! > 0)
+                const rosters = roster?.data?.filter(r => r?.user?.role?.departament_id === d.id)
                 return (
                     <DayRosterTable
                         key={d.id}
@@ -151,14 +152,14 @@ export default function DayrosterPage() {
                             createRosterTask,
                             deleteRosterTask,
                             forms: allForms?.data,
-                            userParams: GETUserDataParams
+                            // userParams: GETUserDataParams
                         })}
-                        data={users || []}
-                        setUsers={setGETUserDataParams}
-                        userParams={GETUserDataParams}
+                        data={rosters || []}
+                        setRosterParams={setRosterParams}
+                        GetRosterParams={GetRosterParams}
                     />
                 )
-            })}
+            })} 
         </Wrap>
     )
 }

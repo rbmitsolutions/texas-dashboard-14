@@ -29,13 +29,6 @@ export function FilledUserTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    // onRowSelectionChange: setRowSelection,
-    // onColumnFiltersChange: setColumnFilters,
-    // getFilteredRowModel: getFilteredRowModel(),
-    // state: {
-    //   rowSelection,
-    //   columnFilters,
-    // },
   })
 
   return (

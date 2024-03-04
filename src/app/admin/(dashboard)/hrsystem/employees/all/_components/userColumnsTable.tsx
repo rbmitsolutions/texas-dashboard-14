@@ -1,10 +1,14 @@
 "use client"
-import { RedirectTo } from "@/common/types/routers/endPoints.types"
-import { IUser } from "@/common/types/user/user.interface"
+
+//components
+import UserDisplay from "@/components/common/userDisplay"
 import LinkButton from "@/components/common/linkButton"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
+
+//interface
+import { RedirectTo } from "@/common/types/routers/endPoints.types"
+import { IUser } from "@/common/types/user/user.interface"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -32,25 +36,20 @@ export const userColumnsTable: ColumnDef<IUser>[] = [
 
     },
     {
-        accessorKey: "profile_image",
+        accessorKey: "name",
         size: 40,
         header: () => <div className="text-left">Avatar</div>,
         cell: ({ row }) => {
-            const name = row.getValue('name') as string || ''
             return (
-                <Avatar className='h-12 w-12'>
-                    <AvatarImage src={row.getValue('profile_image')} alt={row.getValue('name')} />
-                    <AvatarFallback>
-                        {name?.split('')[0]}
-                    </AvatarFallback>
-                </Avatar>
+                <UserDisplay
+                    user={{
+                        name: row?.original?.name || '',
+                        profile_image: row?.original?.profile_image as string
+                    }}
+                    displayClass="h-10 w-10"
+                />
             )
         }
-    },
-    {
-        accessorKey: "name",
-        header: () => <div className="text-left max-w-48">Name</div>,
-        size: 150
     },
     {
         accessorKey: "email",
@@ -75,7 +74,7 @@ export const userColumnsTable: ColumnDef<IUser>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex-container-center">
-                    <LinkButton 
+                    <LinkButton
                         href={`${RedirectTo.USER_PROFILE}/${row?.original?.id}`}
                     />
                 </div>

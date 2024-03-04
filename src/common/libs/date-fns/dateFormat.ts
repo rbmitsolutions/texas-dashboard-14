@@ -43,10 +43,11 @@ export const getEachDayOfInterval = (start: Date, end: Date): Date[] => {
 interface IFormatDate {
     date: Date,
     f?: 'dd/MM/yyyy' | 'dd/MM/yyyy HH:mm' | 'LLL dd, yy' | 'PPP' | 'dd, LLL, yy' | 'yyyy-MM-dd' | 'dd LLL, yy' | 'HH:mm:ss' | 'HH:mm' | 'ccc' | 'h:mma' | 'LLL dd, yy HH:mm' | 'dd/MM/yy' | 'EEE'
+    iso?: boolean
 }
 
-export const formatDate = ({ date, f = 'dd/MM/yyyy' }: IFormatDate): string => {
-    return format(dateFormatIso(date), f)
+export const formatDate = ({ date, f = 'dd/MM/yyyy', iso = true }: IFormatDate): string => {
+    return format(iso ? dateFormatIso(date) : date, f)
 }
 
 export const convertMinutesToHoursAndMinutes = (minutes: number): string => {
