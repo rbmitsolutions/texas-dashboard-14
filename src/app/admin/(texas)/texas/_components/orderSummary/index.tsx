@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button"
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 import { IMenuSection } from "@/common/types/restaurant/menu.interface";
 import { IOrder } from "@/common/types/restaurant/order.interface";
-import { ICreateNewOrder } from "@/store/texas/order";
+import { ICreateNewOrder } from "@/store/restaurant/order";
 
 interface IOrderSummary {
     order: IOrder[] | ICreateNewOrder[]

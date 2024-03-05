@@ -1,6 +1,7 @@
 import TablesStatus from "./tableStatus"
 import { UseMutateFunction } from "react-query"
 import { useRouter } from "next/navigation"
+import toast from "react-hot-toast"
 import Link from "next/link"
 
 //libs
@@ -21,8 +22,9 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import IconText from "@/components/common/iconText"
+import { getCurretBookingTime } from "../../bookings/_components/utils"
 import { RedirectTo } from "@/common/types/routers/endPoints.types"
+import IconText from "@/components/common/iconText"
 import { Button } from "@/components/ui/button"
 
 //store
@@ -31,12 +33,10 @@ import { TransactionsState } from "@/store/company/transactions"
 //interfaces
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface"
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
+import { TransactionsStatus } from "@/common/types/company/transactions.interface"
 import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types"
 import { ITimesOpen } from "@/common/types/restaurant/config.interface"
 import { ITable } from "@/common/types/restaurant/tables.interface"
-import { TransactionsStatus } from "@/common/types/company/transactions.interface"
-import { getCurretBookingTime } from "../../bookings/_components/utils"
-import toast from "react-hot-toast"
 
 interface TableProps {
     table: ITable
@@ -60,7 +60,7 @@ export default function Table({ table, waitres, reception }: TableProps) {
             const walkInClient = await getWalkInClient()
             const currentTime = getCurretBookingTime(waitres?.timesOpen)
 
-            if(!currentTime) return toast.error('Restaurant is closed')
+            if (!currentTime) return toast.error('Restaurant is closed')
 
             await waitres.createBooking({
                 booking: {
@@ -89,6 +89,7 @@ export default function Table({ table, waitres, reception }: TableProps) {
         }
     }
 
+
     return (
         <div className='flex gap-2 min-h-40 bg-background-soft rounded-lg'>
             <div className={cn('flex-col-container w-10 py-1 items-center justify-between rounded-l-lg', table?.is_open ? 'bg-green-500 dark:bg-green-700' : 'bg-red-400 dark:bg-red-800')}>
@@ -108,7 +109,8 @@ export default function Table({ table, waitres, reception }: TableProps) {
                                 icon="Clock"
                                 text={formatDate({
                                     date: table?.start_time,
-                                    f: 'HH:mm:ss'
+                                    f: 'HH:mm:ss',
+                                    iso: false
                                 })}
                                 iconSize={14}
                             />
@@ -126,7 +128,6 @@ export default function Table({ table, waitres, reception }: TableProps) {
                                 text={`Pass ${table?.pass}`}
                                 iconSize={14}
                             />
-
                         </Link>
                         <TablesStatus
                             table={table}
@@ -170,7 +171,7 @@ export default function Table({ table, waitres, reception }: TableProps) {
                     </AlertDialog>
             )}
 
-            {reception &&
+            {reception && table?.is_open &&
                 <Link className='flex flex-col justify-between gap-1 h-full w-full p-2' href={`/admin/texas/reception/${table?.id}`}>
                     <div className='flex flex-col gap-1'>
                         <strong className='capitalize text-sm'>{table?.client_name?.toLowerCase() || 'Walk In'}</strong>
@@ -178,7 +179,8 @@ export default function Table({ table, waitres, reception }: TableProps) {
                             icon="Clock"
                             text={formatDate({
                                 date: table?.start_time,
-                                f: 'HH:mm:ss'
+                                f: 'HH:mm:ss',
+                                iso: false
                             })}
                             iconSize={14}
                         />
@@ -188,11 +190,21 @@ export default function Table({ table, waitres, reception }: TableProps) {
                             status: TransactionsStatus.CONFIRMED
                         }))} - Paid</small>
                     </div>
-                    <strong className='text-xl'>{convertCentsToEuro(reception?.getTotalOfOrdersByTableId(table?.id) + reception?.getTransactionsTotalByFilter({
+                    <strong className='text-xl'>{convertCentsToEuro(reception?.getTotalOfOrdersByTableId(table?.id) - reception?.getTransactionsTotalByFilter({
                         payee_key: table?.id,
                         status: TransactionsStatus.CONFIRMED
                     }))}</strong>
-                </Link>}
+                </Link>
+            }
+
+            {reception && !table?.is_open &&
+                <div className='flex-container items-center justify-center w-full'>
+                    <small className='text-foreground/30'>
+                        <i >Table is Close</i>
+                    </small>
+                </div>
+            }
+
         </div>
     )
 }

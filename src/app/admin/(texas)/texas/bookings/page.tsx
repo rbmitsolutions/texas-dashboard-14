@@ -17,6 +17,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { DatePicker } from "@/components/common/datePicker";
 import BookingDetails from "./_components/bookingDetails";
 import SearchInput from "@/components/common/searchInput";
 import BookingButton from "./_components/bookingButton";
@@ -31,19 +32,20 @@ import Wrap from "@/components/common/wrap";
 import { useDELETERestaurantDataHooks, useGETRestaurantDataHooks, usePOSTRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
 import { useAuthHooks } from "@/hooks/useAuthHooks";
 
+//hooks
+import { useTablesStore } from "@/store/restaurant/tables";
+
 //interfaces
 import { BOOKING_STATUS, IBookingPageFilter, bookingPagefilter } from "@/common/libs/restaurant/bookings";
 import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized";
-import { Permissions } from "@/common/types/auth/auth.interface";
-import { DatePicker } from "@/components/common/datePicker";
-import { useOrderSystemTablesStore } from "@/store/texas/tables";
 import { IBookingDays } from "@/common/types/restaurant/config.interface";
+import { Permissions } from "@/common/types/auth/auth.interface";
 
 const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
 export default function BookingPage() {
     const { user } = useAuthHooks()
-    const { setTables, getTablesFiltered } = useOrderSystemTablesStore()
+    const { setTables, getTablesFiltered } = useTablesStore()
     const isUserAuth = isUserAuthorized(user, [Permissions.ADMIN, Permissions.BOOKING_ADM])
     const [date, setDate] = useState(new Date())
     const [filter, setFilter] = useState<IBookingPageFilter>({

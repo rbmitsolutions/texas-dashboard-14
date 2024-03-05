@@ -1,27 +1,23 @@
 import { IOrderController } from '@/common/types/restaurant/order.interface';
 import { create } from 'zustand';
 
-interface OrderControllerState {
+interface OrderControllerFilterProps {
+    table_id: string
+}
+
+interface OrderControllerStateProps {
     orderControllers: IOrderController[]
     setOrderControllers: (orderControllers: IOrderController[]) => void
-    orderControllerFilter: {
-        table_id: string
-    },
-    setOrderControllerFilter: (filter: { table_id: string }) => void
-    getFilteredOrderControllers: (filter: OrderControllerState['orderControllerFilter']) => IOrderController[]
+    getOrderControllers: (filter: OrderControllerFilterProps) => IOrderController[]
     getTotalOfOrdersByTableId: (table_id: string) => number
 }
 
-export const useOrderSystemOrderControllerStore = create<OrderControllerState>((set) => ({
+export const useOrderControllerStore = create<OrderControllerStateProps>((set) => ({
     orderControllers: [],
     setOrderControllers: (orderControllers) => set({ orderControllers }),
-    orderControllerFilter: {
-        table_id: ''
-    },
-    setOrderControllerFilter: (filter) => set({ orderControllerFilter: filter }),
-    getFilteredOrderControllers: (filter) => {
+    getOrderControllers: (filter) => {
         const { table_id } = filter
-        let orderControllers: IOrderController[] = [...useOrderSystemOrderControllerStore.getState().orderControllers]
+        let orderControllers: IOrderController[] = [...useOrderControllerStore.getState().orderControllers]
 
         if (table_id.length > 0) {
             orderControllers = orderControllers.filter((orderController) => orderController.table_id === table_id)
@@ -30,7 +26,7 @@ export const useOrderSystemOrderControllerStore = create<OrderControllerState>((
         return orderControllers
     },
     getTotalOfOrdersByTableId: (table_id) => {
-        const orderControllers = useOrderSystemOrderControllerStore.getState().orderControllers.filter((orderController) => orderController.table_id === table_id)
+        const orderControllers = useOrderControllerStore.getState().orderControllers.filter((orderController) => orderController.table_id === table_id)
 
         let total = 0
 

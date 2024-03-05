@@ -1,6 +1,6 @@
 'use client'
 import { io } from 'socket.io-client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 //libs
 import { addDaysToDate, getFirstTimeOfTheDay } from '@/common/libs/date-fns/dateFormat';
@@ -15,15 +15,15 @@ import Wrap from '@/components/common/wrap';
 
 //hooks
 import { useGETCompanyDataHooks, usePOSTCompanyDataHooks, usePUTCompanyDataHooks } from '@/hooks/company/companyDataHooks';
-import { useGETRestaurantDataHooks } from '@/hooks/restaurant/restaurantDataHooks';
+import { useGETRestaurantDataHooks, usePUTRestaurantDataHooks } from '@/hooks/restaurant/restaurantDataHooks';
 import { useSocketIoHooks } from '@/hooks/useSocketIoHooks';
 import { useAuthHooks } from '@/hooks/useAuthHooks';
 
 //store
-import { useOrderSystemOrderControllerStore } from '@/store/texas/orderController';
+import { useOrderControllerStore } from '@/store/restaurant/orderController';
 import { useTransactionsStore } from '@/store/company/transactions';
-import { useOrderTablesNewOrderStore } from '@/store/texas/order';
-import { useOrderSystemTablesStore } from '@/store/texas/tables';
+import { useTablesStore } from '@/store/restaurant/tables';
+import { useOrderStore } from '@/store/restaurant/order';
 
 //interfaces
 import { IAllOrderControllerResponse, IGETTablesAllResponse } from '@/hooks/restaurant/IGetRestaurantDataHooks.interface';
@@ -31,21 +31,25 @@ import { IGetAllTransactionsResponse } from '@/hooks/company/IGetCompanyDataHook
 import { TableTransactionsType, TransactionsStatus } from '@/common/types/company/transactions.interface';
 import { ISocketMessage, SocketIoEvent } from '@/common/libs/socketIo/types';
 import { ITable } from '@/common/types/restaurant/tables.interface';
+import { CloseTableDialog } from '../_components/closeTableDialog';
+import { useRouter } from 'next/navigation';
+import { RedirectTo } from '@/common/types/routers/endPoints.types';
 
 const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
 export default function Table({ params }: { params: { id: string } }) {
-    const { getFilteredOrderControllers, getTotalOfOrdersByTableId } = useOrderSystemOrderControllerStore()
+    const { push } = useRouter()
+    const { getOrderControllers, getTotalOfOrdersByTableId, setOrderControllers } = useOrderControllerStore()
     const { getTransactionsByFilter, getTransactionsTotalByFilter, setTransactions, transactions } = useTransactionsStore()
-    const { setOrderControllers } = useOrderSystemOrderControllerStore()
-    const { getOneOrderTotal } = useOrderTablesNewOrderStore()
-    const { getTableById, tables, setTables } = useOrderSystemTablesStore()
-    const { user } = useAuthHooks()
+    const { getOneOrderTotal } = useOrderStore()
+    const { getTableById, tables, setTables } = useTablesStore()
     const { emit } = useSocketIoHooks()
+    const { user } = useAuthHooks()
+    const [isCloseTableDialogOpen, setIsCloseTableDialogOpen] = useState<boolean>(false)
 
     const table = getTableById(params.id)
     const tableTransactions = getTransactionsByFilter({ payee_key: params.id })
-    const orderControllers = getFilteredOrderControllers({ table_id: params.id })
+    const orderControllers = getOrderControllers({ table_id: params.id })
     const remaining = getTotalOfOrdersByTableId(params.id) + getTransactionsTotalByFilter({
         payee_key: params.id,
         status: TransactionsStatus.CONFIRMED
@@ -192,6 +196,44 @@ export default function Table({ params }: { params: { id: string } }) {
     const { updateCompanyData: updateTransaction } = usePUTCompanyDataHooks({
         query: 'TRANSACTIONS'
     })
+
+
+    const { updateRestaurantData: updateTable } = usePUTRestaurantDataHooks({
+        query: 'TABLES'
+    })
+
+
+    const handleCloseTable = () => {
+        if (table?.client_id && table?.client_name) {
+            updateTable({
+                table: {
+                    id: params.id,
+                    close_table: {
+                        client_id: table?.client_id,
+                        client_name: table?.client_name
+                    }
+                }
+            }, {
+                onSuccess: async () => {
+                    setIsCloseTableDialogOpen(false)
+                    await emit({
+                        event: SocketIoEvent.TABLE,
+                        message: params.id
+
+                    })
+                    await emit({
+                        event: SocketIoEvent.TABLE_PAYMENT,
+                        message: params.id
+                    })
+                    await emit({
+                        event: SocketIoEvent.BOOKING,
+                        message: params.id
+                    })
+                    push(RedirectTo.RECEPTION)
+                }
+            })
+        }
+    }
     useEffect(() => {
         socket.on("message", (message: ISocketMessage) => {
             // if (message?.event === SocketIoEvent.ORDER && message?.message === params?.id) {
@@ -230,13 +272,16 @@ export default function Table({ params }: { params: { id: string } }) {
                 },
                 content: (
                     <div className='flex-col-container overflow-auto'>
-
+                        <CloseTableDialog
+                            isOpen={isCloseTableDialogOpen}
+                            setIsOpen={setIsCloseTableDialogOpen}
+                            onClose={handleCloseTable}
+                        />
 
                     </div>
                 ),
                 return: {
-                    path: '/admin/texas/reception',
-                    action: () => {}
+                    action: () => setIsCloseTableDialogOpen(prev => !prev),
                 }
             }}
             rightNavigation={{

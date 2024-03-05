@@ -8,7 +8,7 @@ import Icon from "@/common/libs/lucida-icon";
 import { Button } from "@/components/ui/button";
 
 //store
-import { ICreateNewOrder } from "@/store/texas/order";
+import { ICreateNewOrder } from "@/store/restaurant/order";
 
 //interface
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";

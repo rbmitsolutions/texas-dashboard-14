@@ -30,10 +30,12 @@ export function Sidebar({ alwaysFixed = false }: SidebarProps) {
     const { user } = useAuthHooks()
     const { isOpen, toggleSideBar } = useSideBarStore()
     const [preRendered, setPreRendered] = useState(false);
+
     useEffect(() => {
         setPreRendered(true);
     }, [])
 
+    //todo: remove it and use it on the token
     const {
         userProfileCompleted,
         refetchUserData: toRefetch

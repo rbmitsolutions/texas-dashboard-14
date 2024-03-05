@@ -1,6 +1,7 @@
 import { ITimesOpen } from "@/common/types/restaurant/config.interface";
 
 export const getCurretBookingTime = (timesOpen: ITimesOpen[]): ITimesOpen | undefined => {
+    return timesOpen[0]
     const hours =  new Date().getHours();
     let minutes =  new Date().getMinutes();
 

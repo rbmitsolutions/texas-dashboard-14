@@ -5,7 +5,7 @@ import AddOnsSelect from "./addOnsSelect";
 
 //interface
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
-import { IAddOnsCreateOrder, ICreateNewOrder } from "@/store/texas/order";
+import { IAddOnsCreateOrder, ICreateNewOrder } from "@/store/restaurant/order";
 
 export interface IHandleAddOnsSelection {
     option: IMenuAddOnsOption

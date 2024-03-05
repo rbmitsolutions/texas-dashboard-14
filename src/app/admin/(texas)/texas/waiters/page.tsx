@@ -17,18 +17,18 @@ import { useSocketIoHooks } from '@/hooks/useSocketIoHooks';
 import { useAuthHooks } from '@/hooks/useAuthHooks';
 
 //store
-import { useOrderSystemTablesStore } from '@/store/texas/tables';
+import { useTablesStore } from '@/store/restaurant/tables';
 
 //interfaces
 import { IAllOrderControllerResponse, IGETTablesAllResponse } from '@/hooks/restaurant/IGetRestaurantDataHooks.interface';
-import { useOrderSystemOrderControllerStore } from '@/store/texas/orderController';
+import { useOrderControllerStore } from '@/store/restaurant/orderController';
 import { ISocketMessage, SocketIoEvent } from '@/common/libs/socketIo/types';
 
 const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
 export default function Tables() {
-    const { tablesFilter, setTablesFilter, setTables, getTablesFiltered } = useOrderSystemTablesStore()
-    const { setOrderControllers } = useOrderSystemOrderControllerStore()
+    const { tablesFilter, setTablesFilter, setTables, getTablesFiltered } = useTablesStore()
+    const { setOrderControllers } = useOrderControllerStore()
     const { user } = useAuthHooks()
     const { emit } = useSocketIoHooks()
 
@@ -193,8 +193,8 @@ export default function Tables() {
                             </Button>
                             <Button
                                 className='text-xs'
-                                variant={tablesFilter?.is_open === null ? 'default' : 'outline'}
-                                onClick={() => setTablesFilter({ ...tablesFilter, is_open: null })}
+                                variant={tablesFilter?.is_open === undefined ? 'default' : 'outline'}
+                                onClick={() => setTablesFilter({ ...tablesFilter, is_open: undefined })}
                             >
                                 All
                             </Button>

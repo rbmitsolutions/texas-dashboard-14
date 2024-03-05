@@ -15,7 +15,10 @@ export interface IPUTTablesBody {
     section_id?: string;
     meal_status?: ITableMealStatus
     food_ordered_at?: Date;
-    close_table?: boolean;
+    close_table?: {
+        client_id: string
+        client_name: string
+    };
     open_table?: boolean;
 }
 

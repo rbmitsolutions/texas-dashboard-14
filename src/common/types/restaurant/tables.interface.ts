@@ -24,6 +24,7 @@ export interface IFinishedTable {
   section_id: string;
   client_id: string;
   client: string;
+  booking_id?: string;
   
   start_time: Date;
   end_time: Date;

@@ -10,9 +10,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 
 //store
-import { useOrderSystemOrderControllerStore } from "@/store/texas/orderController";
-import { useOrderTablesNewOrderStore } from "@/store/texas/order";
-import { useOrderSystemTablesStore } from "@/store/texas/tables";
+import { useOrderControllerStore } from "@/store/restaurant/orderController";
+import { useTablesStore } from "@/store/restaurant/tables";
+import { useOrderStore } from "@/store/restaurant/order";
 
 //hooks
 import { useGETRestaurantDataHooks, usePOSTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
@@ -26,10 +26,10 @@ import { Allergens } from "@/common/types/restaurant/menu.interface";
 import { ITable } from "@/common/types/restaurant/tables.interface";
 
 export default function Table({ params }: { params: { id: string } }) {
-    const { getFilteredOrderControllers } = useOrderSystemOrderControllerStore()
-    const { setOrder, order, resetOrder, updateOrderQuantity, deleteOrder, getOrderTotal, getOneOrderTotal, replaceOrder } = useOrderTablesNewOrderStore()
+    const { getOrderControllers } = useOrderControllerStore()
+    const { setOrder, order, resetOrder, updateOrderQuantity, deleteOrder, getOrderTotal, getOneOrderTotal, replaceOrder } = useOrderStore()
     const { emit } = useSocketIoHooks()
-    const { getTableById, tables, setTables } = useOrderSystemTablesStore()
+    const { getTableById, tables, setTables } = useTablesStore()
     const { getFilteredOrderSystemMenu } = useOrderSystemHooks()
     const { user } = useAuthHooks()
     const [filter, setFilter] = useState<IMenuOrderSystemFilter>({
@@ -222,7 +222,7 @@ export default function Table({ params }: { params: { id: string } }) {
                         createOrder={createOrder}
                         emit={emit}
                         sections={sections?.data}
-                        orderControllers={getFilteredOrderControllers({ table_id: params?.id })}
+                        orderControllers={getOrderControllers({ table_id: params?.id })}
                     />
                 ),
                 icon: {

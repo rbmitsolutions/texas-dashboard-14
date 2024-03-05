@@ -8,7 +8,7 @@ import OrderDisplay from "./orderDisplay"
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
 
 //interface
-import { IAddOnsCreateOrder, ICreateNewOrder } from "@/store/texas/order"
+import { IAddOnsCreateOrder, ICreateNewOrder } from "@/store/restaurant/order"
 
 interface MenuCreateUpdateOrderProps {
     menu: IGETMenuOrderSystemResponse,

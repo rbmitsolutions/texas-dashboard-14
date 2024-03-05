@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button"
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
 import { IOrder, IOrderController } from "@/common/types/restaurant/order.interface"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
-import { ICreateNewOrder } from "@/store/texas/order"
+import { ICreateNewOrder } from "@/store/restaurant/order"
 
 interface ClosedTablesProps {
 }

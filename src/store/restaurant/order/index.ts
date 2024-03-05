@@ -28,7 +28,7 @@ export interface ICreateNewOrder {
 }
 
 
-interface OrderSytemNewOrderState {
+interface OrderStateProps {
     order: ICreateNewOrder[] 
     resetOrder: () => void
     setOrder: (order: ICreateNewOrder) => void
@@ -40,7 +40,7 @@ interface OrderSytemNewOrderState {
 }
 
 
-export const useOrderTablesNewOrderStore = create<OrderSytemNewOrderState>((set): OrderSytemNewOrderState => ({
+export const useOrderStore = create<OrderStateProps>((set): OrderStateProps => ({
     order: [],
     resetOrder: () => set({ order: [] }),
     setOrder: (order) => set((state) => {

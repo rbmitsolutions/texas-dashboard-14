@@ -14,7 +14,7 @@ import LastOrders from "./lastOrders"
 
 //interface
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
-import { ICreateNewOrder } from "@/store/texas/order"
+import { ICreateNewOrder } from "@/store/restaurant/order"
 import { ITable, ITableMealStatus } from "@/common/types/restaurant/tables.interface"
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface"
 import { IOrder, IOrderController } from "@/common/types/restaurant/order.interface"

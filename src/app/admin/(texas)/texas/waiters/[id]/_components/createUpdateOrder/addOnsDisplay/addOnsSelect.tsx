@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 
 //interface
 import { IMenuAddOns, IMenuAddOnsOption } from "@/common/types/restaurant/menu.interface"
-import { IAddOnsCreateOrder, ICreateNewOrder } from "@/store/texas/order"
+import { IAddOnsCreateOrder, ICreateNewOrder } from "@/store/restaurant/order"
 import { IHandleAddOnsSelection } from "."
 
 interface IAddOnsSelect {

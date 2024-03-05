@@ -8,7 +8,7 @@ import OrderDisplayFooter from "./footer";
 
 //interface
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
-import { ICreateNewOrder } from "@/store/texas/order";
+import { ICreateNewOrder } from "@/store/restaurant/order";
 
 interface OrderDisplayProps {
     menu: IGETMenuOrderSystemResponse

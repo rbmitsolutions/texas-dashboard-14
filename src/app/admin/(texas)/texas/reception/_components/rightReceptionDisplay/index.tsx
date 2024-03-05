@@ -16,7 +16,7 @@ import { IOrderController } from "@/common/types/restaurant/order.interface"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
 import { ITable } from "@/common/types/restaurant/tables.interface"
 import { ISocketMessage } from "@/common/libs/socketIo/types"
-import { ICreateNewOrder } from "@/store/texas/order"
+import { ICreateNewOrder } from "@/store/restaurant/order"
 import { IToken } from "@/common/types/auth/auth.interface"
 
 interface RightReceptionDisplayProps {

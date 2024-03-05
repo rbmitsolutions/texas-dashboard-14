@@ -1,7 +1,7 @@
 import { ITable } from '@/common/types/restaurant/tables.interface';
 import { create, } from 'zustand';
 
-export interface OrderSystemTablesState {
+export interface TablesStateProps {
     tables: ITable[]
     setTables: (tables: ITable[]) => void
     tablesFilter: {
@@ -10,20 +10,20 @@ export interface OrderSystemTablesState {
         section_ids?: string[]
         guests?: number[]
     }
-    setTablesFilter: (filter: OrderSystemTablesState['tablesFilter']) => void
+    setTablesFilter: (filter: TablesStateProps['tablesFilter']) => void
     getTableById: (id: string) => ITable | undefined
-    getTablesFiltered: (tablesFilter: OrderSystemTablesState['tablesFilter']) => ITable[]
+    getTablesFiltered: (tablesFilter: TablesStateProps['tablesFilter']) => ITable[]
 }
 
 
-export const useOrderSystemTablesStore = create<OrderSystemTablesState>((set): OrderSystemTablesState => ({
+export const useTablesStore = create<TablesStateProps>((set): TablesStateProps => ({
     tables: [],
     setTables: (tables: ITable[]) => set({ tables }),
     tablesFilter: {},
-    setTablesFilter: (tablesFilter: OrderSystemTablesState['tablesFilter']) => set({ tablesFilter }),
-    getTablesFiltered: (tablesFilter: OrderSystemTablesState['tablesFilter']) => {
+    setTablesFilter: (tablesFilter: TablesStateProps['tablesFilter']) => set({ tablesFilter }),
+    getTablesFiltered: (tablesFilter: TablesStateProps['tablesFilter']) => {
         const { section_ids, guests } = tablesFilter
-        let tables: ITable[] = [...useOrderSystemTablesStore.getState().tables] || []
+        let tables: ITable[] = [...useTablesStore.getState().tables] || []
 
         if (section_ids && section_ids?.length > 0) {
             tables = tables?.filter((table) => section_ids.includes(table.section_id))
@@ -42,5 +42,5 @@ export const useOrderSystemTablesStore = create<OrderSystemTablesState>((set): O
         }
         return tables
     },
-    getTableById: (id: string) => useOrderSystemTablesStore.getState().tables.find((table: ITable) => table.id === id)
+    getTableById: (id: string) => useTablesStore.getState().tables.find((table: ITable) => table.id === id)
 }));

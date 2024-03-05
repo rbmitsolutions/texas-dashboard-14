@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import CreateUpdateOrder from "./createUpdateOrder";
 
 //store
-import { ICreateNewOrder } from "@/store/texas/order";
+import { ICreateNewOrder } from "@/store/restaurant/order";
 
 //hooks
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";

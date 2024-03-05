@@ -8,7 +8,7 @@ import { ISpecialDays, ITimesOpen } from "@/common/types/restaurant/config.inter
 import { ISection, ITable } from "@/common/types/restaurant/tables.interface";
 import { IAuthorizedDevices } from "@/common/types/restaurant/authorizedDevices.interface";
 import { IPrinters } from "@/common/types/restaurant/printers.interface";
-import { IAddOnsCreateOrder } from "@/store/texas/order";
+import { IAddOnsCreateOrder } from "@/store/restaurant/order";
 
 export interface IPOSTBookingsBody {
   status: IBookingStatus

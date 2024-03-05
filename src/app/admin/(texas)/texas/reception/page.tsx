@@ -18,9 +18,9 @@ import { useGETRestaurantDataHooks, usePOSTRestaurantDataHooks, usePUTRestaurant
 import { useAuthHooks } from '@/hooks/useAuthHooks';
 
 //store
-import { useOrderSystemOrderControllerStore } from '@/store/texas/orderController';
+import { useOrderControllerStore } from '@/store/restaurant/orderController';
 import { useTransactionsStore } from '@/store/company/transactions';
-import { useOrderSystemTablesStore } from '@/store/texas/tables';
+import { useTablesStore } from '@/store/restaurant/tables';
 
 //interfaces
 import { IAllOrderControllerResponse, IGETTablesAllResponse } from '@/hooks/restaurant/IGetRestaurantDataHooks.interface';
@@ -32,8 +32,8 @@ import { useGETCompanyDataHooks } from '@/hooks/company/companyDataHooks';
 const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
 export default function Reception() {
-    const { tablesFilter, setTablesFilter, setTables, getTablesFiltered } = useOrderSystemTablesStore()
-    const { setOrderControllers, getTotalOfOrdersByTableId } = useOrderSystemOrderControllerStore()
+    const { tablesFilter, setTablesFilter, setTables, getTablesFiltered } = useTablesStore()
+    const { setOrderControllers, getTotalOfOrdersByTableId } = useOrderControllerStore()
     const { getTransactionsTotalByFilter, setTransactions } = useTransactionsStore()
     const { user } = useAuthHooks()
 
@@ -236,8 +236,8 @@ export default function Reception() {
                             </Button>
                             <Button
                                 className='text-xs'
-                                variant={tablesFilter?.is_open === null ? 'default' : 'outline'}
-                                onClick={() => setTablesFilter({ ...tablesFilter, is_open: null })}
+                                variant={tablesFilter?.is_open === undefined ? 'default' : 'outline'}
+                                onClick={() => setTablesFilter({ ...tablesFilter, is_open: undefined })}
                             >
                                 All
                             </Button>

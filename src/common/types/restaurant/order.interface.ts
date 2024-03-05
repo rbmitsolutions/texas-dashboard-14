@@ -1,4 +1,4 @@
-import { IAddOnsCreateOrder } from "@/store/texas/order";
+import { IAddOnsCreateOrder } from "@/store/restaurant/order";
 import { IMenuType } from "./menu.interface";
 import { IFinishedTable, ITable } from "./tables.interface";
 

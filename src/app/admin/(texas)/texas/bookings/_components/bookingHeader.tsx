@@ -28,7 +28,7 @@ import { ISection, ITable } from "@/common/types/restaurant/tables.interface"
 import { IBookings } from "@/common/types/restaurant/bookings.interface"
 import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized"
 import { Permissions } from "@/common/types/auth/auth.interface"
-import { OrderSystemTablesState } from "@/store/texas/tables"
+import { TablesStateProps } from "@/store/restaurant/tables"
 import { SocketIoEvent } from "@/common/libs/socketIo/types"
 
 interface BookingHeaderProps {
@@ -37,7 +37,7 @@ interface BookingHeaderProps {
     bookings: IBookings[]
     sectionsOpen: ISection[]
     time: ITimesOpen
-    getTablesFiltered: (tablesFilter: OrderSystemTablesState['tablesFilter']) => ITable[]
+    getTablesFiltered: (tablesFilter: TablesStateProps['tablesFilter']) => ITable[]
     updateTimesOpen: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
 }
 export default function BookingHeader({ openDay, date, time, updateTimesOpen, sectionsOpen, getTablesFiltered, bookings }: BookingHeaderProps) {
@@ -77,19 +77,19 @@ export default function BookingHeader({ openDay, date, time, updateTimesOpen, se
 
         //the amount of tables available per "time" has to be divided by 3 because an avrage client stays 1.5 hours in the restaurant
         const tables2 = Number((getTablesFiltered({
-            guests: [2]
+            guests: [2],
         })?.length / 3).toFixed(0)) || 0;
 
         const tables4 = Number((getTablesFiltered({
-            guests: [4]
+            guests: [4],
         })?.length / 3).toFixed(0)) || 0;
 
         const tables6 = Number((getTablesFiltered({
-            guests: [6]
+            guests: [6],
         })?.length / 3).toFixed(0)) || 0;
 
         const tables8 = Number((getTablesFiltered({
-            guests: [8]
+            guests: [8],
         })?.length / 3).toFixed(0)) || 0;
 
 
