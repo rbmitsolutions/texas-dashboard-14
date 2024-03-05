@@ -32,6 +32,7 @@ export function DeleteDialogButton({ isDisabled, onDelete, buttonText, buttonPro
                 {children ? children :
                     <Button
                         {...buttonProps}
+                        size='iconExSm'
                         variant='destructive'
                         disabled={isDisabled}
                     >
