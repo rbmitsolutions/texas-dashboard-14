@@ -1,27 +1,26 @@
-import { useEffect, useState } from "react";
+import { UseMutateFunction } from "react-query";
 
 //libs
+import { getOrderStatusBorderColor } from "@/common/libs/restaurant/order";
+import sortMenuSections from "@/common/libs/restaurant/menuSections";
 import { cn } from "@/common/libs/shadcn/utils";
 import Icon from "@/common/libs/lucida-icon";
 
 //components
-import {
-    AlertDialog,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import CreateUpdateOrder from "../../waiters/[id]/_components/createUpdateOrder";
 import { convertCentsToEuro } from "@/common/utils/convertToEuro";
+import UpdateNewOrderDialog from "./updateNewOrderDialog";
+import UpdateOrderStatus from "./updateOrderStatus";
+import OrderQuantities from "./orderQuantities";
 import { Button } from "@/components/ui/button"
 
 //interface
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
-import { IMenuSection } from "@/common/types/restaurant/menu.interface";
-import { IOrder } from "@/common/types/restaurant/order.interface";
+import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface";
+import { IOrder, OrderStatus } from "@/common/types/restaurant/order.interface";
+import { IMenu, IMenuSection } from "@/common/types/restaurant/menu.interface";
 import { ICreateNewOrder } from "@/store/restaurant/order";
 
-interface IOrderSummary {
+export interface IOrderSummary {
     order: IOrder[] | ICreateNewOrder[]
     updateOrder?: {
         deleteOrder: (id: string) => void
@@ -29,33 +28,33 @@ interface IOrderSummary {
         replaceOrder: (order: ICreateNewOrder) => void,
         menu: IGETMenuOrderSystemResponse[]
     }
+    splitBill?: {
+        handleAddToBill?: (order: IOrder) => void
+        handleRemoveFromBill?: (orderId: string) => void
+    }
+    updateOrderStatus?: {
+        onUpdate: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
+    }
     getOneOrderTotal: (order: ICreateNewOrder) => number
-    sections: IMenuSection[]
+    menuSections: IMenuSection[]
+    showPrice?: boolean
 }
 
-export const OrderSummary = ({ order, updateOrder, getOneOrderTotal, sections }: IOrderSummary) => {
-    const [isOpen, setIsOpen] = useState(false)
-    
-    const handleOpen = () => {
-        setIsOpen(!isOpen)
-    }
-
-    const handleUpdateOrder = (order: ICreateNewOrder) => {
-        updateOrder && updateOrder?.replaceOrder(order)
-    }
+export const OrderSummary = ({ order, updateOrder, getOneOrderTotal, menuSections, splitBill, updateOrderStatus, showPrice = true }: IOrderSummary) => {
 
     if (order?.length === 0) {
         return (
-            <div className='flex justify-center items-center h-full rounded-lg'>
-                <h1 className='text-sm'>No orders</h1>
-            </div>
+            <strong className='text-sm'><i>No orders</i></strong>
         )
     }
 
     return (
-        sections?.map(s => {
+        sortMenuSections(menuSections)?.map(s => {
             const mn_types = s?.types?.map(t => t?.title)
-            const orders = order?.filter(o => mn_types?.includes(o?.mn_type as string))
+
+            const orders = order?.filter(o => mn_types?.includes(o?.mn_type as string)).sort((a, b) => {
+                return a?.menu_short_title.localeCompare(b?.menu_short_title)
+            })
 
             if (orders?.length === 0) return
 
@@ -67,97 +66,75 @@ export const OrderSummary = ({ order, updateOrder, getOneOrderTotal, sections }:
                     <small className='text-center'> === {s?.title} === </small>
                     {orders?.map(order => {
                         const menuItem = updateOrder?.menu.find(m => m.id === order?.menu_id)
+
                         return (
                             <div
+                                id={`order-${order?.id}`}
                                 key={order?.id}
-                                className={cn('flex flex-col gap-2 p-2 rounded-r-lg border-l-8 shadow-md bg-slate-100 dark:bg-slate-950/45', 'border-orange-400')}
+                                className={cn('flex flex-col gap-2 p-2 rounded-r-lg border-l-8 shadow-md bg-slate-100 dark:bg-slate-950/45', getOrderStatusBorderColor(order?.status))}
                             >
                                 <div className='flex-container justify-between gap-2'>
                                     <strong>{order?.menu_short_title}</strong>
-                                    <Button
-                                        onClick={() => updateOrder?.deleteOrder(order?.id)}
-                                        size='iconExSm'
-                                        variant='destructive'
-                                        disabled={!updateOrder}
-                                    >
-                                        <Icon name='Trash' />
-                                    </Button>
+                                    {updateOrder &&
+                                        <Button
+                                            onClick={() => updateOrder?.deleteOrder(order?.id)}
+                                            size='iconExSm'
+                                            variant='destructive'
+                                        >
+                                            <Icon name='Trash' />
+                                        </Button>
+                                    }
+                                    {splitBill?.handleAddToBill &&
+                                        <Button
+                                            size='iconSm'
+                                            onClick={() => splitBill?.handleAddToBill!(order as IOrder)}
+                                            disabled={order?.quantity === order?.paid}
+                                        >
+                                            <Icon name='Plus' />
+                                        </Button>
+                                    }
+                                    {splitBill?.handleRemoveFromBill &&
+                                        <Button
+                                            onClick={() => splitBill?.handleRemoveFromBill!(order?.id)}
+                                            size='iconExSm'
+                                            variant='destructive'
+                                        >
+                                            <Icon name='Trash' />
+                                        </Button>
+                                    }
                                 </div>
                                 {order?.add_ons?.map(a => {
                                     return (
                                         <div key={a?.add_ons_opt_id} className='flex flex-col bg-background-soft p-2 rounded-lg'>
-                                            <small >- {a?.title}</small>
+                                            <small className='text-justify'>- {a?.title}</small>
                                             {a?.price > 0 && <small className='text-red-500'>+{convertCentsToEuro(a?.price)}</small>}
-
                                         </div>
                                     )
                                 })}
-                                <small className='text-green-500 mt-1 text-lg'>{convertCentsToEuro(getOneOrderTotal(order as unknown as ICreateNewOrder) || 0)}</small>
-                                <div className='flex justify-between items-center mt-1'>
-                                    {updateOrder ?
-                                        <AlertDialog
-                                            open={isOpen}
-                                            onOpenChange={handleOpen}
-                                        >
-                                            <AlertDialogTrigger asChild>
-                                                <Button
-                                                    variant='orange'
-                                                    size='iconExSm'
-                                                    disabled={menuItem?.add_ons?.length === 0}
-                                                    onClick={() => handleOpen()}
-                                                >
-                                                    <Icon name='Pen' />
-                                                </Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent className='h-[600px] md:!min-w-[900px]'>
-                                                <div className='mt-4'>
-                                                    <CreateUpdateOrder
-                                                        menu={menuItem!}
-                                                        handleOpen={handleOpen}
-                                                        order={order as unknown as ICreateNewOrder}
-                                                        getOneOrderTotal={getOneOrderTotal}
-                                                        setOrder={handleUpdateOrder}
-                                                    />
-                                                </div>
-                                                <AlertDialogCancel asChild>
-                                                    <Button
-                                                        className='absolute p-0 top-0 left-0'
-                                                        type='button'
-                                                        size='icon'
-                                                        variant='ghost'
-                                                    >
-                                                        <Icon name='X' />
-                                                    </Button>
-                                                </AlertDialogCancel>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
-                                        :
-                                        <Button
-                                            variant='orange'
-                                            size='iconExSm'
-                                            disabled={true}
-                                        >
-                                            <Icon name='Pen' />
-                                        </Button>
-                                    }
-                                    <div className='flex items-center'>
-                                        <Button
-                                            disabled={order?.quantity === 1 || !updateOrder}
-                                            onClick={() => updateOrder?.updateOrderQuantity(order as unknown as ICreateNewOrder, false)}
-                                            size='iconExSm'
-                                        >
-                                            <Icon name='Minus' size={14} />
-                                        </Button>
-                                        <span className='text-center w-8'>{order?.quantity}</span>
-                                        <Button
-                                            disabled={!updateOrder}
-                                            onClick={() => updateOrder?.updateOrderQuantity(order as unknown as ICreateNewOrder, true)}
-                                            size='iconExSm'
-                                        >
-                                            <Icon name='Plus' size={14} />
-                                        </Button>
-                                    </div>
-                                </div>
+                                <OrderQuantities
+                                    order={order as IOrder}
+                                    splitBill={splitBill}
+                                    getOneOrderTotal={getOneOrderTotal}
+                                    showPrice={showPrice}
+                                />
+
+                                {updateOrder &&
+                                    <UpdateNewOrderDialog
+                                        key={order?.id}
+                                        order={order as ICreateNewOrder}
+                                        getOneOrderTotal={getOneOrderTotal}
+                                        updateOrderQuantity={updateOrder.updateOrderQuantity}
+                                        replaceOrder={updateOrder.replaceOrder}
+                                        menuItem={menuItem as IMenu || {} as IMenu}
+                                    />
+                                }
+
+                                {(updateOrderStatus?.onUpdate && order?.status === OrderStatus.ORDERED) &&
+                                    <UpdateOrderStatus
+                                        order={order as IOrder}
+                                        onUpdate={updateOrderStatus.onUpdate}
+                                    />
+                                }
                             </div>
                         )
                     })}

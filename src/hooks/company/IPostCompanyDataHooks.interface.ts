@@ -25,6 +25,7 @@ export interface IPOSTTransaction {
     payee?: string; // "client`s name" "table`s number" "employee`s name"
     payee_key?: string; // "client`s id" "tables`s is" "employee`s id"
 
+    orders?: { id: string, paid: number }[]
 }
 export interface IPOSTTransactionsBody {
     one?: IPOSTTransaction,

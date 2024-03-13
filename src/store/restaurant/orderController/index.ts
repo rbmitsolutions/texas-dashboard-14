@@ -1,8 +1,11 @@
-import { IOrderController } from '@/common/types/restaurant/order.interface';
+import { IOrderController, OrderStatus } from '@/common/types/restaurant/order.interface';
 import { create } from 'zustand';
 
-interface OrderControllerFilterProps {
+export interface OrderControllerFilterProps {
     table_id: string
+    orders?: {
+        status: OrderStatus[]
+    }
 }
 
 interface OrderControllerStateProps {
@@ -16,11 +19,17 @@ export const useOrderControllerStore = create<OrderControllerStateProps>((set) =
     orderControllers: [],
     setOrderControllers: (orderControllers) => set({ orderControllers }),
     getOrderControllers: (filter) => {
-        const { table_id } = filter
+        const { table_id, orders } = filter
         let orderControllers: IOrderController[] = [...useOrderControllerStore.getState().orderControllers]
 
-        if (table_id.length > 0) {
+        if (table_id?.length > 0) {
             orderControllers = orderControllers.filter((orderController) => orderController.table_id === table_id)
+        }
+
+        if (orders) {
+            orderControllers = orderControllers.filter((orderController) => {
+                return orderController.orders.some((order) => orders.status.includes(order.status))
+            })
         }
 
         return orderControllers
@@ -34,8 +43,10 @@ export const useOrderControllerStore = create<OrderControllerStateProps>((set) =
             let orderT = 0
 
             orderController.orders.forEach(order => {
-                const addOnsTotal = order.add_ons.reduce((acc, curr) => acc + curr.price, 0)
-                orderT += (order.price + addOnsTotal) * order.quantity
+                if (order?.status === OrderStatus.ORDERED || order?.status === OrderStatus.DELIVERED) {
+                    const addOnsTotal = order.add_ons.reduce((acc, curr) => acc + curr.price, 0)
+                    orderT += (order.price + addOnsTotal) * order.quantity
+                }
             })
 
             total += orderT

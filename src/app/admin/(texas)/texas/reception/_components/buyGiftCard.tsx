@@ -3,8 +3,8 @@ import { UseMutateFunction } from "react-query"
 
 //libs
 import { GiftCardFormSchemaType } from "@/common/libs/zod/forms/restaurant/createGiftCardForm"
+import { getWalkInClient } from "@/common/libs/restaurant/actions/walkinClients"
 import { convertCentsToEuro } from "@/common/utils/convertToEuro"
-import { getWalkInClient } from "../../_components/table/utils"
 import { cn } from "@/common/libs/shadcn/utils"
 import Icon from "@/common/libs/lucida-icon"
 

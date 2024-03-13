@@ -1,6 +1,6 @@
 import { IBookingStatus, IBookings } from "@/common/types/restaurant/bookings.interface";
 import { IMenu, IMenuAddOns, IMenuSection, IMenuType } from "@/common/types/restaurant/menu.interface";
-import { IOrder, IOrderController, IOrderStatus } from "@/common/types/restaurant/order.interface";
+import { IOrder, IOrderController, OrderStatus } from "@/common/types/restaurant/order.interface";
 import { IPUTTablesBody } from "./IPutRestaurantDataHooks.interface";
 import { IGiftCardStatus, IGiftCards } from "@/common/types/restaurant/giftcard.interface";
 import { IPOSTTransactionsBody } from "../company/IPostCompanyDataHooks.interface";
@@ -40,7 +40,7 @@ export interface IPOSTOrderControllerBody {
 
 
 export interface ICreateOrder {
-  status: IOrderStatus;
+  status: OrderStatus;
   quantity: number
 
   mn_type: string
@@ -53,13 +53,13 @@ export interface ICreateOrder {
 
   add_ons: IAddOnsCreateOrder[]
 
-  to_print_ids: string[]
+  to_print_ips: string[]
 }
 
 
 export interface IPOSTOrderBody {
   order?: {
-    status: IOrderStatus;
+    status: OrderStatus;
     quantity: number
   
     mn_type: string
@@ -72,7 +72,7 @@ export interface IPOSTOrderBody {
   
     add_ons: IAddOnsCreateOrder[]
   
-    to_print_ids: string[]
+    to_print_ips: string[]
 
     order_controller_id: string
   };

@@ -9,6 +9,25 @@ interface MenuOptionsComponentProps {
 
 
 export default function MenuOptionsComponent({ options, updateMenuItem }: MenuOptionsComponentProps) {
+    // const optionBgColor = (priority: number) => {
+    //     if (priority === 1) {
+    //         return 'bg-background-soft'
+    //     } else if (priority === 2) {
+    //         return '!bg-blue-300 !hover:bg-blue-300 !dark:bg-blue-900 !dark:hover:bg-blue-900'
+    //     } else if (priority === 3) {
+    //         return '!bg-green-200 !hover:bg-green-400 !dark:bg-orange-700 !dark:hover:bg-green-700'
+    //     }
+    // }
+    const optionBgColor = (priority: number) => {
+        if (priority === 1) {
+            return '!bg-blue-100 dark:!bg-blue-400/60'
+        } else if (priority === 2) {
+            return '!bg-blue-300/80 dark:!bg-blue-400/80'
+        } else if (priority === 3) {
+            return '!bg-blue-400/80 dark:!bg-blue-300'
+        }
+    }
+
     return (
         <div className='flex justify-center items-center  w-full h-full'>
             <div className='grid grid-cols-2 gap-4 lg:grid-cols-3  w-full'>
@@ -17,11 +36,7 @@ export default function MenuOptionsComponent({ options, updateMenuItem }: MenuOp
                         <Button
                             key={index}
                             type='button'
-                            className={cn('flex-container-center justify-center min-h-40 max-h-60 h-full w-full rounded-xl border-2 text-black dark:text-white hover:bg-background-soft',
-                                option?.options_priority === 1 && 'bg-background-soft',
-                                option?.options_priority === 2 && 'bg-blue-300 hover:bg-blue-300 dark:bg-blue-900 dark:hover:bg-blue-900',
-                                option?.options_priority === 3 && 'bg-green-400 hover:bg-green-400 dark:bg-green-700 dark:hover:bg-green-700',
-                            )}
+                            className={cn('flex-container-center justify-center min-h-40 max-h-60 h-full w-full rounded-xl border-2 ', optionBgColor(option?.options_priority))}
                             onClick={() => updateMenuItem(option)}
                         >
                             <h1>{option?.short_title}</h1>

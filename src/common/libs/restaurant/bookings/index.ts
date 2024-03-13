@@ -1,6 +1,19 @@
 import { IBookingStatus, IBookings } from "@/common/types/restaurant/bookings.interface";
 import { IGETBookingsPageReturn } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 
+export const getBookingAmountPerTable = (amount_of_people: number): number => {
+    if (amount_of_people <= 2) {
+        return 2;
+    } else if (amount_of_people <= 5) {
+        return 4;
+    } else if (amount_of_people <= 6) {
+        return 6;
+    } else {
+        return 8;
+    }
+}
+
+
 export const BOOKING_PEOPLE = [
     {
         id: 1,

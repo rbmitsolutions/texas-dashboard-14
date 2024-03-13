@@ -1,4 +1,4 @@
-import { IOrderStatus } from '@/common/types/restaurant/order.interface';
+import { OrderStatus } from '@/common/types/restaurant/order.interface';
 import { create, } from 'zustand';
 
 export interface IAddOnsCreateOrder {
@@ -12,24 +12,27 @@ export interface IAddOnsCreateOrder {
 export interface ICreateNewOrder {
     id: string
 
-    status: IOrderStatus;
+    status: OrderStatus;
     quantity: number
+    paid?: number
 
     mn_type: string
 
     price: number
     add_ons: IAddOnsCreateOrder[]
-    
+
     menu: string,
     menu_id: string
     menu_short_title: string
 
-    to_print_ids: string[]
+    to_print_ips: string[]
 }
 
-
+export interface IGetOrderFilter {
+    id?: string
+}
 interface OrderStateProps {
-    order: ICreateNewOrder[] 
+    order: ICreateNewOrder[]
     resetOrder: () => void
     setOrder: (order: ICreateNewOrder) => void
     getOneOrderTotal: (order: ICreateNewOrder) => number
@@ -56,14 +59,16 @@ export const useOrderStore = create<OrderStateProps>((set): OrderStateProps => (
     }),
     getOneOrderTotal: (order) => {
         const addOnsTotal = order.add_ons.reduce((acc, curr) => acc + curr.price, 0)
-        return (order.price + addOnsTotal) * order.quantity
+        const totalPaid = (order.price + addOnsTotal) * (order?.paid || 0)
+        return ((order.price + addOnsTotal) * order.quantity) - totalPaid
     },
     getOrderTotal: (orders) => {
         let total = 0
 
         orders.forEach(order => {
             const addOnsTotal = order.add_ons.reduce((acc, curr) => acc + curr.price, 0)
-            total += (order.price + addOnsTotal) * order.quantity
+            const totalPaid = (order.price + addOnsTotal) * (order?.paid || 0)
+            total += ((order.price + addOnsTotal) * order.quantity) - totalPaid
         })
 
         return total

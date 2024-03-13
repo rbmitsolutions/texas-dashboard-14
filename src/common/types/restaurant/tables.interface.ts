@@ -38,13 +38,13 @@ export interface IFinishedTable {
   updated_at: Date;
 }
 
-export type ITableMealStatus =
-  | "waiting"
-  | "starters"
-  | "main"
-  | "all together"
-  | "clean table";
-
+export enum TableMealStatus{
+  WAITING = "waiting",
+  STARTERS = "starters",
+  MAIN = "main",
+  ALL_TOGETHER = "all together",
+  CLEAN_TABLE = "clean table"
+}
 export interface ITable {
   id: string;
   number: number;
@@ -53,7 +53,7 @@ export interface ITable {
   food_ordered_at: Date;
   pass: number;
 
-  meal_status: ITableMealStatus;
+  meal_status: TableMealStatus;
   is_open: boolean;
 
   guests: number;

@@ -1,20 +1,19 @@
-//libs
-import { formatDate } from "@/common/libs/date-fns/dateFormat"
+import { UseMutateFunction } from "react-query"
 
 //components
 import {
     Sheet,
     SheetContent,
-    SheetFooter,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import { OrderSummary } from "../../../../_components/orderSummary"
+import FullOrderController from "../../../../_components/orderSummary/fullOrderController"
 import { Button } from "@/components/ui/button"
 
 //interface
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
+import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 import { IOrder, IOrderController } from "@/common/types/restaurant/order.interface"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
 import { ICreateNewOrder } from "@/store/restaurant/order"
@@ -23,10 +22,11 @@ interface LastOrdersProps {
     ordersController: IOrderController[]
     menu: IGETMenuOrderSystemResponse[]
     getOneOrderTotal: (order: ICreateNewOrder) => number
-    sections: IMenuSection[]
+    menuSections: IMenuSection[]
+    updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
 }
 
-export default function LastOrders({ ordersController, menu, getOneOrderTotal, sections }: LastOrdersProps) {
+export default function LastOrders({ ordersController, menu, getOneOrderTotal, menuSections, updateOrder }: LastOrdersProps) {
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -45,20 +45,11 @@ export default function LastOrders({ ordersController, menu, getOneOrderTotal, s
                 <div className="grid gap-4 p-2 overflow-auto scrollbar-thin">
                     {ordersController?.map(oc => {
                         return (
-                            <div
+                            <FullOrderController
                                 key={oc?.id}
-                                className='flex-col-container bg-foreground/5 p-4 rounded-lg'
-                            >
-                                <div className='flex-container justify-between items-center mb-2'>
-                                    <strong className='line-clamp-1'>{oc?.waiter}</strong>
-                                    <small>
-                                        {formatDate({
-                                            date: oc?.created_at,
-                                            f: 'HH:mm:ss'
-                                        })}
-                                    </small>
-                                </div>
-                                {OrderSummary({
+                                orderController={oc}
+                                onOrdersUpdate={updateOrder}
+                                orderSumary={{
                                     order: oc?.orders?.map(o => {
                                         const menuItem = menu?.find(m => m.id === o.menu_id)
                                         return {
@@ -69,9 +60,12 @@ export default function LastOrders({ ordersController, menu, getOneOrderTotal, s
                                         }
                                     }) as unknown as IOrder[],
                                     getOneOrderTotal,
-                                    sections
-                                })}
-                            </div>
+                                    menuSections,
+                                    updateOrderStatus: {
+                                        onUpdate: updateOrder,
+                                    }
+                                }}
+                            />
                         )
                     })}
                 </div>

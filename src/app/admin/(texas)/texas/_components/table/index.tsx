@@ -1,31 +1,15 @@
 import TablesStatus from "./tableStatus"
 import { UseMutateFunction } from "react-query"
-import { useRouter } from "next/navigation"
-import toast from "react-hot-toast"
 import Link from "next/link"
 
 //libs
 import { convertCentsToEuro } from "@/common/utils/convertToEuro"
 import { formatDate } from "@/common/libs/date-fns/dateFormat"
 import { cn } from "@/common/libs/shadcn/utils"
-import { getWalkInClient } from "./utils"
 
 //components
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { getCurretBookingTime } from "../../bookings/_components/utils"
-import { RedirectTo } from "@/common/types/routers/endPoints.types"
 import IconText from "@/components/common/iconText"
-import { Button } from "@/components/ui/button"
+import OpenTableDialog from "./openTable"
 
 //store
 import { TransactionsState } from "@/store/company/transactions"
@@ -34,16 +18,22 @@ import { TransactionsState } from "@/store/company/transactions"
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface"
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 import { TransactionsStatus } from "@/common/types/company/transactions.interface"
-import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types"
+import { IOrderController } from "@/common/types/restaurant/order.interface"
 import { ITimesOpen } from "@/common/types/restaurant/config.interface"
 import { ITable } from "@/common/types/restaurant/tables.interface"
+import { ISocketMessage } from "@/common/libs/socketIo/types"
+import { ICreateNewOrder } from "@/store/restaurant/order"
+import { IMenuSection } from "@/common/types/restaurant/menu.interface"
 
 interface TableProps {
     table: ITable
     waitres?: {
         createBooking: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>
-        emit: (data: ISocketMessage) => void
-        timesOpen: ITimesOpen[]
+        timesOpen: ITimesOpen[],
+        orderControllers: IOrderController[]
+        getOneOrderTotal: (order: ICreateNewOrder) => number
+        menuSections: IMenuSection[]
+        updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
         updateTable: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
     }
     reception?: {
@@ -53,43 +43,6 @@ interface TableProps {
 }
 
 export default function Table({ table, waitres, reception }: TableProps) {
-    const { push } = useRouter()
-
-    const handleOpenTable = async () => {
-        if (waitres) {
-            const walkInClient = await getWalkInClient()
-            const currentTime = getCurretBookingTime(waitres?.timesOpen)
-
-            if (!currentTime) return toast.error('Restaurant is closed')
-
-            await waitres.createBooking({
-                booking: {
-                    amount_of_people: table?.guests,
-                    contact_number: walkInClient?.contact_number,
-                    date: new Date(),
-                    email: walkInClient?.email,
-                    name: walkInClient?.name,
-                    status: 'walk_in',
-                    time: currentTime?.title,
-                    valid_number: false,
-                    table_id: table?.id,
-                },
-            }, {
-                onSuccess: async () => {
-                    await waitres.emit({
-                        event: SocketIoEvent.BOOKING,
-                    })
-                    await waitres.emit({
-                        event: SocketIoEvent.TABLE,
-                    })
-                    push(`${RedirectTo.TABLE_ORDER}/${table?.id}`)
-                }
-
-            })
-        }
-    }
-
-
     return (
         <div className='flex gap-2 min-h-40 bg-background-soft rounded-lg'>
             <div className={cn('flex-col-container w-10 py-1 items-center justify-between rounded-l-lg', table?.is_open ? 'bg-green-500 dark:bg-green-700' : 'bg-red-400 dark:bg-red-800')}>
@@ -114,15 +67,6 @@ export default function Table({ table, waitres, reception }: TableProps) {
                                 })}
                                 iconSize={14}
                             />
-                            {/* //todo  add orders */}
-                            {/* <IconText
-                            icon="Clock"
-                            text={formatDate({
-                                date: table?.start_time,
-                                f: 'HH:mm:ss'
-                            })}
-                              iconSize={14}
-                        /> */}
                             <IconText
                                 icon="Utensils"
                                 text={`Pass ${table?.pass}`}
@@ -131,44 +75,20 @@ export default function Table({ table, waitres, reception }: TableProps) {
                         </Link>
                         <TablesStatus
                             table={table}
-                            updateTable={waitres.updateTable}
-                            emit={waitres.emit}
+                            updateTable={waitres?.updateTable}
+                            orderControllers={waitres?.orderControllers}
+                            getOneOrderTotal={waitres?.getOneOrderTotal}
+                            menuSections={waitres?.menuSections}
+                            updateOrder={waitres?.updateOrder}
                         />
                     </div>
                     :
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <Button
-                                variant='outline'
-                                className='h-full w-full'
-                                leftIcon='Footprints'
-                            >
-                                Open
-                            </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>Open table ?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    A new booking will be created as a walk in client!
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                    asChild
-                                >
-                                    <Button
-                                        variant='pink'
-                                        onClick={handleOpenTable}
-                                        leftIcon="Footprints"
-                                    >
-                                        Walk In
-                                    </Button>
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
+                    <OpenTableDialog
+                        table={table}
+                        timesOpen={waitres.timesOpen}
+                        createBooking={waitres.createBooking}
+                    />
+
             )}
 
             {reception && table?.is_open &&
@@ -190,10 +110,14 @@ export default function Table({ table, waitres, reception }: TableProps) {
                             status: TransactionsStatus.CONFIRMED
                         }))} - Paid</small>
                     </div>
-                    <strong className='text-xl'>{convertCentsToEuro(reception?.getTotalOfOrdersByTableId(table?.id) - reception?.getTransactionsTotalByFilter({
-                        payee_key: table?.id,
-                        status: TransactionsStatus.CONFIRMED
-                    }))}</strong>
+                    <div className='flex flex-col'>
+                        <small>Remain</small>
+                        <strong className='text-xl'>
+                            {convertCentsToEuro(reception?.getTotalOfOrdersByTableId(table?.id) - reception?.getTransactionsTotalByFilter({
+                                payee_key: table?.id,
+                                status: TransactionsStatus.CONFIRMED
+                            }))}</strong>
+                    </div>
                 </Link>
             }
 

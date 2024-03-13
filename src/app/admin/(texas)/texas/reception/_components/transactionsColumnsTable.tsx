@@ -1,29 +1,32 @@
 "use client"
 import { ColumnDef } from "@tanstack/react-table"
-import { formatDate } from "@/common/libs/date-fns/dateFormat"
-import { ITransactions, TransactionsDirection, TransactionsMethod, TransactionsStatus } from "@/common/types/company/transactions.interface";
-import IconText from "@/components/common/iconText";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
 import { UseMutateFunction } from "react-query";
-import { IPUTCompanyBody } from "@/hooks/company/IPutCompanyDataHooks.interface";
-import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types";
+
+//libs
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { convertCentsToEuro } from "@/common/utils/convertToEuro";
+import { formatDate } from "@/common/libs/date-fns/dateFormat"
+import { Button } from "@/components/ui/button";
+
+//components
+import IconText from "@/components/common/iconText";
+
+//interface
+import { ITransactions, TransactionsMethod, TransactionsStatus } from "@/common/types/company/transactions.interface";
+import { IPUTCompanyBody } from "@/hooks/company/IPutCompanyDataHooks.interface";
 
 interface TransactionsColumnsTableProps {
     updateTransaction: UseMutateFunction<any, any, IPUTCompanyBody, unknown>
-    emit: (message: ISocketMessage) => void
 }
 
 export const transactionsColumnsTable = ({
     updateTransaction,
-    emit
 }: TransactionsColumnsTableProps): ColumnDef<ITransactions>[] => {
     return [
         {
             accessorKey: "day",
             header: () => <div className="text-left max-w-48">Day</div>,
-            size: 100,
+            size: 70,
             cell: ({ row }) => {
                 return <div className="text-left max-w-48">
                     {formatDate({
@@ -48,7 +51,7 @@ export const transactionsColumnsTable = ({
         {
             accessorKey: "method",
             header: () => <div className="text-left max-w-48">Method</div>,
-            size: 60,
+            size: 100,
             cell: ({ row }) => {
                 return (
                     <div className="text-left max-w-48">
@@ -92,61 +95,37 @@ export const transactionsColumnsTable = ({
                             </PopoverTrigger>
                             <PopoverContent className="flex-col-container w-auto p-4" align="end">
                                 <div className='flex-col-container'>
-                                    <strong>Cancel / Refunded</strong>
+                                    <strong>Cancel</strong>
+                                    <small className='w-36 text-justify'>The orders that were linked to this payment will return as unpaid</small>
                                     <Button
                                         variant="yellow"
                                         size="sm"
                                         className="mt-2"
                                         leftIcon="XCircle"
                                         onClick={() => {
+                                            const description: { id: string, paid: number }[] = row?.original?.description ? JSON.parse(row?.original?.description) : []
+                                            const unpaidOrders: { id: string, unpaid: number }[] = description?.map(d => {
+                                                return {
+                                                    id: d.id,
+                                                    unpaid: d.paid
+                                                }
+                                            
+                                            })
+
                                             updateTransaction({
                                                 transaction: {
                                                     one: {
                                                         id: row?.original?.id,
                                                         total: row?.original?.total,
-                                                        status: TransactionsStatus.CANCELLED
+                                                        status: TransactionsStatus.CANCELLED,
+                                                        orders: unpaidOrders
                                                     }
-                                                }
-                                            }, {
-                                                onSuccess: async () => {
-                                                    await emit({
-                                                        event: SocketIoEvent.TABLE_PAYMENT,
-                                                        message: row?.original?.payee_key
-                                                    })
                                                 }
                                             })
                                         }}
                                     >
                                         Cancel
                                     </Button>
-                                    {row?.original?.direction !== TransactionsDirection.VOUCHER &&
-                                        <Button
-                                            variant="destructive"
-                                            size="sm"
-                                            className="mt-2"
-                                            leftIcon="Undo"
-                                            onClick={() => {
-                                                updateTransaction({
-                                                    transaction: {
-                                                        one: {
-                                                            id: row?.original?.id,
-                                                            total: row?.original?.total,
-                                                            status: TransactionsStatus.REFUNDED
-                                                        }
-                                                    }
-                                                }, {
-                                                    onSuccess: async () => {
-                                                        await emit({
-                                                            event: SocketIoEvent.TABLE_PAYMENT,
-                                                            message: row?.original?.payee_key
-                                                        })
-                                                    }
-                                                })
-                                            }}
-                                        >
-                                            Refunded
-                                        </Button>}
-
                                 </div>
                             </PopoverContent>
                         </Popover >

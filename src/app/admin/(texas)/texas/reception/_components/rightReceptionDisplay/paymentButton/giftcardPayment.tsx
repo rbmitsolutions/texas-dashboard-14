@@ -1,5 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { UseMutateFunction } from "react-query";
+import React, { useEffect, useState } from "react";
 import { cn } from "@/common/libs/shadcn/utils";
 import Image from "next/image";
 
@@ -14,6 +13,7 @@ import {
     SheetHeader,
     SheetTrigger,
 } from "@/components/ui/sheet"
+import InfoBadge from "@/components/common/infoBadge";
 import ScanInput from "@/components/common/scanInput";
 import IconText from "@/components/common/iconText";
 import { Button } from "@/components/ui/button";
@@ -22,55 +22,28 @@ import { Button } from "@/components/ui/button";
 import { convertCentsToEuro } from "@/common/utils/convertToEuro";
 
 //hooks
+import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
 import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks";
 
 //interface
 import { TransactionsDirection, TransactionsMethod, TransactionsType } from "@/common/types/company/transactions.interface";
-import { IPOSTCompanyBody, IPOSTCompanyDataRerturn } from "@/hooks/company/IPostCompanyDataHooks.interface";
-import { IGETRestaurantDataQuery } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 import { IGiftCards } from "@/common/types/restaurant/giftcard.interface";
-import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types";
-import { IToken } from "@/common/types/auth/auth.interface";
+import { IHandlePayment } from ".";
 
 interface GiftcardPaymentButtonProps {
-    value: number
-    closeDrawer: () => void
-    transactionInfo: {
-        type: TransactionsType
-        payee: string
-        payee_key: string
-        client_id?: string
-        table_id: string
-    }
-    createTransaction: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
-    emit: (message: ISocketMessage) => void
-    user: IToken
-    giftCard: {
-        card: IGiftCards | null,
-        setCardParams: Dispatch<SetStateAction<IGETRestaurantDataQuery>>
-        getCardParams: IGETRestaurantDataQuery
-    }
+    handlePayment: (data: IHandlePayment) => void
+    toPay: number
 }
 
 export default function GiftcardPaymentButton({
-    value,
-    closeDrawer,
-    transactionInfo,
-    createTransaction,
-    emit,
-    user,
-    giftCard: card
+    handlePayment,
+    toPay,
 }: GiftcardPaymentButtonProps) {
     const [isOpen, setIsOpen] = useState(false)
     const [giftCard, setGiftCard] = useState<IGiftCards | undefined>(undefined)
     const [code, setCode] = useState<string>('')
-    const giftCardBalance = (giftCard?.value || 0) - (giftCard?.spent || 0)
+    const [giftCardBalance, setGiftCardBalance] = useState<number>(0)
 
-    const onOpenChange = () => {
-        setGiftCard(undefined)
-        setCode('')
-        setIsOpen(!isOpen)
-    }
     const {
         companyAllTransacations: transactions,
         refetchCompanyData: refetchTransactions
@@ -95,47 +68,61 @@ export default function GiftcardPaymentButton({
         }
     })
 
-    const handlePayByGiftCard = async () => {
-        await createTransaction(
-            {
-                transaction: {
-                    one: {
-                        total: value,
-                        type: transactionInfo?.type,
-                        date: new Date(),
-
-                        valid_by: user?.name,
-                        valid_by_id: user?.user_id,
-
-                        client_id: transactionInfo?.client_id || undefined,
-
-                        payee: transactionInfo?.payee || 'Walk In',
-                        payee_key: transactionInfo?.payee_key,
-
-                        gift_card_id: giftCard?.id,
-
-                        direction: TransactionsDirection.VOUCHER,
-                        method: TransactionsMethod.GIFT_CARD,
-                    }
+    const {
+        setGETRestaurantDataParams: setGiftCardParams,
+        GETRestaurantDataParams: getGiftCardParams
+    } = useGETRestaurantDataHooks({
+        query: 'GIFTCARD',
+        defaultParams: {
+            giftcards: {
+                byCode: {
+                    code: ''
                 }
-            },
-            {
-                onSuccess: async () => {
-                    await emit({
-                        event: SocketIoEvent.TABLE_PAYMENT,
-                        message: transactionInfo?.table_id
-                    })
-                    refetchTransactions()
-                    onOpenChange();
-                    closeDrawer();
-                },
             }
-        );
+        },
+        UseQueryOptions: {
+            refetchOnWindowFocus: false,
+            refetchIntervalInBackground: false,
+            refetchOnMount: false,
+            keepPreviousData: false,
+
+            onSuccess: (data) => {
+                const card = data as IGiftCards
+                if (card) {
+                    setGiftCard(card)
+                    setGiftCardBalance(card.value - card.spent)
+                }
+            }
+        }
+    })
+
+    const onOpenChange = () => {
+        setGiftCard(undefined)
+        setCode('')
+        setIsOpen(!isOpen)
+    }
+
+    const onPayment = async () => {
+        if (!giftCard) return
+        try {
+            await handlePayment({
+                method: TransactionsMethod.GIFT_CARD,
+                direction: TransactionsDirection.VOUCHER,
+                giftCard: {
+                    id: giftCard?.id,
+                    toPay: giftCardBalance > toPay ? toPay : giftCardBalance
+                },
+            })
+            refetchTransactions()
+            onOpenChange()
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     useEffect(() => {
         if (code?.length === 16) {
-            card?.setCardParams({
+            setGiftCardParams({
                 giftcards: {
                     byCode: {
                         code
@@ -143,13 +130,7 @@ export default function GiftcardPaymentButton({
                 }
             })
         }
-    }, [code])
-
-    useEffect(() => {
-        if (card?.card) {
-            setGiftCard(card?.card)
-        }
-    }, [card])
+    }, [code, setGiftCardParams])
 
     return (
         <Sheet
@@ -158,12 +139,13 @@ export default function GiftcardPaymentButton({
         >
             <SheetTrigger asChild>
                 <Button
-                    className='h-14'
                     leftIcon="Banknote"
-                    disabled={value < 0.01 ? true : false}
+                    disabled={toPay < 0.01 ? true : false}
                     variant='blue'
+                    className='h-14'
+
                 >
-                    Gift Card - {convertCentsToEuro(value)}
+                    Gift Card
                 </Button>
             </SheetTrigger>
             <SheetContent
@@ -190,11 +172,8 @@ export default function GiftcardPaymentButton({
                             setGiftCard(undefined)
                         }}
                     />
-                </SheetHeader>
-                <div className='flex-col-container mt-4 overflow-auto scrollbar-thin'>
-
                     {giftCard &&
-                        <div className="flex-col-container bg-background-soft p-4 rounded-md">
+                        <div className='flex-col-container pt-4'>
                             <div className='flex items-center'>
                                 <Image
                                     alt="Gift Card"
@@ -225,12 +204,22 @@ export default function GiftcardPaymentButton({
                                 icon='CreditCard'
                                 text={giftCard?.code || 'N/A'}
                             />
-
+                        </div>
+                    }
+                </SheetHeader>
+                <div className='flex-col-container mt-4 overflow-auto scrollbar-thin'>
+                    {giftCard &&
+                        <div className="flex-col-container bg-background-soft p-4 rounded-md">
+                            {transactions?.data?.length === 0 &&
+                                <div className='flex justify-center'>
+                                    <strong>No transactions</strong>
+                                </div>
+                            }
                             {transactions?.data?.map(t => {
                                 return (
                                     <div
                                         key={t?.id}
-                                        className="flex justify-between gap-4 mt-4 p-2 bg-background-soft rounded-md"
+                                        className="flex justify-between gap-4 p-2 bg-background-soft rounded-md"
                                     >
                                         <div className='space-y-1'>
                                             <IconText
@@ -245,18 +234,15 @@ export default function GiftcardPaymentButton({
                                                 text={t?.valid_by || 'N/A'}
                                             />
                                         </div>
-                                        {convertCentsToEuro(t?.total)}
+                                        <div className='flex flex-col items-end gap-1'>
+                                            {convertCentsToEuro(t?.total)}
+                                            <InfoBadge
+                                                status={t?.status}
+                                            />
+                                        </div>
                                     </div>
                                 )
                             })}
-                            <div className='flex flex-col gap-1'>
-                                <strong>
-                                    Balance
-                                </strong>
-                                <strong className={cn('text-2xl', giftCardBalance > 0 ? 'text-green-500 dark:text-green-600' : 'text-red-600')}>
-                                    {convertCentsToEuro(giftCardBalance)}
-                                </strong>
-                            </div>
                         </div>
                     }
                 </div>
@@ -264,15 +250,35 @@ export default function GiftcardPaymentButton({
                     className="w-full"
                 >
                     {giftCard &&
-                        <Button
-                            onClick={handlePayByGiftCard}
-                            disabled={value < 0.01 ? true : false || !giftCard?.id ? true : false || giftCard?.status === 'spent'}
-                            leftIcon="Banknote"
-                            variant='blue'
-                            className='w-full h-14'
-                        >
-                            Pay - {convertCentsToEuro(giftCardBalance > value ? value : giftCardBalance)}
-                        </Button>
+                        <div className='flex-col-container w-full'>
+                            <div className='flex-container justify-between'>
+                                <div className='flex flex-col gap-1'>
+                                    <strong>
+                                        Total
+                                    </strong>
+                                    <strong className='text-2xl text-foreground/50'>
+                                        {convertCentsToEuro(giftCard?.value)}
+                                    </strong>
+                                </div>
+                                <div className='flex flex-col gap-1 items-end'>
+                                    <strong>
+                                        Balance
+                                    </strong>
+                                    <strong className={cn('text-2xl', giftCardBalance > 0 ? 'text-green-500 dark:text-green-600' : 'text-red-600')}>
+                                        {convertCentsToEuro(giftCardBalance)}
+                                    </strong>
+                                </div>
+                            </div>
+                            <Button
+                                onClick={onPayment}
+                                disabled={toPay < 0.01 ? true : false || !giftCard?.id ? true : false || giftCard?.status === 'spent'}
+                                leftIcon="Banknote"
+                                variant='blue'
+                                className='w-full h-14'
+                            >
+                                Pay - {convertCentsToEuro(giftCardBalance > toPay ? toPay : giftCardBalance)}
+                            </Button>
+                        </div>
                     }
                 </SheetFooter>
             </SheetContent>

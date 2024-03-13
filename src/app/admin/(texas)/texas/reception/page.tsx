@@ -1,9 +1,4 @@
 'use client'
-import { io } from 'socket.io-client';
-import { useEffect } from 'react';
-
-//libs
-import { addDaysToDate, getFirstTimeOfTheDay } from '@/common/libs/date-fns/dateFormat';
 
 //components
 import SearchInput from '@/components/common/searchInput';
@@ -22,45 +17,12 @@ import { useOrderControllerStore } from '@/store/restaurant/orderController';
 import { useTransactionsStore } from '@/store/company/transactions';
 import { useTablesStore } from '@/store/restaurant/tables';
 
-//interfaces
-import { IAllOrderControllerResponse, IGETTablesAllResponse } from '@/hooks/restaurant/IGetRestaurantDataHooks.interface';
-import { IGetAllTransactionsResponse } from '@/hooks/company/IGetCompanyDataHooks.interface';
-import { TableTransactionsType } from '@/common/types/company/transactions.interface';
-import { ISocketMessage, SocketIoEvent } from '@/common/libs/socketIo/types';
-import { useGETCompanyDataHooks } from '@/hooks/company/companyDataHooks';
-
-const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
 export default function Reception() {
-    const { tablesFilter, setTablesFilter, setTables, getTablesFiltered } = useTablesStore()
-    const { setOrderControllers, getTotalOfOrdersByTableId } = useOrderControllerStore()
-    const { getTransactionsTotalByFilter, setTransactions } = useTransactionsStore()
+    const { tablesFilter, setTablesFilter, getTablesFiltered } = useTablesStore()
+    const { getTotalOfOrdersByTableId } = useOrderControllerStore()
+    const { getTransactionsTotalByFilter } = useTransactionsStore()
     const { user } = useAuthHooks()
-
-    const {
-        refetchRestaurantData: refetchTables
-    } = useGETRestaurantDataHooks({
-        query: 'TABLES',
-        defaultParams: {
-            tables: {
-                all: {
-                    pagination: {
-                        take: 400,
-                        skip: 0
-                    },
-                }
-            }
-        },
-        UseQueryOptions: {
-            onSuccess: (data) => {
-                const tables = data as IGETTablesAllResponse
-                setTables(tables?.data)
-            },
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
-            refetchOnMount: false,
-        }
-    })
 
     const {
         restaurantAllSections: sections,
@@ -83,72 +45,6 @@ export default function Reception() {
         }
     })
 
-    const {
-        refetchCompanyData: refetchTransactions
-    } = useGETCompanyDataHooks({
-        query: 'TRANSACTIONS',
-        defaultParams: {
-            transactions: {
-                all: {
-                    pagination: {
-                        take: 500,
-                        skip: 0
-                    },
-                    date: {
-                        gte: getFirstTimeOfTheDay(new Date()),
-                        lte: addDaysToDate(new Date(), 1)
-                    },
-                    type: {
-                        in: [TableTransactionsType.OPEN_TABLE]
-                    }
-                }
-            }
-        },
-        UseQueryOptions: {
-            onSuccess: (data) => {
-                // ba1e31be-bb72-4c4e-bd5a-0b7e1ba180f8
-                const transactions = data as IGetAllTransactionsResponse
-                setTransactions(transactions?.data)
-            },
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
-            refetchOnMount: false,
-        }
-    })
-
-
-    const {
-        refetchRestaurantData: refetchOrdersController
-    } = useGETRestaurantDataHooks({
-        query: 'ORDER_CONTROLLER',
-        defaultParams: {
-            orderController: {
-                all: {
-                    pagination: {
-                        take: 500,
-                        skip: 0
-                    },
-                    includes: {
-                        orders: '1'
-                    },
-                    date: {
-                        gte: getFirstTimeOfTheDay(new Date()),
-                        lte: addDaysToDate(new Date(), 1)
-                    },
-                    finished_table_id: null
-                }
-            }
-        },
-        UseQueryOptions: {
-            onSuccess: (data) => {
-                const orderControllers = data as IAllOrderControllerResponse
-                setOrderControllers(orderControllers?.data)
-            },
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
-            refetchOnMount: false,
-        }
-    })
 
     const {
         restaurantAllClients: clients,
@@ -174,23 +70,6 @@ export default function Reception() {
     } = usePOSTRestaurantDataHooks({
         query: 'GIFTCARD'
     })
-
-    useEffect(() => {
-        socket.on("message", (message: ISocketMessage) => {
-            if (message?.event === SocketIoEvent.TABLE) {
-                refetchTables()
-            }
-            if (message?.event === SocketIoEvent.ORDER) {
-                refetchOrdersController()
-            }
-            if (message?.event === SocketIoEvent.TABLE_PAYMENT) {
-                refetchTransactions()
-            }
-        });
-        () => {
-            socket.off("message");
-        }
-    }, [refetchTables, refetchOrdersController, refetchTransactions]);
 
 
     return (

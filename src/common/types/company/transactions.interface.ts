@@ -29,6 +29,7 @@ export enum TransactionsDirection {
   IN = "in",
   OUT = "out",
   VOUCHER = "voucher",
+  TIP = "tip",
 } 
 export enum TransactionsStatus {
   CONFIRMED = "confirmed",

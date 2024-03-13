@@ -106,6 +106,8 @@ export type ITransactionsPut = {
 
     payee?: string; // "client`s name" "table`s number" "employee`s name"
     payee_key?: string; // "client`s id" "tables`s is" "employee`s id"
+
+    orders?: { id: string, unpaid: number }[]
 };
 
 
@@ -132,6 +134,8 @@ export interface IPUTTransactionsBody {
 
             payee?: string; // "client`s name" "table`s number" "employee`s name"
             payee_key?: string; // "client`s id" "tables`s is" "employee`s id"
+
+            orders?: { id: string, unpaid: number }[]
         };
     };
 }

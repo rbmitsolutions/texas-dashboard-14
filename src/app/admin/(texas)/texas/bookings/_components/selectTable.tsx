@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useState } from "react"
 
 //libs
+import { getBookingAmountPerTable } from "@/common/libs/restaurant/bookings"
 import { cn } from "@/common/libs/shadcn/utils"
 
 //components
@@ -8,7 +9,6 @@ import { Button } from "@/components/ui/button"
 
 //interface
 import { IGETSpareTablesReturn } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
-import { getBookingAmountPerTable } from "./utils"
 import { IBookings } from "@/common/types/restaurant/bookings.interface"
 import { ISection, ITable } from "@/common/types/restaurant/tables.interface"
 
@@ -37,7 +37,7 @@ export default function SelectTable({
     const getOpenAndFIlteredTables = () => {
         let tables = spareTablesFilter?.section?.tables
 
-        if(tables) {
+        if (tables) {
             tables = tables.filter(table => !table?.is_open)
         }
 
@@ -96,7 +96,7 @@ export default function SelectTable({
                             className={cn('flex-col-container items-center justify-center p-2 rounded-lg border-2 gap-1 min-h-20 cursor-pointer', tableSelected?.id === table?.id ? 'bg-background-soft border-primary' : 'bg-background')}
                             onClick={() => setTableSelected(prev => {
                                 if (prev?.id === table?.id) {
-                                    return booking?.table 
+                                    return booking?.table
                                 } else {
                                     return table
                                 }

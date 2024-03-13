@@ -1,4 +1,4 @@
-import { ITransactions, TransactionsStatus } from '@/common/types/company/transactions.interface';
+import { ITransactions, TransactionsDirection, TransactionsStatus } from '@/common/types/company/transactions.interface';
 import { create } from 'zustand';
 
 export interface TransactionsState {
@@ -32,7 +32,7 @@ export const useTransactionsStore = create<TransactionsState>((set) => ({
         }
 
         const total = transactions.reduce((acc, transaction) => {
-            if (transaction.direction === 'in') {
+            if (transaction.direction === TransactionsDirection.TIP || transaction.direction === TransactionsDirection.IN || transaction.direction === TransactionsDirection.VOUCHER) {
                 return acc + transaction.total
             } else {
                 return acc - transaction.total

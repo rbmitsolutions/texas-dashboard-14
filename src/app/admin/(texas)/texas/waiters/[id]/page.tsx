@@ -1,5 +1,8 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+//libs
+import sortMenuSections from "@/common/libs/restaurant/menuSections";
 
 //components
 import RightOrderDisplay from "./_components/rightOrderDisplay";
@@ -15,21 +18,21 @@ import { useTablesStore } from "@/store/restaurant/tables";
 import { useOrderStore } from "@/store/restaurant/order";
 
 //hooks
-import { useGETRestaurantDataHooks, usePOSTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
+import { useGETRestaurantDataHooks, usePOSTRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
 import { useSocketIoHooks } from "@/hooks/useSocketIoHooks";
 import { useAuthHooks } from "@/hooks/useAuthHooks";
 
 //interfaces
-import { IGETTablesAllResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 import { IMenuOrderSystemFilter, useOrderSystemHooks } from "@/hooks/useOrderSystemHooks";
 import { Allergens } from "@/common/types/restaurant/menu.interface";
 import { ITable } from "@/common/types/restaurant/tables.interface";
+import { SocketIoEvent } from "@/common/libs/socketIo/types";
 
 export default function Table({ params }: { params: { id: string } }) {
     const { getOrderControllers } = useOrderControllerStore()
     const { setOrder, order, resetOrder, updateOrderQuantity, deleteOrder, getOrderTotal, getOneOrderTotal, replaceOrder } = useOrderStore()
     const { emit } = useSocketIoHooks()
-    const { getTableById, tables, setTables } = useTablesStore()
+    const { getTableById } = useTablesStore()
     const { getFilteredOrderSystemMenu } = useOrderSystemHooks()
     const { user } = useAuthHooks()
     const [filter, setFilter] = useState<IMenuOrderSystemFilter>({
@@ -43,30 +46,24 @@ export default function Table({ params }: { params: { id: string } }) {
         mn_type_id: ''
     })
 
-
     const {
-        refetchRestaurantData: refetchTables
+        restaurantAllPrinters: printers
     } = useGETRestaurantDataHooks({
-        query: 'TABLES',
+        query: 'PRINTERS',
         defaultParams: {
-            tables: {
+            printers: {
                 all: {
                     pagination: {
-                        take: 400,
+                        take: 50,
                         skip: 0
-                    },
+                    }
                 }
             }
         },
         UseQueryOptions: {
-            onSuccess: (data) => {
-                const tables = data as IGETTablesAllResponse
-                setTables(tables?.data)
-            },
             refetchOnWindowFocus: false,
             refetchIntervalInBackground: false,
             refetchOnMount: false,
-            enabled: tables?.length === 0
         }
     })
 
@@ -87,7 +84,7 @@ export default function Table({ params }: { params: { id: string } }) {
     })
 
     const {
-        restaurantAllMenuSections: sections
+        restaurantAllMenuSections: menuSections
     } = useGETRestaurantDataHooks({
         query: 'MENU_SECTION',
         defaultParams: {
@@ -113,16 +110,34 @@ export default function Table({ params }: { params: { id: string } }) {
     const {
         createRestaurantData: createOrder
     } = usePOSTRestaurantDataHooks({
-        query: 'ORDER'
+        query: 'ORDER',
+        UseMutationOptions: {
+            onSuccess: async () => {
+                await emit({
+                    event: SocketIoEvent.ORDER,
+                    message: params?.id
+                })
+                await emit({
+                    event: SocketIoEvent.TABLE,
+                    message: params?.id
+                })
+            }
+        }
     })
 
-
-    useEffect(() => {
-        if (tables?.length === 0) {
-            refetchTables()
+    const {
+        updateRestaurantData: updateOrder
+    } = usePUTRestaurantDataHooks({
+        query: 'ORDER',
+        UseMutationOptions: {
+            onSuccess: async () => {
+                await emit({
+                    event: SocketIoEvent.ORDER,
+                    message: params?.id
+                })
+            }
         }
-    }, [refetchTables, tables])
-
+    })
     
     return (
         <LayoutFrame
@@ -135,7 +150,7 @@ export default function Table({ params }: { params: { id: string } }) {
                 content: (
                     <div className='flex flex-col justify-between gap-2 h-full'>
                         <div className='overflow-auto scrollbar-thin'>
-                            {sections?.data?.map(s => {
+                            {sortMenuSections(menuSections?.data)?.map(s => {
                                 return (
                                     <div key={s?.id}>
                                         <small className='text-xs'>{s?.title}</small>
@@ -220,9 +235,9 @@ export default function Table({ params }: { params: { id: string } }) {
                         replaceOrder={replaceOrder}
                         table={getTableById(params?.id) || {} as ITable}
                         createOrder={createOrder}
-                        emit={emit}
-                        sections={sections?.data}
+                        menuSections={menuSections?.data}
                         orderControllers={getOrderControllers({ table_id: params?.id })}
+                        updateOrder={updateOrder}
                     />
                 ),
                 icon: {
@@ -252,6 +267,7 @@ export default function Table({ params }: { params: { id: string } }) {
                         updateOrderQuantity={updateOrderQuantity}
                         order={order}
                         getOneOrderTotal={getOneOrderTotal}
+                        printers={printers?.data}
                     />
                 ))}
             </div>

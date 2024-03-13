@@ -1,7 +1,8 @@
+import { useState } from "react"
 import { UseMutateFunction } from "react-query"
 
 //libs
-import { cn } from "@/common/libs/shadcn/utils"
+import { getTableStatusVariant } from "@/common/libs/restaurant/tables"
 
 //components
 import {
@@ -12,125 +13,126 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import FullOrderController from "../orderSummary/fullOrderController"
 import { Button } from "@/components/ui/button"
 
 //interface
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
-import { ITable } from "@/common/types/restaurant/tables.interface"
-import { ISocketMessage } from "@/common/libs/socketIo/types"
+import { ITable, TableMealStatus } from "@/common/types/restaurant/tables.interface"
+import { IOrderController } from "@/common/types/restaurant/order.interface"
+import { ICreateNewOrder } from "@/store/restaurant/order"
+import { IMenuSection } from "@/common/types/restaurant/menu.interface"
 
 interface TableStatusProps {
     table: ITable
     updateTable: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
-    emit: (data: ISocketMessage) => void
+    orderControllers: IOrderController[]
+    getOneOrderTotal: (order: ICreateNewOrder) => number
+    menuSections: IMenuSection[]
+    updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
 }
 
-export default function TablesStatus({ table }: TableStatusProps) {
+export default function TablesStatus({ table, updateTable, orderControllers, updateOrder, getOneOrderTotal, menuSections }: TableStatusProps) {
+    const [isOpen, setIsOpen] = useState(false)
 
-    const tableStatusBg = (): string => {
-        switch (table?.meal_status) {
-            case 'waiting':
-                return 'bg-orange-300 hover:bg-orange-400 dark:bg-orange-300 dark:hover:bg-orange-400'
-            case 'starters':
-                return 'bg-orange-300 hover:bg-orange-400 dark:bg-orange-300 dark:hover:bg-orange-400'
-            case 'main':
-                return 'bg-orange-300 hover:bg-orange-400 dark:bg-orange-300 dark:hover:bg-orange-400'
-            case 'all together':
-                return 'bg-orange-300 hover:bg-orange-400 dark:bg-orange-300 dark:hover:bg-orange-400'
-            case 'clean table':
-                return 'bg-orange-300 hover:bg-orange-400 dark:bg-orange-300 dark:hover:bg-orange-400'
-            default:
-                return 'bg-orange-300 hover:bg-orange-400 dark:bg-orange-300 dark:hover:bg-orange-400'
+    const isStatusDisabled = (status: TableMealStatus): boolean => {
+        if (!table || orderControllers?.length) {
+            return true;
         }
+        const tableMealStatus = table.meal_status;
+
+        switch (tableMealStatus) {
+            case 'waiting':
+                return status !== 'waiting';
+            case 'starters':
+                return status === 'starters';
+            case 'main':
+                return status !== 'main' && status !== 'all together' && status !== 'clean table';
+            case 'all together':
+                return status !== 'clean table';
+            case 'clean table':
+                return status !== 'main'
+            default:
+                return true
+        }
+    };
+
+    const handleUpdateTable = async (meal_status: TableMealStatus) => {
+        await updateTable(
+            {
+                table: {
+                    id: table?.id,
+                    meal_status
+                }
+            },
+            {
+                onSuccess: () => {
+                    setIsOpen(false)
+                },
+            }
+        );
     }
 
-    // const isStatusDisabled = (status: ITableMealStatus): boolean => {
-    //     if (!table || controllers?.length) {
-    //         return true;
-    //     }
-
-    //     const tableMealStatus = table.meal_status;
-
-    //     switch (tableMealStatus) {
-    //         case 'waiting':
-    //             return status !== 'waiting';
-    //         case 'starters':
-    //             return status === 'starters';
-    //         case 'main':
-    //             return status !== 'main' && status !== 'all together' && status !== 'clean table';
-    //         case 'all together':
-    //             return status !== 'clean table';
-    //         case 'clean table':
-    //             return status !== 'main'
-    //         default:
-    //             return true
-    //     }
-    // };
-
-    // const handleOptionSelected = async (option: ITableMealStatus) => {
-    //     await updateTable(
-    //         {
-    //             table: {
-    //                 id: table?.id,
-    //                 data: {
-    //                     meal_status: option,
-    //                 }
-    //             }
-    //         },
-    //         {
-    //             onSuccess: () => {
-    //                 emit({
-    //                     event: 'table'
-    //                 })
-    //                 onClose()
-    //             },
-    //         }
-    //     );
-    // }
-
-    // const handleOrderUpdateStatus = async (orders: IOrder[]) => {
-    //     await updateOrder(
-    //       {
-    //         order: {
-    //           many: {
-    //             orders: {
-    //               id: {
-    //                 in: orders?.map(o => o?.id)
-    //               },
-    //               data: {
-    //                 status: 'delivered'
-    //               }
-    //             },
-    //           }
-    //         }
-    //       },
-    //       {
-    //         onSuccess: () => {
-    //           emit({
-    //             event: 'order',
-    //           })
-    //         },
-    //       }
-    //     );
-    //   }
-
     return (
-        <Dialog>
+        <Dialog
+            open={isOpen}
+            onOpenChange={setIsOpen}
+        >
             <DialogTrigger asChild>
                 <Button
-                    className={cn('w-full capitalize text-black', tableStatusBg())}
+                    className='capitalize'
+                    variant={getTableStatusVariant(table?.meal_status)}
                 >
                     {table?.meal_status}
                 </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className=''>
                 <DialogHeader>
-                    <DialogTitle>Are you absolutely sure?</DialogTitle>
-                    <DialogDescription>
-                        This action cannot be undone. This will permanently delete your account
-                        and remove your data from our servers.
-                    </DialogDescription>
+                    <DialogTitle>Update Table Status</DialogTitle>
                 </DialogHeader>
+                <div className="grid grid-cols-[1fr,auto] gap-2">
+                    <div className='max-h-[400px] overflow-auto'>
+                        {orderControllers?.length === 0 &&
+                            <DialogDescription>
+                                No Orders
+                            </DialogDescription>
+                        }
+                        {orderControllers?.map(oc => {
+                            return (
+                                <FullOrderController
+                                    key={oc?.id}
+                                    orderController={oc}
+                                    orderSumary={{
+                                        getOneOrderTotal,
+                                        menuSections,
+                                        order: oc?.orders,
+                                        updateOrderStatus: {
+                                            onUpdate: updateOrder
+                                        },
+                                    }}
+                                    onOrdersUpdate={updateOrder}
+                                />
+                            )
+                        })}
+                    </div>
+                    <div className='flex-col-container'>
+                        {
+                            Object.values(TableMealStatus).map(status => {
+                                return (
+                                    <Button
+                                        key={status}
+                                        disabled={isStatusDisabled(status)}
+                                        className='capitalize h-12'
+                                        variant={getTableStatusVariant(status)}
+                                        onClick={() => handleUpdateTable(status)}
+                                    >
+                                        {status}
+                                    </Button>
+                                )
+                            })
+                        }
+                    </div>
+                </div>
             </DialogContent>
         </Dialog>
 

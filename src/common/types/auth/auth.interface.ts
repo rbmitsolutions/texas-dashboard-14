@@ -1,28 +1,28 @@
 export enum Permissions {
   MY_PROFILE = "my_profile",
-  
+
   ADMIN = "admin",
   ADMIN_GHOST = "admin-ghost",
-  
+
   BOOKING_READER = "booking_reader",
   BOOKING_PAGINATION = "booking_pagination",
   BOOKING_ADM = "booking_adm",
-  
+
   RECEPTION = "reception",
   PASS = "pass",
   ORDERS = "orders",
   WAITERS = "waiters",
-  
+
   HACCP_ADMIN = "haccp_admin",
-  
+
   MENU = 'menu',
   MENU_CREATE = 'menu_create',
   MENU_UPDATE = 'menu_update',
   MENU_DELETE = 'menu_delete',
-  
+
   SEND_EMAIL = 'send_email',
   SEND_SMS = 'send_sms',
-  
+
   ROSTER_TASKS = 'roster_tasks',
   DAY_ROSTER = 'day_roster',
 }
@@ -36,7 +36,7 @@ export interface IToken {
   roster_password: number;
   authorized_device: boolean
   refresh_token: {
-    id:string
+    id: string
   }
 }
 
@@ -52,12 +52,20 @@ export interface ITokens {
   expiresIn: number;
 }
 
+export enum HistoryType {
+  BookingTime = 'Close / Open Booking Time',
+  BookingDeleted = 'Booking Deleted',
+  MenuUpdated = 'Menu Updated',
+  MenuCreated = 'Menu Created',
+  TaskAdded = 'Task - Added',
+  TaskDeleted = 'Task - Deleted',
+}
 export interface IHistory {
   id: string;
 
   by: string
   by_id: string
-  type: 'Close / Open Booking Time' | 'Booking Deleted' | 'Menu Updated' | 'Menu Created';
+  type: HistoryType
   description: string;
 
   created_at: Date;

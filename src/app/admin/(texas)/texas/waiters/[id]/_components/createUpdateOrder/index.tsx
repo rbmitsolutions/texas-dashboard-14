@@ -9,6 +9,8 @@ import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDa
 
 //interface
 import { IAddOnsCreateOrder, ICreateNewOrder } from "@/store/restaurant/order"
+import { OrderStatus } from "@/common/types/restaurant/order.interface"
+import { IPrinters } from "@/common/types/restaurant/printers.interface"
 
 interface MenuCreateUpdateOrderProps {
     menu: IGETMenuOrderSystemResponse,
@@ -16,20 +18,33 @@ interface MenuCreateUpdateOrderProps {
     getOneOrderTotal: (order: ICreateNewOrder) => number
     order?: ICreateNewOrder
     handleOpen?: () => void
+    printers?: IPrinters[]
 }
 
-export default function CreateUpdateOrder({ menu, setOrder: setToOrders, getOneOrderTotal, order: oldOrder, handleOpen }: MenuCreateUpdateOrderProps) {
-    const [order, setOrder] = useState<ICreateNewOrder>(oldOrder ? oldOrder : {
-        id: Math.random().toString(36).substring(7),
-        menu: menu?.title,
-        menu_short_title: menu?.short_title,
-        menu_id: menu?.id,
-        quantity: 1,
-        add_ons: [],
-        price: menu?.value,
-        mn_type: menu?.mn_type?.title,
-        status: 'ordered',
-        to_print_ids: menu?.to_print_ids
+export default function CreateUpdateOrder({ menu, setOrder: setToOrders, getOneOrderTotal, order: oldOrder, handleOpen, printers }: MenuCreateUpdateOrderProps) {
+    const [order, setOrder] = useState<ICreateNewOrder>(oldOrder ? oldOrder : () => {
+        const to_print_ips: string[] = []
+
+        if (printers) {
+            menu?.to_print_ids?.map(printer => {
+                const printerData = printers.find(p => p.id === printer)
+                if (printerData?.ip) {
+                    to_print_ips.push(printerData?.ip)
+                }
+            })
+        }
+        return {
+            id: Math.random().toString(36).substring(7),
+            menu: menu?.title,
+            menu_short_title: menu?.short_title,
+            menu_id: menu?.id,
+            quantity: 1,
+            add_ons: [],
+            price: menu?.value,
+            mn_type: menu?.mn_type?.title,
+            status: OrderStatus.ORDERED,
+            to_print_ips
+        }
     })
 
     const handleSetAddOns = (addOns: IAddOnsCreateOrder[]) => {

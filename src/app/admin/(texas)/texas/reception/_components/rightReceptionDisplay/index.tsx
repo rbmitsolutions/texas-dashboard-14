@@ -1,89 +1,117 @@
 import { UseMutateFunction } from "react-query"
-import { Dispatch, SetStateAction } from "react"
+import { useState } from "react"
 
 //libs
-import { formatDate } from "@/common/libs/date-fns/dateFormat"
+import { getOrderStatusVariant } from "@/common/libs/restaurant/order"
 
 //components
-import { OrderSummary } from "../../../_components/orderSummary"
+import FullOrderController from "../../../_components/orderSummary/fullOrderController"
+import { Button } from "@/components/ui/button"
 import PaymentButton from "./paymentButton"
 
 //interface
 import { IPOSTCompanyBody, IPOSTCompanyDataRerturn } from "@/hooks/company/IPostCompanyDataHooks.interface"
-import { IGETRestaurantDataQuery } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
-import { IGiftCards } from "@/common/types/restaurant/giftcard.interface"
-import { IOrderController } from "@/common/types/restaurant/order.interface"
+import { IOrderController, OrderStatus } from "@/common/types/restaurant/order.interface"
+import { OrderControllerFilterProps } from "@/store/restaurant/orderController"
+import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
-import { ITable } from "@/common/types/restaurant/tables.interface"
-import { ISocketMessage } from "@/common/libs/socketIo/types"
 import { ICreateNewOrder } from "@/store/restaurant/order"
 import { IToken } from "@/common/types/auth/auth.interface"
+import { IDataTable } from "../../[id]/page"
 
 interface RightReceptionDisplayProps {
-    orderController: IOrderController[]
-    table: ITable
+    dataTable: IDataTable
+    getOrderControllers: (filter: OrderControllerFilterProps) => IOrderController[]
     getOneOrderTotal: (order: ICreateNewOrder) => number
-    sections: IMenuSection[]
-    values: {
-        total: number
-        paid: number
-        remaining: number
-    }
+    menuSections: IMenuSection[]
     createTransaction: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
-    emit: (message: ISocketMessage) => void
     user: IToken
-    giftCard: {
-        card: IGiftCards | null,
-        setCardParams: Dispatch<SetStateAction<IGETRestaurantDataQuery>>
-        getCardParams: IGETRestaurantDataQuery
-    }
+    updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
 }
 
-export default function RightReceptionDisplay({ orderController, table, getOneOrderTotal, sections, values, createTransaction, emit, user, giftCard}: RightReceptionDisplayProps) {
+export default function RightReceptionDisplay({
+    dataTable,
+    getOrderControllers,
+    getOneOrderTotal,
+    menuSections,
+    createTransaction,
+    user,
+    updateOrder
+}: RightReceptionDisplayProps) {
+    const [status, setStatus] = useState<OrderStatus[]>([OrderStatus.ORDERED, OrderStatus.DELIVERED])
+
+    const filteredOrderController = getOrderControllers({
+        table_id: dataTable?.table?.id!,
+        orders: {
+            status
+        }
+    })
 
     return (
         <div className='flex-col-container justify-between h-full scrollbar-thin overflow-auto'>
-            <div className='flex-col-container gap-4 justify-start h-full p-2 rounded-lg overflow-auto scrollbar-thin -mt-2'>
-                {orderController?.map(oc => {
+            <strong>Table {dataTable?.table?.number}</strong>
+            <div className='grid grid-cols-3 gap-2'>
+                {Object.values(OrderStatus).map(s => {
                     return (
-                        <div
-                            key={oc?.id}
-                            className='p-3 rounded-lg bg-background-soft'
+                        <Button
+                            key={s}
+                            variant={status?.includes(s) ? getOrderStatusVariant(s) : 'outline'}
+                            className='capitalize text-xs'
+                            onClick={() => {
+                                if (status?.includes(s)) {
+                                    setStatus(status?.filter(st => st !== s))
+                                } else {
+                                    setStatus([...status, s])
+                                }
+                            }}
                         >
-                            <div className='flex items-center justify-between mb-2'>
-                                <div>
-                                    <small className="line-clamp-1">{oc?.waiter}</small>
-                                    <small className="text-end">{formatDate({
-                                        date: oc?.created_at,
-                                        f: 'HH:mm:ss'
-                                    })}</small>
-                                </div>
-
-                                <div className="bg-primary w-16 p-1 rounded-xl text-center">
-                                    <small>
-                                        {oc?.number}
-                                    </small>
-                                </div>
-                            </div>
-
-                            {OrderSummary({
-                                order: oc?.orders || [],
-                                getOneOrderTotal,
-                                sections
-                            })}
-                        </div>
+                            {s}
+                        </Button>
                     )
                 })}
             </div>
-            <PaymentButton
-                orderController={orderController}
-                table={table}
-                values={values}
-                createTransaction={createTransaction}
-                emit={emit}
-                user={user}
-                giftCard={giftCard}
-            />
+            <div className='flex-col-container gap-4 justify-start h-full p-2 rounded-lg overflow-auto scrollbar-thin -mt-2'>
+                {filteredOrderController?.length === 0 && (
+                    <div className='flex-col-container justify-center items-center h-full'>
+                        <p>No orders</p>
+                    </div>
+                )}
+                {filteredOrderController?.map(oc => {
+                    return (
+                        <FullOrderController
+                            key={oc?.id}
+                            orderController={oc}
+                            orderSumary={{
+                                menuSections,
+                                getOneOrderTotal,
+                                order: oc?.orders,
+                                updateOrderStatus: {
+                                    onUpdate: updateOrder,
+                                }
+                            }}
+                            onOrdersUpdate={updateOrder}
+                        />
+                    )
+                })}
+            </div>
+            <div className='grid grid-cols-1 gap-2'>
+                {/* <SplitBillPaymentButton
+                    dataTable={dataTable}
+                    sections={sections}
+                    getOneOrderTotal={getOneOrderTotal}
+                    createTransaction={createTransaction}
+                    emit={emit}
+                    user={user}
+                /> */}
+                <PaymentButton
+                    dataTable={dataTable}
+                    payTotal={dataTable?.values?.remaining}
+                    createTransaction={createTransaction}
+                    user={user}
+                    getOneOrderTotal={getOneOrderTotal}
+                    menuSections={menuSections}
+                />
+            </div>
         </div>
     )
 }

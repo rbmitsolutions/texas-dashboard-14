@@ -6,6 +6,9 @@ import AddOnsSelect from "./addOnsSelect";
 //interface
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 import { IAddOnsCreateOrder, ICreateNewOrder } from "@/store/restaurant/order";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { PlusCircleIcon } from "lucide-react";
 
 export interface IHandleAddOnsSelection {
     option: IMenuAddOnsOption
@@ -23,6 +26,15 @@ interface AddOnsDisplayProps {
 }
 
 export default function AddOnsDisplay({ menu, order, getOneOrderTotal, setOrder, handleSetAddOns, handleChangeQuantity }: AddOnsDisplayProps) {
+    const sortedAddOns = menu?.add_ons?.sort((a, b) => {
+        if (a.is_mandatory && !b.is_mandatory) {
+            return -1;
+        } else if (!a.is_mandatory && b.is_mandatory) {
+            return 1;
+        } else {
+            return 0
+        }
+    })
 
     const handleAddOnsSelection = ({ option, addOn, to }: IHandleAddOnsSelection) => {
         let addOns = order?.add_ons
@@ -73,19 +85,22 @@ export default function AddOnsDisplay({ menu, order, getOneOrderTotal, setOrder,
         handleSetAddOns(addOns)
     }
 
+    const handleAddDescription = (title: string) => {
+            handleAddFlag({
+                add_ons_id: 'description',
+                add_ons_opt_id: 'description',
+                title,
+                price: 0,
+                is_mandatory: false
+            })
+
+    }
+
     return (
         <div className='flex-col-container p-2'>
             <div className='flex-col-container w-full max-h-[460px] overflow-auto scrollbar-thin pr-2 md:max-h-[520px] md:max-w-[600px]'>
                 <h1 className='font-bold text-xl text-primary scrollbar-thin md:hidden'>{menu?.short_title}</h1>
-                {menu?.add_ons?.sort((a, b) => {
-                    if (a.is_mandatory && !b.is_mandatory) {
-                        return -1;
-                    } else if (!a.is_mandatory && b.is_mandatory) {
-                        return 1;
-                    } else {
-                        return 0
-                    }
-                }).map(addOn => {
+                {sortedAddOns?.map(addOn => {
                     return <AddOnsSelect
                         key={addOn?.id}
                         addOn={addOn}
@@ -94,6 +109,14 @@ export default function AddOnsDisplay({ menu, order, getOneOrderTotal, setOrder,
                         addOnsOrder={order?.add_ons}
                     />
                 })}
+                <div className='flex-col-container'>
+                    <Textarea
+                        placeholder="Add any additional notes to this order"
+                        className='h-32 resize-none scrollbar-thin'
+                        value={order?.add_ons?.find(a => a?.add_ons_id === 'description')?.title || ''}
+                        onChange={(e) => handleAddDescription(e.target.value)}
+                        />
+                </div>
             </div>
             <div className='md:hidden'>
                 <OrderDisplayFooter

@@ -1,20 +1,21 @@
 'use client'
-import { io } from 'socket.io-client';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 //libs
-import { addDaysToDate, getFirstTimeOfTheDay } from '@/common/libs/date-fns/dateFormat';
+import { getWalkInClient } from '@/common/libs/restaurant/actions/walkinClients';
 
 //components
 import { transactionsColumnsTable } from '../_components/transactionsColumnsTable';
 import RightReceptionDisplay from '../_components/rightReceptionDisplay';
 import { TransactionsTable } from '../_components/transactionsTable';
+import { CloseTableDialog } from '../_components/closeTableDialog';
 import LayoutFrame from '../../../_components/layoutFrame';
 import IconText from '@/components/common/iconText';
 import Wrap from '@/components/common/wrap';
 
 //hooks
-import { useGETCompanyDataHooks, usePOSTCompanyDataHooks, usePUTCompanyDataHooks } from '@/hooks/company/companyDataHooks';
+import { usePOSTCompanyDataHooks, usePUTCompanyDataHooks } from '@/hooks/company/companyDataHooks';
 import { useGETRestaurantDataHooks, usePUTRestaurantDataHooks } from '@/hooks/restaurant/restaurantDataHooks';
 import { useSocketIoHooks } from '@/hooks/useSocketIoHooks';
 import { useAuthHooks } from '@/hooks/useAuthHooks';
@@ -26,101 +27,60 @@ import { useTablesStore } from '@/store/restaurant/tables';
 import { useOrderStore } from '@/store/restaurant/order';
 
 //interfaces
-import { IAllOrderControllerResponse, IGETTablesAllResponse } from '@/hooks/restaurant/IGetRestaurantDataHooks.interface';
-import { IGetAllTransactionsResponse } from '@/hooks/company/IGetCompanyDataHooks.interface';
-import { TableTransactionsType, TransactionsStatus } from '@/common/types/company/transactions.interface';
-import { ISocketMessage, SocketIoEvent } from '@/common/libs/socketIo/types';
-import { ITable } from '@/common/types/restaurant/tables.interface';
-import { CloseTableDialog } from '../_components/closeTableDialog';
-import { useRouter } from 'next/navigation';
+import { ITransactions, TransactionsStatus } from '@/common/types/company/transactions.interface';
+import { IOrder, IOrderController, OrderStatus } from '@/common/types/restaurant/order.interface';
 import { RedirectTo } from '@/common/types/routers/endPoints.types';
+import { ITable } from '@/common/types/restaurant/tables.interface';
+import { SocketIoEvent } from '@/common/libs/socketIo/types';
 
-const socket = io(process.env.NEXT_PUBLIC_URL! as string);
+export interface IDataTable {
+    table: ITable | undefined
+    transactions: ITransactions[]
+    orders: {
+        unpaid: IOrder[]
+    },
+    orderControllers: {
+        unpaid: IOrderController[]
+    }
+    values: {
+        total: number,
+        paid: number,
+        remaining: number
+    }
+}
 
 export default function Table({ params }: { params: { id: string } }) {
-    const { push } = useRouter()
-    const { getOrderControllers, getTotalOfOrdersByTableId, setOrderControllers } = useOrderControllerStore()
-    const { getTransactionsByFilter, getTransactionsTotalByFilter, setTransactions, transactions } = useTransactionsStore()
+    const { getTransactionsByFilter, getTransactionsTotalByFilter, transactions } = useTransactionsStore()
+    const { getOrderControllers, getTotalOfOrdersByTableId, orderControllers } = useOrderControllerStore()
     const { getOneOrderTotal } = useOrderStore()
-    const { getTableById, tables, setTables } = useTablesStore()
+    const { getTableById } = useTablesStore()
     const { emit } = useSocketIoHooks()
     const { user } = useAuthHooks()
-    const [isCloseTableDialogOpen, setIsCloseTableDialogOpen] = useState<boolean>(false)
+    const { push } = useRouter()
+    const [dataTable, setDataTable] = useState<IDataTable>({
+        table: undefined,
+        transactions: [],
+        orders: {
+            unpaid: []
+        },
+        orderControllers: {
+            unpaid: []
+        },
+        values: {
+            total: 0,
+            paid: 0,
+            remaining: 0
+        }
+    })
 
-    const table = getTableById(params.id)
-    const tableTransactions = getTransactionsByFilter({ payee_key: params.id })
-    const orderControllers = getOrderControllers({ table_id: params.id })
-    const remaining = getTotalOfOrdersByTableId(params.id) + getTransactionsTotalByFilter({
+    const [isCloseTableDialogOpen, setIsCloseTableDialogOpen] = useState<boolean>(false)
+    const remaining = getTotalOfOrdersByTableId(params.id) - getTransactionsTotalByFilter({
         payee_key: params.id,
         status: TransactionsStatus.CONFIRMED
     })
-    const {
-        refetchCompanyData: refetchTransactions
-    } = useGETCompanyDataHooks({
-        query: 'TRANSACTIONS',
-        defaultParams: {
-            transactions: {
-                all: {
-                    pagination: {
-                        take: 500,
-                        skip: 0
-                    },
-                    date: {
-                        gte: getFirstTimeOfTheDay(new Date()),
-                        lte: addDaysToDate(new Date(), 1)
-                    },
-                    type: {
-                        in: [TableTransactionsType.OPEN_TABLE]
-                    }
-                }
-            }
-        },
-        UseQueryOptions: {
-            onSuccess: (data) => {
-                const transactions = data as IGetAllTransactionsResponse
-                setTransactions(transactions?.data)
-            },
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
-            refetchOnMount: false,
-        }
-    })
 
     const {
-        refetchRestaurantData: refetchOrdersController,
-    } = useGETRestaurantDataHooks({
-        query: 'ORDER_CONTROLLER',
-        defaultParams: {
-            orderController: {
-                all: {
-                    pagination: {
-                        take: 500,
-                        skip: 0
-                    },
-                    includes: {
-                        orders: '1'
-                    },
-                    date: {
-                        gte: getFirstTimeOfTheDay(new Date()),
-                        lte: addDaysToDate(new Date(), 1)
-                    },
-                    finished_table_id: null
-                }
-            }
-        },
-        UseQueryOptions: {
-            onSuccess: (data) => {
-                const orderControllers = data as IAllOrderControllerResponse
-                setOrderControllers(orderControllers?.data)
-            },
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
-            refetchOnMount: false,
-        }
-    })
-
-    const {
-        restaurantAllMenuSections: sections
+        restaurantAllMenuSections: menuSections
     } = useGETRestaurantDataHooks({
         query: 'MENU_SECTION',
         defaultParams: {
@@ -143,58 +103,36 @@ export default function Table({ params }: { params: { id: string } }) {
         }
     })
 
-    const {
-        refetchRestaurantData: refetchTables
-    } = useGETRestaurantDataHooks({
-        query: 'TABLES',
-        defaultParams: {
-            tables: {
-                all: {
-                    pagination: {
-                        take: 400,
-                        skip: 0
-                    },
-                }
-            }
-        },
-        UseQueryOptions: {
-            onSuccess: (data) => {
-                const tables = data as IGETTablesAllResponse
-                setTables(tables?.data)
-            },
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
-            refetchOnMount: false,
-        }
-    })
-
-
-    const {
-        restaurantGiftCard: giftCard,
-        setGETRestaurantDataParams: setGiftCardParams,
-        GETRestaurantDataParams: getGiftCardParams
-    } = useGETRestaurantDataHooks({
-        query: 'GIFTCARD',
-        defaultParams: {
-            giftcards: {
-                byCode: {
-                    code: ''
-                }
-            }
-        },
-        UseQueryOptions: {
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
-            refetchOnMount: false,
-        }
-    })
-
     const { createCompanyData: createTransaction } = usePOSTCompanyDataHooks({
-        query: 'TRANSACTIONS'
+        query: 'TRANSACTIONS',
+        UseMutationOptions: {
+            onSuccess: async () => {
+                await emit({
+                    event: SocketIoEvent.TABLE_PAYMENT,
+                    message: dataTable?.table?.id
+                })
+                await emit({
+                    event: SocketIoEvent.ORDER,
+                    message: dataTable?.table?.id
+                })
+            }
+        }
     })
 
     const { updateCompanyData: updateTransaction } = usePUTCompanyDataHooks({
-        query: 'TRANSACTIONS'
+        query: 'TRANSACTIONS',
+        UseMutationOptions: {
+            onSuccess: async () => {
+                await emit({
+                    event: SocketIoEvent.TABLE_PAYMENT,
+                    message: dataTable?.table?.id
+                })
+                await emit({
+                    event: SocketIoEvent.ORDER,
+                    message: dataTable?.table?.id
+                })
+            }
+        }
     })
 
 
@@ -202,65 +140,105 @@ export default function Table({ params }: { params: { id: string } }) {
         query: 'TABLES'
     })
 
-
-    const handleCloseTable = () => {
-        if (table?.client_id && table?.client_name) {
-            updateTable({
-                table: {
-                    id: params.id,
-                    close_table: {
-                        client_id: table?.client_id,
-                        client_name: table?.client_name
-                    }
-                }
-            }, {
-                onSuccess: async () => {
-                    setIsCloseTableDialogOpen(false)
-                    await emit({
-                        event: SocketIoEvent.TABLE,
-                        message: params.id
-
-                    })
-                    await emit({
-                        event: SocketIoEvent.TABLE_PAYMENT,
-                        message: params.id
-                    })
-                    await emit({
-                        event: SocketIoEvent.BOOKING,
-                        message: params.id
-                    })
-                    push(RedirectTo.RECEPTION)
-                }
-            })
-        }
-    }
-    useEffect(() => {
-        socket.on("message", (message: ISocketMessage) => {
-            // if (message?.event === SocketIoEvent.ORDER && message?.message === params?.id) {
-            //     refetchOrdersController()
-            // }
-            if (message?.event === SocketIoEvent.TABLE_PAYMENT && message?.message === params?.id) {
-                refetchTransactions()
+    const {
+        updateRestaurantData: updateOrder
+    } = usePUTRestaurantDataHooks({
+        query: 'ORDER',
+        UseMutationOptions: {
+            onSuccess: async () => {
+                await emit({
+                    event: SocketIoEvent.ORDER,
+                    message: params?.id
+                })
+                await emit({
+                    event: SocketIoEvent.TABLE,
+                    message: params?.id
+                })
             }
-        });
-        () => {
-            socket.off("message");
         }
-    }, [params?.id, refetchTransactions]);
+    })
+
+    const handleCloseTable = async () => {
+        let client = {
+            id: dataTable?.table?.client_id,
+            name: dataTable?.table?.client_name
+        }
+
+        if (!client.id && !client.name) {
+            const walkIn = await getWalkInClient()
+
+            client = {
+                id: walkIn?.id,
+                name: walkIn?.name
+            }
+        }
+
+        await updateTable({
+            table: {
+                id: params.id,
+                close_table: {
+                    client_id: client?.id!,
+                    client_name: client?.name!
+                }
+            }
+        }, {
+            onSuccess: async () => {
+                setIsCloseTableDialogOpen(false)
+                await emit({
+                    event: SocketIoEvent.TABLE,
+                    message: params.id
+
+                })
+                await emit({
+                    event: SocketIoEvent.TABLE_PAYMENT,
+                    message: params.id
+                })
+                await emit({
+                    event: SocketIoEvent.BOOKING,
+                    message: params.id
+                })
+                push(RedirectTo.RECEPTION)
+            }
+        })
+    }
 
     useEffect(() => {
-        if (tables?.length === 0) {
-            refetchTables()
-        }
-
-        if (transactions?.length === 0) {
-            refetchTransactions()
-        }
-
-        if (orderControllers?.length === 0) {
-            refetchOrdersController()
-        }
-    }, [orderControllers?.length, refetchOrdersController, refetchTables, refetchTransactions, tables?.length, transactions?.length])
+        setDataTable({
+            table: getTableById(params.id),
+            transactions: getTransactionsByFilter({ payee_key: params.id }),
+            orders: {
+                unpaid: getOrderControllers({
+                    table_id: params.id,
+                    orders: {
+                        status: [OrderStatus.ORDERED, OrderStatus.DELIVERED]
+                    }
+                })?.map(oc => {
+                    return oc?.orders?.map(o => {
+                        return {
+                            ...o,
+                            paid: Number(o?.quantity) - Number(o?.paid)
+                        }
+                    })
+                }).flat() || []
+            },
+            values: {
+                total: getTotalOfOrdersByTableId(params.id),
+                paid: getTransactionsTotalByFilter({
+                    payee_key: params.id,
+                    status: TransactionsStatus.CONFIRMED
+                }),
+                remaining
+            },
+            orderControllers: {
+                unpaid: getOrderControllers({
+                    table_id: params.id,
+                    orders: {
+                        status: [OrderStatus.ORDERED, OrderStatus.DELIVERED]
+                    }
+                })
+            }
+        })
+    }, [getOrderControllers, getTableById, getTotalOfOrdersByTableId, getTransactionsByFilter, getTransactionsTotalByFilter, params.id, remaining, orderControllers, transactions])
 
     return (
         <LayoutFrame
@@ -277,37 +255,25 @@ export default function Table({ params }: { params: { id: string } }) {
                             setIsOpen={setIsCloseTableDialogOpen}
                             onClose={handleCloseTable}
                         />
-
+                        <i>Some info</i>
                     </div>
                 ),
                 return: {
-                    action: () => setIsCloseTableDialogOpen(prev => !prev),
+                    action: () => remaining === 0 ? setIsCloseTableDialogOpen(prev => !prev) : push(RedirectTo.RECEPTION),
                 }
             }}
             rightNavigation={{
                 content: (
                     <RightReceptionDisplay
-                        orderController={orderControllers || []}
-                        table={table || {} as ITable}
+                        dataTable={dataTable}
+                        getOrderControllers={getOrderControllers}
                         getOneOrderTotal={getOneOrderTotal}
-                        sections={sections?.data || []}
-                        values={{
-                            total: getTotalOfOrdersByTableId(params.id),
-                            paid: getTransactionsTotalByFilter({
-                                payee_key: params.id,
-                                status: TransactionsStatus.CONFIRMED
-                            }),
-                            remaining
-                        }}
-                        giftCard={{
-                            card: giftCard,
-                            setCardParams: setGiftCardParams,
-                            getCardParams: getGiftCardParams
-                        }}
+                        menuSections={menuSections?.data || []}
                         createTransaction={createTransaction}
-                        emit={emit}
                         user={user}
+                        updateOrder={updateOrder}
                     />
+
                 ),
                 icon: {
                     title: 'Order',
@@ -321,11 +287,11 @@ export default function Table({ params }: { params: { id: string } }) {
                     <div className='p-2 space-y-2'>
                         <IconText
                             icon='LifeBuoy'
-                            text={`Table: ${table?.number}`}
+                            text={`Table: ${dataTable?.table?.number}`}
                         />
                         <IconText
                             icon='User'
-                            text={table?.client_name || 'Walk In'}
+                            text={dataTable?.table?.client_name || 'Walk In'}
                         />
                     </div>
                 </div>
@@ -341,9 +307,8 @@ export default function Table({ params }: { params: { id: string } }) {
                     <TransactionsTable
                         columns={transactionsColumnsTable({
                             updateTransaction,
-                            emit
                         })}
-                        data={tableTransactions || []}
+                        data={dataTable?.transactions || []}
                     />
                 </Wrap>
             </div>

@@ -1,26 +1,33 @@
 import { IAddOnsCreateOrder } from "@/store/restaurant/order";
-import { IMenuType } from "./menu.interface";
 import { IFinishedTable, ITable } from "./tables.interface";
 
-export type IOrderStatus = "ordered" | "cancelled" | "returned" | "delivered";
+
+export enum OrderStatus {
+  ORDERED = "ordered",
+  CANCELLED = "cancelled",
+  RETURNED = "returned",
+  DELIVERED = "delivered",
+  PAID = 'paid'
+}
 
 export interface IOrder {
   id: string;
 
-  status: IOrderStatus;
+  status: OrderStatus;
   quantity: number;
+  paid: number
 
-  mn_type: IMenuType;
+  mn_type: string;
 
   price: number;
-  
+
   menu: string;
   menu_id: string;
   menu_short_title: string
-  
+
   add_ons: IAddOnsCreateOrder[]
 
-  to_print_ids: string[];
+  to_print_ips: string[];
 
   order_controller: IOrderController;
   order_controller_id: string;
@@ -32,7 +39,8 @@ export interface IOrder {
 export interface IOrderController {
   id: string;
   number: number
-
+  pass: number
+  
   waiter: string;
   waiter_id: string;
 

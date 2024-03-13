@@ -146,7 +146,6 @@ export default function VisaDetailsForm({
                             leftIcon='Save'
                             type='submit'
                             className='self-end'
-                            // onClick={() => console.log('dqw')}
                         >
                             Save
                         </Button>

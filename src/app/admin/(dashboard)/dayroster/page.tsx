@@ -133,8 +133,6 @@ export default function DayrosterPage() {
         toRefetch
     })
 
-    console.log(roster)
-
     return (
         <Wrap
             isLoading={isDepartamentsLoading || isFormsLoading || isRosterLoading || isShiftsLoading || isDutiesLoading}

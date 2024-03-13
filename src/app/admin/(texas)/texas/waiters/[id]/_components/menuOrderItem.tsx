@@ -1,6 +1,9 @@
 import { memo, useState } from "react";
 import Icon from "@/common/libs/lucida-icon";
 
+//libs
+import { scrollToOrder } from "@/common/libs/restaurant/order";
+
 //components
 import {
     AlertDialog,
@@ -11,12 +14,12 @@ import MenuOptionsComponent from "./menuOptionsComponent";
 import { Button } from "@/components/ui/button";
 import CreateUpdateOrder from "./createUpdateOrder";
 
-//store
-import { ICreateNewOrder } from "@/store/restaurant/order";
-
 //hooks
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 import { IGETFilterMenuOrderSystem } from "@/hooks/useOrderSystemHooks";
+import { OrderStatus } from "@/common/types/restaurant/order.interface";
+import { IPrinters } from "@/common/types/restaurant/printers.interface";
+import { ICreateNewOrder } from "@/store/restaurant/order";
 
 interface MenuOrderItemProps {
     menu: IGETMenuOrderSystemResponse
@@ -26,9 +29,10 @@ interface MenuOrderItemProps {
     updateOrderQuantity: (order: ICreateNewOrder, incrise: boolean) => void
     order: ICreateNewOrder[]
     getOneOrderTotal: (order: ICreateNewOrder) => number
+    printers: IPrinters[]
 }
 
-export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuantity, getFilteredOrderSystemMenu, getOneOrderTotal }: MenuOrderItemProps) {
+export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuantity, getFilteredOrderSystemMenu, getOneOrderTotal, printers }: MenuOrderItemProps) {
     const [menuItem, setMenuItem] = useState<IGETMenuOrderSystemResponse>(menu)
     const [step, setStep] = useState(0)
     const [isOpen, setIsOpen] = useState(false)
@@ -44,11 +48,17 @@ export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuan
 
             const orderExists = order.find(o => o.menu_id === menuItem?.id)
             if (orderExists) {
+                scrollToOrder(orderExists.id)
                 updateOrderQuantity(orderExists, true)
                 return
             }
 
-            setOrder({
+            const to_print_ips = menuItem?.to_print_ids?.map(printer => {
+                const printerData = printers.find(p => p.id === printer)
+                return printerData?.ip
+            })
+
+            const newOrder = {
                 id: Math.random().toString(36).substring(7),
                 add_ons: [],
                 menu: menu?.title,
@@ -56,10 +66,14 @@ export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuan
                 quantity: 1,
                 menu_short_title: menu?.short_title,
                 price: menu?.value,
-                status: 'ordered',
+                status: OrderStatus.ORDERED,
                 mn_type: menu?.mn_type?.title,
-                to_print_ids: []
-            })
+                to_print_ips
+            }
+
+            setOrder(newOrder as ICreateNewOrder)
+            scrollToOrder(newOrder.id)
+
             return
         }
         setIsOpen(!isOpen)
@@ -83,6 +97,7 @@ export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuan
                         setIsOpen(false)
                     }}
                     getOneOrderTotal={getOneOrderTotal}
+                    printers={printers}
                 />
             case 1: {
                 const options = getFilteredOrderSystemMenu({
@@ -108,9 +123,9 @@ export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuan
         >
             <AlertDialogTrigger asChild>
                 <Button
+                    variant='blue'
                     type='button'
                     className='flex-container-center justify-center min-h-40 max-h-60 h-full rounded-xl border-2'
-                    variant='default'
                 >
                     <h1>{menuItem?.short_title}</h1>
                 </Button>

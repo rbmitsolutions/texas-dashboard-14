@@ -4,9 +4,9 @@ import { IClient } from "@/common/types/restaurant/client.interface";
 import { IBookingDays, ISpecialDays, ITimesOpen } from "@/common/types/restaurant/config.interface";
 import { IGiftCardStatus, IGiftCards } from "@/common/types/restaurant/giftcard.interface";
 import { IMenu, IMenuAddOns, IMenuSection, IMenuType } from "@/common/types/restaurant/menu.interface";
-import { IOrder, IOrderController, IOrderStatus } from "@/common/types/restaurant/order.interface";
+import { IOrder, IOrderController, OrderStatus } from "@/common/types/restaurant/order.interface";
 import { IPrinters } from "@/common/types/restaurant/printers.interface";
-import { IFinishedTable, ISection, ITable, ITableMealStatus } from "@/common/types/restaurant/tables.interface";
+import { IFinishedTable, ISection, ITable, TableMealStatus } from "@/common/types/restaurant/tables.interface";
 import { IPaginationResponse, IQueryPagination } from "@/common/types/settings.interface";
 
 export interface IGETAllBookingsResponse {
@@ -65,7 +65,7 @@ export interface IGETTablesQuery {
       section?: "1";
       order_controller?: {
         orders?: {
-          status?: IOrderStatus
+          status?: OrderStatus
         } | '1';
       } | '1';
     };
@@ -82,7 +82,7 @@ export interface IGETTablesQuery {
     }
 
     meal_status?: {
-      in: ITableMealStatus[];
+      in: TableMealStatus[];
     }
     guests?: number;
 
@@ -91,7 +91,7 @@ export interface IGETTablesQuery {
       section?: "1";
       order_controller?: {
         orders?: {
-          status?: IOrderStatus
+          status?: OrderStatus
         } | '1';
       } | '1';
     };
@@ -116,7 +116,7 @@ export interface IGETOrdersQuery {
     order_controller?: "1";
   };
   all?: {
-    status?: IOrderStatus
+    status?: OrderStatus
 
     menu_id?: string;
     order_controller?: "1";

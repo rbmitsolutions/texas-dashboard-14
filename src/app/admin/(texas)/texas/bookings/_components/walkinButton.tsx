@@ -4,6 +4,10 @@ import Icon from "@/common/libs/lucida-icon";
 import { cn } from "@/common/libs/shadcn/utils";
 import validator from "validator";
 
+//libs
+import { getCurretBookingTime } from "@/common/libs/restaurant/timesOpen";
+import { dateFormatIso } from "@/common/libs/date-fns/dateFormat";
+
 //components
 import {
     Sheet,
@@ -14,7 +18,6 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import SearchInput from "@/components/common/searchInput";
-import { getCurretBookingTime } from "./utils";
 import { Button } from "@/components/ui/button";
 import SelectTable from "./selectTable";
 
@@ -29,7 +32,6 @@ import { IBookingDays, ITimesOpen } from "@/common/types/restaurant/config.inter
 import { IClient } from "@/common/types/restaurant/client.interface";
 import { ITable } from "@/common/types/restaurant/tables.interface";
 import { SocketIoEvent } from "@/common/libs/socketIo/types";
-import { dateFormatIso } from "@/common/libs/date-fns/dateFormat";
 
 interface WalkinButtonProps {
     openDay: IBookingDays

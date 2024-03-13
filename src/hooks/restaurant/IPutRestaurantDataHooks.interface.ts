@@ -1,8 +1,8 @@
 import { IBookingStatus, IBookings } from "@/common/types/restaurant/bookings.interface";
 import { ITimesOpen } from "@/common/types/restaurant/config.interface";
 import { IGiftCardStatus } from "@/common/types/restaurant/giftcard.interface";
-import { IOrderStatus } from "@/common/types/restaurant/order.interface";
-import { ITableMealStatus } from "@/common/types/restaurant/tables.interface";
+import { OrderStatus } from "@/common/types/restaurant/order.interface";
+import { TableMealStatus } from "@/common/types/restaurant/tables.interface";
 
 export interface IPUTTablesBody {
     id: string;
@@ -13,7 +13,7 @@ export interface IPUTTablesBody {
     guests?: number;
     is_open?: boolean;
     section_id?: string;
-    meal_status?: ITableMealStatus
+    meal_status?: TableMealStatus
     food_ordered_at?: Date;
     close_table?: {
         client_id: string
@@ -40,26 +40,21 @@ export interface IPUTOrderControllerBody {
             id: {
                 in: string[];
             };
-            data: {
-                waiter_id?: string;
+            waiter_id?: string;
 
-                client_id?: string;
+            client_id?: string;
 
-                table_id?: string | null;
+            table_id?: string | null;
 
-                finished_table_id?: string;
-            };
+            finished_table_id?: string;
         };
     };
 }
 
 
 export type IOrderPut = {
-    status?: IOrderStatus
+    status?: OrderStatus
     quantity?: number;
-
-    // type?: IType
-    // menu_type?: IMenuType
 
     price?: number;
     description?: string;
@@ -74,23 +69,12 @@ export interface IPUTOrderBody {
     order?: {
         id: string;
         data: IOrderPut;
-        order_controller?: IPUTOrderControllerBody['orderController']
-        check_for_more_orders?: {
-            order_controller_id: string;
-            check_for: string[];
-            order_status: IOrderStatus;
-            order_controller: IPUTOrderControllerBody['orderController']
-        };
     };
     many?: {
-        orders: {
-            id: {
-                in: string[];
-            };
-            data: IOrderPut;
+        id: {
+            in: string[];
         };
-        order_controller?: IPUTOrderControllerBody['orderController']
-        update_table?: IPUTTablesBody;
+        data: IOrderPut;
     };
 }
 

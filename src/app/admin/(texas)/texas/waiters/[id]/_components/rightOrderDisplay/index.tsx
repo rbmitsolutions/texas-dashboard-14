@@ -14,16 +14,16 @@ import LastOrders from "./lastOrders"
 
 //interface
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
-import { ICreateNewOrder } from "@/store/restaurant/order"
-import { ITable, ITableMealStatus } from "@/common/types/restaurant/tables.interface"
+import { ITable,TableMealStatus } from "@/common/types/restaurant/tables.interface"
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface"
+import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 import { IOrder, IOrderController } from "@/common/types/restaurant/order.interface"
-import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types"
+import { hasOrdersWithOrderedStatus } from "@/common/libs/restaurant/order"
 import { IToken, Permissions } from "@/common/types/auth/auth.interface"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
+import { ICreateNewOrder } from "@/store/restaurant/order"
 
 interface RightOrderDisplayProps {
-    emit: (data: ISocketMessage) => void
     order: ICreateNewOrder[]
     resetOrder: () => void
     updateOrderQuantity: (order: ICreateNewOrder, incrise: boolean) => void
@@ -34,14 +34,15 @@ interface RightOrderDisplayProps {
     replaceOrder: (order: ICreateNewOrder) => void
     table: ITable
     createOrder: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>
-    sections: IMenuSection[]
+    menuSections: IMenuSection[]
     orderControllers: IOrderController[]
+    updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
 }
 
-export default function RightOrderDisplay({ emit, order, resetOrder, menu, getOrderTotal, updateOrderQuantity, getOneOrderTotal, deleteOrder, replaceOrder, table, createOrder, sections, orderControllers }: RightOrderDisplayProps) {
+export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTotal, updateOrderQuantity, getOneOrderTotal, deleteOrder, replaceOrder, table, createOrder, menuSections, orderControllers, updateOrder }: RightOrderDisplayProps) {
     const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false)
     const { back } = useRouter()
-    const [status, setStatus] = useState<ITableMealStatus>()
+    const [status, setStatus] = useState<TableMealStatus>()
 
     const toggleAuthDialog = () => {
         setIsAuthDialogOpen(!isAuthDialogOpen)
@@ -55,6 +56,31 @@ export default function RightOrderDisplay({ emit, order, resetOrder, menu, getOr
     }
 
     const handleCreateOrder = async (taken: IToken, order: ICreateNewOrder[]) => {
+        const coordinates = hasOrdersWithOrderedStatus(order as IOrder[], menuSections)
+
+        let meal_status: TableMealStatus = table?.meal_status
+
+        if(meal_status === TableMealStatus.CLEAN_TABLE && coordinates?.hasfood){
+            meal_status = TableMealStatus.ALL_TOGETHER
+        }
+
+
+        if (coordinates?.hasfood && !status) {
+            if (meal_status === TableMealStatus.WAITING || meal_status === TableMealStatus.CLEAN_TABLE) {
+                if (coordinates?.starters) {
+                    meal_status = TableMealStatus.STARTERS
+                }
+                
+                if (coordinates?.maincourse && !coordinates?.starters) {
+                    meal_status = TableMealStatus.MAIN
+                }
+            }
+        }
+        
+        if (status) {
+            meal_status = status
+        }
+    
         await createOrder(
             {
                 order: {
@@ -63,17 +89,13 @@ export default function RightOrderDisplay({ emit, order, resetOrder, menu, getOr
                         order_controller: {
                             waiter: taken?.name,
                             waiter_id: taken?.user_id,
-
                             client_id: table?.client_id as string || 'walk_in',
                             table_id: table?.id,
                         },
                         update_table: {
                             id: table?.id,
-                            meal_status: 'waiting'
-                            // data: {
-                            //     meal_status,
-                            //     food_ordered_at: credentials?.hasfood ? new Date() : undefined,
-                            // }
+                            meal_status,
+                            food_ordered_at: coordinates?.hasfood ? new Date() : undefined,
                         },
                     }
                 }
@@ -81,13 +103,6 @@ export default function RightOrderDisplay({ emit, order, resetOrder, menu, getOr
             {
                 onSuccess: async () => {
                     resetOrder()
-                    await emit({
-                        event: SocketIoEvent.ORDER,
-                        message: table?.id
-                    })
-                    await emit({
-                        event: SocketIoEvent.TABLE,
-                    })
                     back()
                 },
                 onError: (err) => {
@@ -115,20 +130,23 @@ export default function RightOrderDisplay({ emit, order, resetOrder, menu, getOr
                         ordersController={orderControllers}
                         menu={menu}
                         getOneOrderTotal={getOneOrderTotal}
-                        sections={sections}
+                        menuSections={menuSections}
+                        updateOrder={updateOrder}
                     />
                     <Button
-                        variant={status === 'all together' ? 'orange' : 'outline'}
+                        variant={status === TableMealStatus.ALL_TOGETHER ? 'orange' : 'outline'}
                         className='w-full h-12'
-                        onClick={() => setStatus(prev => prev === 'all together' ? undefined : 'all together')}
+                        onClick={() => setStatus(prev => prev === TableMealStatus.ALL_TOGETHER ? undefined : TableMealStatus.ALL_TOGETHER)}
                     >
                         All Together
                     </Button>
                 </div>
                 <strong className='text-center'>Table: {table?.number}</strong>
-                <div className='flex-col-container justify-start h-full p-2 rounded-lg overflow-auto scrollbar-thin -mt-2'>
-                    {OrderSummary({
-                        order: order?.map(o => {
+                <div
+                    id='order-summary-container'
+                    className='flex-col-container justify-start direction-reverse h-full p-2 rounded-lg overflow-auto   scrollbar-thin -mt-2'>
+                    <OrderSummary
+                        order={order?.map(o => {
                             const menuItem = menu?.find(m => m.id === o.menu_id)
                             return {
                                 ...o,
@@ -136,16 +154,16 @@ export default function RightOrderDisplay({ emit, order, resetOrder, menu, getOr
                                 menu_id: menuItem?.id,
                                 menu_short_title: menuItem?.short_title,
                             }
-                        }) as unknown as IOrder[],
-                        updateOrder: {
+                        }) as unknown as IOrder[]}
+                        updateOrder={{
                             deleteOrder,
                             updateOrderQuantity,
                             replaceOrder,
                             menu
-                        },
-                        getOneOrderTotal,
-                        sections
-                    })}
+                        }}
+                        getOneOrderTotal={getOneOrderTotal}
+                        menuSections={menuSections}
+                    />
                 </div>
                 <Button
                     leftIcon="ShoppingCart"
@@ -160,3 +178,4 @@ export default function RightOrderDisplay({ emit, order, resetOrder, menu, getOr
         </>
     )
 }
+
