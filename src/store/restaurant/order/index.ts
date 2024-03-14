@@ -17,6 +17,7 @@ export interface ICreateNewOrder {
     paid?: number
 
     mn_type: string
+    mn_section: string
 
     price: number
     add_ons: IAddOnsCreateOrder[]

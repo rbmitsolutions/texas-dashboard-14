@@ -18,6 +18,7 @@ export interface IOrder {
   paid: number
 
   mn_type: string;
+  mn_section: string;
 
   price: number;
 

@@ -50,9 +50,8 @@ export const OrderSummary = ({ order, updateOrder, getOneOrderTotal, menuSection
 
     return (
         sortMenuSections(menuSections)?.map(s => {
-            const mn_types = s?.types?.map(t => t?.title)
-
-            const orders = order?.filter(o => mn_types?.includes(o?.mn_type as string)).sort((a, b) => {
+        
+            const orders = order?.filter(o => s?.title?.includes(o?.mn_section as string)).sort((a, b) => {
                 return a?.menu_short_title.localeCompare(b?.menu_short_title)
             })
 

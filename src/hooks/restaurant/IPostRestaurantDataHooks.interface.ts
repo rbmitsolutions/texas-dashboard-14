@@ -44,6 +44,7 @@ export interface ICreateOrder {
   quantity: number
 
   mn_type: string
+  mn_section: string
 
   price: number
 
@@ -61,17 +62,18 @@ export interface IPOSTOrderBody {
   order?: {
     status: OrderStatus;
     quantity: number
-  
+
     mn_type: string
-  
+    mn_section: string
+
     price: number
-  
+
     menu: string,
     menu_id: string
     menu_short_title: string
-  
+
     add_ons: IAddOnsCreateOrder[]
-  
+
     to_print_ips: string[]
 
     order_controller_id: string

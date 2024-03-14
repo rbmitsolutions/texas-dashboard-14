@@ -68,6 +68,7 @@ export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuan
                 price: menu?.value,
                 status: OrderStatus.ORDERED,
                 mn_type: menu?.mn_type?.title,
+                mn_section: menu?.mn_type?.section?.title,
                 to_print_ips
             }
 

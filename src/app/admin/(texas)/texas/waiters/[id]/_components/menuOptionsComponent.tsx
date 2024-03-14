@@ -1,5 +1,10 @@
+//libs
 import { cn } from "@/common/libs/shadcn/utils"
+
+//components
 import { Button } from "@/components/ui/button"
+
+//interface
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
 
 interface MenuOptionsComponentProps {
@@ -9,15 +14,7 @@ interface MenuOptionsComponentProps {
 
 
 export default function MenuOptionsComponent({ options, updateMenuItem }: MenuOptionsComponentProps) {
-    // const optionBgColor = (priority: number) => {
-    //     if (priority === 1) {
-    //         return 'bg-background-soft'
-    //     } else if (priority === 2) {
-    //         return '!bg-blue-300 !hover:bg-blue-300 !dark:bg-blue-900 !dark:hover:bg-blue-900'
-    //     } else if (priority === 3) {
-    //         return '!bg-green-200 !hover:bg-green-400 !dark:bg-orange-700 !dark:hover:bg-green-700'
-    //     }
-    // }
+
     const optionBgColor = (priority: number) => {
         if (priority === 1) {
             return '!bg-blue-100 dark:!bg-blue-400/60'

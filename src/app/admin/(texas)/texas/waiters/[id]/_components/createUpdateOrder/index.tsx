@@ -43,6 +43,7 @@ export default function CreateUpdateOrder({ menu, setOrder: setToOrders, getOneO
             price: menu?.value,
             mn_type: menu?.mn_type?.title,
             status: OrderStatus.ORDERED,
+            mn_section: menu?.mn_type?.section?.title,
             to_print_ips
         }
     })
