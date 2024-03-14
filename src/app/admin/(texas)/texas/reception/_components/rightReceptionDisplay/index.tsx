@@ -20,6 +20,7 @@ import { IToken } from "@/common/types/auth/auth.interface"
 import { IDataTable } from "../../[id]/page"
 import { IPrinters } from "@/common/types/restaurant/printers.interface"
 import PrintBill from "./printBillButton"
+import SplitBillPaymentButton from "./splitBillPaymentButton"
 
 interface RightReceptionDisplayProps {
     dataTable: IDataTable
@@ -100,14 +101,14 @@ export default function RightReceptionDisplay({
                 })}
             </div>
             <div className='grid grid-cols-[auto,1fr] gap-4'>
-                {/* <SplitBillPaymentButton
+                 <SplitBillPaymentButton
                     dataTable={dataTable}
-                    sections={sections}
+                    menuSections={menuSections}
                     getOneOrderTotal={getOneOrderTotal}
                     createTransaction={createTransaction}
-                    emit={emit}
                     user={user}
-                /> */}
+                    
+                /> 
                 <PrintBill 
                     printers={printers}
                     tableId={dataTable?.table?.id!}

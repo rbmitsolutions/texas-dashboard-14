@@ -17,17 +17,17 @@ export const scrollToOrder = (orderId: string): void => {
 export const getOrderStatusBorderColor = (status: OrderStatus): string => {
     switch (status) {
         case 'ordered':
-            return 'border-orange-400'
+            return 'border-l-orange-400'
         case 'cancelled':
-            return 'border-yellow-400'
+            return 'border-l-yellow-400'
         case 'returned':
-            return 'border-red-400'
+            return 'border-l-red-400'
         case 'paid':
-            return 'border-green-400'
+            return 'border-l-green-400'
         case 'delivered':
-            return 'border-purple-400'
+            return 'border-l-purple-400'
         default:
-            return 'border-orange-400'
+            return 'border-l-orange-400'
     }
 }
 
