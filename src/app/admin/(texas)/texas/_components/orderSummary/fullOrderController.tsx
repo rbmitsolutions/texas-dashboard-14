@@ -8,17 +8,20 @@ import { formatDate } from "@/common/libs/date-fns/dateFormat";
 import UpdateAllOrderStatus from "./updateAllOrders";
 import { IOrderSummary, OrderSummary } from ".";
 import { Button } from "@/components/ui/button";
+import ToPrintButton from "./toPrintButton";
 
 //interface
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface";
 import { IOrderController } from "@/common/types/restaurant/order.interface";
+import { IPrinters } from "@/common/types/restaurant/printers.interface";
 
 interface FullOrderControllerProps {
     orderController: IOrderController
     orderSumary: IOrderSummary
     onOrdersUpdate?: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
+    printers: IPrinters[]
 }
-export default function FullOrderController({ orderController, orderSumary, onOrdersUpdate }: FullOrderControllerProps) {
+export default function FullOrderController({ orderController, orderSumary, onOrdersUpdate, printers }: FullOrderControllerProps) {
     const hasOrdersWithOrderedStatus = orderController?.orders?.filter(order => order.status === 'ordered')
 
     return (
@@ -51,12 +54,18 @@ export default function FullOrderController({ orderController, orderSumary, onOr
             <OrderSummary
                 {...orderSumary}
             />
-            {(onOrdersUpdate && hasOrdersWithOrderedStatus?.length > 0) &&
-                <UpdateAllOrderStatus
+            <div className='flex-container justify-between mt-2'>
+                <ToPrintButton
                     orderController={orderController}
-                    onUpdate={onOrdersUpdate}
+                    printers={printers}
                 />
-            }
+                {(onOrdersUpdate && hasOrdersWithOrderedStatus?.length > 0) &&
+                    <UpdateAllOrderStatus
+                        orderController={orderController}
+                        onUpdate={onOrdersUpdate}
+                    />
+                }
+            </div>
         </div>
     )
 }

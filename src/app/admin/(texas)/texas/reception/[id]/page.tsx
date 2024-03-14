@@ -80,6 +80,27 @@ export default function Table({ params }: { params: { id: string } }) {
     })
 
     const {
+        restaurantAllPrinters: printers
+    } = useGETRestaurantDataHooks({
+        query: 'PRINTERS',
+        defaultParams: {
+            printers: {
+                all: {
+                    pagination: {
+                        take: 50,
+                        skip: 0
+                    }
+                }
+            }
+        },
+        UseQueryOptions: {
+            refetchOnWindowFocus: false,
+            refetchIntervalInBackground: false,
+            refetchOnMount: false,
+        }
+    })
+
+    const {
         restaurantAllMenuSections: menuSections
     } = useGETRestaurantDataHooks({
         query: 'MENU_SECTION',
@@ -240,6 +261,14 @@ export default function Table({ params }: { params: { id: string } }) {
         })
     }, [getOrderControllers, getTableById, getTotalOfOrdersByTableId, getTransactionsByFilter, getTransactionsTotalByFilter, params.id, remaining, orderControllers, transactions])
 
+    useEffect(()=> {
+        const table = getTableById(params?.id)
+        if(!table) {
+            push('/admin/texas/reception')
+        }
+    }, [getTableById, params?.id, push])
+    
+
     return (
         <LayoutFrame
             user={user}
@@ -272,6 +301,7 @@ export default function Table({ params }: { params: { id: string } }) {
                         createTransaction={createTransaction}
                         user={user}
                         updateOrder={updateOrder}
+                        printers={printers?.data || []}
                     />
 
                 ),

@@ -113,7 +113,7 @@ export default function SplitBillPaymentButton({
                     Split Bill
                 </DialogHeader>
                 <div className='grid grid-cols-2 gap-8 min-h-full overflow-auto'>
-                    <div className='flex-col-container overflow-auto scrollbar-thin p-4'>
+                    {/* <div className='flex-col-container overflow-auto scrollbar-thin p-4'>
                         {dataTable?.orderControllers?.unpaid?.map(oc => {
                             const filteredOrders = oc?.orders?.filter(o => {
                                 const order = orders?.find(or => or?.id === o?.id)
@@ -138,7 +138,7 @@ export default function SplitBillPaymentButton({
                                 />
                             )
                         })}
-                    </div>
+                    </div> */}
                     <div className='flex-col-container overflow-auto scrollbar-thin bg-background-soft p-4 rounded-lg'>
                         <OrderSummary
                             order={orders || []}

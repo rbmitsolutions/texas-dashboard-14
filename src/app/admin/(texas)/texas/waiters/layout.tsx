@@ -13,8 +13,10 @@ import { useTablesStore } from "@/store/restaurant/tables"
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 
 //interface
-import { IAllOrderControllerResponse, IGETTablesAllResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
+import { IAllOrderControllerResponse, IGETPrintersResponse, IGETTablesAllResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
 import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types"
+import { useParams } from "next/navigation"
+import { usePrintersStore } from "@/store/restaurant/printers"
 
 interface WaitressLayoutProps {
     children: React.ReactNode
@@ -25,6 +27,33 @@ const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 export default function WaitressLayout({ children }: WaitressLayoutProps) {
     const { setTables, tables } = useTablesStore()
     const { orderControllers, setOrderControllers } = useOrderControllerStore()
+    const { printers, setPrinters } = usePrintersStore()
+
+    const {
+        refetchRestaurantData: refetchPrinters
+    } = useGETRestaurantDataHooks({
+        query: 'PRINTERS',
+        defaultParams: {
+            printers: {
+                all: {
+                    pagination: {
+                        take: 50,
+                        skip: 0
+                    }
+                }
+            }
+        },
+        UseQueryOptions: {
+            refetchOnWindowFocus: false,
+            refetchIntervalInBackground: false,
+            refetchOnMount: false,
+            onSuccess: (data) => {
+                const printers = data as IGETPrintersResponse
+                setPrinters(printers?.data)
+
+            }
+        }
+    })
 
     const {
         refetchRestaurantData: refetchTables
@@ -107,7 +136,12 @@ export default function WaitressLayout({ children }: WaitressLayoutProps) {
         if (orderControllers?.length === 0) {
             refetchOrdersController()
         }
-    }, [orderControllers, refetchOrdersController, refetchTables, tables])
+
+        if (printers?.length === 0) {
+            refetchPrinters()
+        }
+    }, [orderControllers, refetchOrdersController, refetchTables, tables, printers, refetchPrinters])
+
 
     return (
         <>

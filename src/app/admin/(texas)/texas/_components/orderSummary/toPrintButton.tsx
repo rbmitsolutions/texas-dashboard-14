@@ -1,0 +1,104 @@
+import { PrinterIcon } from "lucide-react"
+import { useState } from "react"
+
+//components
+import { IOrderController } from "@/common/types/restaurant/order.interface"
+import { Button } from "@/components/ui/button"
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+
+//interface
+import { IPOSTToPrintBody } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface"
+import { usePOSTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
+import { IPrinters } from "@/common/types/restaurant/printers.interface"
+
+interface ToPrintButtonProps {
+    orderController: IOrderController
+    printers: IPrinters[]
+}
+
+export default function ToPrintButton({ orderController, printers }: ToPrintButtonProps) {
+    const [isOpen, setIsOpen] = useState(false)
+
+    const {
+        createRestaurantData: toPrint
+    } = usePOSTRestaurantDataHooks({
+        query: 'TO_PRINT',
+    })
+
+    const handlePrintOrder = async (data: IPOSTToPrintBody) => {
+        await toPrint({
+            toPrint: {
+                ...data
+            }
+        })
+    }
+
+    return (
+        <Dialog
+            open={isOpen}
+            onOpenChange={setIsOpen}
+        >
+            <DialogTrigger asChild>
+                <Button
+                    size='iconSm'
+                    variant='pink'
+                    className='w-full'
+                    onClick={() => setIsOpen(true)}
+                >
+                    <PrinterIcon size={14} />
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                    <DialogTitle className='capitalize'>
+                        <Button>
+                            {orderController?.number}
+                        </Button>
+                    </DialogTitle>
+                </DialogHeader>
+                <div>
+
+                    <div className='grid grid-cols-3 gap-2'>
+                        {printers?.map(p => {
+                            return (
+                                <Button
+                                    key={p?.id}
+                                    className='text-wrap h-20 min-h-18'
+                                    variant='outline'
+                                    onClick={() => handlePrintOrder({
+                                        to: {
+                                            ip: p?.ip,
+                                            orderControllerId: orderController?.id,
+                                            tableId: orderController?.table_id!,
+                                        }
+                                    })}
+                                >
+                                    {p?.title}
+                                </Button>
+                            )
+                        })}
+                    </div>
+                    <Button
+                        className='w-full mt-4 h-20'
+                        variant='purple'
+                        leftIcon="Printer"
+                        onClick={() => handlePrintOrder({
+                            order: {
+                                orderControllerId: orderController?.id,
+                                tableId: orderController?.table_id!
+                            }
+                        })}
+                    >
+                        Re-print
+                    </Button>
+                </div>
+            </DialogContent>
+        </Dialog>
+    )
+}

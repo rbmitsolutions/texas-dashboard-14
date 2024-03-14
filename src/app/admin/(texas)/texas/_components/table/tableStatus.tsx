@@ -20,8 +20,9 @@ import { Button } from "@/components/ui/button"
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 import { ITable, TableMealStatus } from "@/common/types/restaurant/tables.interface"
 import { IOrderController } from "@/common/types/restaurant/order.interface"
-import { ICreateNewOrder } from "@/store/restaurant/order"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
+import { IPrinters } from "@/common/types/restaurant/printers.interface"
+import { ICreateNewOrder } from "@/store/restaurant/order"
 
 interface TableStatusProps {
     table: ITable
@@ -30,9 +31,10 @@ interface TableStatusProps {
     getOneOrderTotal: (order: ICreateNewOrder) => number
     menuSections: IMenuSection[]
     updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
+    printers: IPrinters[]
 }
 
-export default function TablesStatus({ table, updateTable, orderControllers, updateOrder, getOneOrderTotal, menuSections }: TableStatusProps) {
+export default function TablesStatus({ table, updateTable, orderControllers, updateOrder, getOneOrderTotal, menuSections, printers }: TableStatusProps) {
     const [isOpen, setIsOpen] = useState(false)
 
     const isStatusDisabled = (status: TableMealStatus): boolean => {
@@ -111,6 +113,7 @@ export default function TablesStatus({ table, updateTable, orderControllers, upd
                                         },
                                     }}
                                     onOrdersUpdate={updateOrder}
+                                    printers={printers}
                                 />
                             )
                         })}

@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 //libs
 import sortMenuSections from "@/common/libs/restaurant/menuSections";
@@ -27,12 +27,16 @@ import { IMenuOrderSystemFilter, useOrderSystemHooks } from "@/hooks/useOrderSys
 import { Allergens } from "@/common/types/restaurant/menu.interface";
 import { ITable } from "@/common/types/restaurant/tables.interface";
 import { SocketIoEvent } from "@/common/libs/socketIo/types";
+import { useRouter } from "next/navigation";
+import { usePrintersStore } from "@/store/restaurant/printers";
 
 export default function Table({ params }: { params: { id: string } }) {
+    const { push } = useRouter()
     const { getOrderControllers } = useOrderControllerStore()
     const { setOrder, order, resetOrder, updateOrderQuantity, deleteOrder, getOrderTotal, getOneOrderTotal, replaceOrder } = useOrderStore()
     const { emit } = useSocketIoHooks()
     const { getTableById } = useTablesStore()
+    const { printers } = usePrintersStore()
     const { getFilteredOrderSystemMenu } = useOrderSystemHooks()
     const { user } = useAuthHooks()
     const [filter, setFilter] = useState<IMenuOrderSystemFilter>({
@@ -44,27 +48,6 @@ export default function Table({ params }: { params: { id: string } }) {
         short_title: '',
         to_order: true,
         mn_type_id: ''
-    })
-
-    const {
-        restaurantAllPrinters: printers
-    } = useGETRestaurantDataHooks({
-        query: 'PRINTERS',
-        defaultParams: {
-            printers: {
-                all: {
-                    pagination: {
-                        take: 50,
-                        skip: 0
-                    }
-                }
-            }
-        },
-        UseQueryOptions: {
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
-            refetchOnMount: false,
-        }
     })
 
     const {
@@ -138,6 +121,13 @@ export default function Table({ params }: { params: { id: string } }) {
             }
         }
     })
+
+    useEffect(()=> {
+        const table = getTableById(params?.id)
+        if(!table) {
+            push('/admin/texas/waiters')
+        }
+    }, [getTableById, params?.id, push])
     
     return (
         <LayoutFrame
@@ -238,6 +228,7 @@ export default function Table({ params }: { params: { id: string } }) {
                         menuSections={menuSections?.data}
                         orderControllers={getOrderControllers({ table_id: params?.id })}
                         updateOrder={updateOrder}
+                        printers={printers}
                     />
                 ),
                 icon: {
@@ -267,7 +258,7 @@ export default function Table({ params }: { params: { id: string } }) {
                         updateOrderQuantity={updateOrderQuantity}
                         order={order}
                         getOneOrderTotal={getOneOrderTotal}
-                        printers={printers?.data}
+                        printers={printers}
                     />
                 ))}
             </div>

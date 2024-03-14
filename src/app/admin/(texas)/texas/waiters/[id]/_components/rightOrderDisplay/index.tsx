@@ -14,7 +14,7 @@ import LastOrders from "./lastOrders"
 
 //interface
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
-import { ITable,TableMealStatus } from "@/common/types/restaurant/tables.interface"
+import { ITable, TableMealStatus } from "@/common/types/restaurant/tables.interface"
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface"
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 import { IOrder, IOrderController } from "@/common/types/restaurant/order.interface"
@@ -22,6 +22,7 @@ import { hasOrdersWithOrderedStatus } from "@/common/libs/restaurant/order"
 import { IToken, Permissions } from "@/common/types/auth/auth.interface"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
 import { ICreateNewOrder } from "@/store/restaurant/order"
+import { IPrinters } from "@/common/types/restaurant/printers.interface"
 
 interface RightOrderDisplayProps {
     order: ICreateNewOrder[]
@@ -37,9 +38,10 @@ interface RightOrderDisplayProps {
     menuSections: IMenuSection[]
     orderControllers: IOrderController[]
     updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
+    printers: IPrinters[]
 }
 
-export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTotal, updateOrderQuantity, getOneOrderTotal, deleteOrder, replaceOrder, table, createOrder, menuSections, orderControllers, updateOrder }: RightOrderDisplayProps) {
+export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTotal, updateOrderQuantity, getOneOrderTotal, deleteOrder, replaceOrder, table, createOrder, menuSections, orderControllers, updateOrder, printers }: RightOrderDisplayProps) {
     const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false)
     const { back } = useRouter()
     const [status, setStatus] = useState<TableMealStatus>()
@@ -60,7 +62,7 @@ export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTot
 
         let meal_status: TableMealStatus = table?.meal_status
 
-        if(meal_status === TableMealStatus.CLEAN_TABLE && coordinates?.hasfood){
+        if (meal_status === TableMealStatus.CLEAN_TABLE && coordinates?.hasfood) {
             meal_status = TableMealStatus.ALL_TOGETHER
         }
 
@@ -70,17 +72,17 @@ export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTot
                 if (coordinates?.starters) {
                     meal_status = TableMealStatus.STARTERS
                 }
-                
+
                 if (coordinates?.maincourse && !coordinates?.starters) {
                     meal_status = TableMealStatus.MAIN
                 }
             }
         }
-        
+
         if (status) {
             meal_status = status
         }
-    
+
         await createOrder(
             {
                 order: {
@@ -132,6 +134,7 @@ export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTot
                         getOneOrderTotal={getOneOrderTotal}
                         menuSections={menuSections}
                         updateOrder={updateOrder}
+                        printers={printers}
                     />
                     <Button
                         variant={status === TableMealStatus.ALL_TOGETHER ? 'orange' : 'outline'}

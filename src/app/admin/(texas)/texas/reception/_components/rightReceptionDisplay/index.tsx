@@ -18,6 +18,8 @@ import { IMenuSection } from "@/common/types/restaurant/menu.interface"
 import { ICreateNewOrder } from "@/store/restaurant/order"
 import { IToken } from "@/common/types/auth/auth.interface"
 import { IDataTable } from "../../[id]/page"
+import { IPrinters } from "@/common/types/restaurant/printers.interface"
+import PrintBill from "./printBillButton"
 
 interface RightReceptionDisplayProps {
     dataTable: IDataTable
@@ -27,6 +29,7 @@ interface RightReceptionDisplayProps {
     createTransaction: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
     user: IToken
     updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
+    printers: IPrinters[]
 }
 
 export default function RightReceptionDisplay({
@@ -36,7 +39,8 @@ export default function RightReceptionDisplay({
     menuSections,
     createTransaction,
     user,
-    updateOrder
+    updateOrder,
+    printers
 }: RightReceptionDisplayProps) {
     const [status, setStatus] = useState<OrderStatus[]>([OrderStatus.ORDERED, OrderStatus.DELIVERED])
 
@@ -90,11 +94,12 @@ export default function RightReceptionDisplay({
                                 }
                             }}
                             onOrdersUpdate={updateOrder}
+                            printers={printers}
                         />
                     )
                 })}
             </div>
-            <div className='grid grid-cols-1 gap-2'>
+            <div className='grid grid-cols-[auto,1fr] gap-4'>
                 {/* <SplitBillPaymentButton
                     dataTable={dataTable}
                     sections={sections}
@@ -103,6 +108,10 @@ export default function RightReceptionDisplay({
                     emit={emit}
                     user={user}
                 /> */}
+                <PrintBill 
+                    printers={printers}
+                    tableId={dataTable?.table?.id!}
+                />
                 <PaymentButton
                     dataTable={dataTable}
                     payTotal={dataTable?.values?.remaining}

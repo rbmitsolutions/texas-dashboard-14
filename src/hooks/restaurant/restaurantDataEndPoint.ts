@@ -151,6 +151,16 @@ export const restaurantEndPoint = {
         createSucess: 'Printer created successfully!',
         createError: "Printer creation failed!",
     },
+    TO_PRINT: {
+        url: EndPointsTypes['RESTAURANT_PRINTERS_ENDPOINT'],
+        queryParams: 'Printer',
+        updateSucess: "Printed!",
+        updateError: "Error while printing!",
+        deleteSucess: "Printer deleted successfully!",
+        deleteError: "Printer delete failed!",
+        createSucess: "Printed!",
+        createError: "Error while printing!"
+    },
     MENU_SECTION: {
         url: EndPointsTypes['RESTAURANT_MENU_SECTION_ENDPOINT'],
         queryParams: 'Menu Section',

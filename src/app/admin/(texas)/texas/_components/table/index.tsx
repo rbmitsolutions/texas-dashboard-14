@@ -20,10 +20,10 @@ import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.i
 import { TransactionsStatus } from "@/common/types/company/transactions.interface"
 import { IOrderController } from "@/common/types/restaurant/order.interface"
 import { ITimesOpen } from "@/common/types/restaurant/config.interface"
-import { ITable } from "@/common/types/restaurant/tables.interface"
-import { ISocketMessage } from "@/common/libs/socketIo/types"
-import { ICreateNewOrder } from "@/store/restaurant/order"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
+import { IPrinters } from "@/common/types/restaurant/printers.interface"
+import { ITable } from "@/common/types/restaurant/tables.interface"
+import { ICreateNewOrder } from "@/store/restaurant/order"
 
 interface TableProps {
     table: ITable
@@ -35,10 +35,12 @@ interface TableProps {
         menuSections: IMenuSection[]
         updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
         updateTable: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
+        printers: IPrinters[]
     }
     reception?: {
         getTotalOfOrdersByTableId: (table_id: string) => number
         getTransactionsTotalByFilter: (data: TransactionsState['transactionFilter']) => number
+
     }
 }
 
@@ -80,6 +82,7 @@ export default function Table({ table, waitres, reception }: TableProps) {
                             getOneOrderTotal={waitres?.getOneOrderTotal}
                             menuSections={waitres?.menuSections}
                             updateOrder={waitres?.updateOrder}
+                            printers={waitres?.printers}
                         />
                     </div>
                     :

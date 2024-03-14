@@ -53,7 +53,7 @@ export default function UpdateAllOrderStatus({ orderController, onUpdate }: Upda
                     leftIcon="RefreshCw"
                     size='sm'
                     variant='orange'
-                    className='w-full mt-2'
+                    className='w-full'
                     onClick={() => setIsOpen(true)}
                 >
                     Update All Orders

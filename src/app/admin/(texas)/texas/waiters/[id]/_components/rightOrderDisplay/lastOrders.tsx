@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 import { IOrder, IOrderController } from "@/common/types/restaurant/order.interface"
+import { IPrinters } from "@/common/types/restaurant/printers.interface"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
 import { ICreateNewOrder } from "@/store/restaurant/order"
 
@@ -24,9 +25,10 @@ interface LastOrdersProps {
     getOneOrderTotal: (order: ICreateNewOrder) => number
     menuSections: IMenuSection[]
     updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
+    printers: IPrinters[]
 }
 
-export default function LastOrders({ ordersController, menu, getOneOrderTotal, menuSections, updateOrder }: LastOrdersProps) {
+export default function LastOrders({ ordersController, menu, getOneOrderTotal, menuSections, updateOrder, printers }: LastOrdersProps) {
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -65,6 +67,7 @@ export default function LastOrders({ ordersController, menu, getOneOrderTotal, m
                                         onUpdate: updateOrder,
                                     }
                                 }}
+                                printers={printers}
                             />
                         )
                     })}

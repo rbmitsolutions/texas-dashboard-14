@@ -29,6 +29,27 @@ export default function PassPage() {
     const { user } = useAuthHooks()
 
     const {
+        restaurantAllPrinters: printers
+    } = useGETRestaurantDataHooks({
+        query: 'PRINTERS',
+        defaultParams: {
+            printers: {
+                all: {
+                    pagination: {
+                        take: 50,
+                        skip: 0
+                    }
+                }
+            }
+        },
+        UseQueryOptions: {
+            refetchOnWindowFocus: false,
+            refetchIntervalInBackground: false,
+            refetchOnMount: false,
+        }
+    })
+
+    const {
         restaurantAllOrderController: orderControllers,
         refetchRestaurantData: refetchOrdersController
     } = useGETRestaurantDataHooks({
@@ -134,7 +155,7 @@ export default function PassPage() {
                             return (
                                 <div key={sec?.id}>
                                     <strong>{sec?.title}</strong>
-                                    <div className='grid grid-cols-2 gap-1 py-2 scrollbar-thin'>
+                                    <div className='grid grid-cols-2 gap-2 py-2 scrollbar-thin'>
                                         {sec?.types?.map(t => {
                                             return (
                                                 <label key={t?.id}
@@ -169,7 +190,7 @@ export default function PassPage() {
             }}
 
         >
-            <div className='flex-container'>
+            <div className='flex flex-col gap-4 md:flex-row md:max-w-[calc(100vw_-_240px)] md:overflow-auto md:scrollbar-thin'>
                 {orderControllers?.data?.map(oc => {
                     return (
                         <div key={oc?.id} className='min-w-64'>
@@ -181,37 +202,12 @@ export default function PassPage() {
                                     getOneOrderTotal,
                                     showPrice: false
                                 }}
+                                printers={printers?.data || []}
                             />
                         </div>
                     )
                 })}
             </div>
-            {/* <div className='grid-container grid-cols-[repeat(auto-fit,minmax(200px,1fr))] sm:grid-cols-[repeat(auto-fit,minmax(200px,222px))]'> */}
-            {/* {
-                    getTablesFiltered(tablesFilter)?.map((table) => {
-                        return (
-                            <Table
-                                key={table?.id}
-                                table={table}
-                                waitres={{
-                                    createBooking,
-                                    timesOpen: openDay?.times_open,
-                                    orderControllers: getOrderControllers({
-                                        table_id: table?.id,
-                                        orders: {
-                                            status: [OrderStatus.ORDERED]
-                                        }
-                                    }),
-                                    getOneOrderTotal,
-                                    menuSections: menuSections?.data,
-                                    updateOrder,
-                                    updateTable
-                                }}
-                            />
-                        )
-                    })
-                } */}
-            {/* </div> */}
         </LayoutFrame>
     )
 }

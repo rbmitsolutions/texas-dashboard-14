@@ -140,6 +140,27 @@ export interface IPOSTPrinterBody {
   ip: string;
 }
 
+export interface IPrintOrderController {
+  orderControllerId: string
+  tableId: string
+}
+
+export interface IPrintOrderTo {
+  ip: string
+  orderControllerId: string
+  tableId: string
+}
+
+export interface IPrintBill {
+  ip: string
+  tableId: string
+}
+export interface IPOSTToPrintBody {
+  order?: IPrintOrderController
+  to?: IPrintOrderTo
+  bill?: IPrintBill
+}
+
 
 export interface IPOSTMenuSectionsBody {
   title: string;
@@ -191,7 +212,7 @@ export interface IPOSTMenuBody {
 }
 
 export type IPOSTRestaurantDataQueryType = 'BOOKINGS' | 'TABLES' | "ORDER" | "ORDER_CONTROLLER" | 'SECTIONS' | "MENU" | "GIFTCARD" | "AUTHORIZED_DEVICES" | 'SPECIAL_DAYS' | 'TIMES_OPEN' | "PRINTERS" | 'MENU_SECTION' |
-  'MENU_TYPE' | "MENU_ADD_ONS" | 'MENU_ADD_ONS_OPTIONS'
+  'MENU_TYPE' | "MENU_ADD_ONS" | 'MENU_ADD_ONS_OPTIONS' | 'TO_PRINT'
 
 export type IPOSTRestaurantDataRerturn = IBookings | ITable | IOrder | IOrderController | ISection | IMenu | IGiftCards | IAuthorizedDevices | ISpecialDays | ITimesOpen | IPrinters | IMenuSection | IMenuType | IMenuAddOns
 
@@ -205,6 +226,7 @@ export interface IPOSTRestaurantBody {
   specialDay?: IPOSTSpecialDaysBody
   timesOpen?: IPOSTTimesOpenBody
   printer?: IPOSTPrinterBody
+  toPrint?: IPOSTToPrintBody
 
   menu?: IPOSTMenuBody
   menu_type?: IPOSTMenuTypesBody

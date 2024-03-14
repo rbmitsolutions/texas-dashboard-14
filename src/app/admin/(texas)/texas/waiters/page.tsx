@@ -22,11 +22,13 @@ import { useOrderStore } from '@/store/restaurant/order';
 //interfaces
 import { OrderStatus } from '@/common/types/restaurant/order.interface';
 import { SocketIoEvent } from '@/common/libs/socketIo/types';
+import { usePrintersStore } from '@/store/restaurant/printers';
 
 export default function Tables() {
     const { getOrderControllers, } = useOrderControllerStore()
     const { getOneOrderTotal } = useOrderStore()
     const { tablesFilter, setTablesFilter, getTablesFiltered } = useTablesStore()
+    const { printers } = usePrintersStore()
     const { user } = useAuthHooks()
     const { emit } = useSocketIoHooks()
 
@@ -251,7 +253,8 @@ export default function Tables() {
                                     getOneOrderTotal,
                                     menuSections: menuSections?.data,
                                     updateOrder,
-                                    updateTable
+                                    updateTable,
+                                    printers
                                 }}
                             />
                         )
