@@ -70,7 +70,7 @@ export const OrderSummary = ({ order, updateOrder, getOneOrderTotal, menuSection
                             <div
                                 id={`order-${order?.id}`}
                                 key={order?.id}
-                                className={cn('flex flex-col gap-2 p-2 rounded-r-lg border-l-8 shadow-md bg-slate-100 dark:bg-slate-950/45', getOrderStatusBorderColor(order?.status))}
+                                className={cn('flex flex-col gap-2 p-2 rounded-r-lg border-2 border-l-8 shadow-md bg-slate-100 dark:bg-slate-950/45', getOrderStatusBorderColor(order?.status))}
                             >
                                 <div className='flex-container justify-between gap-2'>
                                     <strong>{order?.menu_short_title}</strong>

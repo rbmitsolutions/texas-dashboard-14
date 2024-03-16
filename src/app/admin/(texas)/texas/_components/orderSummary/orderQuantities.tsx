@@ -51,8 +51,8 @@ export default function OrderQuantities({ order, getOneOrderTotal, splitBill, sh
                     }
                 </div>
 
-                {/* {(order?.paid > 0) &&
-                todo: split bill
+                {(order?.paid > 0) &&
+               
                 <div className='flex items-center gap-1'>
                 <Badge
                 className="bg-green-500 py-0 px-1"
@@ -61,7 +61,7 @@ export default function OrderQuantities({ order, getOneOrderTotal, splitBill, sh
                 paid
                 </small>
                 </div>
-            } */}
+            } 
             </div>
             {
                 showPrice &&

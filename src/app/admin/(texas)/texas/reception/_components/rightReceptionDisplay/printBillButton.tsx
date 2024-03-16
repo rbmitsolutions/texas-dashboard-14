@@ -27,7 +27,7 @@ export default function PrintBill({ printers, tableId }: PrintBillProps) {
         await toPrint({
             toPrint: {
                 bill: {
-                    ip: printers[0].ip,
+                    ip: findReceiptPrinter.ip,
                     tableId
                 }
             }
@@ -36,7 +36,7 @@ export default function PrintBill({ printers, tableId }: PrintBillProps) {
 
     return (
         <Button
-            className='w-full h-14 w-14'
+            className='h-14 w-14'
             variant='purple'
             onClick={handlePrintOrder}
         >
