@@ -38,9 +38,6 @@ export default function TablesStatus({ table, updateTable, orderControllers, upd
     const [isOpen, setIsOpen] = useState(false)
 
     const isStatusDisabled = (status: TableMealStatus): boolean => {
-        if (!table || orderControllers?.length) {
-            return true;
-        }
         const tableMealStatus = table.meal_status;
 
         switch (tableMealStatus) {
@@ -93,7 +90,7 @@ export default function TablesStatus({ table, updateTable, orderControllers, upd
                     <DialogTitle>Update Table Status</DialogTitle>
                 </DialogHeader>
                 <div className="grid grid-cols-[1fr,auto] gap-2">
-                    <div className='max-h-[400px] overflow-auto'>
+                    <div className='min-h-[600px] max-h-[600px] space-y-4 overflow-auto'>
                         {orderControllers?.length === 0 &&
                             <DialogDescription>
                                 No Orders
@@ -103,7 +100,10 @@ export default function TablesStatus({ table, updateTable, orderControllers, upd
                             return (
                                 <FullOrderController
                                     key={oc?.id}
-                                    orderController={oc}
+                                    orderController={{
+                                        ...oc,
+                                        table
+                                    }}
                                     orderSumary={{
                                         getOneOrderTotal,
                                         menuSections,

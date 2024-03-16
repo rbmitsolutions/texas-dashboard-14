@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 //libs
 import sortMenuSections from "@/common/libs/restaurant/menuSections";
@@ -22,23 +23,24 @@ import { useGETRestaurantDataHooks, usePOSTRestaurantDataHooks, usePUTRestaurant
 import { useSocketIoHooks } from "@/hooks/useSocketIoHooks";
 import { useAuthHooks } from "@/hooks/useAuthHooks";
 
+//store
+import { usePrintersStore } from "@/store/restaurant/printers";
+
 //interfaces
 import { IMenuOrderSystemFilter, useOrderSystemHooks } from "@/hooks/useOrderSystemHooks";
 import { Allergens } from "@/common/types/restaurant/menu.interface";
 import { ITable } from "@/common/types/restaurant/tables.interface";
 import { SocketIoEvent } from "@/common/libs/socketIo/types";
-import { useRouter } from "next/navigation";
-import { usePrintersStore } from "@/store/restaurant/printers";
 
 export default function Table({ params }: { params: { id: string } }) {
-    const { push } = useRouter()
-    const { getOrderControllers } = useOrderControllerStore()
     const { setOrder, order, resetOrder, updateOrderQuantity, deleteOrder, getOrderTotal, getOneOrderTotal, replaceOrder } = useOrderStore()
-    const { emit } = useSocketIoHooks()
+    const { getFilteredOrderSystemMenu } = useOrderSystemHooks()
+    const { getOrderControllers } = useOrderControllerStore()
     const { getTableById } = useTablesStore()
     const { printers } = usePrintersStore()
-    const { getFilteredOrderSystemMenu } = useOrderSystemHooks()
+    const { emit } = useSocketIoHooks()
     const { user } = useAuthHooks()
+    const { push } = useRouter()
     const [filter, setFilter] = useState<IMenuOrderSystemFilter>({
         allergens: [],
         id: [],
@@ -149,7 +151,7 @@ export default function Table({ params }: { params: { id: string } }) {
                                                 return (
                                                     <Button
                                                         key={t?.id}
-                                                        variant={filter?.mn_type_id === t?.id ? 'secondary' : 'outline'}
+                                                        variant={filter?.mn_type_id === t?.id ? 'default' : 'outline'}
                                                         className='h-12 rounded-lg text-xs'
                                                         onClick={() => {
                                                             setFilter({
@@ -181,10 +183,12 @@ export default function Table({ params }: { params: { id: string } }) {
                                                 onCheckedChange={(e) => setFilter(prev => {
                                                     if (e) {
                                                         return {
+                                                            ...prev,
                                                             allergens: [...prev?.allergens || [], a]
                                                         }
                                                     } else {
                                                         return {
+                                                            ...prev,
                                                             allergens: prev?.allergens?.filter((al) => al !== a)
                                                         }
                                                     }
@@ -259,6 +263,7 @@ export default function Table({ params }: { params: { id: string } }) {
                         order={order}
                         getOneOrderTotal={getOneOrderTotal}
                         printers={printers}
+                        menuSections={menuSections?.data || []}
                     />
                 ))}
             </div>

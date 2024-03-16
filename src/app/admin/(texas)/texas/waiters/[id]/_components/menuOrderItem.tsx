@@ -19,6 +19,7 @@ import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDa
 import { IGETFilterMenuOrderSystem } from "@/hooks/useOrderSystemHooks";
 import { OrderStatus } from "@/common/types/restaurant/order.interface";
 import { IPrinters } from "@/common/types/restaurant/printers.interface";
+import { IMenuSection } from "@/common/types/restaurant/menu.interface";
 import { ICreateNewOrder } from "@/store/restaurant/order";
 
 interface MenuOrderItemProps {
@@ -30,9 +31,10 @@ interface MenuOrderItemProps {
     order: ICreateNewOrder[]
     getOneOrderTotal: (order: ICreateNewOrder) => number
     printers: IPrinters[]
+    menuSections: IMenuSection[]
 }
 
-export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuantity, getFilteredOrderSystemMenu, getOneOrderTotal, printers }: MenuOrderItemProps) {
+export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuantity, getFilteredOrderSystemMenu, getOneOrderTotal, printers, menuSections }: MenuOrderItemProps) {
     const [menuItem, setMenuItem] = useState<IGETMenuOrderSystemResponse>(menu)
     const [step, setStep] = useState(0)
     const [isOpen, setIsOpen] = useState(false)
@@ -87,7 +89,6 @@ export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuan
     }
 
 
-
     const renderContent = () => {
         switch (step) {
             case 0:
@@ -99,6 +100,7 @@ export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuan
                     }}
                     getOneOrderTotal={getOneOrderTotal}
                     printers={printers}
+                    menuSections={menuSections}
                 />
             case 1: {
                 const options = getFilteredOrderSystemMenu({
@@ -126,7 +128,7 @@ export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuan
                 <Button
                     variant='blue'
                     type='button'
-                    className='flex-container-center justify-center min-h-40 max-h-60 h-full rounded-xl border-2'
+                    className='flex-container-center justify-center min-h-40 max-h-60 h-full rounded-xl border-2 text-wrap'
                 >
                     <h1>{menuItem?.short_title}</h1>
                 </Button>

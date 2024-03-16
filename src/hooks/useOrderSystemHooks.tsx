@@ -26,7 +26,7 @@ export const useOrderSystemHooks = () => {
         }
 
         if (menuFilter?.allergens && menuFilter?.allergens.length > 0) {
-            menu = menu?.filter((item) => item?.allergens?.some((allergen) => !menuFilter?.allergens?.includes(allergen)));
+            menu = menu?.filter((item) => !menuFilter?.allergens?.some(allergen => item.allergens.includes(allergen)));
         }
 
         if (menuFilter?.id && menuFilter?.id.length > 0) {

@@ -11,6 +11,7 @@ import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDa
 import { IAddOnsCreateOrder, ICreateNewOrder } from "@/store/restaurant/order"
 import { OrderStatus } from "@/common/types/restaurant/order.interface"
 import { IPrinters } from "@/common/types/restaurant/printers.interface"
+import { IMenuSection } from "@/common/types/restaurant/menu.interface"
 
 interface MenuCreateUpdateOrderProps {
     menu: IGETMenuOrderSystemResponse,
@@ -19,9 +20,11 @@ interface MenuCreateUpdateOrderProps {
     order?: ICreateNewOrder
     handleOpen?: () => void
     printers?: IPrinters[]
+    menuSections: IMenuSection[]
 }
 
-export default function CreateUpdateOrder({ menu, setOrder: setToOrders, getOneOrderTotal, order: oldOrder, handleOpen, printers }: MenuCreateUpdateOrderProps) {
+export default function CreateUpdateOrder({ menu, setOrder: setToOrders, getOneOrderTotal, order: oldOrder, handleOpen, printers, menuSections }: MenuCreateUpdateOrderProps) {
+
     const [order, setOrder] = useState<ICreateNewOrder>(oldOrder ? oldOrder : () => {
         const to_print_ips: string[] = []
 
@@ -49,17 +52,17 @@ export default function CreateUpdateOrder({ menu, setOrder: setToOrders, getOneO
     })
 
     const handleSetAddOns = (addOns: IAddOnsCreateOrder[]) => {
-        setOrder({
-            ...order,
+        setOrder(prev => ({
+            ...prev,
             add_ons: addOns
-        })
+        }))
     }
 
     const handleRemoveAddOns = (add_ons_id: string) => {
-        setOrder({
-            ...order,
+        setOrder(prev => ({
+            ...prev,
             add_ons: order.add_ons.filter(a => a.add_ons_opt_id !== add_ons_id)
-        })
+        }))
     }
 
     const handleChangeQuantity = (increase: boolean) => {
@@ -69,6 +72,12 @@ export default function CreateUpdateOrder({ menu, setOrder: setToOrders, getOneO
         }))
     }
 
+    const handleUpdateMnSection = (mn_section: string) => {
+        setOrder(prev => ({
+            ...prev,
+            mn_section
+        }))
+    }
 
     return (
         <div className='relative grid grid-cols-1 gap-4 h-full md:grid-cols-[1fr,220px]'>
@@ -82,6 +91,8 @@ export default function CreateUpdateOrder({ menu, setOrder: setToOrders, getOneO
                     handleOpen && handleOpen()
                 }}
                 getOneOrderTotal={getOneOrderTotal}
+                menuSections={menuSections}
+                updateMnSection={handleUpdateMnSection}
             />
             <OrderDisplay
                 menu={menu}

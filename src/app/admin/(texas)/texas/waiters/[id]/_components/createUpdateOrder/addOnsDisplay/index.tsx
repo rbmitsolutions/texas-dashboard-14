@@ -1,5 +1,5 @@
 //components
-import { IMenuAddOns, IMenuAddOnsOption } from "@/common/types/restaurant/menu.interface";
+import { IMenuAddOns, IMenuAddOnsOption, IMenuSection } from "@/common/types/restaurant/menu.interface";
 import OrderDisplayFooter from "../orderDisplay/footer";
 import AddOnsSelect from "./addOnsSelect";
 
@@ -8,8 +8,6 @@ import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDa
 import { IAddOnsCreateOrder, ICreateNewOrder } from "@/store/restaurant/order";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { PlusCircleIcon } from "lucide-react";
-
 export interface IHandleAddOnsSelection {
     option: IMenuAddOnsOption
     addOn: IMenuAddOns
@@ -23,9 +21,11 @@ interface AddOnsDisplayProps {
     handleChangeQuantity: (increase: boolean) => void
     setOrder: (order: ICreateNewOrder) => void
     getOneOrderTotal: (order: ICreateNewOrder) => number
+    menuSections: IMenuSection[]
+    updateMnSection: (mn_section: string) => void
 }
 
-export default function AddOnsDisplay({ menu, order, getOneOrderTotal, setOrder, handleSetAddOns, handleChangeQuantity }: AddOnsDisplayProps) {
+export default function AddOnsDisplay({ menu, order, getOneOrderTotal, setOrder, handleSetAddOns, handleChangeQuantity, menuSections, updateMnSection }: AddOnsDisplayProps) {
     const sortedAddOns = menu?.add_ons?.sort((a, b) => {
         if (a.is_mandatory && !b.is_mandatory) {
             return -1;
@@ -86,13 +86,13 @@ export default function AddOnsDisplay({ menu, order, getOneOrderTotal, setOrder,
     }
 
     const handleAddDescription = (title: string) => {
-            handleAddFlag({
-                add_ons_id: 'description',
-                add_ons_opt_id: 'description',
-                title,
-                price: 0,
-                is_mandatory: false
-            })
+        handleAddFlag({
+            add_ons_id: 'description',
+            add_ons_opt_id: 'description',
+            title,
+            price: 0,
+            is_mandatory: false
+        })
 
     }
 
@@ -115,7 +115,26 @@ export default function AddOnsDisplay({ menu, order, getOneOrderTotal, setOrder,
                         className='h-32 resize-none scrollbar-thin'
                         value={order?.add_ons?.find(a => a?.add_ons_id === 'description')?.title || ''}
                         onChange={(e) => handleAddDescription(e.target.value)}
-                        />
+                    />
+                </div>
+                <div>
+                    <div className='flex items-center gap-2 '>
+                        <small>Menu Section</small>
+                    </div>
+                    <div className='flex p-2 gap-2 w-full min-h-24 rounded-lg scrollbar-thin overflow-auto bg-foreground/5'>
+                        {menuSections?.map(opt => {
+                            return (
+                                <Button
+                                    key={opt?.id}
+                                    className='text-foreground h-16 min-w-28 bg-transparent hover:bg-transparent focus:bg-transparent border-2 text-wrap text-xs'
+                                    variant={order?.mn_section === opt?.title ? 'default' : 'outline'}
+                                    onClick={() => updateMnSection(opt?.title)}
+                                >
+                                    {opt?.title}
+                                </Button>
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
             <div className='md:hidden'>

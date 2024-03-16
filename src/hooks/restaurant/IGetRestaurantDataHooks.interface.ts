@@ -65,7 +65,7 @@ export interface IGETTablesQuery {
       section?: "1";
       order_controller?: {
         orders?: {
-          status?: OrderStatus
+          status?: OrderStatus[]
         } | '1';
       } | '1';
     };
@@ -137,18 +137,31 @@ export interface IGETOrderControllerQuery {
   byId?: {
     id: string;
 
-    table?: "1";
-    finished_table?: "1";
     includes?: {
+      finished_table?: "1";
       orders?: '1'
+      table?: '1'
     }
   };
   all?: {
     table_id?: string;
     finished_table_id?: string | null;
+    pass?: number[]
+
+    where?: {
+      orders?: {
+        mn_type: string[]
+        status: OrderStatus[]
+      }
+    }
 
     includes?: {
-      orders?: '1'
+      orders?: '1' |{
+        mn_type?: string[]
+        status?: OrderStatus[]
+      },
+      table?: '1'
+      finished_table?: string
     }
 
     orderBy?: {

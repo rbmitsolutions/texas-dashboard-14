@@ -125,6 +125,7 @@ export const OrderSummary = ({ order, updateOrder, getOneOrderTotal, menuSection
                                         updateOrderQuantity={updateOrder.updateOrderQuantity}
                                         replaceOrder={updateOrder.replaceOrder}
                                         menuItem={menuItem as IMenu || {} as IMenu}
+                                        menuSections={menuSections}
                                     />
                                 }
 

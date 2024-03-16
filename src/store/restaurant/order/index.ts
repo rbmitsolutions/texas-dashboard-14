@@ -59,9 +59,9 @@ export const useOrderStore = create<OrderStateProps>((set): OrderStateProps => (
         }
     }),
     getOneOrderTotal: (order) => {
-        const addOnsTotal = order.add_ons.reduce((acc, curr) => acc + curr.price, 0)
-        const totalPaid = (order.price + addOnsTotal) * (order?.paid || 0)
-        return ((order.price + addOnsTotal) * order.quantity) - totalPaid
+        const addOnsTotal = order?.add_ons?.reduce((acc, curr) => acc + curr?.price, 0)
+        const totalPaid = (order?.price + addOnsTotal) * (order?.paid || 0)
+        return ((order?.price + addOnsTotal) * order?.quantity) - totalPaid
     },
     getOrderTotal: (orders) => {
         let total = 0

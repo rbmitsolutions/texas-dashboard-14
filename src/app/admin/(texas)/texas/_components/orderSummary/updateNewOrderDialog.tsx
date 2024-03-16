@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button"
 import CreateUpdateOrder from "../../waiters/[id]/_components/createUpdateOrder"
 
 //interface
-import { IMenu } from "@/common/types/restaurant/menu.interface"
+import { IMenu, IMenuSection } from "@/common/types/restaurant/menu.interface"
 import { ICreateNewOrder } from "@/store/restaurant/order"
 
 interface UpdateNewOrderDialogProps {
@@ -23,9 +23,10 @@ interface UpdateNewOrderDialogProps {
     getOneOrderTotal: (order: ICreateNewOrder) => number
     order: ICreateNewOrder
     menuItem: IMenu
+    menuSections: IMenuSection[]
 }
 
-export default function UpdateNewOrderDialog({ replaceOrder, updateOrderQuantity, getOneOrderTotal, order, menuItem }: UpdateNewOrderDialogProps) {
+export default function UpdateNewOrderDialog({ replaceOrder, updateOrderQuantity, getOneOrderTotal, order, menuItem, menuSections }: UpdateNewOrderDialogProps) {
     const [isOpen, setIsOpen] = useState(false)
     const handleOpen = () => {
         setIsOpen(!isOpen)
@@ -58,6 +59,7 @@ export default function UpdateNewOrderDialog({ replaceOrder, updateOrderQuantity
                             order={order as unknown as ICreateNewOrder}
                             getOneOrderTotal={getOneOrderTotal}
                             setOrder={handleUpdateOrder}
+                            menuSections={menuSections}
                         />
                     </div>
                     <AlertDialogCancel asChild>

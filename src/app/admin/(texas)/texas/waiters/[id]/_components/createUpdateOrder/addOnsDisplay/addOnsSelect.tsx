@@ -1,5 +1,4 @@
 //libs
-import { cn } from "@/common/libs/shadcn/utils"
 
 //components
 import { Button } from "@/components/ui/button"
@@ -140,20 +139,19 @@ export default function AddOnsSelect({ addOn, handleAddOns, handleAddFlag, addOn
                     }
                 </div>
             </div>
-            <div className={cn('flex items-center p-2 gap-2 w-full h-24 rounded-lg scrollbar-thin overflow-auto bg-foreground/5')}>
+            <div className='flex items-center p-2 gap-2 w-full h-24 rounded-lg scrollbar-thin overflow-auto bg-foreground/5'>
                 {addOn?.options?.map(opt => {
                     return (
                         <Button
                             key={opt?.id}
-                            className={cn('text-foreground h-16 min-w-28 bg-transparent hover:bg-transparent focus:bg-transparent border-2 text-wrap text-xs', addOnsOrder?.find(a => a?.add_ons_opt_id === opt?.id) && 'border-primary bg-primary/20')}
+                            className='text-foreground h-16 min-w-28 bg-transparent hover:bg-transparent focus:bg-transparent border-2 text-wrap text-xs'
                             onClick={() => handleAddOnsChange(opt)}
-                            variant='ghost'
+                            variant={addOnsOrder?.find(a => a?.add_ons_opt_id === opt?.id) ? 'default' : 'ghost'}
                         >
                             {opt?.title}
                         </Button>
                     )
                 })}
-
             </div>
         </div >
     )

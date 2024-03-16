@@ -14,6 +14,7 @@ import ToPrintButton from "./toPrintButton";
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface";
 import { IOrderController } from "@/common/types/restaurant/order.interface";
 import { IPrinters } from "@/common/types/restaurant/printers.interface";
+import InfoBadge from "@/components/common/infoBadge";
 
 interface FullOrderControllerProps {
     orderController: IOrderController
@@ -38,19 +39,33 @@ export default function FullOrderController({ orderController, orderSumary, onOr
                         iso: false
                     })}</small>
                 </div>
-                <Button>
-                    {orderController?.number}
-                </Button>
+                <div className='space-x-1'>
+                    <Button
+                        className='justify-self-center mb-2'
+                        variant='purple'
+                    >
+                        {orderController?.pass}
+                    </Button>
+                    <Button>
+                        {orderController?.number}
+                    </Button>
+                </div>
             </div>
-            <div className='flex justify-center w-full'>
-                <Button
-                    size='sm'
-                    className='justify-self-center mb-2'
-                    variant='purple'
-                >
-                    Pass {orderController?.pass}
-                </Button>
-            </div>
+            {orderController?.table &&
+                <div className='flex justify-center items-center w-full gap-2'>
+                    <Button
+                        size='sm'
+                        className='justify-self-center'
+                        variant='green'
+                    >
+                        Table {orderController?.table?.number}
+                    </Button>
+                    <InfoBadge
+                        status={orderController?.table?.meal_status}
+                    />
+                </div>
+            }
+
             <OrderSummary
                 {...orderSumary}
             />
