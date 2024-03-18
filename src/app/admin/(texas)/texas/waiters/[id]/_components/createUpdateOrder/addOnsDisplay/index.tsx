@@ -34,6 +34,8 @@ export default function AddOnsDisplay({ menu, order, getOneOrderTotal, setOrder,
         } else {
             return 0
         }
+    })?.sort((a, b) => {
+        return a.title.localeCompare(b.title)
     })
 
     const handleAddOnsSelection = ({ option, addOn, to }: IHandleAddOnsSelection) => {
