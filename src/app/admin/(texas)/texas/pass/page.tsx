@@ -69,12 +69,15 @@ export default function PassPage() {
                     pass: [],
                     where: {
                         orders: {
-                            mn_type: ['Dqwerwgwg'],
+                            mn_type: [],
                             status: [OrderStatus.ORDERED],
                         },
                     },
                     includes: {
-                        orders: '1',
+                        orders: {
+                            mn_type: [],
+                            status: [OrderStatus.ORDERED]
+                        },
                         table: '1'
                     },
                     date: {
@@ -164,6 +167,12 @@ export default function PassPage() {
                             mn_type: newType,
                             status: [OrderStatus.ORDERED],
                         }
+                    },
+                    includes: {
+                         orders: {
+                            mn_type: newType,
+                            status: [OrderStatus.ORDERED]
+                        },
                     }
                 }
             }

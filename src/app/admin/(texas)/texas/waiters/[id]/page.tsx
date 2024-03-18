@@ -31,6 +31,7 @@ import { IMenuOrderSystemFilter, useOrderSystemHooks } from "@/hooks/useOrderSys
 import { Allergens } from "@/common/types/restaurant/menu.interface";
 import { ITable } from "@/common/types/restaurant/tables.interface";
 import { SocketIoEvent } from "@/common/libs/socketIo/types";
+import AllergensButton from "./_components/allergensButton";
 
 export default function Table({ params }: { params: { id: string } }) {
     const { setOrder, order, resetOrder, updateOrderQuantity, deleteOrder, getOrderTotal, getOneOrderTotal, replaceOrder } = useOrderStore()
@@ -152,7 +153,7 @@ export default function Table({ params }: { params: { id: string } }) {
                                                     <Button
                                                         key={t?.id}
                                                         variant={filter?.mn_type_id === t?.id ? 'default' : 'outline'}
-                                                        className='h-12 rounded-lg text-xs'
+                                                        className='h-12 rounded-lg justify-start text-xs'
                                                         onClick={() => {
                                                             setFilter({
                                                                 ...filter,
@@ -169,36 +170,11 @@ export default function Table({ params }: { params: { id: string } }) {
                                 )
                             })}
                         </div>
-                        <div>
-                            <div className='grid grid-cols-2 gap-4 py-2 scrollbar-thin'>
-                                {Object.values(Allergens).map(a => {
-                                    return (
-                                        <label key={a}
-                                            htmlFor={a}
-                                            className='flex items-center gap-2 text-xs'
-                                        >
-                                            <Checkbox
-                                                id={a}
-                                                checked={filter?.allergens?.includes(a)}
-                                                onCheckedChange={(e) => setFilter(prev => {
-                                                    if (e) {
-                                                        return {
-                                                            ...prev,
-                                                            allergens: [...prev?.allergens || [], a]
-                                                        }
-                                                    } else {
-                                                        return {
-                                                            ...prev,
-                                                            allergens: prev?.allergens?.filter((al) => al !== a)
-                                                        }
-                                                    }
-                                                })}
-                                            />
-                                            <span className='line-clamp-1'>{a}</span>
-                                        </label>
-                                    )
-                                })}
-                            </div>
+                        <div className="space-y-2">
+                            <AllergensButton 
+                                filter={filter}
+                                setFilter={setFilter}
+                            />
                             <SearchInput
                                 value={filter?.short_title || ''}
                                 placeholder="Search..."
@@ -207,7 +183,7 @@ export default function Table({ params }: { params: { id: string } }) {
                                     short_title: e
                                 })}
                                 debounceDelay={0}
-                                custom="min-w-full my-4"
+                                custom="min-w-full my-2"
                             />
                         </div>
                     </div>
