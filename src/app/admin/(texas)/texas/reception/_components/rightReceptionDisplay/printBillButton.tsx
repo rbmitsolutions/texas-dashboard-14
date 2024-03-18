@@ -36,7 +36,6 @@ export default function PrintBill({ printers, tableId }: PrintBillProps) {
 
     return (
         <Button
-            className='h-14 w-14'
             variant='purple'
             onClick={handlePrintOrder}
         >

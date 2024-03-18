@@ -1,4 +1,4 @@
-import { IOrderController, OrderStatus } from '@/common/types/restaurant/order.interface';
+import { IOrder, IOrderController, OrderStatus } from '@/common/types/restaurant/order.interface';
 import { create } from 'zustand';
 
 export interface OrderControllerFilterProps {
@@ -43,7 +43,7 @@ export const useOrderControllerStore = create<OrderControllerStateProps>((set) =
             let orderT = 0
 
             orderController.orders.forEach(order => {
-                if (order?.status === OrderStatus.ORDERED || order?.status === OrderStatus.DELIVERED) {
+                if (order?.status === OrderStatus.ORDERED || order?.status === OrderStatus.DELIVERED || order?.status === OrderStatus.PAID) {
                     const addOnsTotal = order.add_ons.reduce((acc, curr) => acc + curr.price, 0)
                     orderT += (order.price + addOnsTotal) * order.quantity
                 }
@@ -53,6 +53,5 @@ export const useOrderControllerStore = create<OrderControllerStateProps>((set) =
         })
 
         return total
-    }
-
+    },
 }));

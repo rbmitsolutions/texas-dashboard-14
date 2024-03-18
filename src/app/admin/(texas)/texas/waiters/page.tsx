@@ -234,7 +234,7 @@ export default function Tables() {
             }}
 
         >
-            <div className='grid-container grid-cols-[repeat(auto-fit,minmax(200px,1fr))] sm:grid-cols-[repeat(auto-fit,minmax(200px,222px))]'>
+            <div className='grid-container grid-cols-[repeat(auto-fit,minmax(200px,1fr))] sm:grid-cols-4 xl:grid-cols-6'>
                 {
                     getTablesFiltered(tablesFilter)?.map((table) => {
                         return (

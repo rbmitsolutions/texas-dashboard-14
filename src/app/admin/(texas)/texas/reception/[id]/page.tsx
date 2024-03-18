@@ -234,10 +234,12 @@ export default function Table({ params }: { params: { id: string } }) {
                         status: [OrderStatus.ORDERED, OrderStatus.DELIVERED]
                     }
                 })?.map(oc => {
-                    return oc?.orders?.map(o => {
-                        return {
-                            ...o,
-                            paid: Number(o?.quantity) - Number(o?.paid)
+                    return oc?.orders?.filter(o => {
+                        if (o?.status === OrderStatus.ORDERED || o?.status === OrderStatus.DELIVERED) {
+                            return {
+                                ...o,
+                                paid: Number(o?.quantity) - Number(o?.paid)
+                            }
                         }
                     })
                 }).flat() || []
@@ -261,13 +263,13 @@ export default function Table({ params }: { params: { id: string } }) {
         })
     }, [getOrderControllers, getTableById, getTotalOfOrdersByTableId, getTransactionsByFilter, getTransactionsTotalByFilter, params.id, remaining, orderControllers, transactions])
 
-    useEffect(()=> {
+    useEffect(() => {
         const table = getTableById(params?.id)
-        if(!table) {
+        if (!table) {
             push('/admin/texas/reception')
         }
     }, [getTableById, params?.id, push])
-    
+
 
     return (
         <LayoutFrame

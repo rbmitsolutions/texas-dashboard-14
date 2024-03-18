@@ -18,19 +18,15 @@ import { Button } from "@/components/ui/button"
 //interface
 import { TableTransactionsType, TransactionsDirection, TransactionsMethod } from "@/common/types/company/transactions.interface"
 import { IPOSTCompanyBody, IPOSTCompanyDataRerturn, IPOSTTransaction } from "@/hooks/company/IPostCompanyDataHooks.interface"
-import { IMenuSection } from "@/common/types/restaurant/menu.interface"
 import { IToken } from "@/common/types/auth/auth.interface"
-import { ICreateNewOrder } from "@/store/restaurant/order"
 import { IDataTable } from "../../../[id]/page"
 
 interface PaymentButtonProps {
     dataTable: IDataTable
-    payTotal: number
+    payTotal?: number
     payPartial?: number
     createTransaction: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
     user: IToken
-    getOneOrderTotal: (order: ICreateNewOrder) => number
-    menuSections: IMenuSection[]
     onSuccessfulPayment?: () => void
 }
 
@@ -49,8 +45,6 @@ export default function PaymentButton({
     payPartial,
     createTransaction,
     user,
-    getOneOrderTotal,
-    menuSections,
     onSuccessfulPayment,
 }: PaymentButtonProps) {
     const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -88,6 +82,7 @@ export default function PaymentButton({
     }: IHandlePayment
     ) => {
         let ordersToUpdate: { id: string, paid: number }[] = []
+        
         if (toPay >= (dataTable?.values?.total - dataTable?.values?.paid) || payPartial) {
             ordersToUpdate = dataTable?.orders?.unpaid?.map(o => {
                 return {
@@ -191,24 +186,15 @@ export default function PaymentButton({
             onOpenChange={onOpenChange}
         >
             <SheetTrigger asChild>
-                <Button
-                    className='h-14'
-                    variant={payTotal <= 0 ? 'purple' : 'green'}
-                    leftIcon="Banknote"
-
-                    onClick={onOpenChange}
-                >
-                    {payTotal <= 0 ? 'Tip' : convertCentsToEuro(payTotal || 0)}
-                </Button>
-                {/* {payPartial ?
+                {payPartial ?
                     <Button
                         className='h-14'
                         variant='blue'
                         leftIcon="Banknote"
-                        disabled={payPartial === 0}
                         onClick={onOpenChange}
+                        disabled={payPartial === 0}
                     >
-                        Pay Partial {convertCentsToEuro(payPartial || 0)}
+                        {convertCentsToEuro(payPartial)}
                     </Button>
                     :
                     payTotal ?
@@ -216,10 +202,10 @@ export default function PaymentButton({
                             className='h-14'
                             variant='green'
                             leftIcon="Banknote"
-                            disabled={payTotal === 0}
                             onClick={onOpenChange}
+                            disabled={payTotal === 0}
                         >
-                            Pay Total {convertCentsToEuro(payTotal || 0)}
+                            {convertCentsToEuro(payTotal)}
                         </Button>
                         :
                         <Button
@@ -228,9 +214,10 @@ export default function PaymentButton({
                             leftIcon="Banknote"
                             onClick={onOpenChange}
                         >
-                            Add Tip
+                            Tip
                         </Button>
-                } */}
+                }
+
             </SheetTrigger>
             <SheetContent
                 className="grid grid-rows-[auto,1fr,auto] w-[400px] sm:w-[540px]"

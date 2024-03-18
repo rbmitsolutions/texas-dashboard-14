@@ -54,14 +54,20 @@ export default function RightReceptionDisplay({
 
     return (
         <div className='flex-col-container justify-between h-full scrollbar-thin overflow-auto'>
-            <strong>Table {dataTable?.table?.number}</strong>
-            <div className='grid grid-cols-3 gap-2'>
+            <div className='flex-container items-center justify-between'>
+                <strong>Table {dataTable?.table?.number}</strong>
+                <PrintBill
+                    printers={printers}
+                    tableId={dataTable?.table?.id!}
+                />
+            </div>
+            <div className='grid grid-cols-5 gap-2 pb-2'>
                 {Object.values(OrderStatus).map(s => {
                     return (
                         <Button
                             key={s}
                             variant={status?.includes(s) ? getOrderStatusVariant(s) : 'outline'}
-                            className='capitalize text-xs'
+                            className='capitalize text-[10px]'
                             onClick={() => {
                                 if (status?.includes(s)) {
                                     setStatus(status?.filter(st => st !== s))
@@ -100,26 +106,19 @@ export default function RightReceptionDisplay({
                     )
                 })}
             </div>
-            <div className='grid grid-cols-[auto,1fr] gap-4'>
-                 <SplitBillPaymentButton
+            <div className='grid grid-cols-2 gap-4'>
+                <SplitBillPaymentButton
                     dataTable={dataTable}
                     menuSections={menuSections}
                     getOneOrderTotal={getOneOrderTotal}
                     createTransaction={createTransaction}
                     user={user}
-                    
-                /> 
-                <PrintBill 
-                    printers={printers}
-                    tableId={dataTable?.table?.id!}
                 />
                 <PaymentButton
                     dataTable={dataTable}
                     payTotal={dataTable?.values?.remaining}
                     createTransaction={createTransaction}
                     user={user}
-                    getOneOrderTotal={getOneOrderTotal}
-                    menuSections={menuSections}
                 />
             </div>
         </div>

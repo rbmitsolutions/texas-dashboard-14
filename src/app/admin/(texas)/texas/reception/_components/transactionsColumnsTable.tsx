@@ -102,17 +102,16 @@ export const transactionsColumnsTable = ({
                                         size="sm"
                                         className="mt-2"
                                         leftIcon="XCircle"
-                                        onClick={() => {
+                                        onClick={async () => {
                                             const description: { id: string, paid: number }[] = row?.original?.description ? JSON.parse(row?.original?.description) : []
                                             const unpaidOrders: { id: string, unpaid: number }[] = description?.map(d => {
                                                 return {
                                                     id: d.id,
                                                     unpaid: d.paid
                                                 }
-                                            
-                                            })
 
-                                            updateTransaction({
+                                            })
+                                            await updateTransaction({
                                                 transaction: {
                                                     one: {
                                                         id: row?.original?.id,

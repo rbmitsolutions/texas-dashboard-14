@@ -23,22 +23,6 @@ export default function OrderQuantities({ order, getOneOrderTotal, splitBill, sh
 
     const orderTotal = getOneOrderTotal({ ...order, paid: 0 } as unknown as ICreateNewOrder)
 
-    //todo: split bill
-    // if (splitBill?.handleAddToBill) {
-    //     return (
-    //         <div className='flex items-center justify-between gap-1'>
-    //             <small className='text-green-500 text-lg text-end font-bold'>{convertCentsToEuro(getOneOrderTotal({
-    //                 ...order,
-    //             } as unknown as ICreateNewOrder) || 0)}</small>
-    //             {/* : */}
-    //             <small className='text-green-500 text-lg text-end font-bold'>{convertCentsToEuro(getOneOrderTotal({
-    //                 ...order,
-    //                 paid: 0
-    //             } as unknown as ICreateNewOrder) || 0)}</small>
-    //         </div>
-    //     )
-    // }
-
     return (
         <div className='flex-container justify-between items-center'>
             <div className='flex flex-col gap-1'>
@@ -52,16 +36,16 @@ export default function OrderQuantities({ order, getOneOrderTotal, splitBill, sh
                 </div>
 
                 {(order?.paid > 0) &&
-               
-                <div className='flex items-center gap-1'>
-                <Badge
-                className="bg-green-500 py-0 px-1"
-                >{order?.paid} x</Badge>
-                <small >
-                paid
-                </small>
-                </div>
-            } 
+
+                    <div className='flex items-center gap-1'>
+                        <Badge
+                            className="bg-green-500 py-0 px-1"
+                        >{order?.paid} x</Badge>
+                        <small >
+                            {splitBill ? 'to Pay' : 'Paid'}
+                        </small>
+                    </div>
+                }
             </div>
             {
                 showPrice &&

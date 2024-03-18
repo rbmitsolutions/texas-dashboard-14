@@ -70,7 +70,8 @@ export default function GiftcardPaymentButton({
 
     const {
         setGETRestaurantDataParams: setGiftCardParams,
-        GETRestaurantDataParams: getGiftCardParams
+        GETRestaurantDataParams: getGiftCardParams,
+        refetchRestaurantData: refetchGiftCard
     } = useGETRestaurantDataHooks({
         query: 'GIFTCARD',
         defaultParams: {
@@ -84,15 +85,16 @@ export default function GiftcardPaymentButton({
             refetchOnWindowFocus: false,
             refetchIntervalInBackground: false,
             refetchOnMount: false,
-            keepPreviousData: false,
+            initialData: undefined,
 
             onSuccess: (data) => {
                 const card = data as IGiftCards
+                console.log(card)
                 if (card) {
                     setGiftCard(card)
                     setGiftCardBalance(card.value - card.spent)
                 }
-            }
+            },
         }
     })
 
@@ -120,17 +122,22 @@ export default function GiftcardPaymentButton({
         }
     }
 
+
     useEffect(() => {
         if (code?.length === 16) {
-            setGiftCardParams({
-                giftcards: {
-                    byCode: {
-                        code
+            if(code === getGiftCardParams?.giftcards?.byCode?.code) {
+                refetchGiftCard()
+            } else {
+                setGiftCardParams({
+                    giftcards: {
+                        byCode: {
+                            code
+                        }
                     }
-                }
-            })
-        }
-    }, [code, setGiftCardParams])
+                })
+            }
+            }
+    }, [code, setGiftCardParams, refetchGiftCard, getGiftCardParams?.giftcards?.byCode?.code])
 
     return (
         <Sheet

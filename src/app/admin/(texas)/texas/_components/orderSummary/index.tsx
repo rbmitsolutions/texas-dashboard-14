@@ -52,7 +52,7 @@ export const OrderSummary = ({ order, updateOrder, getOneOrderTotal, menuSection
         sortMenuSections(menuSections)?.map(s => {
         
             const orders = order?.filter(o => s?.title?.includes(o?.mn_section as string)).sort((a, b) => {
-                return a?.menu_short_title.localeCompare(b?.menu_short_title)
+                return a?.menu_short_title?.localeCompare(b?.menu_short_title)
             })
 
             if (orders?.length === 0) return

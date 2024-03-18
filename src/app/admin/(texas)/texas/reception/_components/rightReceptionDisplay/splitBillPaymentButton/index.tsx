@@ -1,5 +1,5 @@
 'use client'
-import { Dispatch, SetStateAction, useState } from "react"
+import { useState } from "react"
 import { UseMutateFunction } from "react-query"
 
 //components
@@ -11,12 +11,8 @@ import PaymentButton from "../paymentButton"
 
 //interface
 import { IPOSTCompanyBody, IPOSTCompanyDataRerturn } from "@/hooks/company/IPostCompanyDataHooks.interface"
-import { IGETRestaurantDataQuery } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
-import { IOrder, IOrderController } from "@/common/types/restaurant/order.interface"
-import { IGiftCards } from "@/common/types/restaurant/giftcard.interface"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
-import { ITable } from "@/common/types/restaurant/tables.interface"
-import { ISocketMessage } from "@/common/libs/socketIo/types"
+import { IOrder, OrderStatus } from "@/common/types/restaurant/order.interface"
 import { IToken } from "@/common/types/auth/auth.interface"
 import { ICreateNewOrder } from "@/store/restaurant/order"
 import { IDataTable } from "../../../[id]/page"
@@ -101,7 +97,7 @@ export default function SplitBillPaymentButton({
                     leftIcon="Banknote"
                     disabled={dataTable?.values?.remaining === 0}
                 >
-                    Parcial
+                    Split Bill
                 </Button>
             </DialogTrigger>
             <DialogContent
@@ -115,7 +111,7 @@ export default function SplitBillPaymentButton({
                         {dataTable?.orderControllers?.unpaid?.map(oc => {
                             const filteredOrders = oc?.orders?.filter(o => {
                                 const order = orders?.find(or => or?.id === o?.id)
-                                if (order?.quantity === (o?.quantity - o?.paid)) {
+                                if (order?.quantity === (o?.quantity - o?.paid) || o?.status === OrderStatus.CANCELLED || o?.status === OrderStatus.RETURNED || o?.status === OrderStatus.PAID) {
                                     return false
                                 }
                                 return true
@@ -133,8 +129,6 @@ export default function SplitBillPaymentButton({
                                             handleAddToBill
                                         }
                                     }}
-                                    printers={[]}
-                                    
                                 />
                             )
                         })}
@@ -166,11 +160,7 @@ export default function SplitBillPaymentButton({
                         })).reduce((a, b) => a + b, 0)}
                         createTransaction={createTransaction}
                         user={user}
-                        getOneOrderTotal={getOneOrderTotal}
-                        menuSections={menuSections}
                         onSuccessfulPayment={onOpenChange}
-                        //todo: remove it
-                        payTotal={0}
                     />
                 </DialogFooter>
             </DialogContent>

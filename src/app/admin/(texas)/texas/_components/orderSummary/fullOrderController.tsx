@@ -20,7 +20,7 @@ interface FullOrderControllerProps {
     orderController: IOrderController
     orderSumary: IOrderSummary
     onOrdersUpdate?: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
-    printers: IPrinters[]
+    printers?: IPrinters[]
 }
 export default function FullOrderController({ orderController, orderSumary, onOrdersUpdate, printers }: FullOrderControllerProps) {
     const hasOrdersWithOrderedStatus = orderController?.orders?.filter(order => order.status === 'ordered')
@@ -70,10 +70,12 @@ export default function FullOrderController({ orderController, orderSumary, onOr
                 {...orderSumary}
             />
             <div className='flex-container justify-between mt-2'>
-                <ToPrintButton
-                    orderController={orderController}
-                    printers={printers}
-                />
+                {printers &&
+                    <ToPrintButton
+                        orderController={orderController}
+                        printers={printers}
+                    />
+                }
                 {(onOrdersUpdate && hasOrdersWithOrderedStatus?.length > 0) &&
                     <UpdateAllOrderStatus
                         orderController={orderController}
