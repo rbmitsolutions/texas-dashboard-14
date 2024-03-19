@@ -23,11 +23,13 @@ import { useOrderStore } from '@/store/restaurant/order';
 import { OrderStatus } from '@/common/types/restaurant/order.interface';
 import { SocketIoEvent } from '@/common/libs/socketIo/types';
 import { usePrintersStore } from '@/store/restaurant/printers';
+import { useSectionsStore } from '@/store/restaurant/sections';
 
 export default function Tables() {
-    const { getOrderControllers, } = useOrderControllerStore()
-    const { getOneOrderTotal } = useOrderStore()
     const { tablesFilter, setTablesFilter, getTablesFiltered } = useTablesStore()
+    const { getOrderControllers, } = useOrderControllerStore()
+    const { sections } = useSectionsStore()
+    const { getOneOrderTotal } = useOrderStore()
     const { printers } = usePrintersStore()
     const { user } = useAuthHooks()
     const { emit } = useSocketIoHooks()
@@ -42,27 +44,6 @@ export default function Tables() {
                     includes: {
                         types: '1'
                     },
-                    pagination: {
-                        take: 200,
-                        skip: 0
-                    }
-                }
-            }
-        },
-        UseQueryOptions: {
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
-            refetchOnMount: false,
-        }
-    })
-
-    const {
-        restaurantAllSections: sections,
-    } = useGETRestaurantDataHooks({
-        query: 'SECTIONS',
-        defaultParams: {
-            sections: {
-                all: {
                     pagination: {
                         take: 200,
                         skip: 0
@@ -190,7 +171,7 @@ export default function Tables() {
                         </div>
                         <small className='-mb-2'>Section</small>
                         <div className='grid grid-cols-2 gap-2'>
-                            {sections?.data?.map(section => {
+                            {sections?.map(section => {
                                 return (
                                     <Button
                                         key={section?.id}

@@ -6,21 +6,21 @@ import { getOrderStatusVariant } from "@/common/libs/restaurant/order"
 
 //components
 import FullOrderController from "../../../_components/orderSummary/fullOrderController"
+import SplitBillPaymentButton from "./splitBillPaymentButton"
 import { Button } from "@/components/ui/button"
 import PaymentButton from "./paymentButton"
+import PrintBill from "./printBillButton"
 
 //interface
 import { IPOSTCompanyBody, IPOSTCompanyDataRerturn } from "@/hooks/company/IPostCompanyDataHooks.interface"
 import { IOrderController, OrderStatus } from "@/common/types/restaurant/order.interface"
-import { OrderControllerFilterProps } from "@/store/restaurant/orderController"
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
-import { IMenuSection } from "@/common/types/restaurant/menu.interface"
-import { ICreateNewOrder } from "@/store/restaurant/order"
-import { IToken } from "@/common/types/auth/auth.interface"
-import { IDataTable } from "../../[id]/page"
+import { OrderControllerFilterProps } from "@/store/restaurant/orderController"
 import { IPrinters } from "@/common/types/restaurant/printers.interface"
-import PrintBill from "./printBillButton"
-import SplitBillPaymentButton from "./splitBillPaymentButton"
+import { IMenuSection } from "@/common/types/restaurant/menu.interface"
+import { IToken } from "@/common/types/auth/auth.interface"
+import { ICreateNewOrder } from "@/store/restaurant/order"
+import { IDataTable } from "../../[id]/page"
 
 interface RightReceptionDisplayProps {
     dataTable: IDataTable
@@ -31,6 +31,7 @@ interface RightReceptionDisplayProps {
     user: IToken
     updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
     printers: IPrinters[]
+    closeTable: () => {}
 }
 
 export default function RightReceptionDisplay({
@@ -41,7 +42,8 @@ export default function RightReceptionDisplay({
     createTransaction,
     user,
     updateOrder,
-    printers
+    printers,
+    closeTable
 }: RightReceptionDisplayProps) {
     const [status, setStatus] = useState<OrderStatus[]>([OrderStatus.ORDERED, OrderStatus.DELIVERED])
 
@@ -57,7 +59,6 @@ export default function RightReceptionDisplay({
             <div className='flex-container items-center justify-between'>
                 <strong>Table {dataTable?.table?.number}</strong>
                 <PrintBill
-                    printers={printers}
                     tableId={dataTable?.table?.id!}
                 />
             </div>
@@ -113,12 +114,14 @@ export default function RightReceptionDisplay({
                     getOneOrderTotal={getOneOrderTotal}
                     createTransaction={createTransaction}
                     user={user}
+                    closeTable={closeTable}
                 />
                 <PaymentButton
                     dataTable={dataTable}
                     payTotal={dataTable?.values?.remaining}
                     createTransaction={createTransaction}
                     user={user}
+                    closeTable={closeTable}
                 />
             </div>
         </div>

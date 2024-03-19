@@ -10,19 +10,20 @@ import { useState } from "react"
 import { OrderSummary } from "../../../../_components/orderSummary"
 import AuthDialog from "@/components/common/authDialog"
 import { Button } from "@/components/ui/button"
+import ChangeTable from "./changeTable"
 import LastOrders from "./lastOrders"
 
 //interface
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
-import { ITable, TableMealStatus } from "@/common/types/restaurant/tables.interface"
+import { ISection, ITable, TableMealStatus } from "@/common/types/restaurant/tables.interface"
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface"
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 import { IOrder, IOrderController } from "@/common/types/restaurant/order.interface"
 import { hasOrdersWithOrderedStatus } from "@/common/libs/restaurant/order"
+import { IPrinters } from "@/common/types/restaurant/printers.interface"
 import { IToken, Permissions } from "@/common/types/auth/auth.interface"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
 import { ICreateNewOrder } from "@/store/restaurant/order"
-import { IPrinters } from "@/common/types/restaurant/printers.interface"
 
 interface RightOrderDisplayProps {
     order: ICreateNewOrder[]
@@ -39,9 +40,11 @@ interface RightOrderDisplayProps {
     orderControllers: IOrderController[]
     updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
     printers: IPrinters[]
+    sections: ISection[]
+    updateTable: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
 }
 
-export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTotal, updateOrderQuantity, getOneOrderTotal, deleteOrder, replaceOrder, table, createOrder, menuSections, orderControllers, updateOrder, printers }: RightOrderDisplayProps) {
+export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTotal, updateOrderQuantity, getOneOrderTotal, deleteOrder, replaceOrder, table, createOrder, menuSections, orderControllers, updateOrder, printers, sections, updateTable }: RightOrderDisplayProps) {
     const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false)
     const { back } = useRouter()
     const [status, setStatus] = useState<TableMealStatus>()
@@ -115,7 +118,6 @@ export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTot
     }
 
 
-
     return (
         <>
             <AuthDialog
@@ -127,7 +129,12 @@ export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTot
             />
 
             <div className='flex-col-container h-full'>
-                <div className='grid grid-cols-[1fr,auto,auto] gap-2'>
+                <div className='grid grid-cols-[auto,auto,auto] gap-2'>
+                    <ChangeTable
+                        sections={sections}
+                        updateTable={updateTable}
+                        table={table}
+                    />
                     <LastOrders
                         ordersController={orderControllers}
                         menu={menu}

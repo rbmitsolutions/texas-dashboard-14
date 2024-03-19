@@ -4,11 +4,10 @@ import { io } from "socket.io-client"
 
 //libs
 import { addDaysToDate, getFirstTimeOfTheDay } from "@/common/libs/date-fns/dateFormat"
-import sortMenuSections from "@/common/libs/restaurant/menuSections"
 
 //components
-import FullOrderController from "../_components/orderSummary/fullOrderController"
-import LayoutFrame from "../../_components/layoutFrame"
+import FullOrderController from "../../_components/orderSummary/fullOrderController"
+import LayoutFrame from "../../../_components/layoutFrame"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 
@@ -66,16 +65,16 @@ export default function PassPage() {
                         take: 500,
                         skip: 0
                     },
+                    finished_table_id: 'null',
                     pass: [],
                     where: {
                         orders: {
-                            mn_type: [],
                             status: [OrderStatus.ORDERED],
+                            mn_section: ['Starters', 'Main Course', 'Sides']
                         },
                     },
                     includes: {
                         orders: {
-                            mn_type: [],
                             status: [OrderStatus.ORDERED]
                         },
                         table: '1'
@@ -84,7 +83,6 @@ export default function PassPage() {
                         gte: getFirstTimeOfTheDay(new Date()),
                         lte: addDaysToDate(new Date(), 1)
                     },
-                    finished_table_id: null,
                     orderBy: {
                         key: 'created_at',
                         order: 'asc'
@@ -99,6 +97,7 @@ export default function PassPage() {
         },
         keepParmas: true
     })
+
 
     const {
         restaurantAllMenuSections: menuSections
@@ -153,32 +152,6 @@ export default function PassPage() {
         }))
     }
 
-    const handleTypeChange = (type: string) => {
-        const currentType = params?.orderController?.all?.where?.orders?.mn_type || []
-
-        const newType = currentType.includes(type) ? currentType.filter(t => t !== type) : [...currentType, type]
-
-        setParams(prev => ({
-            orderController: {
-                all: {
-                    ...prev?.orderController?.all,
-                    where: {
-                        orders: {
-                            mn_type: newType,
-                            status: [OrderStatus.ORDERED],
-                        }
-                    },
-                    includes: {
-                         orders: {
-                            mn_type: newType,
-                            status: [OrderStatus.ORDERED]
-                        },
-                    }
-                }
-            }
-        }))
-    }
-
     useEffect(() => {
         socket.on("message", (message: ISocketMessage) => {
             if (message?.event === SocketIoEvent.ORDER) {
@@ -200,7 +173,6 @@ export default function PassPage() {
                 },
                 content: (
                     <div className='flex-col-container overflow-auto'>
-
                         <small className='-mb-2'>Pass</small>
                         <div className='grid grid-cols-2 gap-2'>
                             {[1, 2, 3, 4, 5]?.map(p => {
@@ -216,30 +188,6 @@ export default function PassPage() {
                                 )
                             })}
                         </div>
-                        {sortMenuSections(menuSections?.data || [])?.map(sec => {
-                            return (
-                                <div key={sec?.id}>
-                                    <strong>{sec?.title}</strong>
-                                    <div className='grid grid-cols-2 gap-2 py-2 scrollbar-thin'>
-                                        {sec?.types?.map(t => {
-                                            return (
-                                                <label key={t?.id}
-                                                    htmlFor={t?.id}
-                                                    className='flex items-center gap-2 text-xs'
-                                                >
-                                                    <Checkbox
-                                                        id={t?.id}
-                                                        checked={params?.orderController?.all?.where?.orders?.mn_type?.includes(t?.title)}
-                                                        onCheckedChange={(e) => handleTypeChange(t?.title)}
-                                                    />
-                                                    <span className='line-clamp-1'>{t?.title}</span>
-                                                </label>
-                                            )
-                                        })}
-                                    </div>
-                                </div>
-                            )
-                        })}
                     </div>
                 )
             }}

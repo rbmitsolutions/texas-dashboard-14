@@ -15,11 +15,14 @@ export interface IPUTTablesBody {
     section_id?: string;
     meal_status?: TableMealStatus
     food_ordered_at?: Date;
+    open_table?: boolean;
     close_table?: {
         client_id: string
         client_name: string
     };
-    open_table?: boolean;
+    change_table?: {
+        to_id: string
+    }
 }
 
 export interface IOrderControllerPut {

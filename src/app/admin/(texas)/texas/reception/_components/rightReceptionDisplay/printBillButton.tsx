@@ -1,19 +1,22 @@
+import toast from "react-hot-toast"
+import { PrinterIcon } from "lucide-react"
 
 //components
 import { Button } from "@/components/ui/button"
 
-//interface
+//hooks
 import { usePOSTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
-import { IPrinters } from "@/common/types/restaurant/printers.interface"
-import { PrinterIcon } from "lucide-react"
-import toast from "react-hot-toast"
+
+//store
+import { usePrintersStore } from "@/store/restaurant/printers"
 
 interface PrintBillProps {
     tableId: string
-    printers: IPrinters[]
 }
 
-export default function PrintBill({ printers, tableId }: PrintBillProps) {
+export default function PrintBill({ tableId }: PrintBillProps) {
+    const { defaultPrinter } = usePrintersStore()
+
     const {
         createRestaurantData: toPrint
     } = usePOSTRestaurantDataHooks({
@@ -21,13 +24,12 @@ export default function PrintBill({ printers, tableId }: PrintBillProps) {
     })
 
     const handlePrintOrder = async () => {
-        const findReceiptPrinter = printers.find(p => p?.title?.toLowerCase() === 'reception')
+        if(!defaultPrinter) return
 
-        if(!findReceiptPrinter) return toast.error('There is no printer named "Reception"')
         await toPrint({
             toPrint: {
                 bill: {
-                    ip: findReceiptPrinter.ip,
+                    ip: defaultPrinter?.ip,
                     tableId
                 }
             }
@@ -36,10 +38,11 @@ export default function PrintBill({ printers, tableId }: PrintBillProps) {
 
     return (
         <Button
-            variant='purple'
+            variant='pink'
             onClick={handlePrintOrder}
+            disabled={!defaultPrinter}
         >
-            <PrinterIcon  size={14}/>
+            <PrinterIcon size={14} />
         </Button>
     )
 }

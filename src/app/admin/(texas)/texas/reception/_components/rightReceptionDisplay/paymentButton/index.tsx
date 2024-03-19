@@ -15,9 +15,13 @@ import { KeyPadDisplay } from "@/components/common/keyPadDisplay"
 import GiftcardPaymentButton from "./giftcardPayment"
 import { Button } from "@/components/ui/button"
 
+//sotre
+import { usePrintersStore } from "@/store/restaurant/printers"
+
 //interface
 import { TableTransactionsType, TransactionsDirection, TransactionsMethod } from "@/common/types/company/transactions.interface"
 import { IPOSTCompanyBody, IPOSTCompanyDataRerturn, IPOSTTransaction } from "@/hooks/company/IPostCompanyDataHooks.interface"
+import { usePOSTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 import { IToken } from "@/common/types/auth/auth.interface"
 import { IDataTable } from "../../../[id]/page"
 
@@ -28,6 +32,7 @@ interface PaymentButtonProps {
     createTransaction: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
     user: IToken
     onSuccessfulPayment?: () => void
+    closeTable: () => {}
 }
 
 export interface IHandlePayment {
@@ -46,9 +51,17 @@ export default function PaymentButton({
     createTransaction,
     user,
     onSuccessfulPayment,
+    closeTable
 }: PaymentButtonProps) {
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [toPay, setToPay] = useState<number>(payTotal || payPartial || 0)
+    const { defaultPrinter } = usePrintersStore()
+    const {
+        createRestaurantData: toPrint
+    } = usePOSTRestaurantDataHooks({
+        query: 'TO_PRINT',
+    })
 
     const onValueChange = (number: number, remove?: boolean) => {
         if (remove) {
@@ -75,14 +88,16 @@ export default function PaymentButton({
         setIsOpen(!isOpen)
     }
 
+
     const handlePayment = async ({
         method,
         direction,
         giftCard
     }: IHandlePayment
     ) => {
+        setIsLoading(true)
         let ordersToUpdate: { id: string, paid: number }[] = []
-        
+
         if (toPay >= (dataTable?.values?.total - dataTable?.values?.paid) || payPartial) {
             ordersToUpdate = dataTable?.orders?.unpaid?.map(o => {
                 return {
@@ -173,10 +188,28 @@ export default function PaymentButton({
             },
             {
                 onSuccess: async () => {
+                    if (defaultPrinter) {
+                        await toPrint({
+                            toPrint: {
+                                bill: {
+                                    ip: defaultPrinter?.ip,
+                                    tableId: dataTable?.table?.id!
+                                }
+                            }
+                        })
+                    }
+                    if (total >= remaining) {
+                        await closeTable()
+                    }
                     onSuccessfulPayment && onSuccessfulPayment()
                     onOpenChange();
+
                 },
-            }
+                onSettled: () => {
+                    setIsLoading(false)
+                }
+
+            },
         );
     }
 
@@ -267,9 +300,9 @@ export default function PaymentButton({
                             leftIcon="Banknote"
                             onClick={() => handlePayment({
                                 method: TransactionsMethod.CARD,
-                                direction: TransactionsDirection.IN
+                                direction: TransactionsDirection.IN,
                             })}
-                            disabled={toPay < 0.01 ? true : false}
+                            disabled={isLoading ? true : toPay < 0.01 ? true : false}
                             variant='purple'
                             className='h-20'
                         >
@@ -286,7 +319,7 @@ export default function PaymentButton({
                                     method: TransactionsMethod.CASH,
                                     direction: TransactionsDirection.IN
                                 })}
-                                disabled={toPay < 0.01 ? true : false}
+                                disabled={isLoading ? true : toPay < 0.01 ? true : false}
                                 variant='green'
                                 className='h-14'
                             >

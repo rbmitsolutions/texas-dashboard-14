@@ -34,7 +34,7 @@ export default function SelectTable({
         guests: getBookingAmountPerTable(booking?.amount_of_people || 2)
     })
 
-    const getOpenAndFIlteredTables = () => {
+    const getTables = () => {
         let tables = spareTablesFilter?.section?.tables
 
         if (tables) {
@@ -89,11 +89,12 @@ export default function SelectTable({
                 })}
             </div>
             <div className='grid grid-cols-2 gap-2 p-2 bg-background-soft scrollbar-thin overflow-auto'>
-                {getOpenAndFIlteredTables()?.map(table => {
+                {getTables()?.map(table => {
                     return (
-                        <div
+                        <Button
                             key={table?.id}
-                            className={cn('flex-col-container items-center justify-center p-2 rounded-lg border-2 gap-1 min-h-20 cursor-pointer', tableSelected?.id === table?.id ? 'bg-background-soft border-primary' : 'bg-background')}
+                            className='flex-col-container items-center justify-center p-2 gap-1 min-h-20 cursor-pointer'
+                            variant={tableSelected?.id === table?.id ? 'default' : 'outline'}
                             onClick={() => setTableSelected(prev => {
                                 if (prev?.id === table?.id) {
                                     return booking?.table
@@ -102,13 +103,13 @@ export default function SelectTable({
                                 }
                             })}
                         >
-                            <small>
+                            <strong>
                                 Table - {table?.number}
-                            </small>
+                            </strong>
                             <small>
                                 {table?.guests} Guests
                             </small>
-                        </div>
+                        </Button>
                     )
                 })}
             </div>

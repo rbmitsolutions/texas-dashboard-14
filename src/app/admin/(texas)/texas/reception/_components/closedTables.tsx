@@ -6,7 +6,6 @@ import Icon from "@/common/libs/lucida-icon"
 import {
     Sheet,
     SheetContent,
-    SheetFooter,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
@@ -14,15 +13,15 @@ import {
 import { Button } from "@/components/ui/button"
 
 //interface
-import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
-import { IOrder, IOrderController } from "@/common/types/restaurant/order.interface"
-import { IMenuSection } from "@/common/types/restaurant/menu.interface"
-import { ICreateNewOrder } from "@/store/restaurant/order"
+import { IFinishedTable } from "@/common/types/restaurant/tables.interface"
+import IconText from "@/components/common/iconText"
 
 interface ClosedTablesProps {
+    finishedTables: IFinishedTable[]
 }
 
-export default function ClosedTables({ }: ClosedTablesProps) {
+export default function ClosedTables({ finishedTables }: ClosedTablesProps) {
+    console.log(finishedTables)
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -37,8 +36,32 @@ export default function ClosedTables({ }: ClosedTablesProps) {
                 <SheetHeader>
                     <SheetTitle>Last Orders</SheetTitle>
                 </SheetHeader>
-                <div className="grid gap-4 p-2 overflow-auto scrollbar-thin">
-
+                <div className="flex-col-container gap-2 overflow-auto scrollbar-thin">
+                    {finishedTables?.map(table => {
+                        return (
+                            <div
+                                key={table?.id}
+                                className='flex-col-container gap-2 bg-background-soft p-2 rounded-lg'
+                            >
+                                <strong>{formatDate({
+                                    date: table?.date,
+                                    f: 'dd/MM/yyyy'
+                                })}</strong>
+                                <IconText
+                                    icon="Users"
+                                    text={table?.guests}
+                                />
+                                <strong>{formatDate({
+                                    date: table?.start_time,
+                                    f: 'HH:mm:ss'
+                                })}</strong>
+                                <strong>{formatDate({
+                                    date: table?.end_time,
+                                    f: 'HH:mm:ss'
+                                })}</strong>
+                            </div>
+                        )
+                    })}
                 </div>
             </SheetContent>
         </Sheet>

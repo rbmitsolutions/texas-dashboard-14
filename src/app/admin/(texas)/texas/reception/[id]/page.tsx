@@ -23,6 +23,7 @@ import { useAuthHooks } from '@/hooks/useAuthHooks';
 //store
 import { useOrderControllerStore } from '@/store/restaurant/orderController';
 import { useTransactionsStore } from '@/store/company/transactions';
+import { usePrintersStore } from '@/store/restaurant/printers';
 import { useTablesStore } from '@/store/restaurant/tables';
 import { useOrderStore } from '@/store/restaurant/order';
 
@@ -52,6 +53,7 @@ export interface IDataTable {
 export default function Table({ params }: { params: { id: string } }) {
     const { getTransactionsByFilter, getTransactionsTotalByFilter, transactions } = useTransactionsStore()
     const { getOrderControllers, getTotalOfOrdersByTableId, orderControllers } = useOrderControllerStore()
+    const { printers } = usePrintersStore()
     const { getOneOrderTotal } = useOrderStore()
     const { getTableById } = useTablesStore()
     const { emit } = useSocketIoHooks()
@@ -73,31 +75,9 @@ export default function Table({ params }: { params: { id: string } }) {
         }
     })
 
-    const [isCloseTableDialogOpen, setIsCloseTableDialogOpen] = useState<boolean>(false)
     const remaining = getTotalOfOrdersByTableId(params.id) - getTransactionsTotalByFilter({
         payee_key: params.id,
         status: TransactionsStatus.CONFIRMED
-    })
-
-    const {
-        restaurantAllPrinters: printers
-    } = useGETRestaurantDataHooks({
-        query: 'PRINTERS',
-        defaultParams: {
-            printers: {
-                all: {
-                    pagination: {
-                        take: 50,
-                        skip: 0
-                    }
-                }
-            }
-        },
-        UseQueryOptions: {
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
-            refetchOnMount: false,
-        }
     })
 
     const {
@@ -158,7 +138,28 @@ export default function Table({ params }: { params: { id: string } }) {
 
 
     const { updateRestaurantData: updateTable } = usePUTRestaurantDataHooks({
-        query: 'TABLES'
+        query: 'TABLES',
+        UseMutationOptions: {
+            onSuccess: async () => {
+                await emit({
+                    event: SocketIoEvent.TABLE,
+                    message: dataTable?.table?.id
+                })
+                await emit({
+                    event: SocketIoEvent.TABLE_PAYMENT,
+                    message: dataTable?.table?.id
+                })
+                await emit({
+                    event: SocketIoEvent.BOOKING,
+                    message: dataTable?.table?.id
+                })
+                await emit({
+                    event: SocketIoEvent.ORDER,
+                    message: dataTable?.table?.id
+                })
+                push(RedirectTo.RECEPTION)
+            }
+        }
     })
 
     const {
@@ -201,24 +202,6 @@ export default function Table({ params }: { params: { id: string } }) {
                     client_id: client?.id!,
                     client_name: client?.name!
                 }
-            }
-        }, {
-            onSuccess: async () => {
-                setIsCloseTableDialogOpen(false)
-                await emit({
-                    event: SocketIoEvent.TABLE,
-                    message: params.id
-
-                })
-                await emit({
-                    event: SocketIoEvent.TABLE_PAYMENT,
-                    message: params.id
-                })
-                await emit({
-                    event: SocketIoEvent.BOOKING,
-                    message: params.id
-                })
-                push(RedirectTo.RECEPTION)
             }
         })
     }
@@ -275,22 +258,18 @@ export default function Table({ params }: { params: { id: string } }) {
         <LayoutFrame
             user={user}
             navigation={{
+                defaultPrinter: printers,
                 icon: {
                     icon: 'Filter',
                     title: 'Tables'
                 },
                 content: (
                     <div className='flex-col-container overflow-auto'>
-                        <CloseTableDialog
-                            isOpen={isCloseTableDialogOpen}
-                            setIsOpen={setIsCloseTableDialogOpen}
-                            onClose={handleCloseTable}
-                        />
                         <i>Some info</i>
                     </div>
                 ),
                 return: {
-                    action: () => remaining === 0 ? setIsCloseTableDialogOpen(prev => !prev) : push(RedirectTo.RECEPTION),
+                    path: RedirectTo.RECEPTION
                 }
             }}
             rightNavigation={{
@@ -303,7 +282,8 @@ export default function Table({ params }: { params: { id: string } }) {
                         createTransaction={createTransaction}
                         user={user}
                         updateOrder={updateOrder}
-                        printers={printers?.data || []}
+                        printers={printers || []}
+                        closeTable={handleCloseTable}
                     />
 
                 ),

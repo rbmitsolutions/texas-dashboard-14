@@ -150,8 +150,9 @@ export interface IGETOrderControllerQuery {
 
     where?: {
       orders?: {
-        mn_type: string[]
+        mn_type?: string[]
         status: OrderStatus[]
+        mn_section?: string[]
       }
     }
 

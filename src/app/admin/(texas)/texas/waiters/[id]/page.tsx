@@ -7,10 +7,10 @@ import sortMenuSections from "@/common/libs/restaurant/menuSections";
 
 //components
 import RightOrderDisplay from "./_components/rightOrderDisplay";
+import AllergensButton from "./_components/allergensButton";
 import { MenuOrderItem } from "./_components/menuOrderItem";
 import LayoutFrame from "../../../_components/layoutFrame";
 import SearchInput from "@/components/common/searchInput";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 
 //store
@@ -25,13 +25,13 @@ import { useAuthHooks } from "@/hooks/useAuthHooks";
 
 //store
 import { usePrintersStore } from "@/store/restaurant/printers";
+import { useSectionsStore } from "@/store/restaurant/sections";
 
 //interfaces
 import { IMenuOrderSystemFilter, useOrderSystemHooks } from "@/hooks/useOrderSystemHooks";
-import { Allergens } from "@/common/types/restaurant/menu.interface";
+import { RedirectTo } from "@/common/types/routers/endPoints.types";
 import { ITable } from "@/common/types/restaurant/tables.interface";
 import { SocketIoEvent } from "@/common/libs/socketIo/types";
-import AllergensButton from "./_components/allergensButton";
 
 export default function Table({ params }: { params: { id: string } }) {
     const { setOrder, order, resetOrder, updateOrderQuantity, deleteOrder, getOrderTotal, getOneOrderTotal, replaceOrder } = useOrderStore()
@@ -39,6 +39,7 @@ export default function Table({ params }: { params: { id: string } }) {
     const { getOrderControllers } = useOrderControllerStore()
     const { getTableById } = useTablesStore()
     const { printers } = usePrintersStore()
+    const { sections } = useSectionsStore()
     const { emit } = useSocketIoHooks()
     const { user } = useAuthHooks()
     const { push } = useRouter()
@@ -125,13 +126,36 @@ export default function Table({ params }: { params: { id: string } }) {
         }
     })
 
-    useEffect(()=> {
+    const {
+        updateRestaurantData: updateTable
+    } = usePUTRestaurantDataHooks({
+        query: 'TABLES',
+        UseMutationOptions: {
+            onSuccess: async () => {
+                //used only to change to another table
+                await emit({
+                    event: SocketIoEvent.TABLE,
+                    message: params?.id
+                })
+                await emit({
+                    event: SocketIoEvent.ORDER,
+                    message: params?.id
+                })
+                await emit({
+                    event: SocketIoEvent.TABLE_PAYMENT,
+                    message: params?.id
+                })
+            }
+        }
+    })
+
+    useEffect(() => {
         const table = getTableById(params?.id)
-        if(!table) {
+        if (!table) {
             push('/admin/texas/waiters')
         }
     }, [getTableById, params?.id, push])
-    
+
     return (
         <LayoutFrame
             user={user}
@@ -171,7 +195,7 @@ export default function Table({ params }: { params: { id: string } }) {
                             })}
                         </div>
                         <div className="space-y-2">
-                            <AllergensButton 
+                            <AllergensButton
                                 filter={filter}
                                 setFilter={setFilter}
                             />
@@ -189,7 +213,7 @@ export default function Table({ params }: { params: { id: string } }) {
                     </div>
                 ),
                 return: {
-                    path: "/admin/texas/waiters"
+                    path: RedirectTo.WAITERS
                 }
             }}
             rightNavigation={{
@@ -209,6 +233,8 @@ export default function Table({ params }: { params: { id: string } }) {
                         orderControllers={getOrderControllers({ table_id: params?.id })}
                         updateOrder={updateOrder}
                         printers={printers}
+                        sections={sections}
+                        updateTable={updateTable}
                     />
                 ),
                 icon: {

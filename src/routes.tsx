@@ -56,14 +56,36 @@ const routers: IRoute[] = [
     auth_device: true,
   },
   {
-    name: "Pass",
+    name: "Orders",
     path: "",
     icon: <Icon name='ChefHat' size={14} />,
     // icon: <Wrench />,
-    layout: "/admin/texas/pass",
+    layout: "/admin/texas/orders/pass",
     authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST, Permissions.PASS],
-    collapse: false,
+    collapse: true,
     auth_device: true,
+    items: [
+      {
+        name: "Pass",
+        path: "",
+        icon: <Icon name='ChefHat' size={14} />,
+        // icon: <Wrench />,
+        layout: "/admin/texas/orders/pass",
+        authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST, Permissions.PASS],
+        collapse: false,
+        auth_device: true,
+      },
+      {
+        name: "Bar / Desserts",
+        path: "",
+        icon: <Icon name='ChefHat' size={14} />,
+        // icon: <Wrench />,
+        layout: "/admin/texas/orders/bardessert",
+        authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST, Permissions.ORDERS],
+        collapse: false,
+        auth_device: true,
+      },
+    ]
   },
   // {
   //   name: "HACCP",
@@ -314,7 +336,7 @@ const routers: IRoute[] = [
               Permissions.ADMIN_GHOST,
               Permissions.HACCP_ADMIN
             ],
-            auth_device : true,
+            auth_device: true,
           },
           {
             name: "Create",

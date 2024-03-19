@@ -13,12 +13,13 @@ import { useTablesStore } from "@/store/restaurant/tables"
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 
 //interface
-import { IAllOrderControllerResponse, IGETTablesAllResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
+import { IAllOrderControllerResponse, IGETPrintersResponse, IGETTablesAllResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
 import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types"
 import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
 import { TableTransactionsType } from "@/common/types/company/transactions.interface"
 import { IGetAllTransactionsResponse } from "@/hooks/company/IGetCompanyDataHooks.interface"
 import { useTransactionsStore } from "@/store/company/transactions"
+import { usePrintersStore } from "@/store/restaurant/printers"
 
 interface ReceptionLayoutProps {
     children: React.ReactNode
@@ -29,7 +30,34 @@ const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 export default function ReceptionLayout({ children }: ReceptionLayoutProps) {
     const { orderControllers, setOrderControllers } = useOrderControllerStore()
     const { transactions, setTransactions } = useTransactionsStore()
+    const { printers, setPrinters } = usePrintersStore()
     const { setTables, tables } = useTablesStore()
+
+
+    const {
+        refetchRestaurantData: refetchPrinters
+    } = useGETRestaurantDataHooks({
+        query: 'PRINTERS',
+        defaultParams: {
+            printers: {
+                all: {
+                    pagination: {
+                        take: 50,
+                        skip: 0
+                    }
+                }
+            }
+        },
+        UseQueryOptions: {
+            onSuccess: (data) => {
+                const printers = data as IGETPrintersResponse
+                setPrinters(printers?.data)
+            },
+            refetchOnWindowFocus: false,
+            refetchIntervalInBackground: false,
+            refetchOnMount: false,
+        }
+    })
 
     const {
         refetchRestaurantData: refetchTables
@@ -151,7 +179,11 @@ export default function ReceptionLayout({ children }: ReceptionLayoutProps) {
         if (transactions?.length === 0) {
             refetchTransactions()
         }
-    }, [orderControllers?.length, refetchOrdersController, refetchTables, refetchTransactions, tables?.length, transactions?.length])
+
+        if (printers?.length === 0) {
+            refetchPrinters()
+        }
+    }, [orderControllers?.length, printers?.length, refetchOrdersController, refetchPrinters, refetchTables, refetchTransactions, tables?.length, transactions?.length])
 
     return (
         <>

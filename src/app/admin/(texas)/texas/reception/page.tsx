@@ -9,12 +9,14 @@ import { Button } from '@/components/ui/button';
 import Table from '../_components/table';
 
 //hooks
-import { useGETRestaurantDataHooks, usePOSTRestaurantDataHooks, usePUTRestaurantDataHooks } from '@/hooks/restaurant/restaurantDataHooks';
+import { useGETRestaurantDataHooks, usePOSTRestaurantDataHooks } from '@/hooks/restaurant/restaurantDataHooks';
+import { addDaysToDate, getFirstTimeOfTheDay } from '@/common/libs/date-fns/dateFormat';
 import { useAuthHooks } from '@/hooks/useAuthHooks';
 
 //store
 import { useOrderControllerStore } from '@/store/restaurant/orderController';
 import { useTransactionsStore } from '@/store/company/transactions';
+import { usePrintersStore } from '@/store/restaurant/printers';
 import { useTablesStore } from '@/store/restaurant/tables';
 
 
@@ -22,6 +24,7 @@ export default function Reception() {
     const { tablesFilter, setTablesFilter, getTablesFiltered } = useTablesStore()
     const { getTotalOfOrdersByTableId } = useOrderControllerStore()
     const { getTransactionsTotalByFilter } = useTransactionsStore()
+    const { printers } = usePrintersStore()
     const { user } = useAuthHooks()
 
     const {
@@ -45,6 +48,30 @@ export default function Reception() {
         }
     })
 
+
+    const {
+        restaurantAllFinishedTables: finishedTables,
+        refetchRestaurantData: refetchFinishedTables
+    } = useGETRestaurantDataHooks({
+        query: 'FINISHED_TABLE',
+        defaultParams: {
+            finishedTables: {
+                all: {
+                    date: {
+                        gte: getFirstTimeOfTheDay(new Date()),
+                        lte: addDaysToDate(new Date(), 1)
+                    },
+                    pagination: {
+                        take: 50,
+                        skip: 0
+                    },
+                    include: {
+                        finished_orders: '1'
+                    }
+                }
+            }
+        },
+    })
 
     const {
         restaurantAllClients: clients,
@@ -76,6 +103,7 @@ export default function Reception() {
         <LayoutFrame
             user={user}
             navigation={{
+                defaultPrinter: printers,
                 icon: {
                     icon: 'Filter',
                     title: 'Tables'
@@ -89,7 +117,9 @@ export default function Reception() {
                                 clientsParams={GETClientsParams}
                                 createGiftCard={createGiftCard}
                             />
-                            <ClosedTables />
+                            <ClosedTables
+                                finishedTables={finishedTables?.data || []}
+                            />
                         </div>
                         <SearchInput
                             onSearchChange={(e) => setTablesFilter({ ...tablesFilter, client_name: e })}

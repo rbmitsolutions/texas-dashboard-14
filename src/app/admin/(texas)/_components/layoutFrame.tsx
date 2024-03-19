@@ -18,8 +18,11 @@ import { useSideBarStore } from "@/store/sideBar";
 //hooks
 import { IToken } from "@/common/types/auth/auth.interface";
 import { useRouter } from "next/navigation";
+import DefaultPrinter from "./defaultPrinter";
+import { IPrinters } from "@/common/types/restaurant/printers.interface";
 interface LayoutFrameProps {
     navigation: {
+        defaultPrinter?: IPrinters[]
         icon: {
             title: string
             icon: keyof typeof icons
@@ -54,9 +57,16 @@ export default function LayoutFrame({ navigation, user, rightNavigation, childre
             <Sidebar alwaysFixed={true} />
             <div className={cn('hidden bg-background-soft md:block', defaultCss)}>
                 <header className='flex items-center justify-between'>
-                    <Button size='icon' variant='outline' className='h-8 w-8' onClick={toggleSideBar}>
-                        <Icon name='List' size={14} />
-                    </Button>
+                    <div className='space-x-2'>
+                        <Button size='icon' variant='outline' className='h-8 w-8' onClick={toggleSideBar}>
+                            <Icon name='List' size={14} />
+                        </Button>
+                        {navigation?.defaultPrinter &&
+                            <DefaultPrinter
+                                printers={navigation?.defaultPrinter}
+                            />
+                        }
+                    </div>
                     {navigation?.return &&
                         <Button
                             onClick={() => {

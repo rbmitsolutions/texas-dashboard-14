@@ -23,6 +23,7 @@ interface SplitBillPaymentButtonButtonProps {
     getOneOrderTotal: (order: ICreateNewOrder) => number
     createTransaction: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
     user: IToken
+    closeTable: () => {}
 }
 
 export default function SplitBillPaymentButton({
@@ -31,6 +32,7 @@ export default function SplitBillPaymentButton({
     getOneOrderTotal,
     createTransaction,
     user,
+    closeTable
 }: SplitBillPaymentButtonButtonProps) {
     const [orders, setOrders] = useState<IOrder[]>([])
 
@@ -161,6 +163,7 @@ export default function SplitBillPaymentButton({
                         createTransaction={createTransaction}
                         user={user}
                         onSuccessfulPayment={onOpenChange}
+                        closeTable={closeTable}
                     />
                 </DialogFooter>
             </DialogContent>

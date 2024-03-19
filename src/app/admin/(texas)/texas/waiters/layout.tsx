@@ -13,10 +13,11 @@ import { useTablesStore } from "@/store/restaurant/tables"
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 
 //interface
-import { IAllOrderControllerResponse, IGETPrintersResponse, IGETTablesAllResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
+import { IAllOrderControllerResponse, IGETPrintersResponse, IGETSectionResponse, IGETTablesAllResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
 import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types"
 import { useParams } from "next/navigation"
 import { usePrintersStore } from "@/store/restaurant/printers"
+import { useSectionsStore } from "@/store/restaurant/sections"
 
 interface WaitressLayoutProps {
     children: React.ReactNode
@@ -25,9 +26,10 @@ interface WaitressLayoutProps {
 const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
 export default function WaitressLayout({ children }: WaitressLayoutProps) {
-    const { setTables, tables } = useTablesStore()
     const { orderControllers, setOrderControllers } = useOrderControllerStore()
     const { printers, setPrinters } = usePrintersStore()
+    const { sections, setSections } = useSectionsStore()
+    const { setTables, tables } = useTablesStore()
 
     const {
         refetchRestaurantData: refetchPrinters
@@ -113,11 +115,41 @@ export default function WaitressLayout({ children }: WaitressLayoutProps) {
         }
     })
 
+    const {
+        refetchRestaurantData: refetchSections
+    } = useGETRestaurantDataHooks({
+        query: 'SECTIONS',
+        defaultParams: {
+            sections: {
+                all: {
+                    pagination: {
+                        take: 200,
+                        skip: 0
+                    },
+                    include: {
+                        tables: {
+                            guests: [2,4,6,8]
+                        }
+                    }
+                }
+            }
+        },
+        UseQueryOptions: {
+            onSuccess: (data) => {
+                const sections = data as IGETSectionResponse
+                setSections(sections?.data)
+            },
+            refetchOnWindowFocus: false,
+            refetchIntervalInBackground: false,
+            refetchOnMount: false,
+        }
+    })
 
     useEffect(() => {
         socket.on("message", (message: ISocketMessage) => {
             if (message?.event === SocketIoEvent.TABLE) {
                 refetchTables()
+                refetchSections()
             }
             if (message?.event === SocketIoEvent.ORDER) {
                 refetchOrdersController()
@@ -126,7 +158,7 @@ export default function WaitressLayout({ children }: WaitressLayoutProps) {
         () => {
             socket.off("message");
         }
-    }, [refetchTables, refetchOrdersController]);
+    }, [refetchTables, refetchOrdersController, refetchSections]);
 
     useEffect(() => {
         if (tables?.length === 0) {
@@ -140,7 +172,12 @@ export default function WaitressLayout({ children }: WaitressLayoutProps) {
         if (printers?.length === 0) {
             refetchPrinters()
         }
-    }, [orderControllers, refetchOrdersController, refetchTables, tables, printers, refetchPrinters])
+
+        if (sections?.length === 0) {
+            refetchSections()
+        }
+
+    }, [orderControllers, refetchOrdersController, refetchTables, tables, printers, refetchPrinters, sections?.length, refetchSections])
 
 
     return (

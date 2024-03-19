@@ -79,6 +79,7 @@ export enum EndPointsTypes {
 }
 
 export enum RedirectTo {
+    WAITERS = '/admin/texas/waiters',
     RECEPTION = '/admin/texas/reception',
     USER_PROFILE = '/admin/hrsystem/employees/all',
     CLIENT_PROFILE = '/admin/restaurant/clients',

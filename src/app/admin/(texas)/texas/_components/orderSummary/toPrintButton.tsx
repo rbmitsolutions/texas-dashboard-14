@@ -1,5 +1,4 @@
 import { PrinterIcon } from "lucide-react"
-import { useState } from "react"
 
 //components
 import { IOrderController } from "@/common/types/restaurant/order.interface"
@@ -12,9 +11,11 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 
+//hooks
+import { usePOSTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
+
 //interface
 import { IPOSTToPrintBody } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface"
-import { usePOSTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 import { IPrinters } from "@/common/types/restaurant/printers.interface"
 
 interface ToPrintButtonProps {
@@ -23,7 +24,6 @@ interface ToPrintButtonProps {
 }
 
 export default function ToPrintButton({ orderController, printers }: ToPrintButtonProps) {
-    const [isOpen, setIsOpen] = useState(false)
 
     const {
         createRestaurantData: toPrint
@@ -40,16 +40,12 @@ export default function ToPrintButton({ orderController, printers }: ToPrintButt
     }
 
     return (
-        <Dialog
-            open={isOpen}
-            onOpenChange={setIsOpen}
-        >
+        <Dialog>
             <DialogTrigger asChild>
                 <Button
                     size='iconSm'
                     variant='pink'
                     className='w-full'
-                    onClick={() => setIsOpen(true)}
                 >
                     <PrinterIcon size={14} />
                 </Button>
