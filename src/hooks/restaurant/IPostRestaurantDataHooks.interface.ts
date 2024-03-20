@@ -9,6 +9,7 @@ import { ISection, ITable } from "@/common/types/restaurant/tables.interface";
 import { IAuthorizedDevices } from "@/common/types/restaurant/authorizedDevices.interface";
 import { IPrinters } from "@/common/types/restaurant/printers.interface";
 import { IAddOnsCreateOrder } from "@/store/restaurant/order";
+import { TransactionsMethod, TransactionsType } from "@/common/types/company/transactions.interface";
 
 export interface IPOSTBookingsBody {
   status: IBookingStatus
@@ -111,6 +112,9 @@ export interface IPOSTGiftCardBody {
   status?: IGiftCardStatus
   token?: string;
   transaction?: IPOSTTransactionsBody['one']
+  print?: {
+    ip?: string
+  }
 }
 
 export interface IPOSTAuthorizedDevicesBody {
@@ -154,6 +158,7 @@ export interface IPrintOrderTo {
 export interface IPrintBill {
   ip: string
   tableId: string
+  transaction_method?: TransactionsMethod
 }
 export interface IPOSTToPrintBody {
   order?: IPrintOrderController

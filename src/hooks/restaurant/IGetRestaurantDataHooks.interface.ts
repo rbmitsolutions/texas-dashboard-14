@@ -61,7 +61,6 @@ export interface IGETTablesQuery {
   byId?: {
     id: string;
     include?: {
-      payments?: '1'
       section?: "1";
       order_controller?: {
         orders?: {

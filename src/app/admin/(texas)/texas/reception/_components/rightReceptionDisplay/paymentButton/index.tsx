@@ -193,7 +193,8 @@ export default function PaymentButton({
                             toPrint: {
                                 bill: {
                                     ip: defaultPrinter?.ip,
-                                    tableId: dataTable?.table?.id!
+                                    tableId: dataTable?.table?.id!,
+                                    transaction_method: method
                                 }
                             }
                         })
@@ -203,7 +204,6 @@ export default function PaymentButton({
                     }
                     onSuccessfulPayment && onSuccessfulPayment()
                     onOpenChange();
-
                 },
                 onSettled: () => {
                     setIsLoading(false)
@@ -243,11 +243,12 @@ export default function PaymentButton({
                         :
                         <Button
                             className='h-14'
-                            variant='yellow'
+                            variant='destructive'
                             leftIcon="Banknote"
-                            onClick={onOpenChange}
+                            type='button'
+                            onClick={closeTable}
                         >
-                            Tip
+                            Close Table
                         </Button>
                 }
 

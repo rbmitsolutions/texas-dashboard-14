@@ -85,5 +85,6 @@ export enum RedirectTo {
     CLIENT_PROFILE = '/admin/restaurant/clients',
     TABLE_ORDER = '/admin/texas/waiters',
     TABLE_RECEPTION = '/admin/texas/reception',
-    FORM_EDIT_PAGE = 'admin/hrsystem/forms'
+    FORM_EDIT_PAGE = 'admin/hrsystem/forms',
+    FINISHED_TABLE = '/admin/texas/reception/finishedTables',
 }

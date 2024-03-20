@@ -16,7 +16,7 @@ import { ITransactions, TransactionsMethod, TransactionsStatus } from "@/common/
 import { IPUTCompanyBody } from "@/hooks/company/IPutCompanyDataHooks.interface";
 
 interface TransactionsColumnsTableProps {
-    updateTransaction: UseMutateFunction<any, any, IPUTCompanyBody, unknown>
+    updateTransaction?: UseMutateFunction<any, any, IPUTCompanyBody, unknown>
 }
 
 export const transactionsColumnsTable = ({
@@ -89,6 +89,7 @@ export const transactionsColumnsTable = ({
                                     variant={row?.original?.status === TransactionsStatus.CONFIRMED ? "green" : row?.original?.status === TransactionsStatus.CANCELLED ? "yellow" : "destructive"}
                                     className='capitalize'
                                     size='sm'
+                                    disabled={!updateTransaction}
                                 >
                                     {row?.original?.status?.toLocaleLowerCase()}
                                 </Button>
@@ -102,6 +103,7 @@ export const transactionsColumnsTable = ({
                                         size="sm"
                                         className="mt-2"
                                         leftIcon="XCircle"
+                                        disabled={!updateTransaction}
                                         onClick={async () => {
                                             const description: { id: string, paid: number }[] = row?.original?.description ? JSON.parse(row?.original?.description) : []
                                             const unpaidOrders: { id: string, unpaid: number }[] = description?.map(d => {
@@ -111,7 +113,7 @@ export const transactionsColumnsTable = ({
                                                 }
 
                                             })
-                                            await updateTransaction({
+                                            updateTransaction && await updateTransaction({
                                                 transaction: {
                                                     one: {
                                                         id: row?.original?.id,

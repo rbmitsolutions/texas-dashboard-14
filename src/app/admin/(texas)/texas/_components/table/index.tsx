@@ -3,27 +3,26 @@ import { UseMutateFunction } from "react-query"
 import Link from "next/link"
 
 //libs
-import { convertCentsToEuro } from "@/common/utils/convertToEuro"
 import { formatDate } from "@/common/libs/date-fns/dateFormat"
 import { cn } from "@/common/libs/shadcn/utils"
 
 //components
+import PrintBill from "../../reception/_components/rightReceptionDisplay/printBillButton"
 import IconText from "@/components/common/iconText"
 import OpenTableDialog from "./openTable"
-
-//store
-import { TransactionsState } from "@/store/company/transactions"
 
 //interfaces
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface"
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
-import { TransactionsStatus } from "@/common/types/company/transactions.interface"
 import { IOrderController } from "@/common/types/restaurant/order.interface"
 import { ITimesOpen } from "@/common/types/restaurant/config.interface"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
 import { IPrinters } from "@/common/types/restaurant/printers.interface"
+import { getTableStatusVariant } from "@/common/libs/restaurant/tables"
 import { ITable } from "@/common/types/restaurant/tables.interface"
+import { RedirectTo } from "@/common/types/routers/endPoints.types"
 import { ICreateNewOrder } from "@/store/restaurant/order"
+import { Button } from "@/components/ui/button"
 
 interface TableProps {
     table: ITable
@@ -37,11 +36,7 @@ interface TableProps {
         updateTable: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
         printers: IPrinters[]
     }
-    reception?: {
-        getTotalOfOrdersByTableId: (table_id: string) => number
-        getTransactionsTotalByFilter: (data: TransactionsState['transactionFilter']) => number
-
-    }
+    reception?: '1'
 }
 
 export default function Table({ table, waitres, reception }: TableProps) {
@@ -95,33 +90,38 @@ export default function Table({ table, waitres, reception }: TableProps) {
             )}
 
             {reception && table?.is_open &&
-                <Link className='flex flex-col justify-between gap-1 h-full w-full p-2' href={`/admin/texas/reception/${table?.id}`}>
-                    <div className='flex flex-col gap-1'>
-                        <strong className='capitalize text-sm'>{table?.client_name?.toLowerCase() || 'Walk In'}</strong>
-                        <IconText
-                            icon="Clock"
-                            text={formatDate({
-                                date: table?.start_time,
-                                f: 'HH:mm:ss',
-                                iso: false
-                            })}
-                            iconSize={14}
+                <div className='flex flex-col justify-between p-1 w-full'>
+                    <Link className='flex flex-col justify-between gap-1 h-full w-full p-2' href={`${RedirectTo.RECEPTION}/${table?.id}`}>
+                        <div className='flex flex-col gap-1'>
+                            <strong className='capitalize text-sm'>{table?.client_name?.toLowerCase() || 'Walk In'}</strong>
+                            <IconText
+                                icon="Clock"
+                                text={formatDate({
+                                    date: table?.start_time,
+                                    f: 'HH:mm:ss',
+                                    iso: false
+                                })}
+                                iconSize={14}
+                            />
+                            <IconText
+                                icon="Utensils"
+                                text={`Pass ${table?.pass}`}
+                                iconSize={14}
+                            />
+                        </div>
+                    </Link>
+                    <div className='flex-container'>
+                        <PrintBill
+                            tableId={table?.id}
                         />
-                        <small>{convertCentsToEuro(reception?.getTotalOfOrdersByTableId(table?.id))} - Total</small>
-                        <small>{convertCentsToEuro(reception?.getTransactionsTotalByFilter({
-                            payee_key: table?.id,
-                            status: TransactionsStatus.CONFIRMED
-                        }))} - Paid</small>
+                        <Button
+                            className='w-full capitalize'
+                            variant={getTableStatusVariant(table?.meal_status)}
+                        >
+                            {table?.meal_status}
+                        </Button>
                     </div>
-                    <div className='flex flex-col'>
-                        <small>Remain</small>
-                        <strong className='text-xl'>
-                            {convertCentsToEuro(reception?.getTotalOfOrdersByTableId(table?.id) - reception?.getTransactionsTotalByFilter({
-                                payee_key: table?.id,
-                                status: TransactionsStatus.CONFIRMED
-                            }))}</strong>
-                    </div>
-                </Link>
+                </div>
             }
 
             {reception && !table?.is_open &&
@@ -131,7 +131,6 @@ export default function Table({ table, waitres, reception }: TableProps) {
                     </small>
                 </div>
             }
-
         </div>
     )
 }

@@ -89,7 +89,6 @@ export default function GiftcardPaymentButton({
 
             onSuccess: (data) => {
                 const card = data as IGiftCards
-                console.log(card)
                 if (card) {
                     setGiftCard(card)
                     setGiftCardBalance(card.value - card.spent)

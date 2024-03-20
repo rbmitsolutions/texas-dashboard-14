@@ -10,6 +10,9 @@ import { usePOSTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHoo
 //store
 import { usePrintersStore } from "@/store/restaurant/printers"
 
+//interface
+import { TransactionsMethod } from "@/common/types/company/transactions.interface"
+
 interface PrintBillProps {
     tableId: string
 }
@@ -30,7 +33,7 @@ export default function PrintBill({ tableId }: PrintBillProps) {
             toPrint: {
                 bill: {
                     ip: defaultPrinter?.ip,
-                    tableId
+                    tableId,
                 }
             }
         })

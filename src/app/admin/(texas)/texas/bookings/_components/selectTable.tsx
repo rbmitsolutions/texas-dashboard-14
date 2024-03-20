@@ -83,7 +83,7 @@ export default function SelectTable({
                                 }))
                             }}
                         >
-                            {g} pp
+                            {g}
                         </Button>
                     )
                 })}

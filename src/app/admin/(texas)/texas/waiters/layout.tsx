@@ -8,6 +8,8 @@ import { addDaysToDate, getFirstTimeOfTheDay } from "@/common/libs/date-fns/date
 //store
 import { useOrderControllerStore } from "@/store/restaurant/orderController"
 import { useTablesStore } from "@/store/restaurant/tables"
+import { usePrintersStore } from "@/store/restaurant/printers"
+import { useSectionsStore } from "@/store/restaurant/sections"
 
 //hooks
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
@@ -16,8 +18,6 @@ import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHook
 import { IAllOrderControllerResponse, IGETPrintersResponse, IGETSectionResponse, IGETTablesAllResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
 import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types"
 import { useParams } from "next/navigation"
-import { usePrintersStore } from "@/store/restaurant/printers"
-import { useSectionsStore } from "@/store/restaurant/sections"
 
 interface WaitressLayoutProps {
     children: React.ReactNode

@@ -13,13 +13,14 @@ import { useTablesStore } from "@/store/restaurant/tables"
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 
 //interface
-import { IAllOrderControllerResponse, IGETPrintersResponse, IGETTablesAllResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
+import { IAllOrderControllerResponse, IGETMenuSectionsResponse, IGETPrintersResponse, IGETTablesAllResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
 import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types"
 import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
 import { TableTransactionsType } from "@/common/types/company/transactions.interface"
 import { IGetAllTransactionsResponse } from "@/hooks/company/IGetCompanyDataHooks.interface"
 import { useTransactionsStore } from "@/store/company/transactions"
 import { usePrintersStore } from "@/store/restaurant/printers"
+import { useMenuSectionsStore } from "@/store/restaurant/menuSections"
 
 interface ReceptionLayoutProps {
     children: React.ReactNode
@@ -29,10 +30,10 @@ const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
 export default function ReceptionLayout({ children }: ReceptionLayoutProps) {
     const { orderControllers, setOrderControllers } = useOrderControllerStore()
+    const { menuSections, setMenuSections } = useMenuSectionsStore()
     const { transactions, setTransactions } = useTransactionsStore()
     const { printers, setPrinters } = usePrintersStore()
     const { setTables, tables } = useTablesStore()
-
 
     const {
         refetchRestaurantData: refetchPrinters
@@ -149,6 +150,34 @@ export default function ReceptionLayout({ children }: ReceptionLayoutProps) {
         }
     })
 
+    const {
+        refetchRestaurantData: refetchMenuSections
+    } = useGETRestaurantDataHooks({
+        query: 'MENU_SECTION',
+        defaultParams: {
+            menu_sections: {
+                all: {
+                    includes: {
+                        types: '1'
+                    },
+                    pagination: {
+                        take: 200,
+                        skip: 0
+                    }
+                }
+            }
+        },
+        UseQueryOptions: {
+            onSuccess: (data) => {
+                const menuSections = data as IGETMenuSectionsResponse
+                setMenuSections(menuSections?.data)
+            },
+            refetchOnWindowFocus: false,
+            refetchIntervalInBackground: false,
+            refetchOnMount: false,
+        }
+    })
+
 
     useEffect(() => {
         socket.on("message", (message: ISocketMessage) => {
@@ -183,7 +212,12 @@ export default function ReceptionLayout({ children }: ReceptionLayoutProps) {
         if (printers?.length === 0) {
             refetchPrinters()
         }
-    }, [orderControllers?.length, printers?.length, refetchOrdersController, refetchPrinters, refetchTables, refetchTransactions, tables?.length, transactions?.length])
+
+        if (menuSections?.length === 0) {
+            refetchMenuSections()
+        }
+        
+    }, [menuSections?.length, orderControllers?.length, printers?.length, refetchMenuSections, refetchOrdersController, refetchPrinters, refetchTables, refetchTransactions, tables?.length, transactions?.length])
 
     return (
         <>

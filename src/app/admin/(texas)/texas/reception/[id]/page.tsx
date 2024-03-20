@@ -9,19 +9,19 @@ import { getWalkInClient } from '@/common/libs/restaurant/actions/walkinClients'
 import { transactionsColumnsTable } from '../_components/transactionsColumnsTable';
 import RightReceptionDisplay from '../_components/rightReceptionDisplay';
 import { TransactionsTable } from '../_components/transactionsTable';
-import { CloseTableDialog } from '../_components/closeTableDialog';
 import LayoutFrame from '../../../_components/layoutFrame';
 import IconText from '@/components/common/iconText';
 import Wrap from '@/components/common/wrap';
 
 //hooks
 import { usePOSTCompanyDataHooks, usePUTCompanyDataHooks } from '@/hooks/company/companyDataHooks';
-import { useGETRestaurantDataHooks, usePUTRestaurantDataHooks } from '@/hooks/restaurant/restaurantDataHooks';
+import { usePUTRestaurantDataHooks } from '@/hooks/restaurant/restaurantDataHooks';
 import { useSocketIoHooks } from '@/hooks/useSocketIoHooks';
 import { useAuthHooks } from '@/hooks/useAuthHooks';
 
 //store
 import { useOrderControllerStore } from '@/store/restaurant/orderController';
+import { useMenuSectionsStore } from '@/store/restaurant/menuSections';
 import { useTransactionsStore } from '@/store/company/transactions';
 import { usePrintersStore } from '@/store/restaurant/printers';
 import { useTablesStore } from '@/store/restaurant/tables';
@@ -53,9 +53,10 @@ export interface IDataTable {
 export default function Table({ params }: { params: { id: string } }) {
     const { getTransactionsByFilter, getTransactionsTotalByFilter, transactions } = useTransactionsStore()
     const { getOrderControllers, getTotalOfOrdersByTableId, orderControllers } = useOrderControllerStore()
-    const { printers } = usePrintersStore()
+    const { menuSections } = useMenuSectionsStore()
     const { getOneOrderTotal } = useOrderStore()
     const { getTableById } = useTablesStore()
+    const { printers } = usePrintersStore()
     const { emit } = useSocketIoHooks()
     const { user } = useAuthHooks()
     const { push } = useRouter()
@@ -78,30 +79,6 @@ export default function Table({ params }: { params: { id: string } }) {
     const remaining = getTotalOfOrdersByTableId(params.id) - getTransactionsTotalByFilter({
         payee_key: params.id,
         status: TransactionsStatus.CONFIRMED
-    })
-
-    const {
-        restaurantAllMenuSections: menuSections
-    } = useGETRestaurantDataHooks({
-        query: 'MENU_SECTION',
-        defaultParams: {
-            menu_sections: {
-                all: {
-                    includes: {
-                        types: '1'
-                    },
-                    pagination: {
-                        take: 200,
-                        skip: 0
-                    }
-                }
-            }
-        },
-        UseQueryOptions: {
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
-            refetchOnMount: false,
-        }
     })
 
     const { createCompanyData: createTransaction } = usePOSTCompanyDataHooks({
@@ -249,7 +226,7 @@ export default function Table({ params }: { params: { id: string } }) {
     useEffect(() => {
         const table = getTableById(params?.id)
         if (!table) {
-            push('/admin/texas/reception')
+            push(RedirectTo.RECEPTION)
         }
     }, [getTableById, params?.id, push])
 
@@ -278,7 +255,7 @@ export default function Table({ params }: { params: { id: string } }) {
                         dataTable={dataTable}
                         getOrderControllers={getOrderControllers}
                         getOneOrderTotal={getOneOrderTotal}
-                        menuSections={menuSections?.data || []}
+                        menuSections={menuSections || []}
                         createTransaction={createTransaction}
                         user={user}
                         updateOrder={updateOrder}

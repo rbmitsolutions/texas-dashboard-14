@@ -22,6 +22,9 @@ import AuthDialog from "@/components/common/authDialog"
 import ScanInput from "@/components/common/scanInput"
 import { Button } from "@/components/ui/button"
 
+//store
+import { usePrintersStore } from "@/store/restaurant/printers"
+
 //interface
 import { GiftCardPaymentsType, TransactionsDirection, TransactionsMethod } from "@/common/types/company/transactions.interface"
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface"
@@ -37,6 +40,7 @@ interface BuyGiftCardProps {
 }
 
 export default function BuyGiftCard({ clients, setClientsParams, createGiftCard, clientsParams }: BuyGiftCardProps) {
+    const { defaultPrinter } = usePrintersStore()
     const [isOpen, setIsOpen] = useState(false);
     const [giftCard, setGiftCard] = useState<GiftCardFormSchemaType>({
         client_key: '',
@@ -140,6 +144,9 @@ export default function BuyGiftCard({ clients, setClientsParams, createGiftCard,
                     payee_key: user?.user_id,
                     valid_by: user?.name,
                     valid_by_id: user?.user_id,
+                },
+                print: {
+                    ip: defaultPrinter?.ip
                 }
             }
         })
@@ -201,18 +208,39 @@ export default function BuyGiftCard({ clients, setClientsParams, createGiftCard,
                                     setClientsParams(prev => {
                                         return {
                                             clients: {
-                                                ...prev.clients,
-                                                contact_number: e,
-                                                pagination: {
-                                                    take: 5,
-                                                    skip: 0,
+                                                all: {
+                                                    ...prev?.clients?.all,
+                                                    contact_number: e,
+                                                    pagination: {
+                                                        take: 1,
+                                                        skip: 0,
+                                                    }
                                                 }
                                             }
                                         }
                                     })
                                 }}
                                 value={clientsParams?.clients?.all?.contact_number || ''}
+                                cleanSearch={() => {
+                                    setGiftCard(prev => ({
+                                        ...prev,
+                                        client_key: ''
+                                    }))
+                                    setClientsParams(prev => {
+                                        return {
+                                            clients: {
+                                                ...prev.clients,
+                                                contact_number: '',
+                                                pagination: {
+                                                    take: 1,
+                                                    skip: 0,
+                                                }
+                                            }
+                                        }
+                                    })
+                                }}
                                 custom="mb-4"
+                                placeholder="Contact Number"
                             />
                             <div className='min-h-24'>
                                 {clients?.length === 0 && <div>No clients found</div>}

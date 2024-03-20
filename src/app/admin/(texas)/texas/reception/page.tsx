@@ -14,16 +14,12 @@ import { addDaysToDate, getFirstTimeOfTheDay } from '@/common/libs/date-fns/date
 import { useAuthHooks } from '@/hooks/useAuthHooks';
 
 //store
-import { useOrderControllerStore } from '@/store/restaurant/orderController';
-import { useTransactionsStore } from '@/store/company/transactions';
 import { usePrintersStore } from '@/store/restaurant/printers';
 import { useTablesStore } from '@/store/restaurant/tables';
 
 
 export default function Reception() {
     const { tablesFilter, setTablesFilter, getTablesFiltered } = useTablesStore()
-    const { getTotalOfOrdersByTableId } = useOrderControllerStore()
-    const { getTransactionsTotalByFilter } = useTransactionsStore()
     const { printers } = usePrintersStore()
     const { user } = useAuthHooks()
 
@@ -51,7 +47,8 @@ export default function Reception() {
 
     const {
         restaurantAllFinishedTables: finishedTables,
-        refetchRestaurantData: refetchFinishedTables
+        GETRestaurantDataParams: finishedTablesParams,
+        setGETRestaurantDataParams: setFinishedTablesParams,
     } = useGETRestaurantDataHooks({
         query: 'FINISHED_TABLE',
         defaultParams: {
@@ -62,12 +59,9 @@ export default function Reception() {
                         lte: addDaysToDate(new Date(), 1)
                     },
                     pagination: {
-                        take: 50,
+                        take: 10,
                         skip: 0
                     },
-                    include: {
-                        finished_orders: '1'
-                    }
                 }
             }
         },
@@ -118,7 +112,9 @@ export default function Reception() {
                                 createGiftCard={createGiftCard}
                             />
                             <ClosedTables
-                                finishedTables={finishedTables?.data || []}
+                                finishedTables={finishedTables}
+                                setFinishedTablesParams={setFinishedTablesParams}
+                                finishedTablesParams={finishedTablesParams}
                             />
                         </div>
                         <SearchInput
@@ -204,10 +200,7 @@ export default function Reception() {
                             <Table
                                 key={table?.id}
                                 table={table}
-                                reception={{
-                                    getTotalOfOrdersByTableId,
-                                    getTransactionsTotalByFilter
-                                }}
+                                reception='1'
                             />
                         )
                     })
