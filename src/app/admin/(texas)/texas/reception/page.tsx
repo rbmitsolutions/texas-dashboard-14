@@ -16,6 +16,7 @@ import { useAuthHooks } from '@/hooks/useAuthHooks';
 //store
 import { usePrintersStore } from '@/store/restaurant/printers';
 import { useTablesStore } from '@/store/restaurant/tables';
+import OpenTillButton from './_components/openTillButton';
 
 
 export default function Reception() {
@@ -188,12 +189,13 @@ export default function Reception() {
                                 )
                             })}
                         </div>
+                        <OpenTillButton />
                     </div>
                 )
             }}
 
         >
-            <div className='grid-container grid-cols-[repeat(auto-fit,minmax(200px,1fr))] sm:grid-cols-4 xl:grid-cols-6'>
+            <div className='grid-container grid-cols-[repeat(auto-fit,minmax(200px,1fr))] sm:grid-cols-4 xl:grid-cols-5'>
                 {
                     getTablesFiltered(tablesFilter)?.map((table) => {
                         return (

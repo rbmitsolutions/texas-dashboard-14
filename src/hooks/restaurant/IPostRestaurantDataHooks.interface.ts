@@ -160,10 +160,15 @@ export interface IPrintBill {
   tableId: string
   transaction_method?: TransactionsMethod
 }
+
+export interface IOpenTill {
+  ip: string
+}
 export interface IPOSTToPrintBody {
   order?: IPrintOrderController
   to?: IPrintOrderTo
   bill?: IPrintBill
+  openTill?: IOpenTill
 }
 
 
