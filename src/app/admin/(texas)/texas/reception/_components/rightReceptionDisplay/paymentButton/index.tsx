@@ -14,6 +14,17 @@ import { convertCentsToEuro } from "@/common/utils/convertToEuro"
 import { KeyPadDisplay } from "@/components/common/keyPadDisplay"
 import GiftcardPaymentButton from "./giftcardPayment"
 import { Button } from "@/components/ui/button"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 //sotre
 import { usePrintersStore } from "@/store/restaurant/printers"
@@ -24,6 +35,7 @@ import { IPOSTCompanyBody, IPOSTCompanyDataRerturn, IPOSTTransaction } from "@/h
 import { usePOSTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 import { IToken } from "@/common/types/auth/auth.interface"
 import { IDataTable } from "../../../[id]/page"
+import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
 
 interface PaymentButtonProps {
     dataTable: IDataTable
@@ -242,15 +254,40 @@ export default function PaymentButton({
                             {convertCentsToEuro(payTotal)}
                         </Button>
                         :
-                        <Button
-                            className='h-14'
-                            variant='destructive'
-                            leftIcon="Banknote"
-                            type='button'
-                            onClick={closeTable}
-                        >
-                            Close Table
-                        </Button>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                            <Button
+                                className='h-14'
+                                variant='destructive'
+                                leftIcon="Banknote"
+                                type='button'
+                                // onClick={closeTable}
+                                // disabled={toPay <= 0}
+                            >
+                                Close Table
+                            </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        Close Table
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction asChild>
+                                        <Button
+                                            leftIcon='X'
+                                            onClick={closeTable}
+                                            variant='destructive'
+                                        >
+                                            Close
+                                        </Button>
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                 }
 
             </SheetTrigger>
