@@ -9,21 +9,22 @@ import RosterComponent from "./_components/rosterComponent"
 import { IFiles } from "@/common/types/company/files.interface"
 
 export default async function Roster() {
-    const contract = await getFilesAsUser({
-        byKeyAs: {
-            as: 'contract',
-            type: 'pdf',
-            key: ''
-        }
-    }) as IFiles
+    // const contract = await getFilesAsUser({
+    //     byKeyAs: {
+    //         as: 'contract',
+    //         type: 'pdf',
+    //         key: ''
+    //     }
+    // }) as IFiles
 
     return (
         <>
-            {contract ?
+            <RosterComponent />
+            {/* {contract ?
                 <ContractComponent contract={contract}/>
                 :
                 <RosterComponent />
-            }
+            } */}
         </>
     )
 }
