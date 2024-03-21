@@ -188,7 +188,8 @@ export default function PaymentButton({
             },
             {
                 onSuccess: async () => {
-                    if (defaultPrinter) {
+                    //todo: only print if the remaining is 0
+                    if (defaultPrinter && total >= remaining) {
                         await toPrint({
                             toPrint: {
                                 bill: {
@@ -293,9 +294,7 @@ export default function PaymentButton({
                         </Button>
                     </div>
                 </div>
-                <SheetFooter
-
-                >
+                <SheetFooter>
                     <div className='flex-col-container w-full'>
                         <Button
                             leftIcon="Banknote"
