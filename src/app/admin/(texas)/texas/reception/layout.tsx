@@ -79,8 +79,6 @@ export default function ReceptionLayout({ children }: ReceptionLayoutProps) {
                 const tables = data as IGETTablesAllResponse
                 setTables(tables?.data)
             },
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
             refetchOnMount: false,
         }
     })
@@ -112,8 +110,6 @@ export default function ReceptionLayout({ children }: ReceptionLayoutProps) {
                 const orderControllers = data as IAllOrderControllerResponse
                 setOrderControllers(orderControllers?.data)
             },
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
             refetchOnMount: false,
         }
     })
@@ -144,8 +140,6 @@ export default function ReceptionLayout({ children }: ReceptionLayoutProps) {
                 const transactions = data as IGetAllTransactionsResponse
                 setTransactions(transactions?.data)
             },
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
             refetchOnMount: false,
         }
     })
@@ -172,8 +166,6 @@ export default function ReceptionLayout({ children }: ReceptionLayoutProps) {
                 const menuSections = data as IGETMenuSectionsResponse
                 setMenuSections(menuSections?.data)
             },
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
             refetchOnMount: false,
         }
     })

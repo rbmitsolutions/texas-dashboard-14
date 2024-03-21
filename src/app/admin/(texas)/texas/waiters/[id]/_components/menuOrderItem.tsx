@@ -79,6 +79,7 @@ export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuan
 
             return
         }
+
         setIsOpen(!isOpen)
         setMenuItem(menu)
     }
@@ -96,7 +97,9 @@ export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuan
                     menu={menuItem}
                     setOrder={(order: ICreateNewOrder) => {
                         setOrder(order)
+                        updateMenuItem(menu)
                         setIsOpen(false)
+
                     }}
                     getOneOrderTotal={getOneOrderTotal}
                     printers={printers}

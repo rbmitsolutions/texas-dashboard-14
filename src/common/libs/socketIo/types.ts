@@ -5,7 +5,7 @@ export enum SocketIoEvent {
     ORDER = "order",
     REVIEWS = 'reviews',
     TABLE_PAYMENT = 'table-payment',
-    GIFT_CARD_PAYMENT = 'giftcard-payment'
+    GIFT_CARD_PAYMENT = 'giftcard-payment',
 }
 
 export type ISocketMessage = {

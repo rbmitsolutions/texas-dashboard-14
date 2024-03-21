@@ -23,7 +23,6 @@ export default function Reception() {
     const { tablesFilter, setTablesFilter, getTablesFiltered } = useTablesStore()
     const { printers } = usePrintersStore()
     const { user } = useAuthHooks()
-
     const {
         restaurantAllSections: sections,
     } = useGETRestaurantDataHooks({

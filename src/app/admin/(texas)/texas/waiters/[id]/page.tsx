@@ -151,7 +151,7 @@ export default function Table({ params }: { params: { id: string } }) {
 
     useEffect(() => {
         const table = getTableById(params?.id)
-        if (!table) {
+        if (!table || !table?.is_open) {
             push('/admin/texas/waiters')
         }
     }, [getTableById, params?.id, push])

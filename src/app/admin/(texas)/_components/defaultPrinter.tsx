@@ -43,7 +43,7 @@ export default function DefaultPrinter({ printers }: DefaultPrinterProps) {
             process.env.NEXT_PUBLIC_DEFAULT_PRINTER as string,
             JSON.stringify(printer),
             {
-                maxAge: 24 * 60 * 60, //1day
+                maxAge: 500 * 60 * 60, //20day
                 path: "/",
             }
         )
@@ -53,6 +53,7 @@ export default function DefaultPrinter({ printers }: DefaultPrinterProps) {
     useEffect(() => {
         getDefaultPrinter()
     }, [])
+
     return (
         <Dialog>
             <DialogTrigger asChild>

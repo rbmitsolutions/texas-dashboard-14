@@ -9,6 +9,7 @@ import { cn } from "@/common/libs/shadcn/utils"
 //components
 import PrintBill from "../../reception/_components/rightReceptionDisplay/printBillButton"
 import IconText from "@/components/common/iconText"
+import { Button } from "@/components/ui/button"
 import OpenTableDialog from "./openTable"
 
 //interfaces
@@ -22,7 +23,6 @@ import { getTableStatusVariant } from "@/common/libs/restaurant/tables"
 import { ITable } from "@/common/types/restaurant/tables.interface"
 import { RedirectTo } from "@/common/types/routers/endPoints.types"
 import { ICreateNewOrder } from "@/store/restaurant/order"
-import { Button } from "@/components/ui/button"
 
 interface TableProps {
     table: ITable
@@ -70,7 +70,13 @@ export default function Table({ table, waitres, reception }: TableProps) {
                                 iconSize={14}
                             />
                         </Link>
-                        <TablesStatus
+                        <Button
+                            className='capitalize'
+                            variant={getTableStatusVariant(table?.meal_status)}
+                        >
+                            {table?.meal_status}
+                        </Button>
+                        {/* <TablesStatus
                             table={table}
                             updateTable={waitres?.updateTable}
                             orderControllers={waitres?.orderControllers}
@@ -78,7 +84,7 @@ export default function Table({ table, waitres, reception }: TableProps) {
                             menuSections={waitres?.menuSections}
                             updateOrder={waitres?.updateOrder}
                             printers={waitres?.printers}
-                        />
+                        /> */}
                     </div>
                     :
                     <OpenTableDialog

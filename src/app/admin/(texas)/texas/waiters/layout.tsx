@@ -76,8 +76,6 @@ export default function WaitressLayout({ children }: WaitressLayoutProps) {
                 const tables = data as IGETTablesAllResponse
                 setTables(tables?.data)
             },
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
             refetchOnMount: false,
         }
     })
@@ -109,8 +107,6 @@ export default function WaitressLayout({ children }: WaitressLayoutProps) {
                 const orderControllers = data as IAllOrderControllerResponse
                 setOrderControllers(orderControllers?.data)
             },
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
             refetchOnMount: false,
         }
     })
@@ -139,8 +135,6 @@ export default function WaitressLayout({ children }: WaitressLayoutProps) {
                 const sections = data as IGETSectionResponse
                 setSections(sections?.data)
             },
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
             refetchOnMount: false,
         }
     })

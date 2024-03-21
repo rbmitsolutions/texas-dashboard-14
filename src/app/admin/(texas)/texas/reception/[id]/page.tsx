@@ -225,7 +225,7 @@ export default function Table({ params }: { params: { id: string } }) {
 
     useEffect(() => {
         const table = getTableById(params?.id)
-        if (!table) {
+        if (!table || !table?.is_open) {
             push(RedirectTo.RECEPTION)
         }
     }, [getTableById, params?.id, push])

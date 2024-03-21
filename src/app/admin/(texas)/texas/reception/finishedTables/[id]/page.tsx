@@ -123,7 +123,6 @@ export default function FinishedTable({ params }: { params: { id: string } }) {
         }
     })
 
-    console.log(orderControllers)
     return (
         <LayoutFrame
             user={user}
