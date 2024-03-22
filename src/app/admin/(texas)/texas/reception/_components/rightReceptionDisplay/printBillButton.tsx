@@ -16,9 +16,10 @@ import { TransactionsMethod } from "@/common/types/company/transactions.interfac
 interface PrintBillProps {
     tableId?: string
     finishedTableId?: string
+    giftCardId?: string
 }
 
-export default function PrintBill({ tableId, finishedTableId }: PrintBillProps) {
+export default function PrintBill({ tableId, finishedTableId, giftCardId }: PrintBillProps) {
     const { defaultPrinter } = usePrintersStore()
 
     const {
@@ -49,6 +50,17 @@ export default function PrintBill({ tableId, finishedTableId }: PrintBillProps) 
                         finishedTableId: finishedTableId,
                     }
                 }
+            })
+        }
+
+        if(giftCardId) {
+            await toPrint({
+                toPrint: {
+                    giftCardBalance: {
+                        ip: defaultPrinter?.ip,
+                        giftCardId,
+                    }
+                }   
             })
         }
     }

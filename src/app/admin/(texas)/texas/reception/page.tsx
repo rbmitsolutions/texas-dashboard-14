@@ -15,6 +15,7 @@ import { useAuthHooks } from '@/hooks/useAuthHooks';
 //store
 import { usePrintersStore } from '@/store/restaurant/printers';
 import { useTablesStore } from '@/store/restaurant/tables';
+import GiftCardBalance from './_components/giftCardBallance';
 
 
 export default function Reception() {
@@ -84,6 +85,7 @@ export default function Reception() {
                                 setClientsParams={setGETClientsParams}
                                 createGiftCard={createGiftCard}
                             />
+                            <GiftCardBalance />
                             {/* <ClosedTables
                                 finishedTables={finishedTables}
                                 setFinishedTablesParams={setFinishedTablesParams}

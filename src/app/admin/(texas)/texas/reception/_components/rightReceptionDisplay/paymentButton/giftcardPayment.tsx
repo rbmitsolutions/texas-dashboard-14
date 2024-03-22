@@ -257,23 +257,13 @@ export default function GiftcardPaymentButton({
                 >
                     {giftCard &&
                         <div className='flex-col-container w-full'>
-                            <div className='flex-container justify-between'>
-                                <div className='flex flex-col gap-1'>
-                                    <strong>
-                                        Total
-                                    </strong>
-                                    <strong className='text-2xl text-foreground/50'>
-                                        {convertCentsToEuro(giftCard?.value)}
-                                    </strong>
-                                </div>
-                                <div className='flex flex-col gap-1 items-end'>
+                                <div className='flex flex-col items-center gap-1'>
                                     <strong>
                                         Balance
                                     </strong>
-                                    <strong className={cn('text-2xl', giftCardBalance > 0 ? 'text-green-500 dark:text-green-600' : 'text-red-600')}>
+                                    <strong className={cn('text-[60px]', giftCardBalance > 0 ? 'text-green-500 dark:text-green-600' : 'text-red-600')}>
                                         {convertCentsToEuro(giftCardBalance)}
                                     </strong>
-                                </div>
                             </div>
                             <Button
                                 onClick={onPayment}

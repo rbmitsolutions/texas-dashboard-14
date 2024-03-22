@@ -169,12 +169,18 @@ export interface IFinishTableBill {
 export interface IOpenTill {
   ip: string
 }
+
+export interface IPrintGiftCardBalance {
+  ip: string
+  giftCardId: string
+}
 export interface IPOSTToPrintBody {
   order?: IPrintOrderController
   to?: IPrintOrderTo
   bill?: IPrintBill
   openTill?: IOpenTill
   finishTableBill?: IFinishTableBill
+  giftCardBalance?: IPrintGiftCardBalance
 }
 
 
