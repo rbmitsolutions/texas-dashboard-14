@@ -9,6 +9,7 @@ export interface TablesStateProps {
         is_open?: boolean | null
         section_ids?: string[]
         guests?: number[]
+        meal_status?: string[]
     }
     setTablesFilter: (filter: TablesStateProps['tablesFilter']) => void
     getTableById: (id: string) => ITable | undefined
@@ -40,6 +41,11 @@ export const useTablesStore = create<TablesStateProps>((set): TablesStateProps =
         if (tablesFilter?.is_open !== undefined) {
             tables = tables?.filter((table) => table.is_open === tablesFilter.is_open)
         }
+
+        if (tablesFilter?.meal_status && tablesFilter?.meal_status?.length > 0) {
+            tables = tables?.filter((table) => tablesFilter?.meal_status?.includes(table.meal_status))
+        }
+
         return tables
     },
     getTableById: (id: string) => useTablesStore.getState().tables.find((table: ITable) => table.id === id)
