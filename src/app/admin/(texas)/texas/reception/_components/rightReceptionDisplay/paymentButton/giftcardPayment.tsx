@@ -44,29 +44,29 @@ export default function GiftcardPaymentButton({
     const [code, setCode] = useState<string>('')
     const [giftCardBalance, setGiftCardBalance] = useState<number>(0)
 
-    const {
-        companyAllTransacations: transactions,
-        refetchCompanyData: refetchTransactions
-    } = useGETCompanyDataHooks({
-        query: 'TRANSACTIONS',
-        defaultParams: {
-            transactions: {
-                all: {
-                    direction: {
-                        in: [TransactionsDirection.VOUCHER]
-                    },
-                    gift_card_id: giftCard?.id,
-                    pagination: {
-                        skip: 0,
-                        take: 500
-                    }
-                }
-            }
-        },
-        UseQueryOptions: {
-            enabled: giftCard !== undefined
-        }
-    })
+    // const {
+    //     companyAllTransacations: transactions,
+    //     refetchCompanyData: refetchTransactions
+    // } = useGETCompanyDataHooks({
+    //     query: 'TRANSACTIONS',
+    //     defaultParams: {
+    //         transactions: {
+    //             all: {
+    //                 direction: {
+    //                     in: [TransactionsDirection.VOUCHER]
+    //                 },
+    //                 gift_card_id: giftCard?.id,
+    //                 pagination: {
+    //                     skip: 0,
+    //                     take: 500
+    //                 }
+    //             }
+    //         }
+    //     },
+    //     UseQueryOptions: {
+    //         enabled: giftCard !== undefined
+    //     }
+    // })
 
     const {
         setGETRestaurantDataParams: setGiftCardParams,
@@ -114,7 +114,7 @@ export default function GiftcardPaymentButton({
                     toPay: giftCardBalance > toPay ? toPay : giftCardBalance
                 },
             })
-            refetchTransactions()
+            // refetchTransactions()
             onOpenChange()
         } catch (error) {
             console.error(error)
@@ -214,7 +214,7 @@ export default function GiftcardPaymentButton({
                     }
                 </SheetHeader>
                 <div className='flex-col-container mt-4 overflow-auto scrollbar-thin'>
-                    {giftCard &&
+                    {/* {giftCard &&
                         <div className="flex-col-container bg-background-soft p-4 rounded-md">
                             {transactions?.data?.length === 0 &&
                                 <div className='flex justify-center'>
@@ -250,7 +250,7 @@ export default function GiftcardPaymentButton({
                                 )
                             })}
                         </div>
-                    }
+                    } */}
                 </div>
                 <SheetFooter
                     className="w-full"

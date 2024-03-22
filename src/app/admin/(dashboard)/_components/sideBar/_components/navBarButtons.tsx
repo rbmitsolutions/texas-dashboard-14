@@ -1,21 +1,31 @@
 'use client'
-import Icon from "@/common/libs/lucida-icon";
-import { cn } from "@/common/libs/shadcn/utils";
-import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized";
-import { IToken, Permissions } from "@/common/types/auth/auth.interface";
-import { Button } from "@/components/ui/button";
+import { usePathname, useRouter } from "next/navigation";
+
+//libs
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized";
+import { cn } from "@/common/libs/shadcn/utils";
+import Icon from "@/common/libs/lucida-icon";
+
+///components
+import { Button } from "@/components/ui/button";
+
+//store
+import { useSideBarStore } from "@/store/sideBar";
+
+//hooks
 import { useAuthHooks } from "@/hooks/useAuthHooks";
 
 //interfaces
+import { IToken, Permissions } from "@/common/types/auth/auth.interface";
 import { IRoute } from "@/routes"
-import { usePathname, useRouter } from "next/navigation";
 
 interface NavBarButtonsProps {
     router: IRoute
 }
 
 const NavbarButton = ({ router }: NavBarButtonsProps) => {
+    const { toggleSideBar } = useSideBarStore()
     const { user } = useAuthHooks()
     const pathName = usePathname()
     const r = useRouter()
@@ -30,7 +40,10 @@ const NavbarButton = ({ router }: NavBarButtonsProps) => {
                 <Button
                     variant='link'
                     className={cn('flex gap-2 justify-start px-2 text-sm text-foreground w-full h-10 hover:text-primary', pathName === router?.layout + router?.path && 'bg-background-soft')}
-                    onClick={() => r.push(router?.layout + router?.path)}
+                    onClick={() => {
+                        r.push(router?.layout + router?.path)
+                        toggleSideBar()
+                    }}
                 >
                     {router?.icon}
                     <span className='font-normal'>{router?.name}</span>
@@ -46,7 +59,10 @@ const NavbarButton = ({ router }: NavBarButtonsProps) => {
             <Button
                 variant='link'
                 className={cn('flex gap-2 justify-start px-2 text-sm text-foreground w-full h-10 hover:text-primary', pathName === router?.layout + router?.path && 'bg-background-soft')}
-                onClick={() => r.push(router?.layout + router?.path)}
+                onClick={() => {
+                    r.push(router?.layout + router?.path)
+                    toggleSideBar()
+                }}
             >
                 {router?.icon}
                 <span className='font-normal'>{router?.name}</span>

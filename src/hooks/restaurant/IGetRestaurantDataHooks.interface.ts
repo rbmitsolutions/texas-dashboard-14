@@ -156,7 +156,7 @@ export interface IGETOrderControllerQuery {
     }
 
     includes?: {
-      orders?: '1' |{
+      orders?: '1' | {
         mn_type?: string[]
         status?: OrderStatus[]
       },
@@ -306,8 +306,13 @@ export interface IFinishedTableAllResponse {
 export interface IGETFinishedTableQuery {
   byId?: {
     id: string;
+    table_id?: string;
     include?: {
-      finished_orders?: "1";
+      orders_controller?: {
+        orders: {
+          status: string[];
+        } | '1'
+      } | '1'
     };
   };
   all?: {
@@ -318,6 +323,7 @@ export interface IGETFinishedTableQuery {
     guests?: string;
     client_name?: string;
     client_id?: string;
+    table_id?: string;
     include?: {
       finished_orders?: "1";
     };

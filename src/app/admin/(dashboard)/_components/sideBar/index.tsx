@@ -22,7 +22,6 @@ import { useSideBarStore } from "@/store/sideBar";
 //interface
 import { IUser } from "@/common/types/user/user.interface";
 
-
 interface SidebarProps {
     alwaysFixed?: boolean
 }

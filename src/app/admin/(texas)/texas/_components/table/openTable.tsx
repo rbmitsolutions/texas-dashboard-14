@@ -1,5 +1,6 @@
 'use client'
 import { UseMutateFunction } from "react-query"
+import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 
 //libs
@@ -21,23 +22,24 @@ import {
 import { Button } from "@/components/ui/button"
 
 //interface 
+import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface"
 import { ITimesOpen } from "@/common/types/restaurant/config.interface"
-import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types"
 import { RedirectTo } from "@/common/types/routers/endPoints.types"
-import { useRouter } from "next/navigation"
-import { ITable } from "@/common/types/restaurant/tables.interface"
+import { ITable, TableMealStatus } from "@/common/types/restaurant/tables.interface"
 
 interface OpenTableDialogProps {
     table: ITable
     timesOpen: ITimesOpen[]
     createBooking: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>
+    updateTable: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
 }
 
 export default function OpenTableDialog({
     table,
     timesOpen,
     createBooking,
+    updateTable
 }: OpenTableDialogProps) {
     const { push } = useRouter()
 
@@ -67,6 +69,21 @@ export default function OpenTableDialog({
         })
     }
 
+    const handleOpenWithNoBooking = async () => {
+
+        await updateTable({
+            table: {
+                id: table?.id,
+                is_open: true,
+                start_time: new Date(),
+                client_name: 'Client Not Registered',
+                client_id: 'Client Not Registered',
+                meal_status: TableMealStatus.WAITING,
+            }
+        })
+        push(`${RedirectTo.TABLE_ORDER}/${table?.id}`)
+    }
+
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -85,19 +102,35 @@ export default function OpenTableDialog({
                         A new booking will be created as a walk in client!
                     </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogFooter
+                    className='flex !justify-between w-full'
+                >
                     <AlertDialogAction
                         asChild
                     >
                         <Button
-                            variant='pink'
-                            onClick={handleOpenTable}
-                            leftIcon="Footprints"
+                            onClick={handleOpenWithNoBooking}
+                            leftIcon="Dice4"
+                            className='!bg-zinc-100 dark:!bg-zinc-800 dark:!text-white'
                         >
-                            Walk In
+                            Open Table
                         </Button>
                     </AlertDialogAction>
+                    <div className='flex-container gap-4'>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                        <AlertDialogAction
+                            asChild
+                        >
+                            <Button
+                                variant='pink'
+                                onClick={handleOpenTable}
+                                leftIcon="Footprints"
+                            >
+                                Walk In
+                            </Button>
+                        </AlertDialogAction>
+                    </div>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

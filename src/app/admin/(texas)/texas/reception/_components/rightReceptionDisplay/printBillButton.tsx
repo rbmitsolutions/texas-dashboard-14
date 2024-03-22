@@ -1,4 +1,4 @@
-import toast from "react-hot-toast"
+'use client'
 import { PrinterIcon } from "lucide-react"
 
 //components
@@ -14,10 +14,11 @@ import { usePrintersStore } from "@/store/restaurant/printers"
 import { TransactionsMethod } from "@/common/types/company/transactions.interface"
 
 interface PrintBillProps {
-    tableId: string
+    tableId?: string
+    finishedTableId?: string
 }
 
-export default function PrintBill({ tableId }: PrintBillProps) {
+export default function PrintBill({ tableId, finishedTableId }: PrintBillProps) {
     const { defaultPrinter } = usePrintersStore()
 
     const {
@@ -27,16 +28,29 @@ export default function PrintBill({ tableId }: PrintBillProps) {
     })
 
     const handlePrintOrder = async () => {
-        if(!defaultPrinter) return
+        if (!defaultPrinter) return
 
-        await toPrint({
-            toPrint: {
-                bill: {
-                    ip: defaultPrinter?.ip,
-                    tableId,
+        if (tableId) {
+            await toPrint({
+                toPrint: {
+                    bill: {
+                        ip: defaultPrinter?.ip,
+                        tableId,
+                    }
                 }
-            }
-        })
+            })
+        }
+
+        if (finishedTableId) {
+            await toPrint({
+                toPrint: {
+                    finishTableBill: {
+                        ip: defaultPrinter?.ip,
+                        finishedTableId: finishedTableId,
+                    }
+                }
+            })
+        }
     }
 
     return (
@@ -44,6 +58,8 @@ export default function PrintBill({ tableId }: PrintBillProps) {
             variant='pink'
             onClick={handlePrintOrder}
             disabled={!defaultPrinter}
+            size='sm'
+            type='button'
         >
             <PrinterIcon size={14} />
         </Button>

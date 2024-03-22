@@ -77,7 +77,6 @@ export default function TexasLayout({ children }: any) {
                 const tables = data as IGETTablesAllResponse
                 setTables(tables?.data)
             },
-            refetchOnMount: false,
         }
     })
 
@@ -108,7 +107,6 @@ export default function TexasLayout({ children }: any) {
                 const orderControllers = data as IAllOrderControllerResponse
                 setOrderControllers(orderControllers?.data)
             },
-            refetchOnMount: false,
         }
     })
 
@@ -136,7 +134,6 @@ export default function TexasLayout({ children }: any) {
                 const sections = data as IGETSectionResponse
                 setSections(sections?.data)
             },
-            refetchOnMount: false,
         }
     })
 
@@ -166,7 +163,6 @@ export default function TexasLayout({ children }: any) {
                 const transactions = data as IGetAllTransactionsResponse
                 setTransactions(transactions?.data)
             },
-            refetchOnMount: false,
         }
     })
 
@@ -192,7 +188,6 @@ export default function TexasLayout({ children }: any) {
                 const menuSections = data as IGETMenuSectionsResponse
                 setMenuSections(menuSections?.data)
             },
-            refetchOnMount: false,
         }
     })
 

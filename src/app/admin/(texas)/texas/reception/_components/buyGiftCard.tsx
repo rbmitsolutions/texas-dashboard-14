@@ -35,11 +35,10 @@ import { IClient } from "@/common/types/restaurant/client.interface"
 interface BuyGiftCardProps {
     clients: IClient[],
     setClientsParams: Dispatch<SetStateAction<IGETRestaurantDataQuery>>,
-    clientsParams: IGETRestaurantDataQuery,
     createGiftCard: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>
 }
 
-export default function BuyGiftCard({ clients, setClientsParams, createGiftCard, clientsParams }: BuyGiftCardProps) {
+export default function BuyGiftCard({ clients, setClientsParams, createGiftCard }: BuyGiftCardProps) {
     const { defaultPrinter } = usePrintersStore()
     const [isOpen, setIsOpen] = useState(false);
     const [giftCard, setGiftCard] = useState<GiftCardFormSchemaType>({
@@ -65,7 +64,6 @@ export default function BuyGiftCard({ clients, setClientsParams, createGiftCard,
             method: ''
         })
     }
-
 
     const handleSuccess = async (user: IToken) => {
         setIsOpen(false);
@@ -149,6 +147,11 @@ export default function BuyGiftCard({ clients, setClientsParams, createGiftCard,
                     ip: defaultPrinter?.ip
                 }
             }
+        }, {
+            onSuccess: () => {
+                setIsOpen(false)
+                onOpenChange()
+            }
         })
     }
 
@@ -203,7 +206,8 @@ export default function BuyGiftCard({ clients, setClientsParams, createGiftCard,
                                 onSearchChange={(e) => {
                                     setGiftCard(prev => ({
                                         ...prev,
-                                        client_key: ''
+                                        client_key: '',
+                                        contact_number: e
                                     }))
                                     setClientsParams(prev => {
                                         return {
@@ -220,11 +224,12 @@ export default function BuyGiftCard({ clients, setClientsParams, createGiftCard,
                                         }
                                     })
                                 }}
-                                value={clientsParams?.clients?.all?.contact_number || ''}
+                                value={giftCard?.contact_number || ''}
                                 cleanSearch={() => {
                                     setGiftCard(prev => ({
                                         ...prev,
-                                        client_key: ''
+                                        client_key: '',
+                                        contact_number: ''
                                     }))
                                     setClientsParams(prev => {
                                         return {
@@ -286,7 +291,7 @@ export default function BuyGiftCard({ clients, setClientsParams, createGiftCard,
                                     }))
                                     setIsOpen(true)
                                 }}
-                                disabled={giftCard?.code?.length < 16 || giftCard?.value === 0}
+                                disabled={giftCard?.code?.length < 16 || giftCard?.value === 0 || !giftCard?.contact_number}
                             >
                                 Card
                             </Button>
@@ -302,7 +307,7 @@ export default function BuyGiftCard({ clients, setClientsParams, createGiftCard,
                                     }))
                                     setIsOpen(true)
                                 }}
-                                disabled={giftCard?.code?.length < 16 || giftCard?.value === 0}
+                                disabled={giftCard?.code?.length < 16 || giftCard?.value === 0 || !giftCard?.contact_number}
                             >
                                 Cash
                             </Button>

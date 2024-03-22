@@ -23,6 +23,7 @@ import { getTableStatusVariant } from "@/common/libs/restaurant/tables"
 import { ITable } from "@/common/types/restaurant/tables.interface"
 import { RedirectTo } from "@/common/types/routers/endPoints.types"
 import { ICreateNewOrder } from "@/store/restaurant/order"
+import FinishedTables from "./finishedTable"
 
 interface TableProps {
     table: ITable
@@ -91,6 +92,7 @@ export default function Table({ table, waitres, reception }: TableProps) {
                         table={table}
                         timesOpen={waitres.timesOpen}
                         createBooking={waitres.createBooking}
+                        updateTable={waitres.updateTable}
                     />
 
             )}
@@ -116,25 +118,34 @@ export default function Table({ table, waitres, reception }: TableProps) {
                             />
                         </div>
                     </Link>
-                    <div className='flex-container'>
+                    <div className='grid grid-cols-[auto,1fr,auto] gap-2 ='>
                         <PrintBill
                             tableId={table?.id}
                         />
                         <Button
                             className='w-full capitalize'
                             variant={getTableStatusVariant(table?.meal_status)}
+                            size='sm'
                         >
                             {table?.meal_status}
                         </Button>
+                        <FinishedTables
+                            tableId={table?.id}
+                        />
                     </div>
                 </div>
             }
 
             {reception && !table?.is_open &&
-                <div className='flex-container items-center justify-center w-full'>
-                    <small className='text-foreground/30'>
+                <div className='grid grid-rows-[1fr,auto] w-full'>
+                    <small className='flex-container items-center justify-center h-fulltext-foreground/30'>
                         <i >Table is Close</i>
                     </small>
+                    <div className='flex-container justify-end p-1 w-full'>
+                        <FinishedTables
+                            tableId={table?.id}
+                        />
+                    </div>
                 </div>
             }
         </div>

@@ -69,6 +69,7 @@ export default function FullOrderController({ orderController, orderSumary, onOr
             <OrderSummary
                 {...orderSumary}
             />
+            
             <div className='flex-container justify-between mt-2'>
                 {printers &&
                     <ToPrintButton

@@ -1,9 +1,9 @@
 'use client'
-import { addDaysToDate, getFirstTimeOfTheDay } from "@/common/libs/date-fns/dateFormat"
 
 //components
 import { transactionsColumnsTable } from "../../_components/transactionsColumnsTable"
 import FullOrderController from "../../../_components/orderSummary/fullOrderController"
+import PrintBill from "../../_components/rightReceptionDisplay/printBillButton"
 import { TransactionsTable } from "../../_components/transactionsTable"
 import LayoutFrame from "@/app/admin/(texas)/_components/layoutFrame"
 import IconText from "@/components/common/iconText"
@@ -16,26 +16,21 @@ import { useOrderStore } from "@/store/restaurant/order"
 
 //hooks
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
-import { useGETCompanyDataHooks, usePUTCompanyDataHooks } from "@/hooks/company/companyDataHooks"
-import { useSocketIoHooks } from "@/hooks/useSocketIoHooks"
+import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
 import { useAuthHooks } from "@/hooks/useAuthHooks"
 
 //interface
 import { TableTransactionsType } from "@/common/types/company/transactions.interface"
 import { RedirectTo } from "@/common/types/routers/endPoints.types"
-import { SocketIoEvent } from "@/common/libs/socketIo/types"
 
 export default function FinishedTable({ params }: { params: { id: string } }) {
     const { menuSections } = useMenuSectionsStore()
     const { getOneOrderTotal } = useOrderStore()
     const { printers } = usePrintersStore()
-    const { emit } = useSocketIoHooks()
     const { user } = useAuthHooks()
 
     const {
         restaurantFinishedTable: finishedTable,
-        GETRestaurantDataParams: finishedTablesParams,
-        setGETRestaurantDataParams: setFinishedTablesParams,
     } = useGETRestaurantDataHooks({
         query: 'FINISHED_TABLE',
         defaultParams: {
@@ -49,7 +44,6 @@ export default function FinishedTable({ params }: { params: { id: string } }) {
 
     const {
         restaurantAllOrderController: orderControllers,
-        refetchRestaurantData: refetchOrdersController,
     } = useGETRestaurantDataHooks({
         query: 'ORDER_CONTROLLER',
         defaultParams: {
@@ -62,24 +56,15 @@ export default function FinishedTable({ params }: { params: { id: string } }) {
                     includes: {
                         orders: '1'
                     },
-                    date: {
-                        gte: getFirstTimeOfTheDay(new Date()),
-                        lte: addDaysToDate(new Date(), 1)
-                    },
                     finished_table_id: params?.id
                 }
             }
         },
-        UseQueryOptions: {
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
-            refetchOnMount: false,
-        }
     })
+
 
     const {
         companyAllTransacations: transactions,
-        refetchCompanyData: refetchTransactions,
     } = useGETCompanyDataHooks({
         query: 'TRANSACTIONS',
         defaultParams: {
@@ -89,10 +74,6 @@ export default function FinishedTable({ params }: { params: { id: string } }) {
                         take: 500,
                         skip: 0
                     },
-                    date: {
-                        gte: getFirstTimeOfTheDay(new Date()),
-                        lte: addDaysToDate(new Date(), 1)
-                    },
                     type: {
                         in: [TableTransactionsType.CLOSED_TABLE]
                     },
@@ -100,33 +81,13 @@ export default function FinishedTable({ params }: { params: { id: string } }) {
                 }
             }
         },
-        UseQueryOptions: {
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
-            refetchOnMount: false,
-        }
-    })
-
-    const { updateCompanyData: updateTransaction } = usePUTCompanyDataHooks({
-        query: 'TRANSACTIONS',
-        UseMutationOptions: {
-            onSuccess: async () => {
-                await emit({
-                    event: SocketIoEvent.TABLE_PAYMENT,
-                    message: finishedTable?.id
-                })
-                await emit({
-                    event: SocketIoEvent.ORDER,
-                    message: finishedTable?.id
-                })
-            }
-        }
     })
 
     return (
         <LayoutFrame
             user={user}
             navigation={{
+                defaultPrinter: printers,
                 icon: {
                     icon: 'Filter',
                     title: 'Tables'
@@ -142,21 +103,27 @@ export default function FinishedTable({ params }: { params: { id: string } }) {
             }}
             rightNavigation={{
                 content: (
-                    <div className='flex-col-container'>
-                        {orderControllers?.data?.map(oc => {
-                            return (
-                                <FullOrderController
-                                    key={oc?.id}
-                                    orderController={oc}
-                                    orderSumary={{
-                                        order: oc?.orders,
-                                        getOneOrderTotal,
-                                        menuSections,
-                                    }}
-                                    printers={printers}
-                                />
-                            )
-                        })}
+                    <div className='flex-col-container justify-between h-full scrollbar-thin overflow-auto'>
+                        <div className='flex-container justify-end'>
+                            <PrintBill
+                                finishedTableId={finishedTable?.id}
+                            />
+                        </div>
+                        <div className='flex-col-container h-full overflow-auto'>
+                            {orderControllers?.data?.map(oc => {
+                                return (
+                                    <FullOrderController
+                                        key={oc?.id}
+                                        orderController={oc}
+                                        orderSumary={{
+                                            order: oc?.orders,
+                                            getOneOrderTotal,
+                                            menuSections,
+                                        }}
+                                    />
+                                )
+                            })}
+                        </div>
                     </div>
                 ),
                 icon: {

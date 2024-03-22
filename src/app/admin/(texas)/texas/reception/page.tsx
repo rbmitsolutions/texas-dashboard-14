@@ -1,22 +1,20 @@
 'use client'
 
 //components
+import OpenTillButton from './_components/openTillButton';
 import SearchInput from '@/components/common/searchInput';
 import LayoutFrame from '../../_components/layoutFrame';
-import ClosedTables from './_components/closedTables';
 import BuyGiftCard from './_components/buyGiftCard';
 import { Button } from '@/components/ui/button';
 import Table from '../_components/table';
 
 //hooks
 import { useGETRestaurantDataHooks, usePOSTRestaurantDataHooks } from '@/hooks/restaurant/restaurantDataHooks';
-import { addDaysToDate, getFirstTimeOfTheDay } from '@/common/libs/date-fns/dateFormat';
 import { useAuthHooks } from '@/hooks/useAuthHooks';
 
 //store
 import { usePrintersStore } from '@/store/restaurant/printers';
 import { useTablesStore } from '@/store/restaurant/tables';
-import OpenTillButton from './_components/openTillButton';
 
 
 export default function Reception() {
@@ -44,32 +42,8 @@ export default function Reception() {
         }
     })
 
-
-    const {
-        restaurantAllFinishedTables: finishedTables,
-        GETRestaurantDataParams: finishedTablesParams,
-        setGETRestaurantDataParams: setFinishedTablesParams,
-    } = useGETRestaurantDataHooks({
-        query: 'FINISHED_TABLE',
-        defaultParams: {
-            finishedTables: {
-                all: {
-                    date: {
-                        gte: getFirstTimeOfTheDay(new Date()),
-                        lte: addDaysToDate(new Date(), 1)
-                    },
-                    pagination: {
-                        take: 10,
-                        skip: 0
-                    },
-                }
-            }
-        },
-    })
-
     const {
         restaurantAllClients: clients,
-        GETRestaurantDataParams: GETClientsParams,
         setGETRestaurantDataParams: setGETClientsParams
     } = useGETRestaurantDataHooks({
         query: 'CLIENTS',
@@ -108,14 +82,13 @@ export default function Reception() {
                             <BuyGiftCard
                                 clients={clients?.data}
                                 setClientsParams={setGETClientsParams}
-                                clientsParams={GETClientsParams}
                                 createGiftCard={createGiftCard}
                             />
-                            <ClosedTables
+                            {/* <ClosedTables
                                 finishedTables={finishedTables}
                                 setFinishedTablesParams={setFinishedTablesParams}
                                 finishedTablesParams={finishedTablesParams}
-                            />
+                            /> */}
                         </div>
                         <SearchInput
                             onSearchChange={(e) => setTablesFilter({ ...tablesFilter, client_name: e })}
@@ -194,7 +167,7 @@ export default function Reception() {
             }}
 
         >
-            <div className='grid-container grid-cols-[repeat(auto-fit,minmax(200px,1fr))] sm:grid-cols-4 xl:grid-cols-5'>
+            <div className='grid-container grid-cols-[repeat(auto-fit,minmax(200px,1fr))] sm:grid-cols-3 xl:grid-cols-5'>
                 {
                     getTablesFiltered(tablesFilter)?.map((table) => {
                         return (

@@ -161,6 +161,11 @@ export interface IPrintBill {
   transaction_method?: TransactionsMethod
 }
 
+export interface IFinishTableBill {
+  ip: string
+  finishedTableId: string
+}
+
 export interface IOpenTill {
   ip: string
 }
@@ -169,6 +174,7 @@ export interface IPOSTToPrintBody {
   to?: IPrintOrderTo
   bill?: IPrintBill
   openTill?: IOpenTill
+  finishTableBill?: IFinishTableBill
 }
 
 
