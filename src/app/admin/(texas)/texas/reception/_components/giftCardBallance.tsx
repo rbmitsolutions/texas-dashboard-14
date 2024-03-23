@@ -91,7 +91,7 @@ export default function GiftCardBalance({ }: GiftCardBalanceProps) {
             }
         }
     }, [code, setGiftCardParams, refetchGiftCard, getGiftCardParams?.giftcards?.byCode?.code])
-    console.log(code)
+
     return (
         <Sheet
             onOpenChange={onOpenChange}
