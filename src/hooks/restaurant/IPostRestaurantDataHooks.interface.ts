@@ -78,11 +78,13 @@ export interface IPOSTOrderBody {
     to_print_ips: string[]
 
     order_controller_id: string
+    toPrint?: '1'
   };
   many?: {
     order_controller: IPOSTOrderControllerBody
     update_table: IPUTTablesBody
     orders: ICreateOrder[]
+    toPrint?: '1'
   };
 }
 

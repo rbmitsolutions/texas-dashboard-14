@@ -24,6 +24,8 @@ import { IPrinters } from "@/common/types/restaurant/printers.interface"
 import { IToken, Permissions } from "@/common/types/auth/auth.interface"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
 import { ICreateNewOrder } from "@/store/restaurant/order"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 
 interface RightOrderDisplayProps {
     order: ICreateNewOrder[]
@@ -45,6 +47,7 @@ interface RightOrderDisplayProps {
 }
 
 export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTotal, updateOrderQuantity, getOneOrderTotal, deleteOrder, replaceOrder, table, createOrder, menuSections, orderControllers, updateOrder, printers, sections, updateTable }: RightOrderDisplayProps) {
+    const [toPrint, setToPrint] = useState<boolean>(true)
     const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false)
     const { back } = useRouter()
     const [status, setStatus] = useState<TableMealStatus>()
@@ -85,7 +88,7 @@ export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTot
             meal_status = status
         }
 
-        if(table?.meal_status === TableMealStatus.PREPARING) {
+        if (table?.meal_status === TableMealStatus.PREPARING) {
             meal_status = TableMealStatus.PREPARING
         }
 
@@ -105,11 +108,13 @@ export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTot
                             meal_status,
                             food_ordered_at: coordinates?.hasfood ? new Date() : undefined,
                         },
+                        toPrint: toPrint ? '1' : undefined
                     }
                 }
             },
             {
                 onSuccess: async () => {
+                    setToPrint(true)
                     resetOrder()
                     back()
                 },
@@ -129,6 +134,20 @@ export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTot
                 handleAuthResponse={handleAuthDialogResponse}
                 permissions={[Permissions.WAITERS]}
                 save={false}
+                titleDom={
+                    <div className='m-auto'>
+                        <Label
+                            className='flex-container items-center bg-orange-300 p-2 bg-background-soft'
+                        >
+                            PRINT ORDER
+                            <Switch
+                                className='m-auto'
+                                checked={toPrint}
+                                onCheckedChange={(checked) => setToPrint(checked)}
+                            />
+                        </Label>
+                    </div>
+                }
             />
 
             <div className='flex-col-container h-full'>

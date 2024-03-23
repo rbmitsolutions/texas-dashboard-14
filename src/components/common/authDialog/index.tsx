@@ -30,6 +30,7 @@ interface AuthModalPorps {
     title?: string;
     permissions: Permissions[]
     save?: boolean
+    titleDom?: JSX.Element
 }
 
 export default function AuthDialog({
@@ -38,7 +39,8 @@ export default function AuthDialog({
     isOpen,
     title,
     save = false,
-    permissions
+    permissions,
+    titleDom
 }: AuthModalPorps): JSX.Element {
     const { setUser } = useAuthHooks()
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -144,10 +146,17 @@ export default function AuthDialog({
     return (
         <Dialog open={isOpen} onOpenChange={onToggleDialog}>
             <DialogContent className="sm:max-w-[425px]">
-                {title &&
+                {title ?
                     <DialogHeader>
                         <DialogTitle>{title}</DialogTitle>
                     </DialogHeader>
+                    :
+                    titleDom ?
+                        <DialogHeader>
+                            {titleDom}
+                        </DialogHeader>
+                        :
+                        <></>
                 }
                 <div className="grid gap-4 mt-4">
                     <KeyPadDisplay
