@@ -213,7 +213,10 @@ export default function Table({ params }: { params: { id: string } }) {
                     </div>
                 ),
                 return: {
-                    path: RedirectTo.WAITERS
+                    action() {
+                        resetOrder()
+                        push(RedirectTo.WAITERS)
+                    },
                 }
             }}
             rightNavigation={{

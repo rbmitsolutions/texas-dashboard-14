@@ -14,7 +14,7 @@ import IconText from '@/components/common/iconText';
 import Wrap from '@/components/common/wrap';
 
 //hooks
-import { usePOSTCompanyDataHooks, usePUTCompanyDataHooks } from '@/hooks/company/companyDataHooks';
+import { useGETCompanyDataHooks, usePOSTCompanyDataHooks, usePUTCompanyDataHooks } from '@/hooks/company/companyDataHooks';
 import { usePUTRestaurantDataHooks } from '@/hooks/restaurant/restaurantDataHooks';
 import { useSocketIoHooks } from '@/hooks/useSocketIoHooks';
 import { useAuthHooks } from '@/hooks/useAuthHooks';
@@ -28,11 +28,14 @@ import { useTablesStore } from '@/store/restaurant/tables';
 import { useOrderStore } from '@/store/restaurant/order';
 
 //interfaces
-import { ITransactions, TransactionsStatus } from '@/common/types/company/transactions.interface';
+import { ITransactions, TableTransactionsType, TransactionsStatus } from '@/common/types/company/transactions.interface';
 import { IOrder, IOrderController, OrderStatus } from '@/common/types/restaurant/order.interface';
 import { RedirectTo } from '@/common/types/routers/endPoints.types';
 import { ITable } from '@/common/types/restaurant/tables.interface';
 import { SocketIoEvent } from '@/common/libs/socketIo/types';
+import { addDaysToDate, getFirstTimeOfTheDay } from '@/common/libs/date-fns/dateFormat';
+import { IGetAllTransactionsResponse } from '@/hooks/company/IGetCompanyDataHooks.interface';
+import { transactionsTotalByFilter } from '@/common/libs/restaurant/transactions';
 
 export interface IDataTable {
     table: ITable | undefined
@@ -81,6 +84,51 @@ export default function Table({ params }: { params: { id: string } }) {
         status: TransactionsStatus.CONFIRMED
     })
 
+    //todo implement it
+    // const {
+    //     refetchCompanyData: refetchTransactions
+    // } = useGETCompanyDataHooks({
+    //     query: 'TRANSACTIONS',
+    //     defaultParams: {
+    //         transactions: {
+    //             all: {
+    //                 pagination: {
+    //                     take: 500,
+    //                     skip: 0
+    //                 },
+    //                 date: {
+    //                     gte: getFirstTimeOfTheDay(new Date()),
+    //                     lte: addDaysToDate(new Date(), 1)
+    //                 },
+    //                 type: {
+    //                     in: [TableTransactionsType.OPEN_TABLE]
+    //                 },
+    //                 payee_key: params?.id
+    //             }
+    //         }
+    //     },
+    //     UseQueryOptions: {
+    //         onSuccess: (data) => {
+    //             const transactions = data as IGetAllTransactionsResponse
+    //             setDataTable(prev => ({
+    //                 ...prev,
+    //                 transactions: transactions?.data,
+    //                 values: {
+    //                     ...prev.values,
+    //                     paid: transactionsTotalByFilter({
+    //                         filter: {
+    //                             payee_key: params.id,
+    //                             status: TransactionsStatus.CONFIRMED
+    //                         },
+    //                         transactions: transactions?.data || []
+    //                     })
+    //                 }
+
+    //             }))
+    //         },
+    //     }
+    // })
+
     const { createCompanyData: createTransaction } = usePOSTCompanyDataHooks({
         query: 'TRANSACTIONS',
         UseMutationOptions: {
@@ -93,6 +141,8 @@ export default function Table({ params }: { params: { id: string } }) {
                     event: SocketIoEvent.ORDER,
                     message: dataTable?.table?.id
                 })
+                //todo implement it
+                // await refetchTransactions()
             }
         }
     })

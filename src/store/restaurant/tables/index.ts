@@ -1,4 +1,4 @@
-import { ITable } from '@/common/types/restaurant/tables.interface';
+import { ITable, TableMealStatus } from '@/common/types/restaurant/tables.interface';
 import { create, } from 'zustand';
 
 export interface TablesStateProps {
@@ -9,7 +9,7 @@ export interface TablesStateProps {
         is_open?: boolean | null
         section_ids?: string[]
         guests?: number[]
-        meal_status?: string[]
+        meal_status?: TableMealStatus[]
     }
     setTablesFilter: (filter: TablesStateProps['tablesFilter']) => void
     getTableById: (id: string) => ITable | undefined

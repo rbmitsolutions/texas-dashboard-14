@@ -1,14 +1,13 @@
+'use client'
+import { useState } from "react";
 import { UseMutateFunction } from "react-query";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "lucide-react";
-import { useEffect, useState } from "react";
 
 //libs
 import { SpecialDaysFormSchema, SpecialDaysFormSchemaType } from "@/common/libs/zod/forms/restaurant/createSpecialDayForm";
 import { formatDate } from "@/common/libs/date-fns/dateFormat";
-import { cn } from "@/common/libs/shadcn/utils";
-import Icon from "@/common/libs/lucida-icon";
 
 //components
 import {
@@ -37,6 +36,7 @@ import { Button } from "@/components/ui/button";
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface";
 import { ITimesOpen } from "@/common/types/restaurant/config.interface";
 import { ISection } from "@/common/types/restaurant/tables.interface";
+import { cn } from "@/common/libs/shadcn/utils";
 
 interface CreateSpecialDayFormProps {
     timesOpen: ITimesOpen[]

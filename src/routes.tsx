@@ -60,7 +60,7 @@ const routers: IRoute[] = [
     path: "",
     icon: <Icon name='ChefHat' size={14} />,
     // icon: <Wrench />,
-    layout: "/admin/texas/orders/pass",
+    layout: "/admin/texas/orders/orders",
     authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST, Permissions.PASS],
     collapse: true,
     auth_device: true,

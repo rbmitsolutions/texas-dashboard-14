@@ -71,13 +71,13 @@ export default function Table({ table, waitres, reception }: TableProps) {
                                 iconSize={14}
                             />
                         </Link>
-                        <Button
+                        {/* <Button
                             className='capitalize'
                             variant={getTableStatusVariant(table?.meal_status)}
                         >
                             {table?.meal_status}
-                        </Button>
-                        {/* <TablesStatus
+                        </Button> */}
+                        <TablesStatus
                             table={table}
                             updateTable={waitres?.updateTable}
                             orderControllers={waitres?.orderControllers}
@@ -85,7 +85,7 @@ export default function Table({ table, waitres, reception }: TableProps) {
                             menuSections={waitres?.menuSections}
                             updateOrder={waitres?.updateOrder}
                             printers={waitres?.printers}
-                        /> */}
+                        />
                     </div>
                     :
                     <OpenTableDialog

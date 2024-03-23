@@ -16,10 +16,10 @@ import ExtraSideBar from "./extraSideBar";
 import { useSideBarStore } from "@/store/sideBar";
 
 //hooks
+import { IPrinters } from "@/common/types/restaurant/printers.interface";
 import { IToken } from "@/common/types/auth/auth.interface";
 import { useRouter } from "next/navigation";
 import DefaultPrinter from "./defaultPrinter";
-import { IPrinters } from "@/common/types/restaurant/printers.interface";
 interface LayoutFrameProps {
     navigation: {
         defaultPrinter?: IPrinters[]

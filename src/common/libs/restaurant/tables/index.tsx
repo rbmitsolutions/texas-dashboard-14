@@ -11,9 +11,9 @@ export const getTableStatusVariant = (status: TableMealStatus): ButtonProps['var
             return 'green'
         case TableMealStatus.ALL_TOGETHER:
             return 'pink'
-        case TableMealStatus.CLEAN_TABLE:
-            return 'blue'
+        case TableMealStatus.DESSERT:
+            return 'yellow'
         default:
-            return 'default'
+            return 'green'
     }
 }

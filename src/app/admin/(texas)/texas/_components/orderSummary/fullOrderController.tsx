@@ -77,12 +77,12 @@ export default function FullOrderController({ orderController, orderSumary, onOr
                         printers={printers}
                     />
                 }
-                {(onOrdersUpdate && hasOrdersWithOrderedStatus?.length > 0) &&
+                {/* {(onOrdersUpdate && hasOrdersWithOrderedStatus?.length > 0) &&
                     <UpdateAllOrderStatus
                         orderController={orderController}
                         onUpdate={onOrdersUpdate}
                     />
-                }
+                } */}
             </div>
         </div>
     )

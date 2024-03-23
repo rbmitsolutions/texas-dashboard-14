@@ -80,6 +80,7 @@ export default function TexasLayout({ children }: any) {
         }
     })
 
+    //todo: remove it, leave it at the table to fetch the data
     const {
         refetchRestaurantData: refetchOrdersController
     } = useGETRestaurantDataHooks({
@@ -123,7 +124,7 @@ export default function TexasLayout({ children }: any) {
                     },
                     include: {
                         tables: {
-                            guests: [2,4,6,8]
+                            guests: [2, 4, 6, 8]
                         }
                     }
                 }
@@ -137,6 +138,7 @@ export default function TexasLayout({ children }: any) {
         }
     })
 
+    //todo: remove it, leave it at the table to fetch the data
     const {
         refetchCompanyData: refetchTransactions
     } = useGETCompanyDataHooks({
@@ -234,7 +236,7 @@ export default function TexasLayout({ children }: any) {
         if (sections?.length === 0) {
             refetchSections()
         }
-        
+
     }, [menuSections?.length, orderControllers?.length, printers?.length, refetchMenuSections, refetchOrdersController, refetchPrinters, refetchSections, refetchTables, refetchTransactions, sections?.length, tables?.length, transactions?.length])
 
     return (
@@ -242,4 +244,4 @@ export default function TexasLayout({ children }: any) {
             {children}
         </div>
     )
- }
+}

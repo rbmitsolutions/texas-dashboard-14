@@ -43,7 +43,8 @@ export enum TableMealStatus{
   STARTERS = "starters",
   MAIN = "main",
   ALL_TOGETHER = "all together",
-  CLEAN_TABLE = "clean table"
+  PREPARING = "preparing",
+  DESSERT = "dessert",
 }
 export interface ITable {
   id: string;

@@ -65,13 +65,12 @@ export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTot
 
         let meal_status: TableMealStatus = table?.meal_status
 
-        if (meal_status === TableMealStatus.CLEAN_TABLE && coordinates?.hasfood) {
-            meal_status = TableMealStatus.ALL_TOGETHER
+        if ((meal_status === TableMealStatus.DESSERT) && coordinates?.hasfood) {
+            meal_status = TableMealStatus.MAIN
         }
 
-
         if (coordinates?.hasfood && !status) {
-            if (meal_status === TableMealStatus.WAITING || meal_status === TableMealStatus.CLEAN_TABLE) {
+            if (meal_status === TableMealStatus.WAITING) {
                 if (coordinates?.starters) {
                     meal_status = TableMealStatus.STARTERS
                 }
@@ -84,6 +83,10 @@ export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTot
 
         if (status) {
             meal_status = status
+        }
+
+        if(table?.meal_status === TableMealStatus.PREPARING) {
+            meal_status = TableMealStatus.PREPARING
         }
 
         await createOrder(
