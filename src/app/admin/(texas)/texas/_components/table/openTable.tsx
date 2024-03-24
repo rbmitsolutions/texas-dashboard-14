@@ -80,8 +80,12 @@ export default function OpenTableDialog({
                 client_id: 'Client Not Registered',
                 meal_status: TableMealStatus.WAITING,
             }
+        }, {
+            onSuccess: () => {
+                push(`${RedirectTo.TABLE_ORDER}/${table?.id}`)
+            }
         })
-        push(`${RedirectTo.TABLE_ORDER}/${table?.id}`)
+        
     }
 
     return (
