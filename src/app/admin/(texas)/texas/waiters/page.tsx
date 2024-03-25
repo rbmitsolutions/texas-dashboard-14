@@ -16,20 +16,15 @@ import { useAuthHooks } from '@/hooks/useAuthHooks';
 
 //store
 import { useTablesStore } from '@/store/restaurant/tables';
-import { useOrderControllerStore } from '@/store/restaurant/orderController';
-import { useOrderStore } from '@/store/restaurant/order';
 
 //interfaces
-import { OrderStatus } from '@/common/types/restaurant/order.interface';
-import { SocketIoEvent } from '@/common/libs/socketIo/types';
 import { usePrintersStore } from '@/store/restaurant/printers';
 import { useSectionsStore } from '@/store/restaurant/sections';
+import { SocketIoEvent } from '@/common/libs/socketIo/types';
 
 export default function Tables() {
     const { tablesFilter, setTablesFilter, getTablesFiltered } = useTablesStore()
-    const { getOrderControllers, } = useOrderControllerStore()
     const { sections } = useSectionsStore()
-    const { getOneOrderTotal } = useOrderStore()
     const { printers } = usePrintersStore()
     const { user } = useAuthHooks()
     const { emit } = useSocketIoHooks()
@@ -225,13 +220,7 @@ export default function Tables() {
                                 waitres={{
                                     createBooking,
                                     timesOpen: openDay?.times_open,
-                                    orderControllers: getOrderControllers({
-                                        table_id: table?.id,
-                                        orders: {
-                                            status: [OrderStatus.ORDERED]
-                                        }
-                                    }),
-                                    getOneOrderTotal,
+                                    orderControllers: [],
                                     menuSections: menuSections?.data,
                                     updateOrder,
                                     updateTable,

@@ -2,6 +2,7 @@ import { UseMutateFunction } from "react-query"
 import { useState } from "react"
 
 //libs
+import { filteredOrderControllers } from "@/common/libs/restaurant/orderController"
 import { getOrderStatusVariant } from "@/common/libs/restaurant/order"
 
 //components
@@ -13,19 +14,17 @@ import PrintBill from "./printBillButton"
 
 //interface
 import { IPOSTCompanyBody, IPOSTCompanyDataRerturn } from "@/hooks/company/IPostCompanyDataHooks.interface"
-import { IOrderController, OrderStatus } from "@/common/types/restaurant/order.interface"
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
-import { OrderControllerFilterProps } from "@/store/restaurant/orderController"
+import { TransactionsStatus } from "@/common/types/company/transactions.interface"
 import { IPrinters } from "@/common/types/restaurant/printers.interface"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
+import { OrderStatus } from "@/common/types/restaurant/order.interface"
+import { transactionsTotal } from "@/common/libs/company/transactions"
 import { IToken } from "@/common/types/auth/auth.interface"
-import { ICreateNewOrder } from "@/store/restaurant/order"
 import { IDataTable } from "../../[id]/page"
 
 interface RightReceptionDisplayProps {
     dataTable: IDataTable
-    getOrderControllers: (filter: OrderControllerFilterProps) => IOrderController[]
-    getOneOrderTotal: (order: ICreateNewOrder) => number
     menuSections: IMenuSection[]
     createTransaction: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
     user: IToken
@@ -36,8 +35,6 @@ interface RightReceptionDisplayProps {
 
 export default function RightReceptionDisplay({
     dataTable,
-    getOrderControllers,
-    getOneOrderTotal,
     menuSections,
     createTransaction,
     user,
@@ -47,11 +44,20 @@ export default function RightReceptionDisplay({
 }: RightReceptionDisplayProps) {
     const [status, setStatus] = useState<OrderStatus[]>([OrderStatus.ORDERED, OrderStatus.DELIVERED])
 
-    const filteredOrderController = getOrderControllers({
-        table_id: dataTable?.table?.id!,
-        orders: {
-            status
-        }
+    const filteredOrderController = filteredOrderControllers({
+        filter: {
+            orders: {
+                status
+            }
+        },
+        orderControllers: dataTable?.orderControllers || []
+    })
+
+    const remaining = (dataTable?.values?.total) - transactionsTotal({
+        filter: {
+            status: TransactionsStatus.CONFIRMED
+        },
+        transactions: dataTable?.transactions || []
     })
 
     return (
@@ -95,7 +101,6 @@ export default function RightReceptionDisplay({
                             orderController={oc}
                             orderSumary={{
                                 menuSections,
-                                getOneOrderTotal,
                                 order: oc?.orders,
                                 updateOrderStatus: {
                                     onUpdate: updateOrder,
@@ -111,17 +116,18 @@ export default function RightReceptionDisplay({
                 <SplitBillPaymentButton
                     dataTable={dataTable}
                     menuSections={menuSections}
-                    getOneOrderTotal={getOneOrderTotal}
                     createTransaction={createTransaction}
                     user={user}
                     closeTable={closeTable}
+                    remaining={remaining}
                 />
                 <PaymentButton
                     dataTable={dataTable}
-                    payTotal={dataTable?.values?.remaining}
+                    payTotal={remaining}
                     createTransaction={createTransaction}
                     user={user}
                     closeTable={closeTable}
+                    remaining={remaining}
                 />
             </div>
         </div>

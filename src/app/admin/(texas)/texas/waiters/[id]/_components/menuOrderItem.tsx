@@ -29,12 +29,11 @@ interface MenuOrderItemProps {
     setOrder: (order: ICreateNewOrder) => void
     updateOrderQuantity: (order: ICreateNewOrder, incrise: boolean) => void
     order: ICreateNewOrder[]
-    getOneOrderTotal: (order: ICreateNewOrder) => number
     printers: IPrinters[]
     menuSections: IMenuSection[]
 }
 
-export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuantity, getFilteredOrderSystemMenu, getOneOrderTotal, printers, menuSections }: MenuOrderItemProps) {
+export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuantity, getFilteredOrderSystemMenu, printers, menuSections }: MenuOrderItemProps) {
     const [menuItem, setMenuItem] = useState<IGETMenuOrderSystemResponse>(menu)
     const [step, setStep] = useState(0)
     const [isOpen, setIsOpen] = useState(false)
@@ -101,7 +100,6 @@ export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuan
                         setIsOpen(false)
 
                     }}
-                    getOneOrderTotal={getOneOrderTotal}
                     printers={printers}
                     menuSections={menuSections}
                 />

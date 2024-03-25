@@ -20,12 +20,11 @@ interface AddOnsDisplayProps {
     handleSetAddOns: (addOns: IAddOnsCreateOrder[]) => void
     handleChangeQuantity: (increase: boolean) => void
     setOrder: (order: ICreateNewOrder) => void
-    getOneOrderTotal: (order: ICreateNewOrder) => number
     menuSections: IMenuSection[]
     updateMnSection: (mn_section: string) => void
 }
 
-export default function AddOnsDisplay({ menu, order, getOneOrderTotal, setOrder, handleSetAddOns, handleChangeQuantity, menuSections, updateMnSection }: AddOnsDisplayProps) {
+export default function AddOnsDisplay({ menu, order, setOrder, handleSetAddOns, handleChangeQuantity, menuSections, updateMnSection }: AddOnsDisplayProps) {
     const sortedAddOns = menu?.add_ons?.sort((a, b) => {
         if (a.is_mandatory && !b.is_mandatory) {
             return -1;
@@ -145,7 +144,6 @@ export default function AddOnsDisplay({ menu, order, getOneOrderTotal, setOrder,
                     handleChangeQuantity={handleChangeQuantity}
                     menu={menu}
                     setOrder={setOrder}
-                    getOneOrderTotal={getOneOrderTotal}
                 />
             </div>
         </div>

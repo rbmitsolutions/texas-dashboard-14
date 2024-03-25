@@ -16,14 +16,13 @@ import { IMenuSection } from "@/common/types/restaurant/menu.interface"
 interface MenuCreateUpdateOrderProps {
     menu: IGETMenuOrderSystemResponse,
     setOrder: (order: ICreateNewOrder) => void
-    getOneOrderTotal: (order: ICreateNewOrder) => number
     order?: ICreateNewOrder
     handleOpen?: () => void
     printers?: IPrinters[]
     menuSections: IMenuSection[]
 }
 
-export default function CreateUpdateOrder({ menu, setOrder: setToOrders, getOneOrderTotal, order: oldOrder, handleOpen, printers, menuSections }: MenuCreateUpdateOrderProps) {
+export default function CreateUpdateOrder({ menu, setOrder: setToOrders,  order: oldOrder, handleOpen, printers, menuSections }: MenuCreateUpdateOrderProps) {
 
     const [order, setOrder] = useState<ICreateNewOrder>(oldOrder ? oldOrder : () => {
         const to_print_ips: string[] = []
@@ -90,7 +89,6 @@ export default function CreateUpdateOrder({ menu, setOrder: setToOrders, getOneO
                     setToOrders(order)
                     handleOpen && handleOpen()
                 }}
-                getOneOrderTotal={getOneOrderTotal}
                 menuSections={menuSections}
                 updateMnSection={handleUpdateMnSection}
             />
@@ -99,7 +97,6 @@ export default function CreateUpdateOrder({ menu, setOrder: setToOrders, getOneO
                 order={order}
                 handleRemoveAddOns={handleRemoveAddOns}
                 handleChangeQuantity={handleChangeQuantity}
-                getOneOrderTotal={getOneOrderTotal}
                 setOrder={(order) => {
                     setToOrders(order)
                     handleOpen && handleOpen()

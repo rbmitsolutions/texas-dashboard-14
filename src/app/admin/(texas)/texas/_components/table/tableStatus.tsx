@@ -28,13 +28,12 @@ interface TableStatusProps {
     table: ITable
     updateTable: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
     orderControllers: IOrderController[]
-    getOneOrderTotal: (order: ICreateNewOrder) => number
     menuSections: IMenuSection[]
     updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
     printers: IPrinters[]
 }
 
-export default function TablesStatus({ table, updateTable, orderControllers, updateOrder, getOneOrderTotal, menuSections, printers }: TableStatusProps) {
+export default function TablesStatus({ table, updateTable, orderControllers, updateOrder, menuSections, printers }: TableStatusProps) {
     const [isOpen, setIsOpen] = useState(false)
 
     const isStatusDisabled = (status: TableMealStatus): boolean => {

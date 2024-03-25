@@ -1,6 +1,9 @@
 import { useState } from "react"
 import { UseMutateFunction } from "react-query"
 
+//libs
+import { getOrders } from "@/common/libs/restaurant/order"
+
 //components
 import {
     Sheet,
@@ -33,9 +36,9 @@ import { usePrintersStore } from "@/store/restaurant/printers"
 import { TableTransactionsType, TransactionsDirection, TransactionsMethod } from "@/common/types/company/transactions.interface"
 import { IPOSTCompanyBody, IPOSTCompanyDataRerturn, IPOSTTransaction } from "@/hooks/company/IPostCompanyDataHooks.interface"
 import { usePOSTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
+import { OrderStatus } from "@/common/types/restaurant/order.interface"
 import { IToken } from "@/common/types/auth/auth.interface"
 import { IDataTable } from "../../../[id]/page"
-import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
 
 interface PaymentButtonProps {
     dataTable: IDataTable
@@ -45,6 +48,7 @@ interface PaymentButtonProps {
     user: IToken
     onSuccessfulPayment?: () => void
     closeTable: () => {}
+    remaining: number
 }
 
 export interface IHandlePayment {
@@ -63,7 +67,8 @@ export default function PaymentButton({
     createTransaction,
     user,
     onSuccessfulPayment,
-    closeTable
+    closeTable,
+    remaining
 }: PaymentButtonProps) {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -111,7 +116,14 @@ export default function PaymentButton({
         let ordersToUpdate: { id: string, paid: number }[] = []
 
         if (toPay >= (dataTable?.values?.total - dataTable?.values?.paid) || payPartial) {
-            ordersToUpdate = dataTable?.orders?.unpaid?.map(o => {
+            const unpaidOrders = getOrders({
+                filter: {
+                    status: [OrderStatus.ORDERED, OrderStatus.DELIVERED]
+                },
+                orderControllers: dataTable?.orderControllers || []
+            }) || []
+
+            ordersToUpdate = unpaidOrders?.map(o => {
                 return {
                     id: o?.id,
                     paid: o?.paid
@@ -128,7 +140,6 @@ export default function PaymentButton({
         const total = giftCard?.toPay ? giftCard.toPay : toPay
 
         let transactions: IPOSTTransaction[] = []
-        let remaining = dataTable?.values?.remaining > 0 ? dataTable?.values?.remaining : 0
         let tip = total - remaining
 
         if (tip > 0) {
@@ -200,7 +211,6 @@ export default function PaymentButton({
             },
             {
                 onSuccess: async () => {
-                    //todo: only print if the remaining is 0
                     if (defaultPrinter && total >= remaining) {
                         await toPrint({
                             toPrint: {
@@ -225,6 +235,41 @@ export default function PaymentButton({
             },
         );
     }
+
+    if (!payPartial && !payTotal) return (
+        <AlertDialog>
+            <AlertDialogTrigger asChild>
+                <Button
+                    className='h-14'
+                    variant='destructive'
+                    leftIcon="Banknote"
+                    type='button'
+                >
+                    Close Table
+                </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        Close Table
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction asChild>
+                        <Button
+                            leftIcon='X'
+                            onClick={closeTable}
+                            variant='destructive'
+                        >
+                            Close
+                        </Button>
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+    )
 
     return (
         <Sheet
@@ -254,40 +299,7 @@ export default function PaymentButton({
                             {convertCentsToEuro(payTotal)}
                         </Button>
                         :
-                        <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                            <Button
-                                className='h-14'
-                                variant='destructive'
-                                leftIcon="Banknote"
-                                type='button'
-                                // onClick={closeTable}
-                                // disabled={toPay <= 0}
-                            >
-                                Close Table
-                            </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                        Close Table
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction asChild>
-                                        <Button
-                                            leftIcon='X'
-                                            onClick={closeTable}
-                                            variant='destructive'
-                                        >
-                                            Close
-                                        </Button>
-                                    </AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
+                        <div />
                 }
 
             </SheetTrigger>

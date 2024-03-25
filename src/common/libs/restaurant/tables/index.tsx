@@ -17,3 +17,4 @@ export const getTableStatusVariant = (status: TableMealStatus): ButtonProps['var
             return 'green'
     }
 }
+

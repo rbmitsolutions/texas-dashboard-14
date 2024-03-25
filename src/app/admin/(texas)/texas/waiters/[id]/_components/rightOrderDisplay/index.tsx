@@ -1,15 +1,15 @@
 import { UseMutateFunction } from "react-query"
 import { useRouter } from "next/navigation"
-import toast from "react-hot-toast"
 
 //libs
-import { convertCentsToEuro } from "@/common/utils/convertToEuro"
 import { useState } from "react"
 
 //components
 import { OrderSummary } from "../../../../_components/orderSummary"
 import AuthDialog from "@/components/common/authDialog"
 import { Button } from "@/components/ui/button"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 import ChangeTable from "./changeTable"
 import LastOrders from "./lastOrders"
 
@@ -23,17 +23,15 @@ import { hasOrdersWithOrderedStatus } from "@/common/libs/restaurant/order"
 import { IPrinters } from "@/common/types/restaurant/printers.interface"
 import { IToken, Permissions } from "@/common/types/auth/auth.interface"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
+import { RedirectTo } from "@/common/types/routers/endPoints.types"
 import { ICreateNewOrder } from "@/store/restaurant/order"
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
+import { ErrorMessages } from "@/common/types/messages"
 
 interface RightOrderDisplayProps {
     order: ICreateNewOrder[]
     resetOrder: () => void
     updateOrderQuantity: (order: ICreateNewOrder, incrise: boolean) => void
     deleteOrder: (orderId: string) => void
-    getOneOrderTotal: (order: ICreateNewOrder) => number
-    getOrderTotal: (orders: ICreateNewOrder[]) => number
     menu: IGETMenuOrderSystemResponse[]
     replaceOrder: (order: ICreateNewOrder) => void
     table: ITable
@@ -46,13 +44,14 @@ interface RightOrderDisplayProps {
     updateTable: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
 }
 
-export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTotal, updateOrderQuantity, getOneOrderTotal, deleteOrder, replaceOrder, table, createOrder, menuSections, orderControllers, updateOrder, printers, sections, updateTable }: RightOrderDisplayProps) {
+export default function RightOrderDisplay({ order, resetOrder, menu, updateOrderQuantity, deleteOrder, replaceOrder, table, createOrder, menuSections, orderControllers, updateOrder, printers, sections, updateTable }: RightOrderDisplayProps) {
     const [toPrint, setToPrint] = useState<boolean>(true)
     const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false)
-    const { back } = useRouter()
+    const { push } = useRouter()
     const [status, setStatus] = useState<TableMealStatus>()
 
     const toggleAuthDialog = () => {
+        setToPrint(true)
         setIsAuthDialogOpen(!isAuthDialogOpen)
     }
 
@@ -116,10 +115,13 @@ export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTot
                 onSuccess: async () => {
                     setToPrint(true)
                     resetOrder()
-                    back()
+                    push(RedirectTo.WAITERS)
                 },
                 onError: (err) => {
-                    toast.error('Something went wrong')
+                    if (err?.response?.data?.message === ErrorMessages.TABLE_IS_CLOSED) {
+                        resetOrder()
+                        push(RedirectTo.WAITERS)
+                    }
                 },
             }
         );
@@ -160,7 +162,6 @@ export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTot
                     <LastOrders
                         ordersController={orderControllers}
                         menu={menu}
-                        getOneOrderTotal={getOneOrderTotal}
                         menuSections={menuSections}
                         updateOrder={updateOrder}
                         printers={printers}
@@ -193,7 +194,6 @@ export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTot
                             replaceOrder,
                             menu
                         }}
-                        getOneOrderTotal={getOneOrderTotal}
                         menuSections={menuSections}
                     />
                 </div>
@@ -204,7 +204,7 @@ export default function RightOrderDisplay({ order, resetOrder, menu, getOrderTot
                     disabled={order?.length === 0}
                     onClick={() => toggleAuthDialog()}
                 >
-                    {convertCentsToEuro(getOrderTotal(order))}
+                    Send Order
                 </Button>
             </div>
         </>

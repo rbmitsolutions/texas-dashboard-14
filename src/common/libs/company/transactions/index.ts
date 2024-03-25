@@ -1,13 +1,13 @@
 import { ITransactions, TransactionsDirection, TransactionsStatus } from "@/common/types/company/transactions.interface"
 
-interface IGerTransactionsTotalByFilter {
+interface IGetTransactionsTotal {
     filter: {
         payee_key?: string
         status?: TransactionsStatus
     }
     transactions: ITransactions[]
 }
-export const transactionsTotalByFilter = ({ filter, transactions }: IGerTransactionsTotalByFilter): number => {
+export const transactionsTotal = ({ filter, transactions }: IGetTransactionsTotal): number => {
     let transactionTotal: ITransactions[] = transactions
 
     if (filter.payee_key) {

@@ -12,7 +12,6 @@ import Wrap from "@/components/common/wrap"
 //store
 import { useMenuSectionsStore } from "@/store/restaurant/menuSections"
 import { usePrintersStore } from "@/store/restaurant/printers"
-import { useOrderStore } from "@/store/restaurant/order"
 
 //hooks
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
@@ -25,7 +24,6 @@ import { RedirectTo } from "@/common/types/routers/endPoints.types"
 
 export default function FinishedTable({ params }: { params: { id: string } }) {
     const { menuSections } = useMenuSectionsStore()
-    const { getOneOrderTotal } = useOrderStore()
     const { printers } = usePrintersStore()
     const { user } = useAuthHooks()
 
@@ -117,7 +115,6 @@ export default function FinishedTable({ params }: { params: { id: string } }) {
                                         orderController={oc}
                                         orderSumary={{
                                             order: oc?.orders,
-                                            getOneOrderTotal,
                                             menuSections,
                                         }}
                                     />

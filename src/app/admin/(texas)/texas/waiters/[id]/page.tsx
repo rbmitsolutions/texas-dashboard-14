@@ -1,6 +1,9 @@
 'use client'
 import { useEffect, useState } from "react";
+import { addDaysToDate, getFirstTimeOfTheDay } from "@/common/libs/date-fns/dateFormat";
+import { RedirectTo } from "@/common/types/routers/endPoints.types";
 import { useRouter } from "next/navigation";
+import { io } from "socket.io-client";
 
 //libs
 import sortMenuSections from "@/common/libs/restaurant/menuSections";
@@ -14,7 +17,6 @@ import SearchInput from "@/components/common/searchInput";
 import { Button } from "@/components/ui/button";
 
 //store
-import { useOrderControllerStore } from "@/store/restaurant/orderController";
 import { useTablesStore } from "@/store/restaurant/tables";
 import { useOrderStore } from "@/store/restaurant/order";
 
@@ -29,14 +31,14 @@ import { useSectionsStore } from "@/store/restaurant/sections";
 
 //interfaces
 import { IMenuOrderSystemFilter, useOrderSystemHooks } from "@/hooks/useOrderSystemHooks";
-import { RedirectTo } from "@/common/types/routers/endPoints.types";
+import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types";
 import { ITable } from "@/common/types/restaurant/tables.interface";
-import { SocketIoEvent } from "@/common/libs/socketIo/types";
+
+const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
 export default function Table({ params }: { params: { id: string } }) {
-    const { setOrder, order, resetOrder, updateOrderQuantity, deleteOrder, getOrderTotal, getOneOrderTotal, replaceOrder } = useOrderStore()
+    const { setOrder, order, resetOrder, updateOrderQuantity, deleteOrder, replaceOrder } = useOrderStore()
     const { getFilteredOrderSystemMenu } = useOrderSystemHooks()
-    const { getOrderControllers } = useOrderControllerStore()
     const { getTableById } = useTablesStore()
     const { printers } = usePrintersStore()
     const { sections } = useSectionsStore()
@@ -67,6 +69,35 @@ export default function Table({ params }: { params: { id: string } }) {
             refetchOnWindowFocus: false,
             refetchIntervalInBackground: false,
             refetchOnMount: false,
+        }
+    })
+
+    const {
+        restaurantAllOrderController: orderControllers,
+        refetchRestaurantData: refetchOrdersController
+    } = useGETRestaurantDataHooks({
+        query: 'ORDER_CONTROLLER',
+        defaultParams: {
+            orderController: {
+                all: {
+                    pagination: {
+                        take: 500,
+                        skip: 0
+                    },
+                    includes: {
+                        orders: '1'
+                    },
+                    date: {
+                        gte: getFirstTimeOfTheDay(new Date()),
+                        lte: addDaysToDate(new Date(), 1)
+                    },
+                    finished_table_id: null,
+                    table_id: params?.id
+                }
+            }
+        },
+        UseQueryOptions: {
+            enabled: !!params?.id
         }
     })
 
@@ -156,6 +187,17 @@ export default function Table({ params }: { params: { id: string } }) {
         }
     }, [getTableById, params?.id, push])
 
+    useEffect(() => {
+        socket.on("message", (message: ISocketMessage) => {
+            if (message?.event === SocketIoEvent.TABLE && message?.message === params?.id) {
+                refetchOrdersController()
+            }
+        });
+        () => {
+            socket.off("message");
+        }
+    }, [params?.id, refetchOrdersController]);
+
     return (
         <LayoutFrame
             user={user}
@@ -227,13 +269,11 @@ export default function Table({ params }: { params: { id: string } }) {
                         resetOrder={resetOrder}
                         updateOrderQuantity={updateOrderQuantity}
                         deleteOrder={deleteOrder}
-                        getOneOrderTotal={getOneOrderTotal}
-                        getOrderTotal={getOrderTotal}
                         replaceOrder={replaceOrder}
                         table={getTableById(params?.id) || {} as ITable}
                         createOrder={createOrder}
                         menuSections={menuSections?.data}
-                        orderControllers={getOrderControllers({ table_id: params?.id })}
+                        orderControllers={orderControllers?.data || []}
                         updateOrder={updateOrder}
                         printers={printers}
                         sections={sections}
@@ -266,7 +306,6 @@ export default function Table({ params }: { params: { id: string } }) {
                         setOrder={setOrder}
                         updateOrderQuantity={updateOrderQuantity}
                         order={order}
-                        getOneOrderTotal={getOneOrderTotal}
                         printers={printers}
                         menuSections={menuSections?.data || []}
                     />

@@ -22,13 +22,12 @@ import { ICreateNewOrder } from "@/store/restaurant/order"
 interface LastOrdersProps {
     ordersController: IOrderController[]
     menu: IGETMenuOrderSystemResponse[]
-    getOneOrderTotal: (order: ICreateNewOrder) => number
     menuSections: IMenuSection[]
     updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
     printers: IPrinters[]
 }
 
-export default function LastOrders({ ordersController, menu, getOneOrderTotal, menuSections, updateOrder, printers }: LastOrdersProps) {
+export default function LastOrders({ ordersController, menu, menuSections, updateOrder, printers }: LastOrdersProps) {
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -61,7 +60,6 @@ export default function LastOrders({ ordersController, menu, getOneOrderTotal, m
                                             menu_short_title: menuItem?.short_title,
                                         }
                                     }) as unknown as IOrder[],
-                                    getOneOrderTotal,
                                     menuSections,
                                     updateOrderStatus: {
                                         onUpdate: updateOrder,

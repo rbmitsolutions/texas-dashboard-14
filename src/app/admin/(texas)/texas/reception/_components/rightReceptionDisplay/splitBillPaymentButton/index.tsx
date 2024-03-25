@@ -2,6 +2,9 @@
 import { useState } from "react"
 import { UseMutateFunction } from "react-query"
 
+//libs
+import { getOrderTotal } from "@/common/libs/restaurant/order"
+
 //components
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTrigger } from "@/components/ui/dialog"
 import FullOrderController from "../../../../_components/orderSummary/fullOrderController"
@@ -14,25 +17,24 @@ import { IPOSTCompanyBody, IPOSTCompanyDataRerturn } from "@/hooks/company/IPost
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
 import { IOrder, OrderStatus } from "@/common/types/restaurant/order.interface"
 import { IToken } from "@/common/types/auth/auth.interface"
-import { ICreateNewOrder } from "@/store/restaurant/order"
 import { IDataTable } from "../../../[id]/page"
 
 interface SplitBillPaymentButtonButtonProps {
     dataTable: IDataTable
     menuSections: IMenuSection[]
-    getOneOrderTotal: (order: ICreateNewOrder) => number
     createTransaction: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
     user: IToken
     closeTable: () => {}
+    remaining: number
 }
 
 export default function SplitBillPaymentButton({
     dataTable,
     menuSections,
-    getOneOrderTotal,
     createTransaction,
     user,
-    closeTable
+    closeTable,
+    remaining
 }: SplitBillPaymentButtonButtonProps) {
     const [orders, setOrders] = useState<IOrder[]>([])
 
@@ -67,6 +69,7 @@ export default function SplitBillPaymentButton({
         }
 
     }
+
     const handleRemoveFromBill = (orderId: string) => {
         const order = orders?.find(o => o?.id === orderId)
 
@@ -97,7 +100,6 @@ export default function SplitBillPaymentButton({
                     className='h-14'
                     variant='blue'
                     leftIcon="Banknote"
-                    disabled={dataTable?.values?.remaining === 0}
                 >
                     Split Bill
                 </Button>
@@ -110,7 +112,7 @@ export default function SplitBillPaymentButton({
                 </DialogHeader>
                 <div className='grid grid-cols-2 gap-8 min-h-full overflow-auto'>
                     <div className='flex-col-container overflow-auto scrollbar-thin p-4'>
-                        {dataTable?.orderControllers?.unpaid?.map(oc => {
+                        {dataTable?.orderControllers?.map(oc => {
                             const filteredOrders = oc?.orders?.filter(o => {
                                 const order = orders?.find(or => or?.id === o?.id)
                                 if (order?.quantity === (o?.quantity - o?.paid) || o?.status === OrderStatus.CANCELLED || o?.status === OrderStatus.RETURNED || o?.status === OrderStatus.PAID) {
@@ -125,7 +127,6 @@ export default function SplitBillPaymentButton({
                                     orderController={oc}
                                     orderSumary={{
                                         order: filteredOrders || [],
-                                        getOneOrderTotal,
                                         menuSections,
                                         splitBill: {
                                             handleAddToBill
@@ -138,7 +139,6 @@ export default function SplitBillPaymentButton({
                     <div className='flex-col-container overflow-auto scrollbar-thin bg-background-soft p-4 rounded-lg'>
                         <OrderSummary
                             order={orders || []}
-                            getOneOrderTotal={getOneOrderTotal}
                             menuSections={menuSections}
                             splitBill={{
                                 handleRemoveFromBill
@@ -152,11 +152,24 @@ export default function SplitBillPaymentButton({
                     <PaymentButton
                         dataTable={{
                             ...dataTable,
-                            orders: {
-                                unpaid: orders
-                            }
+                            orderControllers: dataTable?.orderControllers?.map(oc => {
+                                return {
+                                    ...oc,
+                                    orders: oc?.orders?.map(o => {
+                                        const order = orders?.find(or => or?.id === o?.id)
+                                        if (order) {
+                                            return {
+                                                ...o,
+                                                paid: order?.paid
+                                            }
+                                        }
+                                        return o
+                                    })
+                                }
+                            })
                         }}
-                        payPartial={orders?.map(o => getOneOrderTotal({
+                        remaining={remaining}
+                        payPartial={orders?.map(o => getOrderTotal({
                             ...o,
                             paid: 0
                         })).reduce((a, b) => a + b, 0)}
