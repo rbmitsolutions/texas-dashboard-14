@@ -3,7 +3,7 @@ import { UseMutateFunction } from "react-query"
 //libs
 import { CreateRosterFormSchema, CreateRosterFormSchemaType } from "@/common/libs/zod/forms/company/companyRosterForm";
 import { rosterBackground } from "@/common/libs/company/roster";
-import { parseDate, subDaysToDate } from "@/common/libs/date-fns/dateFormat";
+import { dateFormatIso, parseDate, subDaysToDate } from "@/common/libs/date-fns/dateFormat";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/common/libs/shadcn/utils";
@@ -106,7 +106,11 @@ export default function AddToRoster({
             date,
             formData,
         })
-        await handleCreateRoster(postRosterData)
+
+        await handleCreateRoster({
+            ...postRosterData,
+            date: dateFormatIso(postRosterData?.date)
+        })
     };
 
 
