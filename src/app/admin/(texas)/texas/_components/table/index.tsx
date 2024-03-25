@@ -31,7 +31,6 @@ interface TableProps {
         createBooking: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>
         timesOpen: ITimesOpen[],
         orderControllers: IOrderController[]
-        getOneOrderTotal: (order: ICreateNewOrder) => number
         menuSections: IMenuSection[]
         updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
         updateTable: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
@@ -81,7 +80,6 @@ export default function Table({ table, waitres, reception }: TableProps) {
                             table={table}
                             updateTable={waitres?.updateTable}
                             orderControllers={waitres?.orderControllers}
-                            getOneOrderTotal={waitres?.getOneOrderTotal}
                             menuSections={waitres?.menuSections}
                             updateOrder={waitres?.updateOrder}
                             printers={waitres?.printers}

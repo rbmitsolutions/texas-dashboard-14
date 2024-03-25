@@ -70,7 +70,6 @@ export default function OpenTableDialog({
     }
 
     const handleOpenWithNoBooking = async () => {
-
         await updateTable({
             table: {
                 id: table?.id,

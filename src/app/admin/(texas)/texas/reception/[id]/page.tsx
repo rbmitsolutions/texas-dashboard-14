@@ -1,9 +1,14 @@
 'use client'
 import { useEffect, useState } from 'react';
+import { RedirectTo } from '@/common/types/routers/endPoints.types';
 import { useRouter } from 'next/navigation';
+import { io } from 'socket.io-client';
 
 //libs
+import { addDaysToDate, getFirstTimeOfTheDay } from '@/common/libs/date-fns/dateFormat';
 import { getWalkInClient } from '@/common/libs/restaurant/actions/walkinClients';
+import { orderControllersTotal } from '@/common/libs/restaurant/orderController';
+import { transactionsTotal } from '@/common/libs/company/transactions';
 
 //components
 import { transactionsColumnsTable } from '../_components/transactionsColumnsTable';
@@ -15,49 +20,37 @@ import Wrap from '@/components/common/wrap';
 
 //hooks
 import { useGETCompanyDataHooks, usePOSTCompanyDataHooks, usePUTCompanyDataHooks } from '@/hooks/company/companyDataHooks';
-import { usePUTRestaurantDataHooks } from '@/hooks/restaurant/restaurantDataHooks';
+import { useGETRestaurantDataHooks, usePUTRestaurantDataHooks } from '@/hooks/restaurant/restaurantDataHooks';
 import { useSocketIoHooks } from '@/hooks/useSocketIoHooks';
 import { useAuthHooks } from '@/hooks/useAuthHooks';
 
 //store
-import { useOrderControllerStore } from '@/store/restaurant/orderController';
 import { useMenuSectionsStore } from '@/store/restaurant/menuSections';
-import { useTransactionsStore } from '@/store/company/transactions';
 import { usePrintersStore } from '@/store/restaurant/printers';
 import { useTablesStore } from '@/store/restaurant/tables';
-import { useOrderStore } from '@/store/restaurant/order';
 
 //interfaces
 import { ITransactions, TableTransactionsType, TransactionsStatus } from '@/common/types/company/transactions.interface';
-import { IOrder, IOrderController, OrderStatus } from '@/common/types/restaurant/order.interface';
-import { RedirectTo } from '@/common/types/routers/endPoints.types';
-import { ITable } from '@/common/types/restaurant/tables.interface';
-import { SocketIoEvent } from '@/common/libs/socketIo/types';
-import { addDaysToDate, getFirstTimeOfTheDay } from '@/common/libs/date-fns/dateFormat';
+import { IAllOrderControllerResponse } from '@/hooks/restaurant/IGetRestaurantDataHooks.interface';
 import { IGetAllTransactionsResponse } from '@/hooks/company/IGetCompanyDataHooks.interface';
-import { transactionsTotalByFilter } from '@/common/libs/restaurant/transactions';
+import { ISocketMessage, SocketIoEvent } from '@/common/libs/socketIo/types';
+import { IOrderController } from '@/common/types/restaurant/order.interface';
+import { ITable } from '@/common/types/restaurant/tables.interface';
 
 export interface IDataTable {
     table: ITable | undefined
     transactions: ITransactions[]
-    orders: {
-        unpaid: IOrder[]
-    },
-    orderControllers: {
-        unpaid: IOrderController[]
-    }
+    orderControllers: IOrderController[]
     values: {
         total: number,
         paid: number,
-        remaining: number
     }
 }
 
+const socket = io(process.env.NEXT_PUBLIC_URL! as string);
+
 export default function Table({ params }: { params: { id: string } }) {
-    const { getTransactionsByFilter, getTransactionsTotalByFilter, transactions } = useTransactionsStore()
-    const { getOrderControllers, getTotalOfOrdersByTableId, orderControllers } = useOrderControllerStore()
     const { menuSections } = useMenuSectionsStore()
-    const { getOneOrderTotal } = useOrderStore()
     const { getTableById } = useTablesStore()
     const { printers } = usePrintersStore()
     const { emit } = useSocketIoHooks()
@@ -66,68 +59,95 @@ export default function Table({ params }: { params: { id: string } }) {
     const [dataTable, setDataTable] = useState<IDataTable>({
         table: undefined,
         transactions: [],
-        orders: {
-            unpaid: []
-        },
-        orderControllers: {
-            unpaid: []
-        },
+        orderControllers: [],
         values: {
             total: 0,
             paid: 0,
-            remaining: 0
         }
     })
 
-    const remaining = getTotalOfOrdersByTableId(params.id) - getTransactionsTotalByFilter({
-        payee_key: params.id,
-        status: TransactionsStatus.CONFIRMED
+    const {
+        refetchCompanyData: refetchTransactions
+    } = useGETCompanyDataHooks({
+        query: 'TRANSACTIONS',
+        defaultParams: {
+            transactions: {
+                all: {
+                    pagination: {
+                        take: 500,
+                        skip: 0
+                    },
+                    date: {
+                        gte: getFirstTimeOfTheDay(new Date()),
+                        lte: addDaysToDate(new Date(), 1)
+                    },
+                    type: {
+                        in: [TableTransactionsType.OPEN_TABLE]
+                    },
+                    payee_key: params?.id
+                }
+            }
+        },
+        UseQueryOptions: {
+            onSuccess: (data) => {
+                const transactions = data as IGetAllTransactionsResponse
+                setDataTable(prev => ({
+                    ...prev,
+                    transactions: transactions?.data,
+                    values: {
+                        ...prev?.values,
+                        paid: transactionsTotal({
+                            filter: {
+                                payee_key: params.id,
+                                status: TransactionsStatus.CONFIRMED
+                            },
+                            transactions: transactions?.data || []
+                        })
+                    }
+                }))
+            },
+        }
     })
 
-    //todo implement it
-    // const {
-    //     refetchCompanyData: refetchTransactions
-    // } = useGETCompanyDataHooks({
-    //     query: 'TRANSACTIONS',
-    //     defaultParams: {
-    //         transactions: {
-    //             all: {
-    //                 pagination: {
-    //                     take: 500,
-    //                     skip: 0
-    //                 },
-    //                 date: {
-    //                     gte: getFirstTimeOfTheDay(new Date()),
-    //                     lte: addDaysToDate(new Date(), 1)
-    //                 },
-    //                 type: {
-    //                     in: [TableTransactionsType.OPEN_TABLE]
-    //                 },
-    //                 payee_key: params?.id
-    //             }
-    //         }
-    //     },
-    //     UseQueryOptions: {
-    //         onSuccess: (data) => {
-    //             const transactions = data as IGetAllTransactionsResponse
-    //             setDataTable(prev => ({
-    //                 ...prev,
-    //                 transactions: transactions?.data,
-    //                 values: {
-    //                     ...prev.values,
-    //                     paid: transactionsTotalByFilter({
-    //                         filter: {
-    //                             payee_key: params.id,
-    //                             status: TransactionsStatus.CONFIRMED
-    //                         },
-    //                         transactions: transactions?.data || []
-    //                     })
-    //                 }
+    const {
+        refetchRestaurantData: refetchOrdersController
+    } = useGETRestaurantDataHooks({
+        query: 'ORDER_CONTROLLER',
+        defaultParams: {
+            orderController: {
+                all: {
+                    pagination: {
+                        take: 500,
+                        skip: 0
+                    },
+                    includes: {
+                        orders: '1'
+                    },
+                    date: {
+                        gte: getFirstTimeOfTheDay(new Date()),
+                        lte: addDaysToDate(new Date(), 1)
+                    },
+                    finished_table_id: null,
+                    table_id: params?.id
+                }
+            }
+        },
+        UseQueryOptions: {
+            onSuccess: (data) => {
+                const orderControllers = data as IAllOrderControllerResponse
 
-    //             }))
-    //         },
-    //     }
-    // })
+                setDataTable(prev => ({
+                    ...prev,
+                    orderControllers: orderControllers?.data,
+                    values: {
+                        ...prev?.values,
+                        total: orderControllersTotal(orderControllers?.data)
+                    }
+                }))
+            },
+            enabled: !!params?.id
+        }
+    })
 
     const { createCompanyData: createTransaction } = usePOSTCompanyDataHooks({
         query: 'TRANSACTIONS',
@@ -137,12 +157,16 @@ export default function Table({ params }: { params: { id: string } }) {
                     event: SocketIoEvent.TABLE_PAYMENT,
                     message: dataTable?.table?.id
                 })
-                await emit({
-                    event: SocketIoEvent.ORDER,
-                    message: dataTable?.table?.id
-                })
-                //todo implement it
-                // await refetchTransactions()
+
+                if (dataTable?.table?.id === params?.id) {
+                    await refetchTransactions()
+                    await refetchOrdersController()
+                } else {
+                    await emit({
+                        event: SocketIoEvent.ORDER,
+                        message: dataTable?.table?.id
+                    })
+                }
             }
         }
     })
@@ -151,14 +175,19 @@ export default function Table({ params }: { params: { id: string } }) {
         query: 'TRANSACTIONS',
         UseMutationOptions: {
             onSuccess: async () => {
-                await emit({
-                    event: SocketIoEvent.TABLE_PAYMENT,
-                    message: dataTable?.table?.id
-                })
-                await emit({
-                    event: SocketIoEvent.ORDER,
-                    message: dataTable?.table?.id
-                })
+                if (dataTable?.table?.id === params?.id) {
+                    await refetchTransactions()
+                    await refetchOrdersController()
+                } else {
+                    await emit({
+                        event: SocketIoEvent.TABLE_PAYMENT,
+                        message: dataTable?.table?.id
+                    })
+                    await emit({
+                        event: SocketIoEvent.ORDER,
+                        message: dataTable?.table?.id
+                    })
+                }
             }
         }
     })
@@ -195,14 +224,14 @@ export default function Table({ params }: { params: { id: string } }) {
         query: 'ORDER',
         UseMutationOptions: {
             onSuccess: async () => {
-                await emit({
-                    event: SocketIoEvent.ORDER,
-                    message: params?.id
-                })
-                await emit({
-                    event: SocketIoEvent.TABLE,
-                    message: params?.id
-                })
+                if (dataTable?.table?.id === params?.id) {
+                    await refetchOrdersController()
+                } else {
+                    await emit({
+                        event: SocketIoEvent.ORDER,
+                        message: params?.id
+                    })
+                }
             }
         }
     })
@@ -234,44 +263,25 @@ export default function Table({ params }: { params: { id: string } }) {
     }
 
     useEffect(() => {
-        setDataTable({
-            table: getTableById(params.id),
-            transactions: getTransactionsByFilter({ payee_key: params.id }),
-            orders: {
-                unpaid: getOrderControllers({
-                    table_id: params.id,
-                    orders: {
-                        status: [OrderStatus.ORDERED, OrderStatus.DELIVERED]
-                    }
-                })?.map(oc => {
-                    return oc?.orders?.filter(o => {
-                        if (o?.status === OrderStatus.ORDERED || o?.status === OrderStatus.DELIVERED) {
-                            return {
-                                ...o,
-                                paid: Number(o?.quantity) - Number(o?.paid)
-                            }
-                        }
-                    })
-                }).flat() || []
-            },
-            values: {
-                total: getTotalOfOrdersByTableId(params.id),
-                paid: getTransactionsTotalByFilter({
-                    payee_key: params.id,
-                    status: TransactionsStatus.CONFIRMED
-                }),
-                remaining
-            },
-            orderControllers: {
-                unpaid: getOrderControllers({
-                    table_id: params.id,
-                    orders: {
-                        status: [OrderStatus.ORDERED, OrderStatus.DELIVERED]
-                    }
-                })
+        setDataTable(prev => ({
+            ...prev,
+            table: getTableById(params.id)
+        }))
+    }, [getTableById, params.id])
+
+    useEffect(() => {
+        socket.on("message", (message: ISocketMessage) => {
+            if (message?.event === SocketIoEvent.ORDER && message?.message === params?.id) {
+                refetchOrdersController()
             }
-        })
-    }, [getOrderControllers, getTableById, getTotalOfOrdersByTableId, getTransactionsByFilter, getTransactionsTotalByFilter, params.id, remaining, orderControllers, transactions])
+            if (message?.event === SocketIoEvent.TABLE_PAYMENT && message?.message === params?.id) {
+                refetchTransactions()
+            }
+        });
+        () => {
+            socket.off("message");
+        }
+    }, [params?.id, refetchOrdersController, refetchTransactions]);
 
     useEffect(() => {
         const table = getTableById(params?.id)
@@ -303,8 +313,6 @@ export default function Table({ params }: { params: { id: string } }) {
                 content: (
                     <RightReceptionDisplay
                         dataTable={dataTable}
-                        getOrderControllers={getOrderControllers}
-                        getOneOrderTotal={getOneOrderTotal}
                         menuSections={menuSections || []}
                         createTransaction={createTransaction}
                         user={user}
@@ -312,7 +320,6 @@ export default function Table({ params }: { params: { id: string } }) {
                         printers={printers || []}
                         closeTable={handleCloseTable}
                     />
-
                 ),
                 icon: {
                     title: 'Order',

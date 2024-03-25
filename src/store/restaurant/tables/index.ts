@@ -1,3 +1,4 @@
+import { OrderStatus } from '@/common/types/restaurant/order.interface';
 import { ITable, TableMealStatus } from '@/common/types/restaurant/tables.interface';
 import { create, } from 'zustand';
 
@@ -23,7 +24,7 @@ export const useTablesStore = create<TablesStateProps>((set): TablesStateProps =
     tablesFilter: {},
     setTablesFilter: (tablesFilter: TablesStateProps['tablesFilter']) => set({ tablesFilter }),
     getTablesFiltered: (tablesFilter: TablesStateProps['tablesFilter']) => {
-        const { section_ids, guests } = tablesFilter
+        const { section_ids, guests, client_name, is_open, meal_status } = tablesFilter
         let tables: ITable[] = [...useTablesStore.getState().tables] || []
 
         if (section_ids && section_ids?.length > 0) {
@@ -31,19 +32,19 @@ export const useTablesStore = create<TablesStateProps>((set): TablesStateProps =
         }
 
         if (guests && guests?.length > 0) {
-            tables = tables?.filter((table) => guests.includes(table?.guests ))
+            tables = tables?.filter((table) => guests.includes(table?.guests))
         }
 
-        if (tablesFilter?.client_name && tablesFilter?.client_name?.length > 0) {
-            tables = tables?.filter((table) => table.client_name?.toLowerCase().includes(tablesFilter?.client_name!.toLowerCase()))
+        if (client_name && client_name?.length > 0) {
+            tables = tables?.filter((table) => client_name?.toLowerCase().includes(tablesFilter?.client_name!.toLowerCase()))
         }
 
-        if (tablesFilter?.is_open !== undefined) {
-            tables = tables?.filter((table) => table.is_open === tablesFilter.is_open)
+        if (is_open !== undefined) {
+            tables = tables?.filter((table) => is_open === tablesFilter.is_open)
         }
 
-        if (tablesFilter?.meal_status && tablesFilter?.meal_status?.length > 0) {
-            tables = tables?.filter((table) => tablesFilter?.meal_status?.includes(table.meal_status))
+        if (meal_status && meal_status?.length > 0) {
+            tables = tables?.filter((table) => meal_status?.includes(table.meal_status))
         }
 
         return tables

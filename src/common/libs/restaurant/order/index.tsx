@@ -1,6 +1,8 @@
+//interfaces
+import { IOrder, IOrderController, OrderStatus } from "@/common/types/restaurant/order.interface";
 import { IMenuSection } from "@/common/types/restaurant/menu.interface";
-import { IOrder, OrderStatus } from "@/common/types/restaurant/order.interface";
 import { ButtonProps } from "@/components/ui/button";
+import { ICreateNewOrder } from "@/store/restaurant/order";
 
 export const scrollToOrder = (orderId: string): void => {
     const orderSummary = document.getElementById('order-summary-container')
@@ -89,3 +91,44 @@ export const hasOrdersWithOrderedStatus = (orders: IOrder[], sections: IMenuSect
 
     return ordersAlreadyOrdered;
 };
+
+
+export interface OrderFilterProps {
+    status?: OrderStatus[]
+    mn_type?: string;
+    mn_section?: string;
+}
+
+interface GetOrdersProps {
+    filter: OrderFilterProps,
+    orderControllers: IOrderController[]
+}
+
+export const getOrders = ({ filter, orderControllers }: GetOrdersProps) => {
+    const { status, mn_type, mn_section } = filter
+    let orders: IOrder[] = []
+
+    orderControllers.forEach((orderController) => {
+        orders = [...orders, ...orderController.orders]
+    })
+
+    if (status) {
+        orders = orders.filter((order) => status.includes(order.status))
+    }
+
+    if (mn_type) {
+        orders = orders.filter((order) => order.mn_type === mn_type)
+    }
+
+    if (mn_section) {
+        orders = orders.filter((order) => order.mn_section === mn_section)
+    }
+
+    return orders
+}
+
+export const getOrderTotal = (order: IOrder | ICreateNewOrder): number => {
+    const addOnsTotal = order?.add_ons?.reduce((acc, curr) => acc + curr?.price, 0)
+    const totalPaid = (order?.price + addOnsTotal) * (order?.paid || 0)
+    return ((order?.price + addOnsTotal) * order?.quantity) - totalPaid
+}

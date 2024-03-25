@@ -2,33 +2,23 @@
 import { io } from "socket.io-client"
 import { useEffect } from "react"
 
-//libs
-import { addDaysToDate, getFirstTimeOfTheDay } from "@/common/libs/date-fns/dateFormat"
-
 //store
-import { useOrderControllerStore } from "@/store/restaurant/orderController"
+import { useMenuSectionsStore } from "@/store/restaurant/menuSections"
+import { usePrintersStore } from "@/store/restaurant/printers"
+import { useSectionsStore } from "@/store/restaurant/sections"
 import { useTablesStore } from "@/store/restaurant/tables"
 
 //hooks
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 
 //interface
-import { IAllOrderControllerResponse, IGETMenuSectionsResponse, IGETPrintersResponse, IGETSectionResponse, IGETTablesAllResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
+import { IGETMenuSectionsResponse, IGETPrintersResponse, IGETSectionResponse, IGETTablesAllResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
 import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types"
-import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
-import { TableTransactionsType } from "@/common/types/company/transactions.interface"
-import { IGetAllTransactionsResponse } from "@/hooks/company/IGetCompanyDataHooks.interface"
-import { useTransactionsStore } from "@/store/company/transactions"
-import { usePrintersStore } from "@/store/restaurant/printers"
-import { useMenuSectionsStore } from "@/store/restaurant/menuSections"
-import { useSectionsStore } from "@/store/restaurant/sections"
 
 const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
 export default function TexasLayout({ children }: any) {
-    const { orderControllers, setOrderControllers } = useOrderControllerStore()
     const { menuSections, setMenuSections } = useMenuSectionsStore()
-    const { transactions, setTransactions } = useTransactionsStore()
     const { printers, setPrinters } = usePrintersStore()
     const { sections, setSections } = useSectionsStore()
     const { setTables, tables } = useTablesStore()
@@ -80,37 +70,6 @@ export default function TexasLayout({ children }: any) {
         }
     })
 
-    //todo: remove it, leave it at the table to fetch the data
-    const {
-        refetchRestaurantData: refetchOrdersController
-    } = useGETRestaurantDataHooks({
-        query: 'ORDER_CONTROLLER',
-        defaultParams: {
-            orderController: {
-                all: {
-                    pagination: {
-                        take: 500,
-                        skip: 0
-                    },
-                    includes: {
-                        orders: '1'
-                    },
-                    date: {
-                        gte: getFirstTimeOfTheDay(new Date()),
-                        lte: addDaysToDate(new Date(), 1)
-                    },
-                    finished_table_id: null
-                }
-            }
-        },
-        UseQueryOptions: {
-            onSuccess: (data) => {
-                const orderControllers = data as IAllOrderControllerResponse
-                setOrderControllers(orderControllers?.data)
-            },
-        }
-    })
-
     const {
         refetchRestaurantData: refetchSections
     } = useGETRestaurantDataHooks({
@@ -134,36 +93,6 @@ export default function TexasLayout({ children }: any) {
             onSuccess: (data) => {
                 const sections = data as IGETSectionResponse
                 setSections(sections?.data)
-            },
-        }
-    })
-
-    //todo: remove it, leave it at the table to fetch the data
-    const {
-        refetchCompanyData: refetchTransactions
-    } = useGETCompanyDataHooks({
-        query: 'TRANSACTIONS',
-        defaultParams: {
-            transactions: {
-                all: {
-                    pagination: {
-                        take: 500,
-                        skip: 0
-                    },
-                    date: {
-                        gte: getFirstTimeOfTheDay(new Date()),
-                        lte: addDaysToDate(new Date(), 1)
-                    },
-                    type: {
-                        in: [TableTransactionsType.OPEN_TABLE]
-                    }
-                }
-            }
-        },
-        UseQueryOptions: {
-            onSuccess: (data) => {
-                const transactions = data as IGetAllTransactionsResponse
-                setTransactions(transactions?.data)
             },
         }
     })
@@ -197,32 +126,18 @@ export default function TexasLayout({ children }: any) {
     useEffect(() => {
         socket.on("message", (message: ISocketMessage) => {
             if (message?.event === SocketIoEvent.TABLE) {
-                refetchTables()
                 refetchSections()
-            }
-            if (message?.event === SocketIoEvent.ORDER) {
-                refetchOrdersController()
-            }
-            if (message?.event === SocketIoEvent.TABLE_PAYMENT) {
-                refetchTransactions()
+                refetchTables()
             }
         });
         () => {
             socket.off("message");
         }
-    }, [refetchTables, refetchOrdersController, refetchTransactions, refetchSections]);
+    }, [refetchTables, refetchSections]);
 
     useEffect(() => {
         if (tables?.length === 0) {
             refetchTables()
-        }
-
-        if (orderControllers?.length === 0) {
-            refetchOrdersController()
-        }
-
-        if (transactions?.length === 0) {
-            refetchTransactions()
         }
 
         if (printers?.length === 0) {
@@ -237,7 +152,7 @@ export default function TexasLayout({ children }: any) {
             refetchSections()
         }
 
-    }, [menuSections?.length, orderControllers?.length, printers?.length, refetchMenuSections, refetchOrdersController, refetchPrinters, refetchSections, refetchTables, refetchTransactions, sections?.length, tables?.length, transactions?.length])
+    }, [menuSections?.length, printers?.length, refetchMenuSections, refetchPrinters, refetchSections, refetchTables, sections?.length, tables?.length])
 
     return (
         <div className=''>

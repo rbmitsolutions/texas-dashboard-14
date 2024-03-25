@@ -35,12 +35,11 @@ export interface IOrderSummary {
     updateOrderStatus?: {
         onUpdate: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
     }
-    getOneOrderTotal: (order: ICreateNewOrder) => number
     menuSections: IMenuSection[]
     showPrice?: boolean
 }
 
-export const OrderSummary = ({ order, updateOrder, getOneOrderTotal, menuSections, splitBill, updateOrderStatus, showPrice = true }: IOrderSummary) => {
+export const OrderSummary = ({ order, updateOrder, menuSections, splitBill, updateOrderStatus, showPrice = true }: IOrderSummary) => {
 
     if (order?.length === 0) {
         return (
@@ -113,7 +112,6 @@ export const OrderSummary = ({ order, updateOrder, getOneOrderTotal, menuSection
                                 <OrderQuantities
                                     order={order as IOrder}
                                     splitBill={splitBill}
-                                    getOneOrderTotal={getOneOrderTotal}
                                     showPrice={showPrice}
                                 />
 
@@ -121,7 +119,6 @@ export const OrderSummary = ({ order, updateOrder, getOneOrderTotal, menuSection
                                     <UpdateNewOrderDialog
                                         key={order?.id}
                                         order={order as ICreateNewOrder}
-                                        getOneOrderTotal={getOneOrderTotal}
                                         updateOrderQuantity={updateOrder.updateOrderQuantity}
                                         replaceOrder={updateOrder.replaceOrder}
                                         menuItem={menuItem as IMenu || {} as IMenu}

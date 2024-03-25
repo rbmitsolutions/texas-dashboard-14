@@ -1,6 +1,7 @@
 'use client'
 
 //components
+import GiftCardBalance from './_components/giftCardBallance';
 import OpenTillButton from './_components/openTillButton';
 import SearchInput from '@/components/common/searchInput';
 import LayoutFrame from '../../_components/layoutFrame';
@@ -15,8 +16,6 @@ import { useAuthHooks } from '@/hooks/useAuthHooks';
 //store
 import { usePrintersStore } from '@/store/restaurant/printers';
 import { useTablesStore } from '@/store/restaurant/tables';
-import GiftCardBalance from './_components/giftCardBallance';
-
 
 export default function Reception() {
     const { tablesFilter, setTablesFilter, getTablesFiltered } = useTablesStore()

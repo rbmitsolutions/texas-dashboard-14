@@ -12,15 +12,15 @@ import { ICreateNewOrder } from "@/store/restaurant/order";
 
 //interface
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
+import { getOrderTotal } from "@/common/libs/restaurant/order";
 
 interface OrderDisplayFooterProps {
     order: ICreateNewOrder
     handleChangeQuantity: (increase: boolean) => void
     menu: IGETMenuOrderSystemResponse
     setOrder: (order: ICreateNewOrder) => void
-    getOneOrderTotal: (order: ICreateNewOrder) => number
 }
-export default function OrderDisplayFooter({ order, handleChangeQuantity, menu, setOrder, getOneOrderTotal }: OrderDisplayFooterProps) {
+export default function OrderDisplayFooter({ order, handleChangeQuantity, menu, setOrder }: OrderDisplayFooterProps) {
 
     const handleAddToOrder = () => {
         const mandatoryAddOns = menu?.add_ons.filter(a => a.is_mandatory)
@@ -69,7 +69,7 @@ export default function OrderDisplayFooter({ order, handleChangeQuantity, menu, 
                 onClick={handleAddToOrder}
                 variant='green'
             >
-                {convertCentsToEuro(getOneOrderTotal ? getOneOrderTotal(order) : 0)}
+                {convertCentsToEuro(getOrderTotal(order) || 0)}
             </Button>
         </footer>
     )

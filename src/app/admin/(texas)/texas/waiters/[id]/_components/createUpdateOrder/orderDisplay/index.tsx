@@ -17,10 +17,9 @@ interface OrderDisplayProps {
     handleRemoveAddOns: (add_ons_id: string) => void
     handleChangeQuantity: (increase: boolean) => void
     setOrder: (order: ICreateNewOrder) => void
-    getOneOrderTotal: (order: ICreateNewOrder) => number
 }
 
-export default function OrderDisplay({ menu, order, handleRemoveAddOns, handleChangeQuantity, getOneOrderTotal, setOrder }: OrderDisplayProps) {
+export default function OrderDisplay({ menu, order, handleRemoveAddOns, handleChangeQuantity, setOrder }: OrderDisplayProps) {
     const sortedAddOns = order?.add_ons?.sort((a, b) => {
         if (a.is_mandatory && !b.is_mandatory) {
             return -1;
@@ -68,7 +67,6 @@ export default function OrderDisplay({ menu, order, handleRemoveAddOns, handleCh
                 order={order}
                 handleChangeQuantity={handleChangeQuantity}
                 menu={menu}
-                getOneOrderTotal={getOneOrderTotal}
                 setOrder={setOrder}
             />
         </div>

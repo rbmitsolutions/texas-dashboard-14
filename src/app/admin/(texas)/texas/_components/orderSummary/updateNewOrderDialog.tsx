@@ -20,13 +20,12 @@ import { ICreateNewOrder } from "@/store/restaurant/order"
 interface UpdateNewOrderDialogProps {
     replaceOrder: (order: ICreateNewOrder) => void,
     updateOrderQuantity: (order: ICreateNewOrder, isIncrement: boolean) => void
-    getOneOrderTotal: (order: ICreateNewOrder) => number
     order: ICreateNewOrder
     menuItem: IMenu
     menuSections: IMenuSection[]
 }
 
-export default function UpdateNewOrderDialog({ replaceOrder, updateOrderQuantity, getOneOrderTotal, order, menuItem, menuSections }: UpdateNewOrderDialogProps) {
+export default function UpdateNewOrderDialog({ replaceOrder, updateOrderQuantity, order, menuItem, menuSections }: UpdateNewOrderDialogProps) {
     const [isOpen, setIsOpen] = useState(false)
     const handleOpen = () => {
         setIsOpen(!isOpen)
@@ -57,7 +56,6 @@ export default function UpdateNewOrderDialog({ replaceOrder, updateOrderQuantity
                             menu={menuItem!}
                             handleOpen={handleOpen}
                             order={order as unknown as ICreateNewOrder}
-                            getOneOrderTotal={getOneOrderTotal}
                             setOrder={handleUpdateOrder}
                             menuSections={menuSections}
                         />
