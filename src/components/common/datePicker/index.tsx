@@ -36,7 +36,7 @@ export function DatePickerWithRange({
     const [preRendered, setPreRendered] = useState(false);
     const [date, setDate] = React.useState<DateRange | undefined>(value || {
         from: subDaysToDate(new Date(), 30),
-        to: new Date()
+        to: new Date(formatDate({ date: new Date(), f: 'yyyy-MM-dd' }))
     })
 
     const handleConfirm = () => {
@@ -106,8 +106,10 @@ export function DatePickerWithRange({
                         >Confirm</Button>
                         <Button variant='destructive' size='icon'
                             onClick={() => {
-                                setDate(undefined)
-                                onConfirm(undefined)
+                                setDate({
+                                    from: fromDate || new Date(),
+                                    to: toDate || new Date()
+                                })
                             }}
                         >
                             <Icon name='Eraser' size={14} />
@@ -141,7 +143,7 @@ export function DatePicker({ className, fromDate, disabled = false, toDate, valu
     const [date, setDate] = useState<Date | undefined>(value)
 
     const onDateChange = (date: Date | undefined) => {
-        if(!date) return
+        if (!date) return
         setDate(date)
         onConfirm(date)
     }
