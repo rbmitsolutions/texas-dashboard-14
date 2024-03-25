@@ -1,9 +1,7 @@
 import { UseMutateFunction } from "react-query"
 import { useRouter } from "next/navigation"
-import toast from "react-hot-toast"
 
 //libs
-import { convertCentsToEuro } from "@/common/utils/convertToEuro"
 import { useState } from "react"
 
 //components
@@ -53,6 +51,7 @@ export default function RightOrderDisplay({ order, resetOrder, menu, updateOrder
     const [status, setStatus] = useState<TableMealStatus>()
 
     const toggleAuthDialog = () => {
+        setToPrint(true)
         setIsAuthDialogOpen(!isAuthDialogOpen)
     }
 

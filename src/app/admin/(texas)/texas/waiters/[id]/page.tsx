@@ -131,18 +131,14 @@ export default function Table({ params }: { params: { id: string } }) {
         query: 'ORDER',
         UseMutationOptions: {
             onSuccess: async () => {
-                if (getTableById(params?.id)?.id == params?.id) {
-                    await refetchOrdersController()
-                } else {
-                    await emit({
-                        event: SocketIoEvent.ORDER,
-                        message: params?.id
-                    })
-                    await emit({
-                        event: SocketIoEvent.TABLE,
-                        message: params?.id
-                    })
-                }
+                await emit({
+                    event: SocketIoEvent.ORDER,
+                    message: params?.id
+                })
+                await emit({
+                    event: SocketIoEvent.TABLE,
+                    message: params?.id
+                })
             }
         }
     })
@@ -153,14 +149,10 @@ export default function Table({ params }: { params: { id: string } }) {
         query: 'ORDER',
         UseMutationOptions: {
             onSuccess: async () => {
-                if (getTableById(params?.id)?.id == params?.id) {
-                    await refetchOrdersController()
-                } else {
-                    await emit({
-                        event: SocketIoEvent.ORDER,
-                        message: params?.id
-                    })
-                }
+                await emit({
+                    event: SocketIoEvent.ORDER,
+                    message: params?.id
+                })
             }
         }
     })

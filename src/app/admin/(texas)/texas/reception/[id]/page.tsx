@@ -271,10 +271,10 @@ export default function Table({ params }: { params: { id: string } }) {
 
     useEffect(() => {
         socket.on("message", (message: ISocketMessage) => {
-            if (message?.event === SocketIoEvent.ORDER && message?.message === params?.id) {
+            if (message?.event === SocketIoEvent.ORDER) {
                 refetchOrdersController()
             }
-            if (message?.event === SocketIoEvent.TABLE_PAYMENT && message?.message === params?.id) {
+            if (message?.event === SocketIoEvent.TABLE_PAYMENT) {
                 refetchTransactions()
             }
         });
