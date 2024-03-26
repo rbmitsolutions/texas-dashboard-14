@@ -13,6 +13,7 @@ import PaymentButton from "./paymentButton"
 import PrintBill from "./printBillButton"
 
 //interface
+import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface"
 import { IPOSTCompanyBody, IPOSTCompanyDataRerturn } from "@/hooks/company/IPostCompanyDataHooks.interface"
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 import { TransactionsStatus } from "@/common/types/company/transactions.interface"
@@ -31,6 +32,7 @@ interface RightReceptionDisplayProps {
     updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
     printers: IPrinters[]
     closeTable: () => {}
+    createOrder: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>
 }
 
 export default function RightReceptionDisplay({
@@ -40,7 +42,8 @@ export default function RightReceptionDisplay({
     user,
     updateOrder,
     printers,
-    closeTable
+    closeTable,
+    createOrder
 }: RightReceptionDisplayProps) {
     const [status, setStatus] = useState<OrderStatus[]>([OrderStatus.ORDERED, OrderStatus.DELIVERED])
 
@@ -104,9 +107,9 @@ export default function RightReceptionDisplay({
                                 order: oc?.orders,
                                 updateOrderStatus: {
                                     onUpdate: updateOrder,
+                                    createOrder: createOrder
                                 }
                             }}
-                            onOrdersUpdate={updateOrder}
                             printers={printers}
                         />
                     )

@@ -30,9 +30,6 @@ interface TableProps {
     waitres?: {
         createBooking: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>
         timesOpen: ITimesOpen[],
-        orderControllers: IOrderController[]
-        menuSections: IMenuSection[]
-        updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
         updateTable: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
         printers: IPrinters[]
     }
@@ -70,20 +67,16 @@ export default function Table({ table, waitres, reception }: TableProps) {
                                 iconSize={14}
                             />
                         </Link>
-                        {/* <Button
-                            className='capitalize'
-                            variant={getTableStatusVariant(table?.meal_status)}
-                        >
-                            {table?.meal_status}
-                        </Button> */}
-                        <TablesStatus
-                            table={table}
-                            updateTable={waitres?.updateTable}
-                            orderControllers={waitres?.orderControllers}
-                            menuSections={waitres?.menuSections}
-                            updateOrder={waitres?.updateOrder}
-                            printers={waitres?.printers}
-                        />
+                        <div className='grid grid-cols-[auto,1fr] gap-2 items-center'>
+                            <PrintBill
+                                tableId={table?.id}
+                            />
+                            <TablesStatus
+                                table={table}
+                                updateTable={waitres?.updateTable}
+                                printers={waitres?.printers}
+                            />
+                        </div>
                     </div>
                     :
                     <OpenTableDialog

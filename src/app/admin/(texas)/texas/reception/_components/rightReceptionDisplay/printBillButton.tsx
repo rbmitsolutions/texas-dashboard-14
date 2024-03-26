@@ -12,6 +12,7 @@ import { usePrintersStore } from "@/store/restaurant/printers"
 
 //interface
 import { TransactionsMethod } from "@/common/types/company/transactions.interface"
+import DefaultPrinter from "@/app/admin/(texas)/_components/defaultPrinter"
 
 interface PrintBillProps {
     tableId?: string
@@ -20,7 +21,7 @@ interface PrintBillProps {
 }
 
 export default function PrintBill({ tableId, finishedTableId, giftCardId }: PrintBillProps) {
-    const { defaultPrinter } = usePrintersStore()
+    const { defaultPrinter, printers } = usePrintersStore()
 
     const {
         createRestaurantData: toPrint
@@ -53,17 +54,19 @@ export default function PrintBill({ tableId, finishedTableId, giftCardId }: Prin
             })
         }
 
-        if(giftCardId) {
+        if (giftCardId) {
             await toPrint({
                 toPrint: {
                     giftCardBalance: {
                         ip: defaultPrinter?.ip,
                         giftCardId,
                     }
-                }   
+                }
             })
         }
     }
+
+    if (!defaultPrinter) return <DefaultPrinter printers={printers}/>
 
     return (
         <Button

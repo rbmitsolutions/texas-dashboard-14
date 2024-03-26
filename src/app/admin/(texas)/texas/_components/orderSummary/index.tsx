@@ -14,6 +14,7 @@ import OrderQuantities from "./orderQuantities";
 import { Button } from "@/components/ui/button"
 
 //interface
+import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface";
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface";
 import { IOrder, OrderStatus } from "@/common/types/restaurant/order.interface";
@@ -34,6 +35,7 @@ export interface IOrderSummary {
     }
     updateOrderStatus?: {
         onUpdate: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
+        createOrder: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>
     }
     menuSections: IMenuSection[]
     showPrice?: boolean
@@ -49,7 +51,7 @@ export const OrderSummary = ({ order, updateOrder, menuSections, splitBill, upda
 
     return (
         sortMenuSections(menuSections)?.map(s => {
-        
+
             const orders = order?.filter(o => s?.title?.includes(o?.mn_section as string)).sort((a, b) => {
                 return a?.menu_short_title?.localeCompare(b?.menu_short_title)
             })
@@ -63,7 +65,7 @@ export const OrderSummary = ({ order, updateOrder, menuSections, splitBill, upda
                 >
                     <small className='text-center'> === {s?.title} === </small>
                     {orders?.map(order => {
-                        const menuItem = updateOrder?.menu.find(m => m.id === order?.menu_id)
+                        const menuItem = updateOrder?.menu?.find(m => m.id === order?.menu_id)
 
                         return (
                             <div
@@ -126,9 +128,10 @@ export const OrderSummary = ({ order, updateOrder, menuSections, splitBill, upda
                                     />
                                 }
 
-                                {(updateOrderStatus?.onUpdate && order?.status === OrderStatus.ORDERED) &&
+                                {updateOrderStatus &&
                                     <UpdateOrderStatus
                                         order={order as IOrder}
+                                        createOrder={updateOrderStatus.createOrder}
                                         onUpdate={updateOrderStatus.onUpdate}
                                     />
                                 }

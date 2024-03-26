@@ -2,22 +2,24 @@ import { Dispatch, SetStateAction, useState } from "react"
 
 //libs
 import { getBookingAmountPerTable } from "@/common/libs/restaurant/bookings"
-import { cn } from "@/common/libs/shadcn/utils"
 
 //components
 import { Button } from "@/components/ui/button"
 
+//store
+import { useSectionsStore } from "@/store/restaurant/sections"
+
 //interface
 import { IGETSpareTablesReturn } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
-import { IBookings } from "@/common/types/restaurant/bookings.interface"
 import { ISection, ITable } from "@/common/types/restaurant/tables.interface"
+import { IBookings } from "@/common/types/restaurant/bookings.interface"
 
 interface ISpareTables {
     section: ISection | undefined,
     guests: number
 }
 interface SelectTableProps {
-    sections: ISection[]
+    sections?: ISection[]
     tableSelected?: IGETSpareTablesReturn
     setTableSelected: Dispatch<SetStateAction<ITable | undefined>>
     booking?: IBookings
@@ -29,8 +31,9 @@ export default function SelectTable({
     tableSelected,
     setTableSelected
 }: SelectTableProps) {
+    const { sections: sec } = useSectionsStore()
     const [spareTablesFilter, setSpareTablesFilter] = useState<ISpareTables>({
-        section: sections[0],
+        section: sections ? sections[0] : sec[0],
         guests: getBookingAmountPerTable(booking?.amount_of_people || 2)
     })
 
@@ -48,10 +51,12 @@ export default function SelectTable({
         return tables
     }
 
+    const allSec = sections || sec
+
     return (
         <>
             <div className='grid grid-cols-4 gap-2'>
-                {sections?.map(section => {
+                {allSec?.map(section => {
                     return (
                         <Button
                             key={section?.id}

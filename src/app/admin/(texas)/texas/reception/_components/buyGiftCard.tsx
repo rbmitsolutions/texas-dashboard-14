@@ -164,7 +164,6 @@ export default function BuyGiftCard({ clients, setClientsParams, createGiftCard 
                 permissions={[Permissions.RECEPTION]}
                 title={`Pay ${convertCentsToEuro(giftCard?.value || 0)}`}
             />
-
             <Sheet
                 onOpenChange={onOpenChange}
             >

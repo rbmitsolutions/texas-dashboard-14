@@ -20,6 +20,7 @@ interface RolesColumnsTableProps {
     redirectTo: (href: string, options?: NavigateOptions | undefined) => void
     onUpdate: UseMutateFunction<any, any, IPUTCompanyBody, unknown>
     departments: IDepartments[]
+    showOnlyWorking: boolean
 }
 
 export const rolesColumnsTable = ({
@@ -78,7 +79,7 @@ export const rolesColumnsTable = ({
                                     id: row?.original?.id
                                 }
                             })}
-                            isDisabled={row?.original?.users?.length !== 0 || row?.original?.title === 'Job Applicants'}
+                            isDisabled={true}
                         />
                     </div>
                 )

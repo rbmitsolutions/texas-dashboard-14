@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import {
     Dialog,
     DialogContent,
+    DialogHeader,
     DialogTrigger,
 } from "@/components/ui/dialog"
 
@@ -66,7 +67,9 @@ export default function DefaultPrinter({ printers }: DefaultPrinterProps) {
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
-
+                <DialogHeader>
+                    <h3 className='text-lg font-bold'>Select Default Printer</h3>
+                </DialogHeader>
                 <div className='grid grid-cols-3 gap-2'>
                     {printers?.map(p => {
                         return (

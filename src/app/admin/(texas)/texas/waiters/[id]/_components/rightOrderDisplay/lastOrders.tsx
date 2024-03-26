@@ -13,21 +13,18 @@ import { Button } from "@/components/ui/button"
 
 //interface
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
-import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 import { IOrder, IOrderController } from "@/common/types/restaurant/order.interface"
 import { IPrinters } from "@/common/types/restaurant/printers.interface"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
-import { ICreateNewOrder } from "@/store/restaurant/order"
 
 interface LastOrdersProps {
     ordersController: IOrderController[]
     menu: IGETMenuOrderSystemResponse[]
     menuSections: IMenuSection[]
-    updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
     printers: IPrinters[]
 }
 
-export default function LastOrders({ ordersController, menu, menuSections, updateOrder, printers }: LastOrdersProps) {
+export default function LastOrders({ ordersController, menu, menuSections, printers }: LastOrdersProps) {
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -36,7 +33,7 @@ export default function LastOrders({ ordersController, menu, menuSections, updat
                     className='w-full h-12'
                     leftIcon='Utensils'
                 >
-                    {ordersController?.length} {ordersController?.length === 1 ? 'Order' : 'Orders'}
+                    {ordersController?.length}
                 </Button>
             </SheetTrigger>
             <SheetContent>
@@ -49,7 +46,6 @@ export default function LastOrders({ ordersController, menu, menuSections, updat
                             <FullOrderController
                                 key={oc?.id}
                                 orderController={oc}
-                                onOrdersUpdate={updateOrder}
                                 orderSumary={{
                                     order: oc?.orders?.map(o => {
                                         const menuItem = menu?.find(m => m.id === o.menu_id)
@@ -61,9 +57,6 @@ export default function LastOrders({ ordersController, menu, menuSections, updat
                                         }
                                     }) as unknown as IOrder[],
                                     menuSections,
-                                    updateOrderStatus: {
-                                        onUpdate: updateOrder,
-                                    }
                                 }}
                                 printers={printers}
                             />

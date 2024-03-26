@@ -15,12 +15,11 @@ import { ISection, ITable } from "@/common/types/restaurant/tables.interface";
 import { RedirectTo } from "@/common/types/routers/endPoints.types";
 
 interface ChangeTableProps {
-    sections: ISection[]
     table: ITable
     updateTable: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
 }
 
-export default function ChangeTable({ sections, table, updateTable }: ChangeTableProps) {
+export default function ChangeTable({ table, updateTable }: ChangeTableProps) {
     const { push } = useRouter()
     const [tableSelected, setTableSelected] = useState<ITable | undefined>(undefined)
 
@@ -65,7 +64,6 @@ return (
             </DialogHeader>
             <div className='flex-col-container gap-4 overflow-auto'>
                 <SelectTable
-                    sections={sections}
                     tableSelected={tableSelected}
                     setTableSelected={setTableSelected}
                 />

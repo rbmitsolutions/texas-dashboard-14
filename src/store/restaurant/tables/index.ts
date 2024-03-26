@@ -36,11 +36,12 @@ export const useTablesStore = create<TablesStateProps>((set): TablesStateProps =
         }
 
         if (client_name && client_name?.length > 0) {
-            tables = tables?.filter((table) => client_name?.toLowerCase().includes(tablesFilter?.client_name!.toLowerCase()))
+            tables = tables?.filter((table) => client_name?.toLowerCase().includes((table?.client_name || '').toLowerCase()))
         }
 
+
         if (is_open !== undefined) {
-            tables = tables?.filter((table) => is_open === tablesFilter.is_open)
+            tables = tables?.filter((table) => is_open === table?.is_open)
         }
 
         if (meal_status && meal_status?.length > 0) {
