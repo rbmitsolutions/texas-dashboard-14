@@ -19,6 +19,19 @@ export interface IRoute {
 
 const routers: IRoute[] = [
   {
+    path: "/analytics",
+    name: "Analytic",
+    layout: "/admin",
+    icon: <Icon name='LineChart' size={14} />,
+    // icon: <ChartBar />,
+    collapse: false,
+    authorization: [
+      Permissions.ADMIN,
+      Permissions.ADMIN_GHOST,
+    ],
+    auth_device: true
+  },
+  {
     name: "Bookings",
     path: "",
     icon: <Icon name='CalendarDays' size={14} />,

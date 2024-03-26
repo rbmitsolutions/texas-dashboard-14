@@ -14,11 +14,10 @@ interface InfoBoxProps {
     smallValue?: string
     isLoading?: boolean
     error?: boolean
-    className?: string
 }
 
 export default function InfoBox({
-    icon, title, value, smallValue, isLoading = false, error = false, className
+    icon, title, value, smallValue, isLoading = false, error = false,
 }: InfoBoxProps): JSX.Element {
     return (
         <div className='flex items-center justify-end p-3 gap-4 rounded-xl bg-background-soft'>
@@ -29,7 +28,7 @@ export default function InfoBox({
                     <div className='flex flex-col items-end'>
                         <p className='text-xs font-bold text-slate-400 dark:text-slate-500 line-clamp-1 capitalize'>{title.toLocaleLowerCase()}</p>
                         <p className='text-sm font-bold text-primary'>{value}</p>
-                        <p className='text-xs text-slate-400 dark:text-slate-500 capitalize'>{smallValue ? smallValue.toLocaleLowerCase() : '-'}</p>
+                        <p className='text-xs text-end text-slate-400 dark:text-slate-500 capitalize'>{smallValue ? smallValue.toLocaleLowerCase() : '-'}</p>
                     </div>
                 }
             </div>
