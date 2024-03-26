@@ -85,11 +85,6 @@ export default function Reception() {
                                 createGiftCard={createGiftCard}
                             />
                             <GiftCardBalance />
-                            {/* <ClosedTables
-                                finishedTables={finishedTables}
-                                setFinishedTablesParams={setFinishedTablesParams}
-                                finishedTablesParams={finishedTablesParams}
-                            /> */}
                         </div>
                         <SearchInput
                             onSearchChange={(e) => setTablesFilter({ ...tablesFilter, client_name: e })}

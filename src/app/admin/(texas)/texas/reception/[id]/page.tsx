@@ -20,7 +20,7 @@ import Wrap from '@/components/common/wrap';
 
 //hooks
 import { useGETCompanyDataHooks, usePOSTCompanyDataHooks, usePUTCompanyDataHooks } from '@/hooks/company/companyDataHooks';
-import { useGETRestaurantDataHooks, usePUTRestaurantDataHooks } from '@/hooks/restaurant/restaurantDataHooks';
+import { useGETRestaurantDataHooks, usePOSTRestaurantDataHooks, usePUTRestaurantDataHooks } from '@/hooks/restaurant/restaurantDataHooks';
 import { useSocketIoHooks } from '@/hooks/useSocketIoHooks';
 import { useAuthHooks } from '@/hooks/useAuthHooks';
 
@@ -236,6 +236,24 @@ export default function Table({ params }: { params: { id: string } }) {
         }
     })
 
+    const {
+        createRestaurantData: createOrder
+    } = usePOSTRestaurantDataHooks({
+        query: 'ORDER',
+        UseMutationOptions: {
+            onSuccess: async () => {
+                await emit({
+                    event: SocketIoEvent.ORDER,
+                    message: params?.id
+                })
+                await emit({
+                    event: SocketIoEvent.TABLE,
+                    message: params?.id
+                })
+            }
+        }
+    })
+
     const handleCloseTable = async () => {
         let client = {
             id: dataTable?.table?.client_id,
@@ -319,6 +337,7 @@ export default function Table({ params }: { params: { id: string } }) {
                         updateOrder={updateOrder}
                         printers={printers || []}
                         closeTable={handleCloseTable}
+                        createOrder={createOrder}
                     />
                 ),
                 icon: {

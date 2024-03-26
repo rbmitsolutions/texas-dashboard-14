@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 //components
+import PrintBill from "../../../../reception/_components/rightReceptionDisplay/printBillButton"
 import { OrderSummary } from "../../../../_components/orderSummary"
 import AuthDialog from "@/components/common/authDialog"
 import { Button } from "@/components/ui/button"
@@ -40,11 +41,10 @@ interface RightOrderDisplayProps {
     orderControllers: IOrderController[]
     updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
     printers: IPrinters[]
-    sections: ISection[]
     updateTable: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
 }
 
-export default function RightOrderDisplay({ order, resetOrder, menu, updateOrderQuantity, deleteOrder, replaceOrder, table, createOrder, menuSections, orderControllers, updateOrder, printers, sections, updateTable }: RightOrderDisplayProps) {
+export default function RightOrderDisplay({ order, resetOrder, menu, updateOrderQuantity, deleteOrder, replaceOrder, table, createOrder, menuSections, orderControllers, updateOrder, printers, updateTable }: RightOrderDisplayProps) {
     const [toPrint, setToPrint] = useState<boolean>(true)
     const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false)
     const { push } = useRouter()
@@ -153,9 +153,8 @@ export default function RightOrderDisplay({ order, resetOrder, menu, updateOrder
             />
 
             <div className='flex-col-container h-full'>
-                <div className='grid grid-cols-[auto,auto,auto] gap-2'>
+                <div className='grid grid-cols-[auto,auto,auto,auto] items-center gap-2'>
                     <ChangeTable
-                        sections={sections}
                         updateTable={updateTable}
                         table={table}
                     />
@@ -163,7 +162,6 @@ export default function RightOrderDisplay({ order, resetOrder, menu, updateOrder
                         ordersController={orderControllers}
                         menu={menu}
                         menuSections={menuSections}
-                        updateOrder={updateOrder}
                         printers={printers}
                     />
                     <Button
@@ -173,6 +171,9 @@ export default function RightOrderDisplay({ order, resetOrder, menu, updateOrder
                     >
                         All Together
                     </Button>
+                    <PrintBill
+                        tableId={table?.id}
+                    />
                 </div>
                 <strong className='text-center'>Table: {table?.number}</strong>
                 <div
@@ -206,6 +207,7 @@ export default function RightOrderDisplay({ order, resetOrder, menu, updateOrder
                 >
                     Send Order
                 </Button>
+
             </div>
         </>
     )

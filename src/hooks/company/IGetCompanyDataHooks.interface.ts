@@ -336,6 +336,8 @@ export interface IGetAllTransactionsResponse {
   pagination: IPaginationResponse;
 }
 
+export type TransactionsScalarFieldEnum = 'id' | 'type' | 'method' | 'direction' | 'date' | 'status' | 'gift_card_id' | 'client_id' | 'total' | 'description' | 'valid_by' | 'valid_by_id' | 'payee' | 'payee_key' | 'created_at' | 'updated_at'
+
 export interface IGETTransactionsQuery {
   all?: {
     type?: {
@@ -376,6 +378,38 @@ export interface IGETTransactionsQuery {
   byId?: {
     id: string;
   };
+  analytics?: {
+    by: TransactionsScalarFieldEnum[]
+    type?: {
+      in: TransactionsType[];
+    };
+    method?: {
+      in: TransactionsMethod[];
+    };
+
+    direction?: {
+      in: TransactionsDirection[];
+    };
+
+    date?: {
+      gte: Date;
+      lte: Date;
+    };
+
+    status?: TransactionsStatus
+
+    gift_card_id?: string;
+    client_id?: string;
+
+    valid_by_id?: string;
+
+    payee_key?: string;
+
+    created_at?: {
+      gte: Date;
+      lte: Date;
+    };
+  }
 }
 
 export interface IGETHistoryResponse {

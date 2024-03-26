@@ -105,6 +105,7 @@ export function useGETCompanyDataHooks({
         companyRosterTask: data as IGETRosterTaskResponse,
         companyRosterPaymentPage: data as IRosterPaymentPageResponse,
         companyAllTransacations: data as IGetAllTransactionsResponse,
+        companyTransactionAnalytics: data as any,
         compnayTransaction: data as ITransactions,
         companayAllHistory: data as IGETHistoryResponse,
 

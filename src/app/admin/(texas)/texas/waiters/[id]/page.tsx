@@ -27,7 +27,6 @@ import { useAuthHooks } from "@/hooks/useAuthHooks";
 
 //store
 import { usePrintersStore } from "@/store/restaurant/printers";
-import { useSectionsStore } from "@/store/restaurant/sections";
 
 //interfaces
 import { IMenuOrderSystemFilter, useOrderSystemHooks } from "@/hooks/useOrderSystemHooks";
@@ -41,7 +40,6 @@ export default function Table({ params }: { params: { id: string } }) {
     const { getFilteredOrderSystemMenu } = useOrderSystemHooks()
     const { getTableById } = useTablesStore()
     const { printers } = usePrintersStore()
-    const { sections } = useSectionsStore()
     const { emit } = useSocketIoHooks()
     const { user } = useAuthHooks()
     const { push } = useRouter()
@@ -276,7 +274,6 @@ export default function Table({ params }: { params: { id: string } }) {
                         orderControllers={orderControllers?.data || []}
                         updateOrder={updateOrder}
                         printers={printers}
-                        sections={sections}
                         updateTable={updateTable}
                     />
                 ),

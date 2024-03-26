@@ -25,6 +25,7 @@ export enum Permissions {
 
   ROSTER_TASKS = 'roster_tasks',
   DAY_ROSTER = 'day_roster',
+
 }
 
 export interface IToken {

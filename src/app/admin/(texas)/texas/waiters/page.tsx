@@ -30,30 +30,6 @@ export default function Tables() {
     const { emit } = useSocketIoHooks()
 
     const {
-        restaurantAllMenuSections: menuSections
-    } = useGETRestaurantDataHooks({
-        query: 'MENU_SECTION',
-        defaultParams: {
-            menu_sections: {
-                all: {
-                    includes: {
-                        types: '1'
-                    },
-                    pagination: {
-                        take: 200,
-                        skip: 0
-                    }
-                }
-            }
-        },
-        UseQueryOptions: {
-            refetchOnWindowFocus: false,
-            refetchIntervalInBackground: false,
-            refetchOnMount: false,
-        }
-    })
-
-    const {
         restaurantOpenDay: openDay,
     } = useGETRestaurantDataHooks({
         query: 'OPEN_DAYS',
@@ -108,26 +84,11 @@ export default function Tables() {
         }
     })
 
-    const {
-        updateRestaurantData: updateOrder
-    } = usePUTRestaurantDataHooks({
-        query: 'ORDER',
-        UseMutationOptions: {
-            onSuccess: async () => {
-                await emit({
-                    event: SocketIoEvent.ORDER
-                })
-                await emit({
-                    event: SocketIoEvent.TABLE
-                })
-            }
-        }
-    })
-
     return (
         <LayoutFrame
             user={user}
             navigation={{
+                defaultPrinter: printers,
                 icon: {
                     icon: 'Filter',
                     title: 'Tables'
@@ -220,9 +181,6 @@ export default function Tables() {
                                 waitres={{
                                     createBooking,
                                     timesOpen: openDay?.times_open,
-                                    orderControllers: [],
-                                    menuSections: menuSections?.data,
-                                    updateOrder,
                                     updateTable,
                                     printers
                                 }}

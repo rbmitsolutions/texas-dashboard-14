@@ -47,7 +47,7 @@ export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuan
                 setIsOpen(!isOpen)
             }
 
-            const orderExists = order.find(o => o.menu_id === menuItem?.id)
+            const orderExists = order?.find(o => o.menu_id === menuItem?.id)
             if (orderExists) {
                 scrollToOrder(orderExists.id)
                 updateOrderQuantity(orderExists, true)
@@ -55,7 +55,7 @@ export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuan
             }
 
             const to_print_ips = menuItem?.to_print_ids?.map(printer => {
-                const printerData = printers.find(p => p.id === printer)
+                const printerData = printers?.find(p => p.id === printer)
                 return printerData?.ip
             })
 
