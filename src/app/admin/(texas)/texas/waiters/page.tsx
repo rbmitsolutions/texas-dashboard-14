@@ -21,6 +21,8 @@ import { useTablesStore } from '@/store/restaurant/tables';
 import { usePrintersStore } from '@/store/restaurant/printers';
 import { useSectionsStore } from '@/store/restaurant/sections';
 import { SocketIoEvent } from '@/common/libs/socketIo/types';
+import { TableMealStatus } from '@/common/types/restaurant/tables.interface';
+import { getTableStatusVariant } from '@/common/libs/restaurant/tables';
 
 export default function Tables() {
     const { tablesFilter, setTablesFilter, getTablesFiltered } = useTablesStore()
@@ -101,7 +103,6 @@ export default function Tables() {
                             placeholder='Name'
 
                         />
-                        <small className='-mb-2'>Status</small>
                         <div className='grid grid-cols-3 gap-2'>
                             <Button
                                 className='text-xs'
@@ -162,6 +163,26 @@ export default function Tables() {
 
                                     >
                                         {g} pp
+                                    </Button>
+                                )
+                            })}
+                        </div>
+                        <small className='-mb-2'>Status</small>
+                        <div className='grid grid-cols-2 gap-2'>
+                            {Object.values(TableMealStatus).map(status => {
+                                return (
+                                    <Button
+                                        key={status}
+                                        className='text-[10px] capitalize'
+                                        variant={tablesFilter?.meal_status?.includes(status) ? getTableStatusVariant(status) : 'outline'}
+                                        onClick={() => {
+                                            setTablesFilter({
+                                                ...tablesFilter,
+                                                meal_status: tablesFilter?.meal_status?.includes(status) ? tablesFilter?.meal_status?.filter(meal_status => meal_status !== status) : [...tablesFilter?.meal_status || [], status]
+                                            })
+                                        }}
+                                    >
+                                        {status}
                                     </Button>
                                 )
                             })}

@@ -16,6 +16,8 @@ import { useAuthHooks } from '@/hooks/useAuthHooks';
 //store
 import { usePrintersStore } from '@/store/restaurant/printers';
 import { useTablesStore } from '@/store/restaurant/tables';
+import { TableMealStatus } from '@/common/types/restaurant/tables.interface';
+import { getTableStatusVariant } from '@/common/libs/restaurant/tables';
 
 export default function Reception() {
     const { tablesFilter, setTablesFilter, getTablesFiltered } = useTablesStore()
@@ -86,13 +88,13 @@ export default function Reception() {
                             />
                             <GiftCardBalance />
                         </div>
+                        <OpenTillButton />
                         <SearchInput
                             onSearchChange={(e) => setTablesFilter({ ...tablesFilter, client_name: e })}
                             value={tablesFilter?.client_name || ''}
                             placeholder='Name'
 
                         />
-                        <small className='-mb-2'>Status</small>
                         <div className='grid grid-cols-3 gap-2'>
                             <Button
                                 className='text-xs'
@@ -157,7 +159,27 @@ export default function Reception() {
                                 )
                             })}
                         </div>
-                        <OpenTillButton />
+                        <small className='-mb-2'>Status</small>
+                        <div className='grid grid-cols-2 gap-2'>
+                            {Object.values(TableMealStatus).map(status => {
+                                return (
+                                    <Button
+                                        key={status}
+                                        className='text-[10px] capitalize'
+                                        variant={tablesFilter?.meal_status?.includes(status) ? getTableStatusVariant(status) : 'outline'}
+                                        onClick={() => {
+                                            setTablesFilter({
+                                                ...tablesFilter,
+                                                meal_status: tablesFilter?.meal_status?.includes(status) ? tablesFilter?.meal_status?.filter(meal_status => meal_status !== status) : [...tablesFilter?.meal_status || [], status]
+                                            })
+                                        }}
+                                    >
+                                        {status}
+                                    </Button>
+                                )
+                            })}
+                        </div>
+
                     </div>
                 )
             }}
