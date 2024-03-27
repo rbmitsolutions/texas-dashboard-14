@@ -22,15 +22,19 @@ export const OrdersColumnsTable = ({
 }: OrdersColumnsTableProps): ColumnDef<IOrder>[] => {
     return [
         {
-            id: "created_at",
-            accessorKey: "Date / Time",
-            size: 40,
+            id: "mn_type",
+            accessorKey: "Menu Type",
+            size: 80,
             cell: ({ row }) => {
-                return formatDate({
-                    date: row?.original?.created_at,
-                    f: 'dd/MM/yyyy HH:mm',
-                    iso: false
-                })
+                return row?.original?.mn_type
+            }
+        },
+        {
+            id: "menu_short_title",
+            accessorKey: "Short Title",
+            size: 80,
+            cell: ({ row }) => {
+                return row?.original?.menu_short_title
             }
         },
         {
@@ -44,22 +48,6 @@ export const OrdersColumnsTable = ({
         {
             id: "mn_section",
             accessorKey: "Menu Section",
-            size: 80,
-            cell: ({ row }) => {
-                return row?.original?.mn_section
-            }
-        },
-        {
-            id: "mn_type",
-            accessorKey: "Menu Type",
-            size: 80,
-            cell: ({ row }) => {
-                return row?.original?.mn_section
-            }
-        },
-        {
-            id: "menu_short_title",
-            accessorKey: "Short Title",
             size: 80,
             cell: ({ row }) => {
                 return row?.original?.mn_section
@@ -80,6 +68,18 @@ export const OrdersColumnsTable = ({
                     </Button>
                 )
             },
+        },
+        {
+            id: "created_at",
+            accessorKey: "Date / Time",
+            size: 40,
+            cell: ({ row }) => {
+                return formatDate({
+                    date: row?.original?.created_at,
+                    f: 'dd/MM/yyyy HH:mm',
+                    iso: false
+                })
+            }
         },
         {
             id: "add_ons",
