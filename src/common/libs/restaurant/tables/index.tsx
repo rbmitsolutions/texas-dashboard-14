@@ -13,6 +13,8 @@ export const getTableStatusVariant = (status: TableMealStatus): ButtonProps['var
             return 'pink'
         case TableMealStatus.DESSERT:
             return 'yellow'
+        case TableMealStatus.PREPARING:
+            return 'blue'
         default:
             return 'green'
     }
