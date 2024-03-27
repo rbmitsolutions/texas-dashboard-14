@@ -95,7 +95,7 @@ export const OrdersColumnsTable = ({
             accessorKey: "Total",
             size: 100,
             cell: ({ row }) => {
-                return convertCentsToEuro(getOrderTotal(row?.original))
+                return convertCentsToEuro(row?.original?.price * row?.original?.quantity)
             },
         },
     ]
