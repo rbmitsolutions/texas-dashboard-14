@@ -109,22 +109,53 @@ export interface IAllOrdersResponse {
   pagination: IPaginationResponse
 };
 
+// export type OrdersBy = 'id' | 'status' | 'quantity' | 'paid' | 'mn_type' | 'mn_section' | 'price' | 'menu' | 'menu_id' | 'menu_short_title' | 'to_print_ips' | 'order_controller_id' | 'created_at' | 'updated_at'
 export interface IGETOrdersQuery {
   byId?: {
     id: string;
     order_controller?: "1";
   };
   all?: {
-    status?: OrderStatus
+    status?: OrderStatus[]
 
+    mn_type?: {
+      in: string[]
+    }
+    mn_section?: {
+      in: string[]
+    }
     menu_id?: string;
-    order_controller?: "1";
+
+    include?: {
+      order_controller?: "1";
+      add_ons?: "1";
+    }
+   
     orderBy?: {
-      key: keyof IOrder
+      key: keyof IOrder;
       order: "asc" | "desc";
     };
-    pagination: IQueryPagination
+    created_at?: {
+      gte: Date
+      lte: Date
+    }
+    pagination: IQueryPagination;
   };
+  analytics?: {
+    status?: {
+      in: OrderStatus[]
+    }
+    mn_type?: {
+      in: string[]
+    }
+    mn_section?: {
+      in: string[]
+    }
+    created_at: {
+      gte: Date
+      lte: Date
+    }
+  }
 }
 
 export interface IAllOrderControllerResponse {
@@ -693,7 +724,7 @@ export type IRestaurantDataQueryType = 'BOOKINGS' | 'TABLES' | "ORDER" | "ORDER_
 export interface IGETRestaurantDataQuery {
   bookings?: IGETBookingsQuery
   tables?: IGETTablesQuery
-  orders?: IGETOrdersQuery
+  order?: IGETOrdersQuery
   orderController?: IGETOrderControllerQuery
   clients?: IGETClientQuery
   sections?: IGETSectionQuery

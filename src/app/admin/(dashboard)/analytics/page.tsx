@@ -1,23 +1,16 @@
 'use client'
-
-//libs
-import { dateFormatIso, getMondayOfTheWeek, getSundayOfTheWeek } from "@/common/libs/date-fns/dateFormat"
-import { convertCentsToEuro } from "@/common/utils/convertToEuro"
-
-//components
-import DirectionAnalytics from "./_components/directionAnalytics"
-import InfoBox from "@/components/common/infoBox"
-
-//hooks
-import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
-
-//interface
-import { TransactionsDirection, TransactionsStatus } from "@/common/types/company/transactions.interface"
-import { DatePickerWithRange } from "@/components/common/datePicker"
-import { DateRange } from "react-day-picker"
 import { useState } from "react"
 
+//libs
+import { dateFormatIso, getFirstTimeOfTheDay, getLastTimeOfTheDay, getMondayOfTheWeek, getSundayOfTheWeek } from "@/common/libs/date-fns/dateFormat"
 
+//components
+import TransactionsAnalytics from "./_components/transactionsAnalytics"
+import { DateRange } from "react-day-picker"
+
+//interface
+import { DatePickerWithRange } from "@/components/common/datePicker"
+import SalesAnalytics from "./_components/salesAnalytics"
 
 export default function Analytics() {
     const [date, setDate] = useState<{
@@ -32,15 +25,15 @@ export default function Analytics() {
         if (date) {
             const { from, to } = date
             setDate({
-                from: dateFormatIso(from!),
-                to: dateFormatIso(to!)
+                from: getFirstTimeOfTheDay(dateFormatIso(from!)),
+                to: getLastTimeOfTheDay(dateFormatIso(to!))
             })
         }
     }
 
     return (
-        <div className='flex-col-container'>
-            <div className='flex-container justify-between py-4'>
+        <div className='flex-col-container gap-8'>
+            <div className='flex-container justify-between'>
                 <h1 className='text-2xl font-bold'>Analytics</h1>
                 <DatePickerWithRange
                     onConfirm={onDateChange}
@@ -51,7 +44,11 @@ export default function Analytics() {
                     }}
                 />
             </div>
-            <DirectionAnalytics date={date} />
+            <TransactionsAnalytics date={date} />
+            <SalesAnalytics date={date} />
+            <strong>Booking</strong>
+            <strong>Waitress</strong>
+            <strong>Haccp Reports</strong>
         </div>
     )
 }

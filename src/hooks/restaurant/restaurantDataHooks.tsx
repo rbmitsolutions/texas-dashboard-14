@@ -84,6 +84,7 @@ export function useGETRestaurantDataHooks({
         restaurantTable: data as ITable,
         restaurantAllOrders: data as IAllOrdersResponse,
         restaurantOrder: data as IOrder,
+        restaurantOrdersAnalytics: data as any,
         restaurantAllOrderController: data as IAllOrderControllerResponse,
         restaurantOrderController: data as IOrderController,
         restaurantAllClients: data as IGetAllClientsResponse,

@@ -72,7 +72,7 @@ export default function RosterPaymentsPageComponents({ departments }: RosterPaym
     })
 
     const createTransaction = (data: ICreateTransaction) => {
-        const description = `${data?.type.toLocaleUpperCase()} - ${user.name} - ${formatDate({
+        const description = `${data?.type.toLocaleUpperCase()} - ${data?.user?.name} - ${formatDate({
             date: new Date(),
             f: "dd/MM/yyyy"
         })} - ${convertCentsToEuro(Number(data?.value))}`

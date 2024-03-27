@@ -14,8 +14,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import PaymentInputDescription from "./paymentInputDescription"
+import UserDisplay from "@/components/common/userDisplay"
+import { Button } from "@/components/ui/button"
 
 //libs
 import { convertCentsToEuro } from "@/common/utils/convertToEuro"
@@ -24,10 +25,7 @@ import { convertCentsToEuro } from "@/common/utils/convertToEuro"
 import { PayrollTransactionsType } from "@/common/types/company/transactions.interface"
 import { IUserExtraPaymentData } from "@/hooks/company/IGetCompanyDataHooks.interface"
 import { IPOSTTransaction } from "@/hooks/company/IPostCompanyDataHooks.interface"
-import { ImagesPath } from "@/common/types/imgs"
 import { ICreateTransaction } from ".."
-import { Button } from "@/components/ui/button"
-import UserDisplay from "@/components/common/userDisplay"
 
 interface RosterPaymentTableProps {
   users: IUserExtraPaymentData[]
