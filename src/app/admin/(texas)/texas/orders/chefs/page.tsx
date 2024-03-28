@@ -94,7 +94,7 @@ export default function Chefs() {
             tables: {
                 all: {
                     meal_status: {
-                        in: [TableMealStatus.MAIN, TableMealStatus.ALL_TOGETHER, TableMealStatus.STARTERS, TableMealStatus.PREPARING]
+                        in: [TableMealStatus.MAIN, TableMealStatus.STARTERS, TableMealStatus.PREPARING]
                     },
                     include: {
                         order_controller: {

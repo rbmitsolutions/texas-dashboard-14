@@ -190,6 +190,7 @@ interface IBOOKING_STATUS {
     status: IBookingStatus
     changeStatus: boolean;
     bg: string;
+    hex: string;
 }
 
 export const BOOKING_STATUS: IBOOKING_STATUS[] = [
@@ -198,36 +199,42 @@ export const BOOKING_STATUS: IBOOKING_STATUS[] = [
         status: "confirmed",
         changeStatus: false,
         bg: 'bg-green-200 dark:bg-green-900',
+        hex: "#48BB9B",
     },
     {
         title: "Unconfirmed",
         status: "unconfirmed",
         changeStatus: false,
         bg: 'bg-red-200 dark:bg-red-900',
+        hex: "#ED5565",
     },
     {
         title: "Not Shown",
         status: "not_shown",
         changeStatus: true,
         bg: 'bg-blue-200 dark:bg-blue-900',
+        hex: "#4299E1",
     },
     {
         title: "Canceled",
         status: "canceled",
         changeStatus: true,
         bg: 'bg-amber-200 dark:bg-amber-800',
+        hex: "#DD6B20",
     },
     {
         title: "Walk In",
         status: "walk_in",
         changeStatus: true,
         bg: 'bg-pink-200 dark:bg-pink-900',
+        hex: "#ED64A6",
     },
     {
         title: "Arrived",
         status: "arrived",
         changeStatus: true,
         bg: 'bg-purple-200 dark:bg-purple-900',
+        hex: "#6C5CE7"
     },
 ];
 
@@ -253,7 +260,7 @@ type ValidSortKey = keyof IGETBookingsPageReturn;
 export const bookingPagefilter = (data: IBookingPageFilter, bookings: IBookings[]): IBookings[] => {
     let filteredBookings = bookings;
 
-    if (data?.name ) {
+    if (data?.name) {
         filteredBookings = filteredBookings?.filter(booking =>
             booking?.client?.name.toLowerCase().includes(data?.name!.toLowerCase())
         );
@@ -277,7 +284,7 @@ export const bookingPagefilter = (data: IBookingPageFilter, bookings: IBookings[
         );
     }
 
-    if(data?.time) {
+    if (data?.time) {
         filteredBookings = filteredBookings?.filter(booking =>
             booking.time === data.time
         );
