@@ -50,7 +50,6 @@ export default function Analytics() {
             <TransactionsAnalytics date={date} />
             <SalesAnalytics date={date} />
             <OwtAnalytics date={date} />
-            quantidade de orders / top waitress / tempo medio por mesa fechada por amount of people / media de orders por mesa
             <strong>Haccp Reports</strong>
         </div>
     )
