@@ -6,7 +6,7 @@ export const orderControllersTotal = (orderController: IOrderController[]): numb
     orderController?.forEach((oc) => {
         let orderT = 0
 
-        oc?.orders.forEach(order => {
+        oc?.orders?.forEach(order => {
             if (order?.status === OrderStatus.ORDERED || order?.status === OrderStatus.DELIVERED || order?.status === OrderStatus.PAID) {
                 const addOnsTotal = order.add_ons.reduce((acc, curr) => acc + curr.price, 0)
                 orderT += (order.price + addOnsTotal) * order.quantity

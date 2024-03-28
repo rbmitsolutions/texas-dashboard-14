@@ -3,11 +3,11 @@ import { useCallback, useEffect } from "react"
 
 //components
 import { InTransactionsColumnsTable } from "./inTransactionsColumns"
-import { TransactionsTables } from "./transactionsTable"
+import { BasicTable } from "@/components/common/basicTable"
 import Wrap from "@/components/common/wrap"
 
 //interface
-import { TransactionsDirection, TransactionsStatus, TransactionsMethod, TableTransactionsType } from "@/common/types/company/transactions.interface"
+import { TransactionsDirection, TransactionsStatus, TableTransactionsType } from "@/common/types/company/transactions.interface"
 
 //hooks
 import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
@@ -98,7 +98,7 @@ export default function TipsAnalytics({ date }: TipsAnalyticsProps) {
                 }
             }}
         >
-            <TransactionsTables
+            <BasicTable
                 columns={InTransactionsColumnsTable({})}
                 data={transactions?.data || []}
             />

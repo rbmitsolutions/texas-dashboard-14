@@ -3,7 +3,7 @@ import { useCallback, useEffect } from "react"
 
 //components
 import { InTransactionsColumnsTable } from "./inTransactionsColumns"
-import { TransactionsTables } from "./transactionsTable"
+import { BasicTable } from "@/components/common/basicTable"
 import Wrap from "@/components/common/wrap"
 
 //interface
@@ -95,7 +95,7 @@ export default function VoucherAnalytics({ date }: VoucherAnalyticsProps) {
                 }
             }}
         >
-            <TransactionsTables
+            <BasicTable
                 columns={InTransactionsColumnsTable({})}
                 data={transactions?.data || []}
             />
