@@ -7,7 +7,7 @@ import { cn } from "@/common/libs/shadcn/utils"
 
 //components
 import { InTransactionsColumnsTable } from "./inTransactionsColumns"
-import { TransactionsTables } from "./transactionsTable"
+import { BasicTable } from "@/components/common/basicTable"
 import InfoBox from "@/components/common/infoBox"
 import Wrap from "@/components/common/wrap"
 
@@ -181,7 +181,7 @@ export default function OutAnalytics({ date }: OutAnalyticsProps) {
                     }
                 }}
             >
-                <TransactionsTables
+                <BasicTable
                     columns={InTransactionsColumnsTable({
                         showDescription: true
                     })}

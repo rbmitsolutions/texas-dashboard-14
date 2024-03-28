@@ -180,6 +180,7 @@ export interface IAllOrderControllerResponse {
   data: IOrderController[];
   pagination: IPaginationResponse
 };
+export type OrderControllerScalarFieldEnum = 'id' | 'number' | 'pass' | 'waiter' | 'waiter_id' | 'client_id' | 'table_id' | 'finished_table_id' | 'created_at' | 'updated_at'
 
 export interface IGETOrderControllerQuery {
   byId?: {
@@ -195,7 +196,7 @@ export interface IGETOrderControllerQuery {
     table_id?: string;
     finished_table_id?: string | null;
     pass?: number[]
-
+    waiter?: string
     where?: {
       orders?: {
         mn_type?: string[]
@@ -224,11 +225,20 @@ export interface IGETOrderControllerQuery {
     };
     pagination?: IQueryPagination;
   };
+  analytics?: {
+    by?: OrderControllerScalarFieldEnum[];
+    count?: '1'
+    date?: {
+      gte: Date;
+      lte: Date;
+    };
+  }
 }
 export interface IGetAllClientsResponse {
   data: IClient[];
   pagination: IPaginationResponse
 }
+
 
 export interface IGETClientQuery {
   byId?: {
@@ -264,6 +274,7 @@ export interface IGETClientQuery {
     };
     pagination: IQueryPagination;
   };
+
 }
 
 export interface IGETSectionResponse {
@@ -352,6 +363,7 @@ export interface IFinishedTableAllResponse {
   pagination: IPaginationResponse
 }
 
+export type FinishedTableScalarFieldEnum = 'id' | 'date' | 'table_id' | 'section_id' | 'client_id' | 'client' | 'booking_id' | 'start_time' | 'end_time' | 'average_minutes' | 'guests' | 'pass' | 'created_at' | 'updated_at'
 export interface IGETFinishedTableQuery {
   byId?: {
     id: string;
@@ -382,6 +394,18 @@ export interface IGETFinishedTableQuery {
     };
     pagination: IQueryPagination
   };
+  analytics?: {
+    by?: FinishedTableScalarFieldEnum[]
+    avg?: {
+      by?: FinishedTableScalarFieldEnum[],
+      total?: '1'
+    }
+    date: {
+      gte: Date;
+      lte: Date;
+    }
+    count?: '1'
+  }
 }
 
 export interface IGETAllReviewsResponse {

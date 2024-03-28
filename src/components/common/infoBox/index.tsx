@@ -27,7 +27,7 @@ export default function InfoBox({
                     :
                     <div className='flex flex-col items-end'>
                         <p className='text-xs font-bold text-slate-400 dark:text-slate-500 line-clamp-1 capitalize'>{title.toLocaleLowerCase()}</p>
-                        <p className='text-sm font-bold text-primary'>{value}</p>
+                        <p className='text-sm font-bold text-primary text-right'>{value}</p>
                         <p className='text-xs text-end text-slate-400 dark:text-slate-500 capitalize'>{smallValue ? smallValue.toLocaleLowerCase() : '-'}</p>
                     </div>
                 }

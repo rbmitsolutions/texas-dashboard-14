@@ -17,15 +17,15 @@ import {
     TableRow,
 } from "@/components/ui/table"
 
-interface TransactionsTablesProps<TData, TValue> {
+interface BasicTable<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
 }
 
-export function TransactionsTables<TData, TValue>({
+export function BasicTable<TData, TValue>({
     columns,
     data,
-}: TransactionsTablesProps<TData, TValue>) {
+}: BasicTable<TData, TValue>) {
 
     const table = useReactTable({
         data,
