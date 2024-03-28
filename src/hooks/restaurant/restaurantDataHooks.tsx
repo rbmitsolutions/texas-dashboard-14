@@ -80,6 +80,7 @@ export function useGETRestaurantDataHooks({
     return {
         restaurantAllBookings: data as IGETAllBookingsResponse,
         restaurantBooking: data as IBookings,
+        restaurantBookingAnalytics: data as any,
         restaurantAllTables: data as IGETTablesAllResponse,
         restaurantTable: data as ITable,
         restaurantAllOrders: data as IAllOrdersResponse,

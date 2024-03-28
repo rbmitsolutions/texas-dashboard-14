@@ -6,11 +6,12 @@ import { dateFormatIso, getFirstTimeOfTheDay, getLastTimeOfTheDay, getMondayOfTh
 
 //components
 import TransactionsAnalytics from "./_components/transactionsAnalytics"
-import { DateRange } from "react-day-picker"
+import BookingsAnalytics from "./_components/bookingsAnalytics"
+import SalesAnalytics from "./_components/salesAnalytics"
 
 //interface
 import { DatePickerWithRange } from "@/components/common/datePicker"
-import SalesAnalytics from "./_components/salesAnalytics"
+import { DateRange } from "react-day-picker"
 
 export default function Analytics() {
     const [date, setDate] = useState<{
@@ -44,9 +45,9 @@ export default function Analytics() {
                     }}
                 />
             </div>
+            <BookingsAnalytics date={date} />
             <TransactionsAnalytics date={date} />
             <SalesAnalytics date={date} />
-            <strong>Booking</strong>
             <strong>Waitress</strong>
             <strong>Haccp Reports</strong>
         </div>

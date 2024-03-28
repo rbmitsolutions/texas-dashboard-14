@@ -14,6 +14,8 @@ export interface IGETAllBookingsResponse {
   pagination: IPaginationResponse
 }
 
+export type BookingsScalarFieldEnum = 'id' | 'date' | 'weekDay' | 'amount_of_people' | 'amount_per_table' | 'request' | 'review_id' | 'table_id' | 'status' | 'has_request' | 'cancelation_comment' | 'cancelation_reason' | 'time' | 'client_id' | 'created_at' | 'updated_at'
+
 export interface IGETBookingsQuery {
   byId?: {
     id: string;
@@ -50,6 +52,22 @@ export interface IGETBookingsQuery {
       order: "asc" | "desc";
     };
   };
+  analytics?: {
+    by: BookingsScalarFieldEnum[]
+    date: {
+      gte: Date;
+      lte: Date;
+    };
+    status?: {
+      in: IBookingStatus[]
+    }
+    amount_per_table?: {
+      in: number[]
+    }
+    amount_of_people?: {
+      in: number[]
+    }
+  }
 }
 
 export interface IGETTablesAllResponse {
@@ -130,7 +148,7 @@ export interface IGETOrdersQuery {
       order_controller?: "1";
       add_ons?: "1";
     }
-   
+
     orderBy?: {
       key: keyof IOrder;
       order: "asc" | "desc";
