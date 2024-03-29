@@ -1,4 +1,5 @@
 import { UseMutateFunction } from "react-query";
+import { Dispatch, SetStateAction } from "react";
 
 //libs
 import { addDaysToDate } from "@/common/libs/date-fns/dateFormat";
@@ -21,8 +22,10 @@ import BookingDetails from "./bookingDetails";
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
 
 //interfaces
+import { IGETRestaurantDataQuery } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 import { IDELETERestaurantDataBody } from "@/hooks/restaurant/IDeleteRestaurantDataHooks.interface";
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface";
+import { IClient } from "@/common/types/restaurant/client.interface";
 
 interface FindBookingProps {
     iconOnly?: boolean;
@@ -30,10 +33,12 @@ interface FindBookingProps {
     updateBooking: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
     isUserAuth: boolean
     isLoading: boolean
+    clients: IClient[],
+    setGETClientsParams: Dispatch<SetStateAction<IGETRestaurantDataQuery>>,
 }
 
 
-export default function FindBooking({ updateBooking, iconOnly, isUserAuth, deleteBooking, isLoading }: FindBookingProps): JSX.Element {
+export default function FindBooking({ updateBooking, iconOnly, isUserAuth, deleteBooking, isLoading, clients, setGETClientsParams }: FindBookingProps): JSX.Element {
     const {
         restaurantAllBookings: bookings,
         setGETRestaurantDataParams: setBookingsParams,
@@ -156,6 +161,8 @@ export default function FindBooking({ updateBooking, iconOnly, isUserAuth, delet
                                     deleteBooking={deleteBooking}
                                     isUserAuth={isUserAuth}
                                     isUpdateBookingLoading={isLoading}
+                                    clients={clients}
+                                    setGETClientsParams={setGETClientsParams}
                                 />
                             )
                         })}

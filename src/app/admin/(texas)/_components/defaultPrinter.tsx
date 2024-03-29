@@ -51,8 +51,10 @@ export default function DefaultPrinter({ printers }: DefaultPrinterProps) {
         setDefaultPrinter(printer)
     }
 
+
     useEffect(() => {
         getDefaultPrinter()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

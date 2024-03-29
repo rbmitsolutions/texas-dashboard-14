@@ -232,6 +232,8 @@ export default function BookingPage() {
                             updateBooking={updateBooking}
                             isUserAuth={isUserAuth}
                             isLoading={isUpdateBookingLoading || isDeleteBookingLoading}
+                            clients={clients?.data || []}
+                            setGETClientsParams={setGETClientsParams}
                         />
                         <SearchInput
                             placeholder="Name"
