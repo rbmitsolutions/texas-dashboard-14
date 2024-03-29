@@ -125,10 +125,10 @@ export const finishedTablesColumnsTable: ColumnDef<IFinishedTable>[] = [
         cell: ({ row }) => {
             return (
                 <div>
-                    <DeleteDialogButton
+                    {/* <DeleteDialogButton
                         onDelete={() => console.log('delete')}
                         isDisabled={false}
-                    /> 
+                    />  */}
                 </div>
             )
         }
