@@ -16,6 +16,7 @@ import { TransactionsDirection, TransactionsStatus, PayrollTransactionsType } fr
 
 //hooks
 import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
+import WrapSelect from "../wrapSelect"
 
 interface OutAnalyticsProps {
     date: {
@@ -144,10 +145,10 @@ export default function OutAnalytics({ date }: OutAnalyticsProps) {
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4'>
                 {outData?.map((data: IOutDirection) => {
                     return (
-                        <div
+                        <WrapSelect
                             key={data?.type}
-                            className={cn('border-2 rounded-2xl cursor-pointer', transactionsParams?.transactions?.all?.type?.in?.includes(data?.type) ? 'border-primary' : 'border-transparent')}
-                            onClick={() => onTypeChange(data?.type)}
+                            selected={transactionsParams?.transactions?.all?.type?.in?.includes(data?.type) || false}
+                            handleSelect={() => onTypeChange(data?.type)}
                         >
                             <InfoBox
                                 icon={{
@@ -157,7 +158,7 @@ export default function OutAnalytics({ date }: OutAnalyticsProps) {
                                 value={convertCentsToEuro(data?._sum?.total || 0)}
                                 isLoading={isFetching}
                             />
-                        </div>
+                        </WrapSelect>
                     )
                 })}
             </div>

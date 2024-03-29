@@ -2,16 +2,16 @@ import { useCallback, useEffect, useState } from "react"
 
 //libs
 import { BOOKING_STATUS } from "@/common/libs/restaurant/bookings"
-import { cn } from "@/common/libs/shadcn/utils"
 
 //components
+import { BookingsColumnsTable } from "@/components/common/basicTable/columns/restaurant/bookingsColumns"
 import RadarChart from "@/components/common/charts/radarChart"
 import LineChart from "@/components/common/charts/lineChart"
+import { BasicTable } from "@/components/common/basicTable"
 import BarChart from "@/components/common/charts/barChart"
-import { BookingsColumnsTable } from "./bookingsColumns"
 import InfoBox from "@/components/common/infoBox"
-import { BookingsTables } from "./bookingsTable"
 import Wrap from "@/components/common/wrap"
+import WrapSelect from "../wrapSelect"
 
 //hooks
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
@@ -264,10 +264,10 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
             <div className='grid grid-cols-1 gap-2 bg-orange sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6'>
                 {bookingsData?.map((data: IDataBooking) => {
                     return (
-                        <div
+                        <WrapSelect
                             key={data?.status}
-                            className={cn('border-2 rounded-2xl cursor-pointer w-full', data?.status === status ? 'border-primary' : 'border-transparent')}
-                            onClick={() => setStatus(status === data?.status ? undefined : data?.status)}
+                            selected={status === data?.status}
+                            handleSelect={() => setStatus(status === data?.status ? undefined : data?.status)}
                         >
                             <InfoBox
                                 icon={{
@@ -276,7 +276,7 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
                                 title={data?.status}
                                 value={data?._count?._all || 0}
                             />
-                        </div>
+                        </WrapSelect>
                     )
                 })}
                 <InfoBox
@@ -314,7 +314,7 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
                         }}
                     >
 
-                        <BookingsTables
+                        <BasicTable
                             columns={BookingsColumnsTable({})}
                             data={bookings?.data || []}
                         />

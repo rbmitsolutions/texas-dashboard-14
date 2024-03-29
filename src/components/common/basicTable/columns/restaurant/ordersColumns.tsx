@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 //libs
-import { getOrderStatusVariant, getOrderTotal } from "@/common/libs/restaurant/order"
+import { getOrderStatusVariant } from "@/common/libs/restaurant/order"
 import { convertCentsToEuro } from "@/common/utils/convertToEuro"
 import { formatDate } from "@/common/libs/date-fns/dateFormat"
 
@@ -14,12 +14,9 @@ import { Button } from "@/components/ui/button"
 import { IOrder } from "@/common/types/restaurant/order.interface"
 
 interface OrdersColumnsTableProps {
-    showDescription?: boolean
 }
 
-export const OrdersColumnsTable = ({
-    showDescription = false
-}: OrdersColumnsTableProps): ColumnDef<IOrder>[] => {
+export const OrdersColumnsTable = ({ }: OrdersColumnsTableProps): ColumnDef<IOrder>[] => {
     return [
         {
             id: "mn_type",

@@ -1,6 +1,5 @@
 'use client'
 import { useCallback, useEffect, useState } from "react"
-import { cn } from "@/common/libs/shadcn/utils"
 
 //libs
 import { convertCentsToEuro } from "@/common/utils/convertToEuro"
@@ -10,6 +9,7 @@ import InfoBox from "@/components/common/infoBox"
 import VoucherAnalytics from "./voucherAnalytics"
 import TipsAnalytics from "./tipsAnalytics"
 import OutAnalytics from "./outAnalytics"
+import WrapSelect from "../wrapSelect"
 
 //interface
 import { PayrollTransactionsType, TransactionsDirection, TransactionsStatus } from "@/common/types/company/transactions.interface"
@@ -155,10 +155,10 @@ export default function TransactionsAnalytics({ date }: TransactionsAnalyticsPro
                     if (dir === TransactionsDirection.OUT) return null
                     const dataByDirection = dataDirection?.find((data: IDataDirection) => data.direction === dir)
                     return (
-                        <div
+                        <WrapSelect
                             key={dir}
-                            className={cn('border-2 rounded-2xl cursor-pointer', dir === direction ? 'border-primary' : 'border-transparent')}
-                            onClick={() => setDirection(perv => perv === dir ? undefined : dir)}
+                            selected={dir === direction}
+                            handleSelect={() => setDirection(perv => perv === dir ? undefined : dir)}
                         >
                             <InfoBox
                                 icon={{
@@ -169,13 +169,12 @@ export default function TransactionsAnalytics({ date }: TransactionsAnalyticsPro
                                 smallValue={directionSmallText(dir)}
 
                             />
-                        </div>
+                        </WrapSelect>
                     )
                 })}
-                <div
-                    key={'out'}
-                    className={cn('border-2 rounded-2xl cursor-pointer', 'out' === direction ? 'border-primary' : 'border-transparent')}
-                    onClick={() => setDirection(perv => perv === TransactionsDirection.OUT ? undefined : TransactionsDirection.OUT)}
+                <WrapSelect
+                    selected={'out' === direction}
+                    handleSelect={() => setDirection(perv => perv === TransactionsDirection.OUT ? undefined : TransactionsDirection.OUT)}
                 >
                     <InfoBox
                         icon={{
@@ -186,13 +185,14 @@ export default function TransactionsAnalytics({ date }: TransactionsAnalyticsPro
                         smallValue={directionSmallText(TransactionsDirection.OUT)}
 
                     />
-                </div>
+                </WrapSelect>
             </div>
-            {direction &&
+            {
+                direction &&
                 <div className='flex-col-container p-4 bg-slate-100 dark:bg-slate-900'>
                     {renderDirectionDetails(direction)}
                 </div>
             }
-        </div>
+        </div >
     )
 }

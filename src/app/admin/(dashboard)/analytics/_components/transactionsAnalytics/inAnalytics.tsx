@@ -3,13 +3,13 @@ import { useCallback, useEffect } from "react"
 
 //libs
 import { convertCentsToEuro } from "@/common/utils/convertToEuro"
-import { cn } from "@/common/libs/shadcn/utils"
 
 //components
 import { InTransactionsColumnsTable } from "./inTransactionsColumns"
 import { BasicTable } from "@/components/common/basicTable"
 import InfoBox from "@/components/common/infoBox"
 import Wrap from "@/components/common/wrap"
+import WrapSelect from "../wrapSelect"
 
 //interface
 import { TransactionsType, TransactionsDirection, TransactionsStatus, TransactionsMethod } from "@/common/types/company/transactions.interface"
@@ -175,10 +175,10 @@ export default function InAnalytics({ date }: InAnalyticsProps) {
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4'>
                 {inDataSorted?.map((data: IInDirection) => {
                     return (
-                        <div
+                        <WrapSelect
                             key={data?.type + data?.method}
-                            className={cn('border-2 rounded-2xl cursor-pointer', transactionsParams?.transactions?.all?.type?.in?.includes(data?.type) ? 'border-primary' : 'border-transparent')}
-                            onClick={() => onTypeChange(data?.type)}
+                            selected={transactionsParams?.transactions?.all?.type?.in?.includes(data?.type) || false}
+                            handleSelect={() => onTypeChange(data?.type)}
                         >
                             <InfoBox
                                 icon={{
@@ -189,7 +189,7 @@ export default function InAnalytics({ date }: InAnalyticsProps) {
                                 isLoading={isFetching}
                                 smallValue={data?.method}
                             />
-                        </div>
+                        </WrapSelect>
                     )
                 })}
             </div>

@@ -4,16 +4,16 @@ import { useCallback, useEffect, useState } from "react"
 import { convertCentsToEuro } from "@/common/utils/convertToEuro"
 
 //components
+import SalesByMenuTypeAnalytics from "./salesByMenuTypeAnalytics"
 import InfoBox from "@/components/common/infoBox"
-
-//interface
+import WrapSelect from "../wrapSelect"
 
 //hooks
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
+
+//interface
 import { OrderStatus } from "@/common/types/restaurant/order.interface"
-import { cn } from "@/common/libs/shadcn/utils"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
-import SalesByMenuTypeAnalytics from "./salesByMenuTypeAnalytics"
 
 interface SalesAnalyticsProps {
     date: {
@@ -107,10 +107,10 @@ export default function SalesAnalytics({ date }: SalesAnalyticsProps) {
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-6'>
                 {dataOrders?.map((data: IDataOrders) => {
                     return (
-                        <div
+                        <WrapSelect
                             key={data?.title}
-                            className={cn('border-2 rounded-2xl cursor-pointer', data?.title === menuSection?.title ? 'border-primary' : 'border-transparent')}
-                            onClick={handleSelectMenuSection(data?.title)}
+                            selected={data?.title === menuSection?.title}
+                            handleSelect={handleSelectMenuSection(data?.title)}
                         >
                             <InfoBox
                                 icon={{
@@ -119,13 +119,13 @@ export default function SalesAnalytics({ date }: SalesAnalyticsProps) {
                                 title={data?.title}
                                 value={convertCentsToEuro(data?.total || 0)}
                             />
-                        </div>
+                        </WrapSelect>
                     )
                 })}
             </div>
             {menuSection &&
                 <div className='flex-col-container p-4 bg-slate-100 dark:bg-slate-900'>
-                    <SalesByMenuTypeAnalytics 
+                    <SalesByMenuTypeAnalytics
                         date={date}
                         menuSection={menuSection}
                     />
