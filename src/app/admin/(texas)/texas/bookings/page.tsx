@@ -117,7 +117,7 @@ export default function BookingPage() {
             clients: {
                 all: {
                     pagination: {
-                        take: 20,
+                        take: 5,
                         skip: 0
                     },
                 }
@@ -224,12 +224,16 @@ export default function BookingPage() {
                             createBooking={createBooking}
                             isUserAuth={isUserAuth}
                             isLoading={isCreateBookingLoading}
+                            clients={clients?.data || []}
+                            setGETClientsParams={setGETClientsParams}
                         />
                         <FindBooking
                             deleteBooking={deleteBooking}
                             updateBooking={updateBooking}
                             isUserAuth={isUserAuth}
                             isLoading={isUpdateBookingLoading || isDeleteBookingLoading}
+                            clients={clients?.data || []}
+                            setGETClientsParams={setGETClientsParams}
                         />
                         <SearchInput
                             placeholder="Name"
@@ -343,6 +347,8 @@ export default function BookingPage() {
                                             deleteBooking={deleteBooking}
                                             updateBooking={updateBooking}
                                             isUserAuth={isUserAuth}
+                                            clients={clients?.data || []}
+                                            setGETClientsParams={setGETClientsParams}
                                             toTable={{
                                                 sections: openDay?.section || [],
                                             }}

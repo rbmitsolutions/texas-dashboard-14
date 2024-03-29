@@ -36,7 +36,6 @@ export default function AvgTableTimeAnalytics({ date }: AvgTableTimeAnalyticsPro
         }
     })
 
-    console.log(finishedTablesAvgTime)
     const onDateChange = useCallback((date: { from: Date, to: Date }) => {
         setFinishedTablesAvgTime(({
             finishedTables: {

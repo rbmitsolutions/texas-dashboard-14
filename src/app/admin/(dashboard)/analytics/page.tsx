@@ -20,7 +20,7 @@ export default function Analytics() {
         to: Date
     }>({
         from: getMondayOfTheWeek(new Date()),
-        to: getSundayOfTheWeek(new Date())
+        to: new Date()
     })
 
     const onDateChange = (date: DateRange | undefined) => {
@@ -39,18 +39,18 @@ export default function Analytics() {
                 <h1 className='text-2xl font-bold'>Analytics</h1>
                 <DatePickerWithRange
                     onConfirm={onDateChange}
-                    max={90}
+                    max={365}
                     value={{
                         from: date?.from,
                         to: date?.to
                     }}
+                    toDate={new Date()}
                 />
             </div>
             <BookingsAnalytics date={date} />
             <TransactionsAnalytics date={date} />
             <SalesAnalytics date={date} />
             <OwtAnalytics date={date} />
-            <strong>Haccp Reports</strong>
         </div>
     )
 }

@@ -1,5 +1,8 @@
 'use client'
 
+//libs
+import { getTableStatusVariant } from '@/common/libs/restaurant/tables';
+
 //components
 import GiftCardBalance from './_components/giftCardBallance';
 import OpenTillButton from './_components/openTillButton';
@@ -16,8 +19,9 @@ import { useAuthHooks } from '@/hooks/useAuthHooks';
 //store
 import { usePrintersStore } from '@/store/restaurant/printers';
 import { useTablesStore } from '@/store/restaurant/tables';
+
+//interfaces
 import { TableMealStatus } from '@/common/types/restaurant/tables.interface';
-import { getTableStatusVariant } from '@/common/libs/restaurant/tables';
 
 export default function Reception() {
     const { tablesFilter, setTablesFilter, getTablesFiltered } = useTablesStore()
