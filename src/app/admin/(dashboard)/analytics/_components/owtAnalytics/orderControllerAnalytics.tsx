@@ -1,8 +1,12 @@
-import Wrap from "@/components/common/wrap";
-import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
-import { useCallback, useEffect } from "react";
-import { OrderControllerColumnsTable } from "./orderControllerColumns";
+import { useCallback, useEffect } from "react"
+
+//components
+import { OrderControllerColumnsTable } from "../../../../../../components/common/basicTable/columns/restaurant/orderControllerColumns";
 import { BasicTable } from "@/components/common/basicTable";
+import Wrap from "@/components/common/wrap";
+
+//hooks
+import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
 
 interface OrderControllerAnalyticsProps {
     date: { from: Date, to: Date }

@@ -1,14 +1,12 @@
 import { useCallback, useEffect, useState } from "react"
 
-//libs
-import { cn } from "@/common/libs/shadcn/utils"
-
 //components
-import InfoBox from "@/components/common/infoBox"
 import OrderControllerAnalytics from "./orderControllerAnalytics"
 import AvgTableTimeAnalytics from "./avgTableTimeAnalytics"
 import TablesServedAnalytics from "./tableServedAnalytics"
+import InfoBox from "@/components/common/infoBox"
 import WaiterAnalytics from "./waiterAnalytics"
+import WrapSelect from "../wrapSelect"
 
 //hooks
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
@@ -184,9 +182,9 @@ export default function OwtAnalytics({ date }: OwtAnalyticsProps) {
         <div className='flex-col-container'>
             <strong>Orders / Waiters / Tables</strong>
             <div className='grid grid-cols-1 gap-2 bg-orange sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4'>
-                <div
-                    className={cn('border-2 rounded-2xl cursor-pointer w-full', selected === 'orders' ? 'border-primary' : 'border-transparent')}
-                    onClick={() => setSelected(selected === 'orders' ? undefined : 'orders')}
+                <WrapSelect
+                    selected={selected === 'orders'}
+                    handleSelect={() => setSelected(selected === 'orders' ? undefined : 'orders')}
                 >
                     <InfoBox
                         icon={{
@@ -195,10 +193,10 @@ export default function OwtAnalytics({ date }: OwtAnalyticsProps) {
                         title='Total Orders'
                         value={countOrders || 0}
                     />
-                </div>
-                <div
-                    className={cn('border-2 rounded-2xl cursor-pointer w-full', selected === 'waiter' ? 'border-primary' : 'border-transparent')}
-                    onClick={() => setSelected(selected === 'waiter' ? undefined : 'waiter')}
+                </WrapSelect>
+                <WrapSelect
+                    selected={selected === 'waiter'}
+                    handleSelect={() => setSelected(selected === 'waiter' ? undefined : 'waiter')}
                 >
                     <InfoBox
                         icon={{
@@ -208,10 +206,10 @@ export default function OwtAnalytics({ date }: OwtAnalyticsProps) {
                         value={topWaitress?.waiter}
                         smallValue={(String(topWaitress?._count?._all)) + ' Orders'}
                     />
-                </div>
-                <div
-                    className={cn('border-2 rounded-2xl cursor-pointer w-full', selected === 'tables' ? 'border-primary' : 'border-transparent')}
-                    onClick={() => setSelected(selected === 'tables' ? undefined : 'tables')}
+                </WrapSelect>
+                <WrapSelect
+                    selected={selected === 'tables'}
+                    handleSelect={() => setSelected(selected === 'tables' ? undefined : 'tables')}
                 >
                     <InfoBox
                         icon={{
@@ -220,10 +218,10 @@ export default function OwtAnalytics({ date }: OwtAnalyticsProps) {
                         title='Tables Served'
                         value={finishedTablesCount || 0}
                     />
-                </div>
-                <div
-                    className={cn('border-2 rounded-2xl cursor-pointer w-full', selected === 'avg' ? 'border-primary' : 'border-transparent')}
-                    onClick={() => setSelected(selected === 'avg' ? undefined : 'avg')}
+                </WrapSelect>
+                <WrapSelect
+                    selected={selected === 'avg'}
+                    handleSelect={() => setSelected(selected === 'avg' ? undefined : 'avg')}
                 >
                     <InfoBox
                         icon={{
@@ -233,7 +231,7 @@ export default function OwtAnalytics({ date }: OwtAnalyticsProps) {
                         value={convertMinutesToHoursAndMinutes(finishedTablesAvgTime?._avg?.average_minutes?.toFixed(0) || 0) || '0h 0m'}
                     />
 
-                </div>
+                </WrapSelect>
             </div>
             {selected &&
                 <div className='flex-col-container p-4 bg-slate-100 dark:bg-slate-900'>

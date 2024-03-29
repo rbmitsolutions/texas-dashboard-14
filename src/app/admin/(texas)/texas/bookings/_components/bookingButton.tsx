@@ -104,9 +104,9 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
             return
         } else {
             form.setValue('contact_number', client?.contact_number)
-            form.setValue('name', client?.name)
+            form.setValue('name', client?.name.trim().split(/\s+/)[0] || '')
+            form.setValue('surname', client?.name.trim().split(/\s+/).slice(1).join(' ') || '')
             form.setValue('email', client?.email)
-            form.setValue('surname', client?.name)
         }
     }
 

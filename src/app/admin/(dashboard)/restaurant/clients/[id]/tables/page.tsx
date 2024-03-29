@@ -4,8 +4,9 @@
 import { getFirstDayOfMonth, getLastDayOfMonth } from "@/common/libs/date-fns/dateFormat"
 
 //components
-import { clientFinishedtablesColumnsTable } from "./_components/clientFinishedTablesColumnsTable"
-import { ClientFinishedtablesTable } from "./_components/clientFinishedTablesTable"
+
+import { finishedTablesColumnsTable } from "@/components/common/basicTable/columns/restaurant/finishedTablesColumnsTable"
+import { BasicTable } from "@/components/common/basicTable"
 import Wrap from "@/components/common/wrap"
 
 //hooks
@@ -102,8 +103,8 @@ export default function ClientTables({ params }: { params: { id: string } }): JS
             isLoading={isFinishedTablesLoading}
             error={error}
         >
-            <ClientFinishedtablesTable
-                columns={clientFinishedtablesColumnsTable}
+            <BasicTable
+                columns={finishedTablesColumnsTable}
                 data={finishedTables?.data}
             />
         </Wrap>

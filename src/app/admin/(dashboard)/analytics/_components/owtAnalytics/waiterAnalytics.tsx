@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { cn } from "@/common/libs/shadcn/utils";
 
 //components
-import { OrderControllerColumnsTable } from "./orderControllerColumns";
+import { OrderControllerColumnsTable } from "../../../../../../components/common/basicTable/columns/restaurant/orderControllerColumns";
 import { BasicTable } from "@/components/common/basicTable";
 import InfoBox from "@/components/common/infoBox";
 import Wrap from "@/components/common/wrap";
+import WrapSelect from "../wrapSelect";
 
 //interface
 import { IWaitressesData } from ".";
@@ -94,10 +94,10 @@ export default function WaiterAnalytics({ data, date }: WaiterAnalyticsProps) {
             <div className='grid grid-cols-1 gap-2 bg-orange sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6'>
                 {data?.map(w => {
                     return (
-                        <div
+                        <WrapSelect
                             key={w?.waiter}
-                            className={cn('border-2 rounded-2xl cursor-pointer w-full', waiter === w?.waiter ? 'border-primary' : 'border-transparent')}
-                            onClick={() => setWaiter(waiter === w?.waiter ? undefined : w?.waiter)}
+                            selected={waiter === w?.waiter}
+                            handleSelect={() => setWaiter(waiter === w?.waiter ? undefined : w?.waiter)}
                         >
                             <InfoBox
 
@@ -107,7 +107,7 @@ export default function WaiterAnalytics({ data, date }: WaiterAnalyticsProps) {
                                 title={w?.waiter}
                                 value={w?._count?._all || 0}
                             />
-                        </div>
+                        </WrapSelect>
                     )
                 })}
             </div>

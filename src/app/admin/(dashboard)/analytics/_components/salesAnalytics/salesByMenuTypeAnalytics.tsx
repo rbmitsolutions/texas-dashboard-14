@@ -2,14 +2,14 @@ import { useCallback, useEffect, useState } from "react"
 
 //libs
 import { convertCentsToEuro } from "@/common/utils/convertToEuro"
-import { cn } from "@/common/libs/shadcn/utils"
 
 //components
 import { OrderStatus } from "@/common/types/restaurant/order.interface"
-import { OrdersColumnsTable } from "./ordersColumns"
+import { BasicTable } from "@/components/common/basicTable"
+import { OrdersColumnsTable } from "../../../../../../components/common/basicTable/columns/restaurant/ordersColumns"
 import InfoBox from "@/components/common/infoBox"
-import { OrdersTables } from "./ordersTable"
 import Wrap from "@/components/common/wrap"
+import WrapSelect from "../wrapSelect"
 
 //hooks
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
@@ -88,8 +88,6 @@ export default function SalesByMenuTypeAnalytics({ date, menuSection }: SalesByM
             enabled: !!type
         }
     })
-
-    console.log(byMenuAndType)
 
     const {
         restaurantOrdersAnalytics: orders,
@@ -206,10 +204,10 @@ export default function SalesByMenuTypeAnalytics({ date, menuSection }: SalesByM
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4'>
                 {dataTypeOrders?.map((data: IDataTypeOrders) => {
                     return (
-                        <div
+                        <WrapSelect
                             key={data?.title}
-                            className={cn('border-2 rounded-2xl cursor-pointer', data?.title === type?.title ? 'border-primary' : 'border-transparent')}
-                            onClick={() => handleSelectMenuType(data?.title)}
+                            selected={data?.title === type?.title}
+                            handleSelect={() => handleSelectMenuType(data?.title)}
                         >
                             <InfoBox
                                 icon={{
@@ -218,7 +216,7 @@ export default function SalesByMenuTypeAnalytics({ date, menuSection }: SalesByM
                                 title={data?.title}
                                 value={convertCentsToEuro(data?.total || 0)}
                             />
-                        </div>
+                        </WrapSelect>
                     )
                 })}
             </div>
@@ -227,7 +225,7 @@ export default function SalesByMenuTypeAnalytics({ date, menuSection }: SalesByM
                     {byMenuAndTypeSort?.map((data: IDataByMenuAndType) => {
                         return (
                             <InfoBox
-                                key={data?.title}
+                                key={data?.title + data?.total}
                                 icon={{
                                     name: 'ChefHat',
                                 }}
@@ -259,7 +257,7 @@ export default function SalesByMenuTypeAnalytics({ date, menuSection }: SalesByM
                 }}
             >
 
-                <OrdersTables
+                <BasicTable
                     columns={OrdersColumnsTable({})}
                     data={orders?.data || []}
                 />

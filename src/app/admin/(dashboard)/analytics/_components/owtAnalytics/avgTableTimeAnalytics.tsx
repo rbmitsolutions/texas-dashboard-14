@@ -1,7 +1,13 @@
-import { convertMinutesToHoursAndMinutes } from "@/common/libs/date-fns/dateFormat"
-import InfoBox from "@/components/common/infoBox"
-import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 import { useCallback, useEffect } from "react"
+
+//libs
+import { convertMinutesToHoursAndMinutes } from "@/common/libs/date-fns/dateFormat"
+
+//components
+import InfoBox from "@/components/common/infoBox"
+
+//hooks
+import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 
 interface AvgTableTimeAnalyticsProps {
     date: { from: Date, to: Date }
