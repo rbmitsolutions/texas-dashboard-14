@@ -1,8 +1,9 @@
 import { UseMutateFunction } from "react-query";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 //libs
 import { bookingBackgroundColor } from "@/common/libs/restaurant/bookings";
+import { formatDate } from "@/common/libs/date-fns/dateFormat";
 import { cn } from "@/common/libs/shadcn/utils";
 import Icon from "@/common/libs/lucida-icon";
 
@@ -26,6 +27,7 @@ import BookingButton from "./bookingButton";
 import SelectTable from "./selectTable";
 
 //hooks
+import { IGETRestaurantDataQuery } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 import { useSocketIoHooks } from "@/hooks/useSocketIoHooks";
 
 //interface
@@ -33,9 +35,9 @@ import { IDELETERestaurantDataBody } from "@/hooks/restaurant/IDeleteRestaurantD
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface";
 import { ISection, ITable } from "@/common/types/restaurant/tables.interface";
 import { IBookings } from "@/common/types/restaurant/bookings.interface";
+import { IClient } from "@/common/types/restaurant/client.interface";
 import { RedirectTo } from "@/common/types/routers/endPoints.types";
 import { SocketIoEvent } from "@/common/libs/socketIo/types";
-import { formatDate } from "@/common/libs/date-fns/dateFormat";
 
 interface BookingDetailsProps {
     booking: IBookings
@@ -46,6 +48,8 @@ interface BookingDetailsProps {
         sections: ISection[]
     }
     isUpdateBookingLoading: boolean
+    clients: IClient[],
+    setGETClientsParams: Dispatch<SetStateAction<IGETRestaurantDataQuery>>,
 }
 
 
@@ -55,7 +59,10 @@ export default function BookingDetails({
     updateBooking,
     isUserAuth,
     toTable,
-    isUpdateBookingLoading }: BookingDetailsProps) {
+    isUpdateBookingLoading,
+    clients,
+    setGETClientsParams
+}: BookingDetailsProps) {
     const { emit } = useSocketIoHooks()
     const [tableSelected, setTableSelected] = useState<ITable | undefined>(booking?.table || undefined)
 
@@ -267,6 +274,8 @@ export default function BookingDetails({
                                 ),
                                 updateBooking
                             }}
+                            clients={clients}
+                            setGETClientsParams={setGETClientsParams}
                             isLoading={isUpdateBookingLoading}
                         />
                         <DeleteDialogButton

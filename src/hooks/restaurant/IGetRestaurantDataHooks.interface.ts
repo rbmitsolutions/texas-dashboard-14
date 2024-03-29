@@ -169,6 +169,11 @@ export interface IGETOrdersQuery {
     mn_section?: {
       in: string[]
     }
+    byMenu?: {
+      in: {
+        mn_type: string[]
+      }
+    }
     created_at: {
       gte: Date
       lte: Date

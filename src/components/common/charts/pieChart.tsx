@@ -36,35 +36,3 @@ export default function PieChart({ data }:PieChartProps) {
         </ResponsiveContainer>
     )
 }
-
-     {/* <Chart width={300} height={40} data={data}>
-                <Bar 
-                    dataKey='value' 
-                />
-                <YAxis />
-                <XAxis dataKey='title'/>
-                <CartesianGrid strokeDasharray="5 5" />
-                <Tooltip content={<CustomTooltip />}/>
-            </Chart>  */}
-            
-const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-        return (
-            <div className="flex-col-container gap-2 p-4 shadow-sm rounded-md bg-slate-50 dark:bg-slate-900">
-                <p className="capitalize text-primary font-bold">{label}</p>
-                <p className="">{payload[0].value}</p>
-            </div>
-        );
-    }
-
-    return null;
-}
-
-// export default class Example extends PureComponent {
-
-//     render() {
-//         return (
-      
-//     );
-//     }
-// }

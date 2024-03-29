@@ -158,7 +158,7 @@ export default function WalkinButton({ openDay, iconOnly, createBooking, clients
                                     all: {
                                         ...prev?.clients?.all,
                                         pagination: {
-                                            take: 20,
+                                            take: 5,
                                             skip: 0
                                         },
                                         contact_number: e

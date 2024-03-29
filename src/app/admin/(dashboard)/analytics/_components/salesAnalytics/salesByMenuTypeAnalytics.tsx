@@ -1,16 +1,21 @@
+import { useCallback, useEffect, useState } from "react"
+
+//libs
+import { convertCentsToEuro } from "@/common/utils/convertToEuro"
+import { cn } from "@/common/libs/shadcn/utils"
+
+//components
+import { OrderStatus } from "@/common/types/restaurant/order.interface"
+import { OrdersColumnsTable } from "./ordersColumns"
+import InfoBox from "@/components/common/infoBox"
+import { OrdersTables } from "./ordersTable"
+import Wrap from "@/components/common/wrap"
+
 //hooks
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 
 //interface
 import { IMenuSection, IMenuType } from "@/common/types/restaurant/menu.interface"
-import { OrderStatus } from "@/common/types/restaurant/order.interface"
-import { useCallback, useEffect, useState } from "react"
-import Wrap from "@/components/common/wrap"
-import { cn } from "@/common/libs/shadcn/utils"
-import InfoBox from "@/components/common/infoBox"
-import { convertCentsToEuro } from "@/common/utils/convertToEuro"
-import { OrdersTables } from "./ordersTable"
-import { OrdersColumnsTable } from "./ordersColumns"
 
 interface SalesByMenuTypeAnalyticsProps {
     date: {
@@ -24,8 +29,15 @@ interface IDataTypeOrders {
     title: string
     total: number
 }
+
+interface IDataByMenuAndType {
+    title: string
+    total: number
+}
+
 export default function SalesByMenuTypeAnalytics({ date, menuSection }: SalesByMenuTypeAnalyticsProps) {
     const [type, setType] = useState<IMenuType | undefined>(undefined)
+
     const {
         restaurantOrdersAnalytics: dataTypeOrders,
         setGETRestaurantDataParams: setOrdersTypeParams,
@@ -48,6 +60,36 @@ export default function SalesByMenuTypeAnalytics({ date, menuSection }: SalesByM
             }
         }
     })
+
+    const {
+        restaurantOrdersAnalytics: byMenuAndType,
+        setGETRestaurantDataParams: setByMenuAndTypeParams,
+    } = useGETRestaurantDataHooks({
+        query: 'ORDER',
+        defaultParams: {
+            order: {
+                analytics: {
+                    byMenu: {
+                        in: {
+                            mn_type: [type?.title!]
+                        }
+                    },
+                    status: {
+                        in: [OrderStatus.DELIVERED, OrderStatus.ORDERED, OrderStatus.PAID]
+                    },
+                    created_at: {
+                        gte: new Date(date?.from),
+                        lte: new Date(date?.to)
+                    }
+                }
+            }
+        },
+        UseQueryOptions: {
+            enabled: !!type
+        }
+    })
+
+    console.log(byMenuAndType)
 
     const {
         restaurantOrdersAnalytics: orders,
@@ -80,6 +122,7 @@ export default function SalesByMenuTypeAnalytics({ date, menuSection }: SalesByM
         }
     })
 
+
     const handleSelectMenuType = (title: string) => {
         const type = menuSection?.types?.find(type => type?.title === title)
         setType(prev => prev?.title === title ? undefined : type)
@@ -102,7 +145,27 @@ export default function SalesByMenuTypeAnalytics({ date, menuSection }: SalesByM
                 }
             }
         })
-    }, [menuSection?.types, setOrdersTypeParams]);
+        if (type) {
+            setByMenuAndTypeParams({
+                order: {
+                    analytics: {
+                        byMenu: {
+                            in: {
+                                mn_type: [type?.title!]
+                            }
+                        },
+                        status: {
+                            in: [OrderStatus.DELIVERED, OrderStatus.ORDERED, OrderStatus.PAID]
+                        },
+                        created_at: {
+                            gte: new Date(date?.from),
+                            lte: new Date(date?.to)
+                        }
+                    }
+                }
+            })
+        }
+    }, [setOrdersTypeParams, menuSection?.types, type, setByMenuAndTypeParams]);
 
     const onTypeChange = useCallback((type: IMenuType) => {
         setOrders({
@@ -137,6 +200,7 @@ export default function SalesByMenuTypeAnalytics({ date, menuSection }: SalesByM
         }
     }, [type, onTypeChange])
 
+    const byMenuAndTypeSort = byMenuAndType?.sort((a: IDataByMenuAndType, b: IDataByMenuAndType) => b?.total - a?.total) || []
     return (
         <div className='flex-col-container gap-8'>
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4'>
@@ -158,6 +222,22 @@ export default function SalesByMenuTypeAnalytics({ date, menuSection }: SalesByM
                     )
                 })}
             </div>
+            {type &&
+                <div className='grid grid-cols-1 gap-4 p-4  bg-slate-200 dark:bg-slate-800 sm:grid-cols-2 xl:grid-cols-6'>
+                    {byMenuAndTypeSort?.map((data: IDataByMenuAndType) => {
+                        return (
+                            <InfoBox
+                                key={data?.title}
+                                icon={{
+                                    name: 'ChefHat',
+                                }}
+                                title={data?.title}
+                                value={convertCentsToEuro(data?.total || 0)}
+                            />
+                        )
+                    })}
+                </div>
+            }
             <Wrap
                 header={{
                     title: {

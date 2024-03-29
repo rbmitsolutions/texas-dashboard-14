@@ -230,7 +230,7 @@ export default function OwtAnalytics({ date }: OwtAnalyticsProps) {
                             name: 'Clock',
                         }}
                         title='Avg Table Time'
-                        value={convertMinutesToHoursAndMinutes(finishedTablesAvgTime?._avg?.average_minutes.toFixed(0) || 0) || '0h 0m'}
+                        value={convertMinutesToHoursAndMinutes(finishedTablesAvgTime?._avg?.average_minutes?.toFixed(0) || 0) || '0h 0m'}
                     />
 
                 </div>

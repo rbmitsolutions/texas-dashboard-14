@@ -5,6 +5,7 @@ import { BOOKING_STATUS } from "@/common/libs/restaurant/bookings"
 import { cn } from "@/common/libs/shadcn/utils"
 
 //components
+import RadarChart from "@/components/common/charts/radarChart"
 import LineChart from "@/components/common/charts/lineChart"
 import BarChart from "@/components/common/charts/barChart"
 import { BookingsColumnsTable } from "./bookingsColumns"
@@ -39,6 +40,13 @@ interface IDataBookingTime {
     time: string
 }
 
+interface IDataBookingGuets {
+    _count: {
+        _all: number
+    },
+    amount_of_people: string
+}
+
 export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
     const [status, setStatus] = useState<IBookingStatus | undefined>(undefined)
 
@@ -51,6 +59,27 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
             bookings: {
                 analytics: {
                     by: ['status'],
+                    date: {
+                        gte: date.from,
+                        lte: date.to
+                    },
+                }
+            }
+        }
+    })
+
+    const {
+        restaurantBookingAnalytics: bookingsGuestsData,
+        setGETRestaurantDataParams: setBookingGuestsParams,
+    } = useGETRestaurantDataHooks({
+        query: 'BOOKINGS',
+        defaultParams: {
+            bookings: {
+                analytics: {
+                    by: ['amount_of_people'],
+                    status: {
+                        in: ['arrived', 'confirmed', 'unconfirmed', 'walk_in']
+                    },
                     date: {
                         gte: date.from,
                         lte: date.to
@@ -137,11 +166,26 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
                     date: {
                         gte: date.from,
                         lte: date.to
-                    },  
+                    },
                 }
             }
         })
-    }, [setBookingParams, setBookingsParams, setBookingTimeParams]);
+        setBookingGuestsParams({
+            bookings: {
+                analytics: {
+                    by: ['amount_of_people'],
+                    status: {
+                        in: ['arrived', 'confirmed', 'unconfirmed', 'walk_in']
+                    },
+                    date: {
+                        gte: date.from,
+                        lte: date.to
+                    },
+                }
+            }
+
+        })
+    }, [setBookingParams, setBookingsParams, setBookingTimeParams, setBookingGuestsParams]);
 
     useEffect(() => {
         onDateChange(date)
@@ -185,10 +229,21 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
         }
     })
 
+    const radarChart = bookingsGuestsData?.map((item: IDataBookingGuets) => {
+        return {
+            title: item.amount_of_people,
+            value: item._count._all
+        }
+    })
+
+    const totalGuests = bookingsGuestsData?.reduce((acc: number, item: IDataBookingGuets) => acc + item?._count?._all, 0)
+
+
+
     return (
         <div className='flex-col-container'>
             <strong>Bookings</strong>
-            <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+            <div className='grid grid-cols-1 gap-4 sm:grid-cols-3'>
                 <div className='h-80'>
                     <BarChart
                         data={data}
@@ -197,6 +252,12 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
                 <div className='h-80'>
                     <LineChart
                         data={lineChart}
+                    />
+                </div>
+                <div className='relative h-80'>
+                    <small className='absolute top-2 left-2'>Guests</small>
+                    <RadarChart
+                        data={radarChart}
                     />
                 </div>
             </div>
@@ -210,7 +271,7 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
                         >
                             <InfoBox
                                 icon={{
-                                    name: 'PieChart',
+                                    name: 'CalendarCheck',
                                 }}
                                 title={data?.status}
                                 value={data?._count?._all || 0}
@@ -218,6 +279,13 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
                         </div>
                     )
                 })}
+                <InfoBox
+                    icon={{
+                        name: 'Footprints',
+                    }}
+                    title='Guests'
+                    value={totalGuests || 0}
+                />
             </div>
             {status &&
                 <div className='flex-col-container p-4 bg-slate-100 dark:bg-slate-900'>
