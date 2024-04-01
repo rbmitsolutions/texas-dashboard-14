@@ -3,17 +3,15 @@ import { Bar, ResponsiveContainer, BarChart as Chart, YAxis, XAxis, CartesianGri
 import { CustomTooltip } from './customToolTip';
 
 interface IData {
-    title: string
-    fill: string
-    value: number
+    [key: string]: string | number
 }
 
 interface BarChartProps {
     data: IData[]
-
+    children: React.ReactNode
 }
 
-export default function BarChart({ data }: BarChartProps) {
+export default function BarChart({ data, children }: BarChartProps) {
     const [mounted, setMounted] = React.useState(false)
 
     React.useEffect(() => {
@@ -25,12 +23,9 @@ export default function BarChart({ data }: BarChartProps) {
     return (
         <ResponsiveContainer width="100%" height="100%" className='bg-background-soft p-4 min-w-8 min-h-8 h-full w-full'>
             <Chart width={300} height={40} data={data}>
-                <Bar
-                    dataKey='value'
-                    fill='blue'
-                />
+                {children}
                 <YAxis />
-                <XAxis dataKey='title' />
+                <XAxis dataKey='name' />
                 <CartesianGrid strokeDasharray="5 5" />
                 <Tooltip
                     cursor={{ fill: 'transparent' }}

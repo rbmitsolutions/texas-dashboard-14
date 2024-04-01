@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 //libs
 import { convertCentsToEuro } from "@/common/utils/convertToEuro"
@@ -14,6 +14,10 @@ import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHook
 //interface
 import { OrderStatus } from "@/common/types/restaurant/order.interface"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
+import { api } from "@/common/libs/axios/api"
+import { EndPointsTypes } from "@/common/types/routers/endPoints.types"
+import { CSVLink } from "react-csv"
+import { formatDate } from "@/common/libs/date-fns/dateFormat"
 
 interface SalesAnalyticsProps {
     date: {
@@ -27,8 +31,18 @@ interface IDataOrders {
     total: number
 }
 
+interface ITest {
+    menu: {
+        menu: string
+        _sum: { quantity: number }
+    }[]
+    title: string
+}
+
 export default function SalesAnalytics({ date }: SalesAnalyticsProps) {
     const [menuSection, setMenuSection] = useState<IMenuSection | undefined>(undefined)
+    const [csvDownload, setCsvDownload] = useState<any[]>([]);
+    const csvRef = useRef(null);
 
     const {
         restaurantOrdersAnalytics: dataOrders,
@@ -97,12 +111,68 @@ export default function SalesAnalytics({ date }: SalesAnalyticsProps) {
         })
     }, [setOrdersParams]);
 
+
+    const downloadSalesAnalytics = async (menuSection: string) => {
+        try {
+            const { data } = await api.get(EndPointsTypes['RESTAURANT_ORDER_ENDPOINT'], {
+                params: {
+                    order: {
+                        analytics: {
+                            count: '1',
+                            mn_section: {
+                                in: [menuSection]
+                            },
+                            status: {
+                                in: [OrderStatus.DELIVERED, OrderStatus.ORDERED, OrderStatus.PAID]
+                            },
+                            created_at: {
+                                gte: new Date(date?.from),
+                                lte: new Date(date?.to)
+                            },
+                        }
+                    }
+                }
+            })
+
+            let finalData: any[] = []
+
+            data?.map((d: ITest) => {
+                d?.menu?.map(m => {
+                    finalData.push({
+                        menu: m?.menu,
+                        quantity: m?._sum?.quantity
+                    })
+                })
+            })
+
+            setCsvDownload(finalData);
+
+            (csvRef.current as any)?.link?.click();
+
+        } catch (err) {
+            console.log('err', err)
+        }
+    }
+
     useEffect(() => {
         onDateChange(date)
     }, [date, onDateChange])
 
     return (
         <div className='flex-col-container'>
+            <div className='none'>
+                <CSVLink
+                    ref={csvRef}
+                    data={csvDownload}
+                    filename={`${formatDate({
+                        date: date?.from!,
+                        f: 'dd/MM/yyyy'
+                    })} - ${formatDate({
+                        date: date?.to!,
+                        f: 'dd/MM/yyyy'
+                    })}`}
+                />
+            </div>
             <strong>Sales</strong>
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-6'>
                 {dataOrders?.map((data: IDataOrders) => {
@@ -111,6 +181,9 @@ export default function SalesAnalytics({ date }: SalesAnalyticsProps) {
                             key={data?.title}
                             selected={data?.title === menuSection?.title}
                             handleSelect={handleSelectMenuSection(data?.title)}
+                            donwload={{
+                                onClick: () => downloadSalesAnalytics(data?.title)
+                            }}
                         >
                             <InfoBox
                                 icon={{
