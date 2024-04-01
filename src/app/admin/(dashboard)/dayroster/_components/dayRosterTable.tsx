@@ -13,7 +13,7 @@ import {
 } from "@tanstack/react-table"
 
 //libs
-import { addDaysToDate, getFirstTimeOfTheDay, getLastTimeOfTheDay } from "@/common/libs/date-fns/dateFormat"
+import { addDaysToDate, formatDate, getFirstTimeOfTheDay, getLastTimeOfTheDay } from "@/common/libs/date-fns/dateFormat"
 
 //components
 import {
@@ -93,8 +93,14 @@ export function DayRosterTable<TData, TValue>({
                       skip: 0
                     },
                     date: {
-                      gte: getFirstTimeOfTheDay(date!),
-                      lte: getLastTimeOfTheDay(date!)
+                      gte: new Date(formatDate({
+                        date: getFirstTimeOfTheDay(new Date(date!)),
+                        f: 'yyyy-MM-dd'
+                      })),
+                      lte: new Date(formatDate({
+                        date: getLastTimeOfTheDay(new Date(date!)),
+                        f: 'yyyy-MM-dd'
+                      })),
                     },
                     includes: {
                       user: '1'
