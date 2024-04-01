@@ -18,6 +18,8 @@ import { api } from "@/common/libs/axios/api"
 import { EndPointsTypes } from "@/common/types/routers/endPoints.types"
 import { CSVLink } from "react-csv"
 import { formatDate } from "@/common/libs/date-fns/dateFormat"
+import { Button } from "@/components/ui/button"
+import Icon from "@/common/libs/lucida-icon"
 
 interface SalesAnalyticsProps {
     date: {
@@ -160,19 +162,7 @@ export default function SalesAnalytics({ date }: SalesAnalyticsProps) {
 
     return (
         <div className='flex-col-container'>
-            <div className='none'>
-                <CSVLink
-                    ref={csvRef}
-                    data={csvDownload}
-                    filename={`${formatDate({
-                        date: date?.from!,
-                        f: 'dd/MM/yyyy'
-                    })} - ${formatDate({
-                        date: date?.to!,
-                        f: 'dd/MM/yyyy'
-                    })}`}
-                />
-            </div>
+
             <strong>Sales</strong>
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-6'>
                 {dataOrders?.map((data: IDataOrders) => {
@@ -181,9 +171,6 @@ export default function SalesAnalytics({ date }: SalesAnalyticsProps) {
                             key={data?.title}
                             selected={data?.title === menuSection?.title}
                             handleSelect={handleSelectMenuSection(data?.title)}
-                            donwload={{
-                                onClick: () => downloadSalesAnalytics(data?.title)
-                            }}
                         >
                             <InfoBox
                                 icon={{
@@ -198,6 +185,25 @@ export default function SalesAnalytics({ date }: SalesAnalyticsProps) {
             </div>
             {menuSection &&
                 <div className='flex-col-container p-4 bg-slate-100 dark:bg-slate-900'>
+                    <Button
+                        size='iconExSm'
+                        variant='orange'
+                        onClick={() => downloadSalesAnalytics(menuSection?.title)}
+                    >
+                        <Icon
+                            name='FileDown'
+                        />
+                    </Button>
+                    <div className='none'>
+                        <CSVLink
+                            ref={csvRef}
+                            data={csvDownload}
+                            filename={`${menuSection?.title} Sales / ${formatDate({
+                                date: date?.from,
+                                f: 'dd/MM/yy'
+                            })}`}
+                        />
+                    </div>
                     <SalesByMenuTypeAnalytics
                         date={date}
                         menuSection={menuSection}
