@@ -13,7 +13,7 @@ import { transactionsTotal } from '@/common/libs/company/transactions';
 //components
 import { transactionsColumnsTable } from '../_components/transactionsColumnsTable';
 import RightReceptionDisplay from '../_components/rightReceptionDisplay';
-import { TransactionsTable } from '../_components/transactionsTable';
+import { BasicTable } from '@/components/common/basicTable';
 import LayoutFrame from '../../../_components/layoutFrame';
 import IconText from '@/components/common/iconText';
 import Wrap from '@/components/common/wrap';
@@ -369,7 +369,7 @@ export default function Table({ params }: { params: { id: string } }) {
                     }}
                     className='p-4 rounded-xl bg-background-soft overflow-auto scrollbar-thin'
                 >
-                    <TransactionsTable
+                    <BasicTable
                         columns={transactionsColumnsTable({
                             updateTransaction,
                         })}

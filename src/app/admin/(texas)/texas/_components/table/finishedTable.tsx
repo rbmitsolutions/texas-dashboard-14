@@ -41,7 +41,7 @@ export default function FinishedTables({ tableId }: FinishedTablesProps) {
             finishedTables: {
                 all: {
                     date: {
-                        gte: subDaysToDate(new Date(), 7),
+                        gte: subDaysToDate(new Date(), 365),
                         lte: addDaysToDate(new Date(), 1)
                     },
                     pagination: {
@@ -79,7 +79,7 @@ export default function FinishedTables({ tableId }: FinishedTablesProps) {
                                     all: {
                                         ...prev?.finishedTables?.all,
                                         date: {
-                                            gte: subDaysToDate(new Date(),7),
+                                            gte: subDaysToDate(new Date(), 365),
                                             lte: addDaysToDate(new Date(), 1)
                                         },
                                         pagination,
@@ -133,7 +133,7 @@ export default function FinishedTables({ tableId }: FinishedTablesProps) {
                                     </div>
                                 </Link>
                                 <div>
-                                    <PrintBill 
+                                    <PrintBill
                                         finishedTableId={table?.id}
                                     />
                                 </div>

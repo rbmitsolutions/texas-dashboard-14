@@ -66,13 +66,13 @@ export default function Pagination({
             </Button>
             <Popover>
                 <PopoverTrigger asChild>
-                    <Button size='icon' variant='outline' className='h-8 min-w-20 text-xs'>
+                    <Button size='icon' variant='outline' className='h-8 min-w-16 text-xs'>
                        {pagination?.currentPage} / {pagination?.maxPages}
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className='flex-col-container gap-3 bg-background p-2 w-[180px]'>
                     <small>Pagination</small>
-                    <div className='flex  gap-2 h-8'>
+                    <div className='flex gap-2 h-8'>
                         {
                             createArray(pagination?.currentPage, pagination?.maxPages).map((item, index) => (
                                 <Button
