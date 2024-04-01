@@ -47,8 +47,14 @@ export default function RosterPaymentsPageComponents({ departments }: RosterPaym
             roster: {
                 rosterPayment: {
                     date: {
-                        gte: getMondayOfTheWeek(new Date()),
-                        lte: getSundayOfTheWeek(new Date())
+                        gte: new Date(formatDate({
+                            date: getMondayOfTheWeek(new Date()),
+                            f: 'yyyy-MM-dd'
+                        })),
+                        lte: new Date(formatDate({
+                            date: getSundayOfTheWeek(new Date()),
+                            f: 'yyyy-MM-dd'
+                        }))
                     },
                     name: '',
                     status: 'Working'
@@ -168,8 +174,16 @@ export default function RosterPaymentsPageComponents({ departments }: RosterPaym
                                                 roster: {
                                                     rosterPayment: {
                                                         date: {
-                                                            gte: new Date(data?.from!),
-                                                            lte: new Date(data?.to!)
+                                                            gte: new Date(formatDate({
+                                                                date: new Date(data?.from!),
+                                                                f: 'yyyy-MM-dd'
+                                                            })),
+                                                            lte: new Date(
+                                                                formatDate({
+                                                                    date: new Date(data?.to!),
+                                                                    f: 'yyyy-MM-dd'
+                                                                })
+                                                            )
                                                         },
                                                         status: 'Working'
                                                     }
