@@ -104,7 +104,7 @@ export default function ClientTables({ params }: { params: { id: string } }): JS
             error={error}
         >
             <BasicTable
-                columns={finishedTablesColumnsTable}
+                columns={finishedTablesColumnsTable({})}
                 data={finishedTables?.data}
             />
         </Wrap>

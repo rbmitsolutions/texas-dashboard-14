@@ -24,10 +24,11 @@ interface ITablesServedData {
 }
 
 export default function TablesServedAnalytics({ date }: TablesServedAnalyticsProps) {
+
     const [guests, setGuests] = useState<number | undefined>(undefined)
     const {
         restaurantFinishedTableAnalytics: finishedTablesCount,
-        setGETRestaurantDataParams: setFinishedTablesCount
+        setGETRestaurantDataParams: setFinishedTablesCount,
     } = useGETRestaurantDataHooks({
         query: 'FINISHED_TABLE',
         defaultParams: {
@@ -161,7 +162,7 @@ export default function TablesServedAnalytics({ date }: TablesServedAnalyticsPro
                     }}
                 >
                     <BasicTable
-                        columns={finishedTablesColumnsTable}
+                        columns={finishedTablesColumnsTable({})}
                         data={finishedTables?.data || []}
                     />
                 </Wrap>}

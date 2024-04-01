@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 //components
-import { OrderControllerColumnsTable } from "../../../../../../components/common/basicTable/columns/restaurant/orderControllerColumns";
+import { OrderControllerColumnsTable } from "@/components/common/basicTable/columns/restaurant/orderControllerColumns";
 import { BasicTable } from "@/components/common/basicTable";
 import InfoBox from "@/components/common/infoBox";
 import Wrap from "@/components/common/wrap";
