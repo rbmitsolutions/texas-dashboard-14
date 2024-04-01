@@ -10,13 +10,14 @@ import { DeleteDialogButton } from "../../deleteDialogButton";
 import VisaDetailsForm from "./_components/visaDetailsForm";
 import BankDetailsForm from "./_components/bankDetailsForm";
 import UpdateRoleForm from "./_components/updateRoleForm";
+import PaymentDetails from "./_components/paymentDetails";
 import { Button } from "@/components/ui/button";
 
 //interface
 import { IRoles } from "@/common/types/company/companyDetails.interface";
 import { IPUTUserBody } from "@/hooks/user/IPutUserDataHooks.interface";
 import { IUser } from "@/common/types/user/user.interface";
-import PaymentDetails from "./_components/paymentDetails";
+import UserAnalytics from "./_components/analytics";
 
 interface UserProfileProps {
     user: IUser
@@ -78,7 +79,10 @@ export default function UserProfile({ user, isAdmin, roles, onUpdate }: UserProf
                 }
             </div>
             {isAdmin &&
-                <PaymentDetails user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
+                <>
+                    <UserAnalytics user={user} isAdmin={isAdmin} />
+                    <PaymentDetails user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
+                </>
             }
             <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
                 <DetailsForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />

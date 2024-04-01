@@ -6,7 +6,7 @@ import { RosterTable } from "./table"
 import RosterHeader from "./header"
 
 //libs
-import { formatDate, getMondayOfTheWeek, getSundayOfTheWeek } from "@/common/libs/date-fns/dateFormat"
+import { dateFormatIso, formatDate, getMondayOfTheWeek, getSundayOfTheWeek } from "@/common/libs/date-fns/dateFormat"
 
 //hooks
 import { useDELETECompanyDataHooks, useGETCompanyDataHooks, usePOSTCompanyDataHooks, usePUTCompanyDataHooks } from "@/hooks/company/companyDataHooks"
@@ -42,14 +42,21 @@ export default function RosterContainer({
             roster: {
                 rosterPage: {
                     date: {
-                        gte: getMondayOfTheWeek(new Date()),
-                        lte: getSundayOfTheWeek(new Date())
+                        gte: new Date(formatDate({
+                            date: getMondayOfTheWeek(new Date()),
+                            f: 'yyyy-MM-dd'
+                        })),
+                        lte: new Date(formatDate({
+                            date: getSundayOfTheWeek(new Date()),
+                            f: 'yyyy-MM-dd'
+                        }))
                     },
                     status: 'Working'
                 }
             }
         }
     })
+
 
     const {
         updateCompanyData: updateRoster
@@ -120,7 +127,7 @@ export default function RosterContainer({
                                                         date: new Date(data?.from!),
                                                         f: 'yyyy-MM-dd'
                                                     })),
-                                                    lte: new Date (
+                                                    lte: new Date(
                                                         formatDate({
                                                             date: new Date(data?.to!),
                                                             f: 'yyyy-MM-dd'

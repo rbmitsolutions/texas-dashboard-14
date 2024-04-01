@@ -42,7 +42,7 @@ export const getEachDayOfInterval = (start: Date, end: Date): Date[] => {
 
 interface IFormatDate {
     date: Date,
-    f?: 'dd/MM/yyyy' | 'dd/MM/yyyy HH:mm' | 'LLL dd, yy' | 'PPP' | 'dd, LLL, yy' | 'yyyy-MM-dd' | 'dd LLL, yy' | 'HH:mm:ss' | 'HH:mm' | 'ccc' | 'h:mma' | 'LLL dd, yy HH:mm' | 'dd/MM/yy' | 'EEE'
+    f?: 'dd/MM/yyyy' | 'dd/MM/yyyy HH:mm' | 'LLL dd, yy' | 'PPP' | 'dd, LLL, yy' | 'yyyy-MM-dd' | 'dd LLL, yy' | 'HH:mm:ss' | 'HH:mm' | 'ccc' | 'h:mma' | 'LLL dd, yy HH:mm' | 'dd/MM/yy' | 'EEE' | 'yyy'
     iso?: boolean
 }
 
@@ -93,4 +93,35 @@ export const isDateBeforeDate = (dateA: Date, dateB: Date): boolean => {
 
 export const compareAscDate = (dateA: Date, dateB: Date): number => {
     return dateFormatIso(dateA).getTime() - dateFormatIso(dateB).getTime()
+}
+
+export const getMonth = (number: number): string => {
+    switch (number) {
+        case 0:
+            return 'Jan'
+        case 1:
+            return 'Febr'
+        case 2:
+            return 'Mar'
+        case 3:
+            return 'Apr'
+        case 4:
+            return 'May'
+        case 5:
+            return 'Jun'
+        case 6:
+            return 'Jul'
+        case 7:
+            return 'Aug'
+        case 8:
+            return 'Sep'
+        case 9:
+            return 'Oct'
+        case 10:
+            return 'Nov'
+        case 11:
+            return 'Dec'
+        default:
+            return ''
+    }
 }

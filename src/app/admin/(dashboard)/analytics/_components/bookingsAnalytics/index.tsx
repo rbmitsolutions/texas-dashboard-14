@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
+import { Area } from "recharts"
 
 //libs
 import { BOOKING_STATUS } from "@/common/libs/restaurant/bookings"
@@ -222,10 +223,11 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
         }
     })
 
-    const lineChart = bookingsTimeData?.map((item: IDataBookingTime, index: number) => {
+    const lineChart = bookingsTimeData?.map((item: IDataBookingTime) => {
         return {
+            name: item?.time,
             title: item.time,
-            value: item._count._all
+            bookings: item._count._all
         }
     })
 
@@ -237,8 +239,6 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
     })
 
     const totalGuests = bookingsGuestsData?.reduce((acc: number, item: IDataBookingGuets) => acc + item?._count?._all, 0)
-
-
 
     return (
         <div className='flex-col-container'>
@@ -252,7 +252,14 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
                 <div className='h-80'>
                     <LineChart
                         data={lineChart}
-                    />
+                    >
+                        <Area
+                            type='monotone'
+                            dataKey='bookings'
+                            fill='#075af56a'
+                            stroke='#015cb1'
+                        />
+                    </LineChart>
                 </div>
                 <div className='relative h-80'>
                     <small className='absolute top-2 left-2'>Guests</small>

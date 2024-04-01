@@ -2,27 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { ResponsiveContainer, RadarChart as Chart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Tooltip } from 'recharts';
 import { CustomTooltip } from './customToolTip';
 
-
-const data = [
-    {
-        title: 'Math',
-        value: 120,
-    },
-    {
-        title: 'Chinese',
-        value: 98,
-    },
-    {
-        title: 'English',
-        value: 86,
-    },
-    {
-        title: 'Geography',
-        value: 99,
-    },
-
-];
-
 interface IData {
     title: string
     value: number

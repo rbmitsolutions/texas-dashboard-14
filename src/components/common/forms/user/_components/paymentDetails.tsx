@@ -76,24 +76,24 @@ export default function PaymentDetails({
                     onSubmit={form.handleSubmit(onSubmitForm)}
                     className='flex-col-container gap-4'
                 >
+                    <FormField
+                        control={form.control}
+                        name="fixed_salary"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row items-center justify-between w-40 rounded-lg border p-3 shadow-sm">
+                                <div className="space-y-0.5">
+                                    <FormLabel>Fixed Salary</FormLabel>
+                                </div>
+                                <FormControl>
+                                    <Switch
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
                     <div className={cn('grid grid-cols-1 gap-4 ', user?.visa_needed ? 'lg:grid-cols-[1fr,1fr,1fr]' : 'grid-cols-1')}>
-                        <FormField
-                            control={form.control}
-                            name="fixed_salary"
-                            render={({ field }) => (
-                                <FormItem className="flex flex-row items-center justify-between w-40 rounded-lg border p-3 shadow-sm">
-                                    <div className="space-y-0.5">
-                                        <FormLabel>Fixed Salary</FormLabel>
-                                    </div>
-                                    <FormControl>
-                                        <Switch
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
                         <FormField
                             control={form.control}
                             name="payment_id"
@@ -135,7 +135,7 @@ export default function PaymentDetails({
                                     />
                                 </>
                                 :
-                                <div className='grid grid-cols-2 gap-4'>
+                                <>
                                     <FormField
                                         control={form.control}
                                         name="rate_per_hour"
@@ -174,7 +174,7 @@ export default function PaymentDetails({
                                             </FormItem>
                                         )}
                                     />
-                                </div>
+                                </>
                         }
                     </div>
                     {isAdmin &&

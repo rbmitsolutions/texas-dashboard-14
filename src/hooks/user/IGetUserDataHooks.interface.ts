@@ -2,7 +2,7 @@ import { IRequests, IRequestsStatus, IRequestsType } from "@/common/types/compan
 import { IRoster, IRosterStatus } from "@/common/types/company/roster.interface";
 import { IPaginationResponse, IQueryPagination } from "@/common/types/settings.interface";
 import { IUser, IUserStatus } from "@/common/types/user/user.interface";
-import { ICompanyDetailsResponse, IGETCompanyDetailsQuery, IGETCompanyRosterResponse, IRequestsGetAllResponse } from "../company/IGetCompanyDataHooks.interface";
+import { ICompanyDetailsResponse, IGETCompanyDetailsQuery, IGETCompanyRosterResponse, IGETTransactionsQuery, IRequestsGetAllResponse } from "../company/IGetCompanyDataHooks.interface";
 
 
 export interface IGETUserResponse {
@@ -58,6 +58,13 @@ export interface IGETUserQuery {
     profileCompleted?: {
         id: string
     }
+    analytics?: {
+        roster?: {}
+        transactions?: {
+            year?: Date
+            filter: IGETTransactionsQuery['analytics']
+        }
+    }
 }
 
 export interface IUserGETRequestsQuery {
@@ -97,10 +104,12 @@ export interface IUserGETCompanyRosterQuery {
 }
 
 export type IGETUserDataResponse = IUser | IGETUserResponse | IGetAllUserResponse | IGETCompanyRosterResponse | IRequestsGetAllResponse | IUserProfileCompletedResponse | ICompanyDetailsResponse
-export type IUserDataQueryType = "DETAILS" | "USER_COMPANY" | "USER_ROSTER" | "USER_REQUESTS" | "COMPANY_DETAILS"
+export type IUserDataQueryType = "DETAILS" | "USER_COMPANY" | "USER_ROSTER" | "USER_REQUESTS" | "COMPANY_DETAILS" | 'ANALYTICS'
+
 export interface IGETUserDataQuery {
     user?: IGETUserQuery,
     requests?: IUserGETRequestsQuery
     roster?: IUserGETCompanyRosterQuery
     details?: IGETCompanyDetailsQuery
+    analytics?: IGETUserQuery['analytics']
 }

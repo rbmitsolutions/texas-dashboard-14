@@ -151,7 +151,6 @@ export default function FinishedTable({ params }: { params: { id: string } }) {
         }
     }, [finishedTable?.table_id, params.id, setFinishedTablesParams])
 
-    console.log(finishedTables)
     return (
         <LayoutFrame
             user={user}

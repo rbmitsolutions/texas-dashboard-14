@@ -74,6 +74,7 @@ export function useGETUserDataHooks({
 
     return {
         userDetails: data as IUser,
+        analytics: data as any,
         allUsers: data as IGetAllUserResponse,
         companyDetails: data as ICompanyDetailsResponse,
         userAllRoster: data as IGETCompanyRosterResponse,
