@@ -1,6 +1,6 @@
 'use client'
 
-import { getFirstTimeOfTheDay, getLastTimeOfTheDay } from "@/common/libs/date-fns/dateFormat"
+import { formatDate, getFirstTimeOfTheDay, getLastTimeOfTheDay } from "@/common/libs/date-fns/dateFormat"
 //components
 import { dayRosterColumnsTable } from "./_components/dayRosterColumnsTable"
 import { DayRosterTable } from "./_components/dayRosterTable"
@@ -28,8 +28,14 @@ export default function DayrosterPage() {
                         skip: 0
                     },
                     date: {
-                        gte: getFirstTimeOfTheDay(new Date()),
-                        lte: getLastTimeOfTheDay(new Date())
+                        gte: new Date(formatDate({
+                            date: getFirstTimeOfTheDay(new Date()),
+                            f: 'yyyy-MM-dd'
+                        })),
+                        lte: new Date(formatDate({
+                            date: getLastTimeOfTheDay(new Date()),
+                            f: 'yyyy-MM-dd'
+                        })),
                     },
                     includes:{
                         user: '1',
@@ -39,7 +45,7 @@ export default function DayrosterPage() {
             }
         }
     })
-
+    
     const {
         companyAllForms: allForms,
         isCompanyDataLoading: isFormsLoading
