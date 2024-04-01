@@ -1,4 +1,4 @@
-import { ITransactions, TransactionsDirection, TransactionsStatus } from "@/common/types/company/transactions.interface"
+import { ITransactions, PayrollTransactionsType, TransactionsDirection, TransactionsStatus } from "@/common/types/company/transactions.interface"
 
 interface IGetTransactionsTotal {
     filter: {

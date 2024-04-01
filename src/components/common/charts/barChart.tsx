@@ -10,12 +10,12 @@ interface IData {
 
 interface BarChartProps {
     data: IData[]
-    
+
 }
 
-export default function BarChart({ data }:BarChartProps) {
+export default function BarChart({ data }: BarChartProps) {
     const [mounted, setMounted] = React.useState(false)
-    
+
     React.useEffect(() => {
         setMounted(true)
     }, [])
@@ -24,18 +24,18 @@ export default function BarChart({ data }:BarChartProps) {
 
     return (
         <ResponsiveContainer width="100%" height="100%" className='bg-background-soft p-4 min-w-8 min-h-8 h-full w-full'>
-          <Chart width={300} height={40} data={data}>
-                <Bar 
-                    dataKey='value' 
-                    fill='fill'
+            <Chart width={300} height={40} data={data}>
+                <Bar
+                    dataKey='value'
+                    fill='blue'
                 />
                 <YAxis />
-                <XAxis dataKey='title'/>
+                <XAxis dataKey='title' />
                 <CartesianGrid strokeDasharray="5 5" />
-                <Tooltip 
-                cursor={{ fill: 'transparent' }}
-                content={<CustomTooltip />}/>
-            </Chart> 
+                <Tooltip
+                    cursor={{ fill: 'transparent' }}
+                    content={<CustomTooltip />} />
+            </Chart>
         </ResponsiveContainer>
     )
 }

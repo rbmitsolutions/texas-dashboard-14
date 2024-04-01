@@ -11,6 +11,15 @@ export const userEndPoint = {
         deleteSucess: "Details deleted successfully!",
         deleteError: "Details delete failed!",
     },
+    ANALYTICS: {
+        url: EndPointsTypes['USER_ANALYTICS_ENDPOINT'],
+        createSucess: "Details created successfully!",
+        createError: "Details creation failed!",
+        updateSucess: "Details updated successfully!",
+        updateError: "Details update failed!",
+        deleteSucess: "Details deleted successfully!",
+        deleteError: "Details delete failed!",
+    },
     USER_COMPANY: {
         url: EndPointsTypes['COMPANY_USERS_ENDPOINT'],
         createSucess: "User company created successfully!",
