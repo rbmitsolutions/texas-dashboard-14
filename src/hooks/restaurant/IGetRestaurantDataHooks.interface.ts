@@ -160,6 +160,7 @@ export interface IGETOrdersQuery {
     pagination: IQueryPagination;
   };
   analytics?: {
+    count?: "1";
     status?: {
       in: OrderStatus[]
     }

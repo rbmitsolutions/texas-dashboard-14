@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { Area } from "recharts"
+import { Area, Bar } from "recharts"
 
 //libs
 import { BOOKING_STATUS } from "@/common/libs/restaurant/bookings"
@@ -217,9 +217,9 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
     const data = bookingsData?.map((item: IDataBooking) => {
         const getHexColor = BOOKING_STATUS?.find(status => status?.status === item.status)?.hex
         return {
-            title: item.status,
+            name: item.status,
             fill: getHexColor,
-            value: item._count._all
+            bookings: item._count._all
         }
     })
 
@@ -233,7 +233,7 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
 
     const radarChart = bookingsGuestsData?.map((item: IDataBookingGuets) => {
         return {
-            title: item.amount_of_people,
+            name: item.amount_of_people,
             value: item._count._all
         }
     })
@@ -247,7 +247,12 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
                 <div className='h-80'>
                     <BarChart
                         data={data}
-                    />
+                    >
+                        <Bar
+                            dataKey='bookings'
+                            fill='fill'
+                        />
+                    </BarChart>
                 </div>
                 <div className='h-80'>
                     <LineChart
