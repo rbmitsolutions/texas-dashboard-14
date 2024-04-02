@@ -2,7 +2,7 @@
 import { useState } from "react"
 
 //libs
-import { dateFormatIso, getFirstTimeOfTheDay, getLastTimeOfTheDay, getMondayOfTheWeek, getSundayOfTheWeek } from "@/common/libs/date-fns/dateFormat"
+import { formatDate, getFirstTimeOfTheDay, getLastTimeOfTheDay, getMondayOfTheWeek } from "@/common/libs/date-fns/dateFormat"
 
 //components
 import TransactionsAnalytics from "./_components/transactionsAnalytics"
@@ -16,19 +16,31 @@ import { DateRange } from "react-day-picker"
 
 export default function Analytics() {
     const [date, setDate] = useState<{
-        from: Date
-        to: Date
+        from: any
+        to: any
     }>({
-        from: getMondayOfTheWeek(new Date()),
-        to: new Date()
+        from: new Date(formatDate({
+            date: getMondayOfTheWeek(new Date()),
+            f: 'yyyy-MM-dd'
+        })),
+        to: new Date(formatDate({
+            date: new Date(),
+            f: 'yyyy-MM-dd'
+        })),
     })
 
     const onDateChange = (date: DateRange | undefined) => {
         if (date) {
             const { from, to } = date
             setDate({
-                from: getFirstTimeOfTheDay(dateFormatIso(from!)),
-                to: getLastTimeOfTheDay(dateFormatIso(to!))
+                from: new Date(formatDate({
+                    date: getFirstTimeOfTheDay(new Date(from!)),
+                    f: 'yyyy-MM-dd'
+                })),
+                to: new Date(formatDate({
+                    date: getFirstTimeOfTheDay(new Date(to!)),
+                    f: 'yyyy-MM-dd'
+                })),
             })
         }
     }

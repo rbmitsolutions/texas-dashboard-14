@@ -80,6 +80,16 @@ export default function RequestForm({ createRequest, isCreateRequestLoading }: R
 
 
     const onSubmitForm: SubmitHandler<RequestFormSchemaType> = async (formData) => {
+        if (formData.type !== 'Message' && !dates.length) {
+            setSubmitError("Please select a date")
+            return
+        }
+
+        if(formData.type === 'Holiday' && dates.length !== 2){
+            setSubmitError("Please select a range of dates")
+            return
+        }
+
         await createRequest({
             request: {
                 type: formData.type as IRequestsType,
@@ -209,7 +219,7 @@ export default function RequestForm({ createRequest, isCreateRequestLoading }: R
                         leftIcon='Send'
                         isLoading={isCreateRequestLoading}
                         type="submit"
-                        disabled={isCreateRequestLoading}
+                        disabled={isCreateRequestLoading || !form.formState.isValid}
                     >
                         Send
                     </Button>
