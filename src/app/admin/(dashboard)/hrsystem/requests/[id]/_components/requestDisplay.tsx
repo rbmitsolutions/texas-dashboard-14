@@ -42,7 +42,7 @@ export default function RequestDisplay({ request }: RequestDisplayProps): JSX.El
             return dates.map((date) => {
                 return (
                     <Badge className='flex items-center justify-center' key={date}>{formatDate({
-                        date: new Date(date),
+                        date: new Date(date) || new Date(),
                         f: 'dd/MM/yyyy'
                     })}</Badge>
                 )
@@ -51,11 +51,11 @@ export default function RequestDisplay({ request }: RequestDisplayProps): JSX.El
             return (
                 <>
                     <Badge className='flex items-center justify-center'>From: {formatDate({
-                        date: new Date(dates[0]),
+                        date: new Date(dates[0]) || new Date(),
                         f: 'dd/MM/yyyy'
                     })}</Badge>
                     <Badge className='flex items-center justify-center'>To: {formatDate({
-                        date: new Date(dates[1]),
+                        date: new Date(dates[1]) || new Date(),
                         f: 'dd/MM/yyyy'
                     })}</Badge>
                 </>
@@ -77,6 +77,7 @@ export default function RequestDisplay({ request }: RequestDisplayProps): JSX.El
         })
     }
 
+    console.log(request?.dates_off)
     return (
         <div className='flex-col-container-center'>
             <div className={cn('h-80 w-full rounded-2xl bg-[url("/img/background.png")] bg-center bg-no-repeat bg-cover dark:grayscale ',)} />
@@ -104,14 +105,13 @@ export default function RequestDisplay({ request }: RequestDisplayProps): JSX.El
                     <LinkButton href={`${RedirectTo.USER_PROFILE}/${request?.user_id}`} />
                 </div>
                 <div className='flex-col-container mt-4'>
-                    {request?.type !== "Message" && (
+                    {(request?.type !== "Message" &&  request?.dates_off?.length > 1) && (
                         <div
                             className='flex-col-container-center w-full my-2'
                         >
                             {renderDaysOff(request?.type, request?.dates_off)}
                         </div>
                     )}
-
                     {request?.message && (
                         <div >
                             <Label>{request?.user?.name}</Label>
