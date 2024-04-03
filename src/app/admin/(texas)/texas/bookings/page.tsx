@@ -1,6 +1,6 @@
 'use client'
 import { io } from "socket.io-client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { cn } from "@/common/libs/shadcn/utils";
 
 //libs
@@ -91,8 +91,8 @@ export default function BookingPage() {
             bookings: {
                 all: {
                     date: {
-                        gte: getFirstTimeOfTheDay(date),
-                        lte: getLastTimeOfTheDay(date)
+                        gte: getFirstTimeOfTheDay(new Date(date)),
+                        lte: getLastTimeOfTheDay(new Date(date))
                     },
                     pagination: {
                         take: 1000,
@@ -152,7 +152,7 @@ export default function BookingPage() {
         query: 'TIMES_OPEN',
     })
 
-    useEffect(() => {
+    const onDateChange = useCallback((date: Date) => {
         setOpenDayParams(({
             openDays: {
                 byShortDay: {
@@ -168,8 +168,8 @@ export default function BookingPage() {
             bookings: {
                 all: {
                     date: {
-                        gte: getFirstTimeOfTheDay(date),
-                        lte: getLastTimeOfTheDay(date)
+                        gte: getFirstTimeOfTheDay(new Date(date)),
+                        lte: getLastTimeOfTheDay(new Date(date))
                     },
                     pagination: {
                         take: 1000,
@@ -182,7 +182,11 @@ export default function BookingPage() {
                 }
             }
         })
-    }, [date, setBookingsParams, setOpenDayParams])
+    }, [setOpenDayParams, setBookingsParams])
+
+    useEffect(() => {
+        onDateChange(date)
+    }, [date, onDateChange])
 
     useEffect(() => {
         socket.on("message", (message: ISocketMessage) => {
