@@ -7,6 +7,7 @@ import ProfileForm from "./profileForm";
 import EmergencyContactForm from "./_components/emergencyContactForm";
 import UpdatePasswordForm from "./_components/updatePasswordForm";
 import { DeleteDialogButton } from "../../deleteDialogButton";
+import NewContractForm from "./_components/newContractForm";
 import VisaDetailsForm from "./_components/visaDetailsForm";
 import BankDetailsForm from "./_components/bankDetailsForm";
 import UpdateRoleForm from "./_components/updateRoleForm";
@@ -26,11 +27,10 @@ interface UserProfileProps {
     roles?: IRoles[]
 }
 export default function UserProfile({ user, isAdmin, roles, onUpdate }: UserProfileProps) {
-
     return (
         <div className='flex-col-container gap-4'>
             <ProfileForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
-            <div className='grid-container grid-cols-2 md:pl-64 md:grid-cols-[repeat(auto-fit,minmax(200px,200px))] md:mb-6'>
+            <div className='grid-container grid-cols-1 sm:grid-cols-2 md:pl-64 md:grid-cols-[repeat(auto-fit,minmax(200px,200px))] md:mb-6'>
                 <UpdatePasswordForm user={user} onUpdate={onUpdate} />
                 {isAdmin &&
                     <>
@@ -48,6 +48,9 @@ export default function UserProfile({ user, isAdmin, roles, onUpdate }: UserProf
                         {roles &&
                             <UpdateRoleForm user={user} onUpdate={onUpdate} roles={roles} />
                         }
+                        <NewContractForm
+                            user={user}
+                        />
                         <DeleteDialogButton
                             buttonText="File"
                             onDelete={async () => await onUpdate({
@@ -74,7 +77,6 @@ export default function UserProfile({ user, isAdmin, roles, onUpdate }: UserProf
                                 {user?.status === 'Filled' ? 'Unfile' : 'File Employee'}
                             </Button>
                         </DeleteDialogButton>
-
                     </>
                 }
             </div>
