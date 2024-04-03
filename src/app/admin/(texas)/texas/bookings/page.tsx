@@ -91,8 +91,11 @@ export default function BookingPage() {
             bookings: {
                 all: {
                     date: {
-                        gte: getFirstTimeOfTheDay(new Date(date)),
-                        lte: getLastTimeOfTheDay(new Date(date))
+                        gte: new Date(formatDate({
+                            date: getFirstTimeOfTheDay(new Date()),
+                            f: 'yyyy-MM-dd',
+                        })),
+                        lte: getLastTimeOfTheDay(new Date()),
                     },
                     pagination: {
                         take: 1000,
@@ -168,8 +171,11 @@ export default function BookingPage() {
             bookings: {
                 all: {
                     date: {
-                        gte: getFirstTimeOfTheDay(new Date(date)),
-                        lte: getLastTimeOfTheDay(new Date(date))
+                        gte: new Date(formatDate({
+                            date: getFirstTimeOfTheDay(new Date(date)),
+                            f: 'yyyy-MM-dd',
+                        })),
+                        lte: getLastTimeOfTheDay(new Date(date)),
                     },
                     pagination: {
                         take: 1000,
