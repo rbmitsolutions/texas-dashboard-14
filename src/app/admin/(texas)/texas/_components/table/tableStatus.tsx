@@ -22,10 +22,10 @@ import { IPrinters } from "@/common/types/restaurant/printers.interface"
 interface TableStatusProps {
     table: ITable
     updateTable: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
-    printers: IPrinters[]
+    children?: React.ReactNode
 }
 
-export default function TablesStatus({ table, updateTable, printers }: TableStatusProps) {
+export default function TablesStatus({ table, updateTable, children }: TableStatusProps) {
     const [isOpen, setIsOpen] = useState(false)
 
     const isStatusDisabled = (status: TableMealStatus): boolean => {
@@ -68,13 +68,15 @@ export default function TablesStatus({ table, updateTable, printers }: TableStat
             onOpenChange={setIsOpen}
         >
             <DialogTrigger asChild>
-                <Button
-                    className='capitalize'
-                    variant={getTableStatusVariant(table?.meal_status)}
-                    disabled={table?.meal_status === TableMealStatus?.WAITING || table?.meal_status === TableMealStatus?.PREPARING}
-                >
-                    {table?.meal_status}
-                </Button>
+                {children ? children :
+                    <Button
+                        className='capitalize'
+                        variant={getTableStatusVariant(table?.meal_status)}
+                        disabled={table?.meal_status === TableMealStatus?.WAITING || table?.meal_status === TableMealStatus?.PREPARING}
+                    >
+                        {table?.meal_status}
+                    </Button>
+                }
             </DialogTrigger>
             <DialogContent className=''>
                 <DialogHeader>

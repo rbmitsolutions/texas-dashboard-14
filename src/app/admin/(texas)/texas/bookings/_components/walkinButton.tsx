@@ -109,10 +109,7 @@ export default function WalkinButton({ openDay, iconOnly, createBooking, clients
         }, {
             onSuccess: async () => {
                 await emit({
-                    event: SocketIoEvent.BOOKING
-                })
-                await emit({
-                    event: SocketIoEvent.TABLE
+                    event: [SocketIoEvent.BOOKING, SocketIoEvent.TABLE]
                 })
                 onOpenChange(false)
             }

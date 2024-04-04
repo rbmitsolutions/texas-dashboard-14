@@ -6,7 +6,6 @@ import { useEffect } from "react"
 import { useMenuSectionsStore } from "@/store/restaurant/menuSections"
 import { usePrintersStore } from "@/store/restaurant/printers"
 import { useSectionsStore } from "@/store/restaurant/sections"
-import { useTablesStore } from "@/store/restaurant/tables"
 
 //hooks
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
@@ -14,6 +13,7 @@ import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHook
 //interface
 import { IGETMenuSectionsResponse, IGETPrintersResponse, IGETSectionResponse, IGETTablesAllResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
 import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types"
+import { useSocketIoHooks } from "@/hooks/useSocketIoHooks"
 
 const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
@@ -21,7 +21,7 @@ export default function TexasLayout({ children }: any) {
     const { menuSections, setMenuSections } = useMenuSectionsStore()
     const { printers, setPrinters } = usePrintersStore()
     const { sections, setSections } = useSectionsStore()
-    const { setTables, tables } = useTablesStore()
+    const { isMessageToMe } = useSocketIoHooks()
 
     const {
         refetchRestaurantData: refetchPrinters
@@ -48,27 +48,27 @@ export default function TexasLayout({ children }: any) {
         }
     })
 
-    const {
-        refetchRestaurantData: refetchTables
-    } = useGETRestaurantDataHooks({
-        query: 'TABLES',
-        defaultParams: {
-            tables: {
-                all: {
-                    pagination: {
-                        take: 400,
-                        skip: 0
-                    },
-                }
-            }
-        },
-        UseQueryOptions: {
-            onSuccess: (data) => {
-                const tables = data as IGETTablesAllResponse
-                setTables(tables?.data)
-            },
-        }
-    })
+    // const {
+    //     refetchRestaurantData: refetchTables
+    // } = useGETRestaurantDataHooks({
+    //     query: 'TABLES',
+    //     defaultParams: {
+    //         tables: {
+    //             all: {
+    //                 pagination: {
+    //                     take: 400,
+    //                     skip: 0
+    //                 },
+    //             }
+    //         }
+    //     },
+    //     UseQueryOptions: {
+    //         onSuccess: (data) => {
+    //             const tables = data as IGETTablesAllResponse
+    //             setTables(tables?.data)
+    //         },
+    //     }
+    // })
 
     const {
         refetchRestaurantData: refetchSections
@@ -125,20 +125,16 @@ export default function TexasLayout({ children }: any) {
 
     useEffect(() => {
         socket.on("message", (message: ISocketMessage) => {
-            if (message?.event === SocketIoEvent.TABLE) {
+            if (isMessageToMe({ event: message?.event, listemTo: [SocketIoEvent.TABLE] })) {
                 refetchSections()
-                refetchTables()
             }
         });
         () => {
             socket.off("message");
         }
-    }, [refetchTables, refetchSections]);
+    }, [isMessageToMe, refetchSections]);
 
     useEffect(() => {
-        if (tables?.length === 0) {
-            refetchTables()
-        }
 
         if (printers?.length === 0) {
             refetchPrinters()
@@ -152,7 +148,7 @@ export default function TexasLayout({ children }: any) {
             refetchSections()
         }
 
-    }, [menuSections?.length, printers?.length, refetchMenuSections, refetchPrinters, refetchSections, refetchTables, sections?.length, tables?.length])
+    }, [menuSections?.length, printers?.length, refetchMenuSections, refetchPrinters, refetchSections, sections?.length])
 
     return (
         <div className=''>

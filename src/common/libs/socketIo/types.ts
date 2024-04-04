@@ -8,7 +8,17 @@ export enum SocketIoEvent {
     GIFT_CARD_PAYMENT = 'giftcard-payment',
 }
 
+export enum SocketIoFrom {
+    BOOKING = "booking",
+    WAITER = "waiter",
+    WAITER_TABLE = "waiter-table",
+    RECEPTION = "reception",
+    RECEPTION_TABLE = "reception-table",
+    CHEFS = "chefs",
+    PASS = "pass",
+}
+
 export type ISocketMessage = {
-    event: SocketIoEvent;
+    event: SocketIoEvent[]
     message?: string;
 };

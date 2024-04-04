@@ -1,4 +1,6 @@
 'use client'
+import { useEffect } from 'react';
+import { io } from 'socket.io-client';
 
 //libs
 import { getTableStatusVariant } from '@/common/libs/restaurant/tables';
@@ -14,6 +16,7 @@ import Table from '../_components/table';
 
 //hooks
 import { useGETRestaurantDataHooks, usePOSTRestaurantDataHooks } from '@/hooks/restaurant/restaurantDataHooks';
+import { useSocketIoHooks } from '@/hooks/useSocketIoHooks';
 import { useAuthHooks } from '@/hooks/useAuthHooks';
 
 //store
@@ -22,11 +25,40 @@ import { useTablesStore } from '@/store/restaurant/tables';
 
 //interfaces
 import { TableMealStatus } from '@/common/types/restaurant/tables.interface';
+import { IGETTablesAllResponse } from '@/hooks/restaurant/IGetRestaurantDataHooks.interface';
+import { ISocketMessage, SocketIoEvent } from '@/common/libs/socketIo/types';
+
+const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
 export default function Reception() {
-    const { tablesFilter, setTablesFilter, getTablesFiltered } = useTablesStore()
+    const { tablesFilter, setTablesFilter, getTablesFiltered, setTables } = useTablesStore()
     const { printers } = usePrintersStore()
     const { user } = useAuthHooks()
+    const { isMessageToMe } = useSocketIoHooks()
+
+    const {
+        refetchRestaurantData: refetchTables
+    } = useGETRestaurantDataHooks({
+        query: 'TABLES',
+        defaultParams: {
+            tables: {
+                all: {
+                    pagination: {
+                        take: 400,
+                        skip: 0
+                    },
+                }
+            }
+        },
+        UseQueryOptions: {
+            onSuccess: (data) => {
+                const tables = data as IGETTablesAllResponse
+                setTables(tables?.data)
+            },
+        }
+    })
+
+
     const {
         restaurantAllSections: sections,
     } = useGETRestaurantDataHooks({
@@ -71,6 +103,17 @@ export default function Reception() {
     } = usePOSTRestaurantDataHooks({
         query: 'GIFTCARD'
     })
+
+    useEffect(() => {
+        socket.on("message", (message: ISocketMessage) => {
+            if (isMessageToMe({ event: message?.event, listemTo: [SocketIoEvent.TABLE] })) {
+                refetchTables()
+            }
+        });
+        () => {
+            socket.off("message");
+        }
+    }, [isMessageToMe, refetchTables]);
 
 
     return (

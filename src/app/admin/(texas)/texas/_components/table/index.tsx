@@ -10,20 +10,17 @@ import { cn } from "@/common/libs/shadcn/utils"
 import PrintBill from "../../reception/_components/rightReceptionDisplay/printBillButton"
 import IconText from "@/components/common/iconText"
 import { Button } from "@/components/ui/button"
+import FinishedTables from "./finishedTable"
 import OpenTableDialog from "./openTable"
 
 //interfaces
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface"
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
-import { IOrderController } from "@/common/types/restaurant/order.interface"
 import { ITimesOpen } from "@/common/types/restaurant/config.interface"
-import { IMenuSection } from "@/common/types/restaurant/menu.interface"
 import { IPrinters } from "@/common/types/restaurant/printers.interface"
 import { getTableStatusVariant } from "@/common/libs/restaurant/tables"
 import { ITable } from "@/common/types/restaurant/tables.interface"
 import { RedirectTo } from "@/common/types/routers/endPoints.types"
-import { ICreateNewOrder } from "@/store/restaurant/order"
-import FinishedTables from "./finishedTable"
 
 interface TableProps {
     table: ITable
@@ -74,7 +71,6 @@ export default function Table({ table, waitres, reception }: TableProps) {
                             <TablesStatus
                                 table={table}
                                 updateTable={waitres?.updateTable}
-                                printers={waitres?.printers}
                             />
                         </div>
                     </div>

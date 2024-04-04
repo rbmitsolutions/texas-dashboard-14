@@ -17,7 +17,6 @@ import SearchInput from "@/components/common/searchInput";
 import { Button } from "@/components/ui/button";
 
 //store
-import { useTablesStore } from "@/store/restaurant/tables";
 import { useOrderStore } from "@/store/restaurant/order";
 
 //hooks
@@ -38,11 +37,11 @@ const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 export default function Table({ params }: { params: { id: string } }) {
     const { setOrder, order, resetOrder, updateOrderQuantity, deleteOrder, replaceOrder } = useOrderStore()
     const { getFilteredOrderSystemMenu } = useOrderSystemHooks()
-    const { getTableById } = useTablesStore()
     const { printers } = usePrintersStore()
-    const { emit } = useSocketIoHooks()
+    const { emit, isMessageToMe } = useSocketIoHooks()
     const { user } = useAuthHooks()
     const { push } = useRouter()
+    const [table, setTable] = useState<ITable | undefined>(undefined)
     const [filter, setFilter] = useState<IMenuOrderSystemFilter>({
         allergens: [],
         id: [],
@@ -52,6 +51,31 @@ export default function Table({ params }: { params: { id: string } }) {
         short_title: '',
         to_order: true,
         mn_type_id: ''
+    })
+
+    const {
+        refetchRestaurantData: refetchTable
+    } = useGETRestaurantDataHooks({
+        query: 'TABLES',
+        defaultParams: {
+            tables: {
+                byId: {
+                    id: params?.id,
+                }
+            }
+        },
+        UseQueryOptions: {
+            onSuccess: (data) => {
+                const table = data as ITable
+
+                if (!table?.is_open) {
+                    push(RedirectTo.WAITERS)
+                }
+
+                setTable(table)
+            },
+            enabled: !!params?.id
+        }
     })
 
     const {
@@ -130,11 +154,7 @@ export default function Table({ params }: { params: { id: string } }) {
         UseMutationOptions: {
             onSuccess: async () => {
                 await emit({
-                    event: SocketIoEvent.ORDER,
-                    message: params?.id
-                })
-                await emit({
-                    event: SocketIoEvent.TABLE,
+                    event: [SocketIoEvent.ORDER, SocketIoEvent.TABLE],
                     message: params?.id
                 })
             }
@@ -148,7 +168,7 @@ export default function Table({ params }: { params: { id: string } }) {
         UseMutationOptions: {
             onSuccess: async () => {
                 await emit({
-                    event: SocketIoEvent.ORDER,
+                    event: [SocketIoEvent.ORDER],
                     message: params?.id
                 })
             }
@@ -163,15 +183,7 @@ export default function Table({ params }: { params: { id: string } }) {
             onSuccess: async () => {
                 //used only to change to another table
                 await emit({
-                    event: SocketIoEvent.TABLE,
-                    message: params?.id
-                })
-                await emit({
-                    event: SocketIoEvent.ORDER,
-                    message: params?.id
-                })
-                await emit({
-                    event: SocketIoEvent.TABLE_PAYMENT,
+                    event: [SocketIoEvent.TABLE, SocketIoEvent.ORDER, SocketIoEvent.TABLE_PAYMENT],
                     message: params?.id
                 })
             }
@@ -179,22 +191,19 @@ export default function Table({ params }: { params: { id: string } }) {
     })
 
     useEffect(() => {
-        const table = getTableById(params?.id)
-        if (!table || !table?.is_open) {
-            push('/admin/texas/waiters')
-        }
-    }, [getTableById, params?.id, push])
-
-    useEffect(() => {
         socket.on("message", (message: ISocketMessage) => {
-            if (message?.event === SocketIoEvent.TABLE && message?.message === params?.id) {
+            if (isMessageToMe({ event: message?.event, listemTo: [SocketIoEvent.ORDER] }) && message?.message === params?.id) {
+
                 refetchOrdersController()
+            }
+            if (isMessageToMe({ event: message?.event, listemTo: [SocketIoEvent.TABLE] }) && message?.message === params?.id) {
+                refetchTable()
             }
         });
         () => {
             socket.off("message");
         }
-    }, [params?.id, refetchOrdersController]);
+    }, [params?.id, refetchOrdersController, refetchTable]);
 
     return (
         <LayoutFrame
@@ -268,7 +277,7 @@ export default function Table({ params }: { params: { id: string } }) {
                         updateOrderQuantity={updateOrderQuantity}
                         deleteOrder={deleteOrder}
                         replaceOrder={replaceOrder}
-                        table={getTableById(params?.id) || {} as ITable}
+                        table={table || {} as ITable}
                         createOrder={createOrder}
                         menuSections={menuSections?.data}
                         orderControllers={orderControllers?.data || []}

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { Area, Bar } from "recharts"
+import { Area, Bar, Radar } from "recharts"
 
 //libs
 import { BOOKING_STATUS } from "@/common/libs/restaurant/bookings"
@@ -234,7 +234,7 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
     const radarChart = bookingsGuestsData?.map((item: IDataBookingGuets) => {
         return {
             name: item.amount_of_people,
-            value: item._count._all
+            guests: item._count._all
         }
     })
 
@@ -270,7 +270,14 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
                     <small className='absolute top-2 left-2'>Guests</small>
                     <RadarChart
                         data={radarChart}
-                    />
+                    >
+                        <Radar
+                            dataKey="guests"
+                            fill='#075af56a'
+                            stroke='#015cb1'
+                            fillOpacity={0.6}
+                        />
+                    </RadarChart>
                 </div>
             </div>
             <div className='grid grid-cols-1 gap-2 bg-orange sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6'>
