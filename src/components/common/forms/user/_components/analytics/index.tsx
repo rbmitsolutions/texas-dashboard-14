@@ -1,19 +1,20 @@
+import { Area } from "recharts"
+
 //libs
 import { addDaysToDate, formatDate, getMonth, subDaysToDate } from "@/common/libs/date-fns/dateFormat"
+import { convertCentsToEuro } from "@/common/utils/convertToEuro"
+import Icon from "@/common/libs/lucida-icon"
 
 //components
+import LineChart, { ILineChartData } from "@/components/common/charts/lineChart"
+import InfoBox from "@/components/common/infoBox"
+import { Button } from "@/components/ui/button"
 
 //hooks
 import { useGETUserDataHooks } from "@/hooks/user/useUserDataHooks"
 
 //interface
 import { IUser } from "@/common/types/user/user.interface"
-import { Area, Pie } from "recharts"
-import LineChart, { ILineChartData } from "@/components/common/charts/lineChart"
-import InfoBox from "@/components/common/infoBox"
-import { convertCentsToEuro } from "@/common/utils/convertToEuro"
-import { Button } from "@/components/ui/button"
-import Icon from "@/common/libs/lucida-icon"
 
 interface UserAnalyticsProps {
     user: IUser
@@ -45,7 +46,7 @@ export default function UserAnalytics({ user, isAdmin }: UserAnalyticsProps) {
         defaultParams: {
             analytics: {
                 transactions: {
-                    year: subDaysToDate(new Date(), 365),
+                    year: new Date(),
                     filter: {
                         by: ['type'],
                         payee_key: user?.id

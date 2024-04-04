@@ -206,7 +206,7 @@ export default function BookingHeader({ openDay, date, time, updateTimesOpen, se
                         }, {
                             onSuccess: () => {
                                 emit({
-                                    event: SocketIoEvent.BOOKING_CONFIG
+                                    event: [SocketIoEvent.BOOKING_CONFIG]
                                 })
                             }
                         })}

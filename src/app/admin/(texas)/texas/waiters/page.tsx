@@ -1,7 +1,10 @@
 'use client'
+import { useEffect } from 'react';
+import { io } from 'socket.io-client';
 
 //libs
 import { dateFormatIso, formatDate } from '@/common/libs/date-fns/dateFormat';
+import { getTableStatusVariant } from '@/common/libs/restaurant/tables';
 
 //components
 import SearchInput from '@/components/common/searchInput';
@@ -20,16 +23,40 @@ import { useTablesStore } from '@/store/restaurant/tables';
 //interfaces
 import { usePrintersStore } from '@/store/restaurant/printers';
 import { useSectionsStore } from '@/store/restaurant/sections';
-import { SocketIoEvent } from '@/common/libs/socketIo/types';
+import { ISocketMessage, SocketIoEvent } from '@/common/libs/socketIo/types';
 import { TableMealStatus } from '@/common/types/restaurant/tables.interface';
-import { getTableStatusVariant } from '@/common/libs/restaurant/tables';
+import { IGETTablesAllResponse } from '@/hooks/restaurant/IGetRestaurantDataHooks.interface';
+
+const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
 export default function Tables() {
-    const { tablesFilter, setTablesFilter, getTablesFiltered } = useTablesStore()
+    const { tablesFilter, setTablesFilter, getTablesFiltered, setTables } = useTablesStore()
+    const { emit, isMessageToMe } = useSocketIoHooks()
     const { sections } = useSectionsStore()
     const { printers } = usePrintersStore()
     const { user } = useAuthHooks()
-    const { emit } = useSocketIoHooks()
+
+    const {
+        refetchRestaurantData: refetchTables
+    } = useGETRestaurantDataHooks({
+        query: 'TABLES',
+        defaultParams: {
+            tables: {
+                all: {
+                    pagination: {
+                        take: 400,
+                        skip: 0
+                    },
+                }
+            }
+        },
+        UseQueryOptions: {
+            onSuccess: (data) => {
+                const tables = data as IGETTablesAllResponse
+                setTables(tables?.data)
+            },
+        }
+    })
 
     const {
         restaurantOpenDay: openDay,
@@ -60,10 +87,7 @@ export default function Tables() {
         UseMutationOptions: {
             onSuccess: async () => {
                 await emit({
-                    event: SocketIoEvent.BOOKING,
-                })
-                await emit({
-                    event: SocketIoEvent.TABLE,
+                    event: [SocketIoEvent.TABLE, SocketIoEvent.BOOKING]
                 })
             }
         }
@@ -77,14 +101,22 @@ export default function Tables() {
         UseMutationOptions: {
             onSuccess: async () => {
                 await emit({
-                    event: SocketIoEvent.BOOKING,
-                })
-                await emit({
-                    event: SocketIoEvent.TABLE,
+                    event: [SocketIoEvent.BOOKING, SocketIoEvent.TABLE],
                 })
             }
         }
     })
+
+    useEffect(() => {
+        socket.on("message", (message: ISocketMessage) => {
+            if (isMessageToMe({ event: message?.event, listemTo: [SocketIoEvent.TABLE] })) {
+                refetchTables()
+            }
+        });
+        () => {
+            socket.off("message");
+        }
+    }, [isMessageToMe, refetchTables]);
 
     return (
         <LayoutFrame

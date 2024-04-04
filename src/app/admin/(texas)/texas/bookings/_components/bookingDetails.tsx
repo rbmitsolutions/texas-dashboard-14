@@ -84,9 +84,9 @@ export default function BookingDetails({
                 time: booking?.time,
             }
         }, {
-            onSuccess: () => {
-                emit({
-                    event: SocketIoEvent.BOOKING,
+            onSuccess: async () => {
+                await emit({
+                    event: [SocketIoEvent.BOOKING],
                 })
             }
         })
@@ -98,9 +98,9 @@ export default function BookingDetails({
                 id
             }
         }, {
-            onSuccess: () => {
-                emit({
-                    event: SocketIoEvent.BOOKING,
+            onSuccess: async () => {
+                await emit({
+                    event: [SocketIoEvent.BOOKING],
                 })
             }
         })
@@ -120,10 +120,7 @@ export default function BookingDetails({
         }, {
             onSuccess: async () => {
                 await emit({
-                    event: SocketIoEvent.BOOKING,
-                })
-                await emit({
-                    event: SocketIoEvent.TABLE,
+                    event: [SocketIoEvent.BOOKING, SocketIoEvent.TABLE],
                 })
             }
         })

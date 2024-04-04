@@ -8,11 +8,12 @@ interface IData {
 }
 
 interface RadarChartProps {
-    data: IData[]
+    data: IData[],
+    children: React.ReactNode
 }
 
 
-export default function RadarChart({ data }: RadarChartProps) {
+export default function RadarChart({ data, children }: RadarChartProps) {
     const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
@@ -27,12 +28,7 @@ export default function RadarChart({ data }: RadarChartProps) {
                 <PolarGrid />
                 <PolarAngleAxis dataKey="title" />
                 <PolarRadiusAxis />
-                <Radar
-                    dataKey="value"
-                    fill='#075af56a'
-                    stroke='#015cb1'
-                    fillOpacity={0.6}
-                />
+                {children}
                 <Tooltip
                     cursor={{ fill: 'transparent' }}
                     content={<CustomTooltip />} />

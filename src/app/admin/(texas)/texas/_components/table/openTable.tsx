@@ -1,6 +1,5 @@
 'use client'
 import { UseMutateFunction } from "react-query"
-import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 
 //libs
@@ -24,9 +23,8 @@ import { Button } from "@/components/ui/button"
 //interface 
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface"
-import { ITimesOpen } from "@/common/types/restaurant/config.interface"
-import { RedirectTo } from "@/common/types/routers/endPoints.types"
 import { ITable, TableMealStatus } from "@/common/types/restaurant/tables.interface"
+import { ITimesOpen } from "@/common/types/restaurant/config.interface"
 
 interface OpenTableDialogProps {
     table: ITable
@@ -41,7 +39,6 @@ export default function OpenTableDialog({
     createBooking,
     updateTable
 }: OpenTableDialogProps) {
-    const { push } = useRouter()
 
     const handleOpenTable = async () => {
         const walkInClient = await getWalkInClient()
@@ -61,11 +58,6 @@ export default function OpenTableDialog({
                 valid_number: false,
                 table_id: table?.id,
             },
-        }, {
-            onSuccess: async () => {
-                push(`${RedirectTo.TABLE_ORDER}/${table?.id}`)
-            }
-
         })
     }
 
@@ -79,12 +71,8 @@ export default function OpenTableDialog({
                 client_id: 'Client Not Registered',
                 meal_status: TableMealStatus.WAITING,
             }
-        }, {
-            onSuccess: () => {
-                push(`${RedirectTo.TABLE_ORDER}/${table?.id}`)
-            }
         })
-        
+
     }
 
     return (

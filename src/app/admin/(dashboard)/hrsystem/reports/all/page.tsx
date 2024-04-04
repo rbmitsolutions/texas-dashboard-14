@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation"
 
 //components
 import { columnsReports } from "./_components/columnsReport"
-import { TableRerport } from "./_components/tableReport"
 import { Button } from "@/components/ui/button"
 import Wrap from "@/components/common/wrap"
 
@@ -16,6 +15,7 @@ import { useAuthHooks } from "@/hooks/useAuthHooks"
 
 //interface
 import { IQueryPagination } from "@/common/types/settings.interface"
+import { BasicTable } from "@/components/common/basicTable"
 
 export default function Reports() {
     const { user } = useAuthHooks()
@@ -120,7 +120,7 @@ export default function Reports() {
             isLoading={isHaccpReportsLoading}
             error={haccpReportsError}
         >
-            <TableRerport columns={columnsReports({
+            <BasicTable columns={columnsReports({
                 user: user,
                 deleteHaccpReport,
                 isDeleteLoading

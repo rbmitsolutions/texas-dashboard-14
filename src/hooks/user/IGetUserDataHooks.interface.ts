@@ -2,7 +2,8 @@ import { IRequests, IRequestsStatus, IRequestsType } from "@/common/types/compan
 import { IRoster, IRosterStatus } from "@/common/types/company/roster.interface";
 import { IPaginationResponse, IQueryPagination } from "@/common/types/settings.interface";
 import { IUser, IUserStatus } from "@/common/types/user/user.interface";
-import { ICompanyDetailsResponse, IGETCompanyDetailsQuery, IGETCompanyRosterResponse, IGETTransactionsQuery, IRequestsGetAllResponse } from "../company/IGetCompanyDataHooks.interface";
+import { ICompanyDetailsResponse, IGETCompanyDetailsQuery, IGETCompanyRosterResponse, IGETFilesQuery, IGETTransactionsQuery, IRequestsGetAllResponse } from "../company/IGetCompanyDataHooks.interface";
+import { IFiles, IFilesAs, IFilesType } from "@/common/types/company/files.interface";
 
 
 export interface IGETUserResponse {
@@ -103,8 +104,14 @@ export interface IUserGETCompanyRosterQuery {
     };
 }
 
-export type IGETUserDataResponse = IUser | IGETUserResponse | IGetAllUserResponse | IGETCompanyRosterResponse | IRequestsGetAllResponse | IUserProfileCompletedResponse | ICompanyDetailsResponse
-export type IUserDataQueryType = "DETAILS" | "USER_COMPANY" | "USER_ROSTER" | "USER_REQUESTS" | "COMPANY_DETAILS" | 'ANALYTICS'
+export interface IGetFilesUserResponse {
+    data: IFiles[];
+    pagination: IPaginationResponse
+}
+
+
+export type IGETUserDataResponse = IUser | IGETUserResponse | IGetAllUserResponse | IGETCompanyRosterResponse | IRequestsGetAllResponse | IUserProfileCompletedResponse | ICompanyDetailsResponse | IGetFilesUserResponse | IFiles
+export type IUserDataQueryType = "DETAILS" | "USER_COMPANY" | "USER_ROSTER" | "USER_REQUESTS" | "COMPANY_DETAILS" | 'ANALYTICS' | "USER_FILES"
 
 export interface IGETUserDataQuery {
     user?: IGETUserQuery,
@@ -112,4 +119,6 @@ export interface IGETUserDataQuery {
     roster?: IUserGETCompanyRosterQuery
     details?: IGETCompanyDetailsQuery
     analytics?: IGETUserQuery['analytics']
+    files?: IGETFilesQuery
 }
+// USER_FILES_ENDPOINT

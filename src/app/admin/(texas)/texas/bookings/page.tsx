@@ -40,12 +40,14 @@ import { BOOKING_STATUS, IBookingPageFilter, bookingPagefilter } from "@/common/
 import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized";
 import { IBookingDays } from "@/common/types/restaurant/config.interface";
 import { Permissions } from "@/common/types/auth/auth.interface";
+import { useSocketIoHooks } from "@/hooks/useSocketIoHooks";
 
 const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
 export default function BookingPage() {
     const { user } = useAuthHooks()
     const { setTables, getTablesFiltered } = useTablesStore()
+    const { isMessageToMe } = useSocketIoHooks()
     const isUserAuth = isUserAuthorized(user, [Permissions.ADMIN, Permissions.BOOKING_ADM])
     const [date, setDate] = useState(new Date())
     const [filter, setFilter] = useState<IBookingPageFilter>({
@@ -196,17 +198,18 @@ export default function BookingPage() {
 
     useEffect(() => {
         socket.on("message", (message: ISocketMessage) => {
-            if (message?.event === SocketIoEvent.BOOKING) {
+            if (isMessageToMe({ event: message?.event, listemTo: [SocketIoEvent.BOOKING] })) {
                 refetchBookings()
             }
-            if (message?.event === SocketIoEvent.TABLE || message?.event === SocketIoEvent.BOOKING_CONFIG) {
+            
+            if (isMessageToMe({ event: message?.event, listemTo: [SocketIoEvent.TABLE, SocketIoEvent.BOOKING_CONFIG] })) {
                 refetchOpenDay()
             }
         });
         () => {
             socket.off("message");
         }
-    }, [refetchBookings, refetchOpenDay]);
+    }, [isMessageToMe, refetchBookings, refetchOpenDay]);
 
     return (
         <LayoutFrame

@@ -1,221 +1,195 @@
 'use client'
-import { useEffect } from "react"
-import { io } from "socket.io-client"
+import { useEffect } from "react";
+import { formatDate } from "@/common/libs/date-fns/dateFormat";
+import { io } from "socket.io-client";
 
 //libs
-import { addDaysToDate, getFirstTimeOfTheDay } from "@/common/libs/date-fns/dateFormat"
+import { getTableStatusVariant } from "@/common/libs/restaurant/tables";
 
 //components
-import FullOrderController from "../../_components/orderSummary/fullOrderController"
-import LayoutFrame from "../../../_components/layoutFrame"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Button } from "@/components/ui/button"
-
-//hooks
-import { useGETRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
-import { useSocketIoHooks } from "@/hooks/useSocketIoHooks"
-import { useAuthHooks } from "@/hooks/useAuthHooks"
+import TablesStatus from "../../_components/table/tableStatus";
+import LayoutFrame from "../../../_components/layoutFrame";
+import { Button } from "@/components/ui/button";
 
 //store
-import { useOrderStore } from "@/store/restaurant/order"
+import { useSectionsStore } from "@/store/restaurant/sections";
+
+//hooks
+import { useGETRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
+import { useSocketIoHooks } from "@/hooks/useSocketIoHooks";
+import { useAuthHooks } from "@/hooks/useAuthHooks";
 
 //interface
-import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types"
-import { OrderStatus } from "@/common/types/restaurant/order.interface"
+import { TableMealStatus } from "@/common/types/restaurant/tables.interface";
+import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types";
+import { OrderStatus } from "@/common/types/restaurant/order.interface";
 
 const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
-export default function PassPage() {
-    // const { getOneOrderTotal } = useOrderStore()
-    // const { emit } = useSocketIoHooks()
-    // const { user } = useAuthHooks()
+export default function Pass() {
+    const { emit, isMessageToMe } = useSocketIoHooks()
+    const { sections } = useSectionsStore()
+    const { user } = useAuthHooks()
 
-    // const {
-    //     restaurantAllPrinters: printers
-    // } = useGETRestaurantDataHooks({
-    //     query: 'PRINTERS',
-    //     defaultParams: {
-    //         printers: {
-    //             all: {
-    //                 pagination: {
-    //                     take: 50,
-    //                     skip: 0
-    //                 }
-    //             }
-    //         }
-    //     },
-    //     UseQueryOptions: {
-    //         refetchOnWindowFocus: false,
-    //         refetchIntervalInBackground: false,
-    //         refetchOnMount: false,
-    //     }
-    // })
+    const {
+        updateRestaurantData: updateTable
+    } = usePUTRestaurantDataHooks({
+        query: 'TABLES',
+        UseMutationOptions: {
+            onSuccess: async () => {
+                await emit({
+                    event: [SocketIoEvent.TABLE]
+                })
+            }
+        }
+    })
 
-    // const {
-    //     restaurantAllOrderController: orderControllers,
-    //     GETRestaurantDataParams: params,
-    //     setGETRestaurantDataParams: setParams,
-    //     refetchRestaurantData: refetchOrdersController
-    // } = useGETRestaurantDataHooks({
-    //     query: 'ORDER_CONTROLLER',
-    //     defaultParams: {
-    //         orderController: {
-    //             all: {
-    //                 pagination: {
-    //                     take: 500,
-    //                     skip: 0
-    //                 },
-    //                 finished_table_id: 'null',
-    //                 pass: [],
-    //                 where: {
-    //                     orders: {
-    //                         status: [OrderStatus.ORDERED],
-    //                         mn_section: ['Starters', 'Main Course', 'Sides']
-    //                     },
-    //                 },
-    //                 includes: {
-    //                     orders: {
-    //                         status: [OrderStatus.ORDERED]
-    //                     },
-    //                     table: '1'
-    //                 },
-    //                 date: {
-    //                     gte: getFirstTimeOfTheDay(new Date()),
-    //                     lte: addDaysToDate(new Date(), 1)
-    //                 },
-    //                 orderBy: {
-    //                     key: 'created_at',
-    //                     order: 'asc'
-    //                 }
-    //             }
-    //         }
-    //     },
-    //     UseQueryOptions: {
-    //         refetchOnWindowFocus: false,
-    //         refetchIntervalInBackground: false,
-    //         refetchOnMount: false,
-    //     },
-    //     keepParmas: true
-    // })
+    const {
+        restaurantAllTables: tables,
+        GETRestaurantDataParams: tablesParams,
+        setGETRestaurantDataParams: setTablesParams,
+        refetchRestaurantData: refetchTables
+    } = useGETRestaurantDataHooks({
+        query: 'TABLES',
+        defaultParams: {
+            tables: {
+                all: {
+                    meal_status: {
+                        in: []
+                    },
+                    include: {
+                        order_controller: {
+                            orders: {
+                                status: OrderStatus.ORDERED
+                            }
+                        }
+                    },
+                    is_open: true,
+                    pagination: {
+                        take: 200,
+                        skip: 0
+                    },
+                    orderBy: {
+                        key: 'food_ordered_at',
+                        order: 'asc'
+                    }
+                }
+            }
+        },
+    })
 
-
-    // const {
-    //     restaurantAllMenuSections: menuSections
-    // } = useGETRestaurantDataHooks({
-    //     query: 'MENU_SECTION',
-    //     defaultParams: {
-    //         menu_sections: {
-    //             all: {
-    //                 includes: {
-    //                     types: '1'
-    //                 },
-    //                 pagination: {
-    //                     take: 200,
-    //                     skip: 0
-    //                 }
-    //             }
-    //         }
-    //     },
-    //     UseQueryOptions: {
-    //         refetchOnWindowFocus: false,
-    //         refetchIntervalInBackground: false,
-    //         refetchOnMount: false,
-    //     }
-    // })
-
-    // const {
-    //     updateRestaurantData: updateOrder
-    // } = usePUTRestaurantDataHooks({
-    //     query: 'ORDER',
-    //     UseMutationOptions: {
-    //         onSuccess: async () => {
-    //             await emit({
-    //                 event: SocketIoEvent.ORDER,
-    //             })
-    //         }
-    //     }
-    // })
-
-    // const handlePassChange = (pass: number) => {
-    //     const currentPass = params?.orderController?.all?.pass || []
-
-    //     const newPass = currentPass.includes(pass) ? currentPass.filter(p => p !== pass) : [...currentPass, pass]
-
-    //     setParams(prev => ({
-    //         orderController: {
-    //             all: {
-    //                 ...prev?.orderController?.all,
-    //                 pass: newPass,
-
-    //             }
-    //         }
-    //     }))
-    // }
-
-    // useEffect(() => {
-    //     socket.on("message", (message: ISocketMessage) => {
-    //         if (message?.event === SocketIoEvent.ORDER) {
-    //             refetchOrdersController()
-    //         }
-    //     });
-    //     () => {
-    //         socket.off("message");
-    //     }
-    // }, [refetchOrdersController]);
+    useEffect(() => {
+        socket.on("message", (message: ISocketMessage) => {
+            if (isMessageToMe({ event: message?.event, listemTo: [SocketIoEvent.TABLE, SocketIoEvent.ORDER] })) {
+                refetchTables()
+            }
+        });
+        () => {
+            socket.off("message");
+        }
+    }, [isMessageToMe, refetchTables]);
 
     return (
-        <div />
-        // <LayoutFrame
-        //     user={user}
-        //     navigation={{
-        //         icon: {
-        //             icon: 'Filter',
-        //             title: 'Tables'
-        //         },
-        //         content: (
-        //             <div className='flex-col-container overflow-auto'>
-        //                 <small className='-mb-2'>Pass</small>
-        //                 <div className='grid grid-cols-2 gap-2'>
-        //                     {[1, 2, 3, 4, 5]?.map(p => {
-        //                         return (
-        //                             <Button
-        //                                 key={p}
-        //                                 className='h-12'
-        //                                 variant={params?.orderController?.all?.pass?.includes(p) ? 'default' : 'outline'}
-        //                                 onClick={() => handlePassChange(p)}
-        //                             >
-        //                                 {p}
-        //                             </Button>
-        //                         )
-        //                     })}
-        //                 </div>
-        //             </div>
-        //         )
-        //     }}
-
-        // >
-        //     <div className='flex flex-col gap-4 md:flex-row md:max-w-[calc(100vw_-_240px)] md:overflow-auto md:scrollbar-thin'>
-        //         {orderControllers?.data?.map(oc => {
-        //             return (
-        //                 <div key={oc?.id} className='min-w-64'>
-        //                     <FullOrderController
-        //                         orderController={oc}
-        //                         orderSumary={{
-        //                             menuSections: menuSections?.data,
-        //                             order: oc?.orders,
-        //                             getOneOrderTotal,
-        //                             showPrice: false,
-        //                             updateOrderStatus: {
-        //                                 onUpdate: updateOrder
-        //                             }
-        //                         }}
-        //                         printers={printers?.data || []}
-        //                         onOrdersUpdate={updateOrder}
-        //                     />
-        //                 </div>
-        //             )
-        //         })}
-        //     </div>
-        // </LayoutFrame>
+        <LayoutFrame
+            user={user}
+            navigation={{
+                icon: {
+                    icon: 'Filter',
+                    title: 'Tables'
+                },
+                content: (
+                    <div className='flex-col-container overflow-auto'>
+                        <small className='-mb-2'>Section</small>
+                        <div className='grid grid-cols-2 gap-2'>
+                            {sections?.map(section => {
+                                return (
+                                    <Button
+                                        key={section?.id}
+                                        variant={tablesParams?.tables?.all?.section_id?.in?.includes(section?.id) ? 'default' : 'outline'}
+                                        onClick={() => setTablesParams(prev => ({
+                                            tables: {
+                                                all: {
+                                                    ...prev?.tables?.all,
+                                                    pagination: {
+                                                        take: 200,
+                                                        skip: 0
+                                                    },
+                                                    section_id: {
+                                                        in: prev?.tables?.all?.section_id?.in?.includes(section?.id) ? prev?.tables?.all?.section_id?.in?.filter(section_id => section_id !== section?.id) : [...prev?.tables?.all?.section_id?.in || [], section?.id]
+                                                    }
+                                                }
+                                            }
+                                        }))}
+                                        className='p-1 h-14 text-sm'
+                                    >
+                                        {section?.title}
+                                    </Button>
+                                )
+                            })}
+                        </div>
+                        <small className='-mb-2'>Status</small>
+                        <div className='grid grid-cols-2 gap-2'>
+                            {Object.values(TableMealStatus).map(status => {
+                                return (
+                                    <Button
+                                        key={status}
+                                        className='text-[10px] h-14 capitalize'
+                                        variant={tablesParams?.tables?.all?.meal_status?.in?.includes(status) ? getTableStatusVariant(status) : 'outline'}
+                                        onClick={() => setTablesParams(prev => ({
+                                            tables: {
+                                                all: {
+                                                    ...prev?.tables?.all,
+                                                    pagination: {
+                                                        take: 200,
+                                                        skip: 0
+                                                    },
+                                                    meal_status: {
+                                                        in: prev?.tables?.all?.meal_status?.in?.includes(status) ? prev?.tables?.all?.meal_status?.in?.filter(meal_status => meal_status !== status) : [...prev?.tables?.all?.meal_status?.in || [], status]
+                                                    }
+                                                }
+                                            }
+                                        }))}
+                                    >
+                                        {status}
+                                    </Button>
+                                )
+                            })}
+                        </div>
+                    </div>
+                )
+            }}
+        >
+            <div className='grid grid-cols-5 gap-4 px-4 overflow-auto scrollbar-thin'>
+                {tables?.data?.length === 0 && <strong>No Tables</strong>}
+                {tables?.data?.map(table => {
+                    return (
+                        <TablesStatus
+                            key={table?.id}
+                            updateTable={updateTable}
+                            table={table}
+                        >
+                            <div
+                                className='flex-col-container justify-center items-center p-4 rounded-lg bg-background-soft w-full border-4'
+                            >
+                                <strong className='text-5xl'>{table?.number}</strong>
+                                <Button
+                                    className='capitalize'
+                                    variant={getTableStatusVariant(table?.meal_status)}
+                                >
+                                    {table?.meal_status}
+                                </Button>
+                                <strong className='text-lg'>
+                                    {formatDate({
+                                        date: table?.food_ordered_at,
+                                        f: 'HH:mm:ss',
+                                        iso: false
+                                    })}
+                                </strong>
+                            </div>
+                        </TablesStatus>
+                    )
+                })}
+            </div>
+        </LayoutFrame>
     )
 }

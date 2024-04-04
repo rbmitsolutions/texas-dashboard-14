@@ -36,7 +36,7 @@ const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
 export default function Chefs() {
     const [tables, setTables] = useState<ITable[]>([])
-    const { emit } = useSocketIoHooks()
+    const { emit, isMessageToMe } = useSocketIoHooks()
     const { user } = useAuthHooks()
     const [isOpen, setIsOpen] = useState<string>('')
 
@@ -49,7 +49,7 @@ export default function Chefs() {
         }, {
             onSuccess: async () => {
                 await emit({
-                    event: SocketIoEvent.TABLE
+                    event: [SocketIoEvent.TABLE]
                 })
             }
         })
@@ -67,7 +67,7 @@ export default function Chefs() {
         })
 
         await emit({
-            event: SocketIoEvent.TABLE
+            event: [SocketIoEvent.TABLE]
         })
 
         setIsOpen('')
@@ -80,7 +80,7 @@ export default function Chefs() {
         UseMutationOptions: {
             onSuccess: async () => {
                 await emit({
-                    event: SocketIoEvent.TABLE
+                    event: [SocketIoEvent.TABLE]
                 })
             }
         }
@@ -150,14 +150,14 @@ export default function Chefs() {
 
     useEffect(() => {
         socket.on("message", (message: ISocketMessage) => {
-            if (message?.event === SocketIoEvent.TABLE || message?.event === SocketIoEvent.ORDER) {
+            if (isMessageToMe({ event: message?.event, listemTo: [SocketIoEvent.TABLE, SocketIoEvent.ORDER] })) {
                 refetchTables()
             }
         });
         () => {
             socket.off("message");
         }
-    }, [refetchTables]);
+    }, [isMessageToMe, refetchTables]);
 
     return (
         <LayoutFrame
@@ -185,14 +185,14 @@ export default function Chefs() {
                                     className='flex-col-container justify-center items-center p-4 rounded-lg bg-background-soft w-full border-4'
                                     onClick={() => setIsOpen(table?.id)}
                                 >
-                                    <strong className='text-3xl'>{table?.number}</strong>
+                                    <strong className='text-5xl'>{table?.number}</strong>
                                     <Button
                                         className='capitalize'
                                         variant={getTableStatusVariant(table?.meal_status)}
                                     >
                                         {table?.meal_status}
                                     </Button>
-                                    <strong>
+                                    <strong className='text-lg'>
                                         {formatDate({
                                             date: table?.food_ordered_at,
                                             f: 'HH:mm:ss',

@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import { ICompanyDetailsResponse, IGETCompanyRosterResponse, IRequestsGetAllResponse } from "../company/IGetCompanyDataHooks.interface";
 import { IPOSTUserBody, IPOSTUserDataQueryType, IPOSTUserDataRerturn } from "./IPostUserDataHooks.interface";
 import { IDELETEUserDataBody, IDELETEUserDataQueryType } from "./IDeleteUserDataHooks.interface";
+import { IFiles } from "@/common/types/company/files.interface";
 
 export interface IUseGETUserDataHooks {
     query: IUserDataQueryType
@@ -77,6 +78,7 @@ export function useGETUserDataHooks({
         analytics: data as any,
         allUsers: data as IGetAllUserResponse,
         companyDetails: data as ICompanyDetailsResponse,
+        userFile: data as IFiles,
         userAllRoster: data as IGETCompanyRosterResponse,
         userAllRequests: data as IRequestsGetAllResponse,
         userProfileCompleted: data as IUserProfileCompletedResponse,

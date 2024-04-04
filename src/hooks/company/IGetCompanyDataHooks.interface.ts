@@ -316,7 +316,14 @@ export interface IGETFilesQuery {
     in?: {
       key?: string[]
     }
+    as?: {
+      in?: IFilesAs[]
+    }
     pagination?: IQueryPagination
+    orderBy?: {
+      key?: keyof IFiles
+      type?: 'asc' | 'desc'
+    }
   }
 
   byId?: {
