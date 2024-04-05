@@ -73,7 +73,7 @@ export default function ContractComponent({ contract }: ContractComponentProps):
 
         await updateFile({
             file: {
-                as: 'contract-sgined',
+                as: 'contract-signed',
                 file,
                 id: contract?.id,
                 key: contract?.key,
