@@ -32,7 +32,7 @@ export default function InfoBadge({ status, className }: InfoBadgeProps) {
             case 'done':
             case 'restaurant':
             case 'confirmed':
-            case 'contract-sgined':
+            case 'contract-signed':
             case 'avatar':
             case 'report':
             case 'menu':

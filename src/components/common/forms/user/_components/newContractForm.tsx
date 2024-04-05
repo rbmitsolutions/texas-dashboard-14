@@ -1,7 +1,10 @@
 import { useState } from "react";
 
+//interfaces
+
 //components
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import FileDownload from "@/components/common/fileDownload";
 import { Button } from "@/components/ui/button";
 
 //hooks
@@ -9,7 +12,6 @@ import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks";
 
 //interface
 import { IUser } from "@/common/types/user/user.interface";
-import FileDownload from "@/components/common/fileDownload";
 
 interface NewContractFormProps {
     user: IUser
@@ -30,7 +32,7 @@ export default function NewContractForm({ user }: NewContractFormProps) {
                         key: [user?.id],
                     },
                     as: {
-                        in: ['contract', 'contract-filed', 'contract-sgined']
+                        in: ['contract', 'contract-filed', 'contract-signed']
                     },
                     pagination: {
                         take: 10,
@@ -73,7 +75,7 @@ export default function NewContractForm({ user }: NewContractFormProps) {
                         )
                     })}
                 </div>
-                
+
                 {/* <DialogFooter>
                     <Button
                         // onClick={handleAddOption}
