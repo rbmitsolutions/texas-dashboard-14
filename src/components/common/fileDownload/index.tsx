@@ -60,12 +60,6 @@ export default function FileDownload({ file, onDelete }: FileDownloadProps) {
         <div className='flex-container justify-between border-2 p-2 rounded-xl cursor-pointer hover:bg-background-soft'>
             <div className='flex-col-container gap-1'>
                 <strong>{file?.title}</strong>
-                <small>
-                    {formatDate({
-                        date: file?.created_at,
-                        f: 'dd/MM/yyyy'
-                    })}
-                </small>
             </div>
             <div className='flex-container items-center'>
                 <Button
