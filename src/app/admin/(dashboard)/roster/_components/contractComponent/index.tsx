@@ -97,7 +97,7 @@ export default function ContractComponent({ contract }: ContractComponentProps):
             }}
         >
             <iframe
-                src={contract?.url}
+                src={contract?.secure_url}
                 width='100%'
                 height='100%'
                 style={{
