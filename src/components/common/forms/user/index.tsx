@@ -46,11 +46,16 @@ export default function UserProfile({ user, isAdmin, roles, onUpdate }: UserProf
                             Roster Password
                         </Button>
                         {roles &&
-                            <UpdateRoleForm user={user} onUpdate={onUpdate} roles={roles} />
+                            <>
+
+                                <UpdateRoleForm user={user} onUpdate={onUpdate} roles={roles} />
+                                <NewContractForm
+                                    user={user}
+                                    roles={roles}
+                                />
+                            </>
                         }
-                        <NewContractForm
-                            user={user}
-                        />
+
                         <DeleteDialogButton
                             buttonText="File"
                             onDelete={async () => await onUpdate({
