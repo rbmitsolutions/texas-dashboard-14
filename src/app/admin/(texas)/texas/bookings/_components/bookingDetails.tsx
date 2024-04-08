@@ -218,10 +218,13 @@ export default function BookingDetails({
                         </div>
                     </div>
                     <div className='flex-container justify-between'>
-                        <LinkButton
-                            icon="User"
-                            href={RedirectTo.CLIENT_PROFILE + '/' + booking?.client?.id + '/bookings'}
-                        />
+                        {booking?.client?.id ?
+                            <LinkButton
+                                icon="User"
+                                href={RedirectTo.CLIENT_PROFILE + '/' + booking?.client?.id + '/bookings'}
+                            />
+                            : <div />
+                        }
                         <div className="space-x-2">
                             <SendEmail
                                 contacts={[{

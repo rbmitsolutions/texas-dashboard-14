@@ -19,7 +19,6 @@ import {
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -48,7 +47,7 @@ import { cn } from "@/common/libs/shadcn/utils";
 
 //hooks
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
-import { SocketIoEvent, SocketIoFrom } from "@/common/libs/socketIo/types";
+import { SocketIoEvent } from "@/common/libs/socketIo/types";
 import { useSocketIoHooks } from "@/hooks/useSocketIoHooks";
 
 //interfaces
@@ -159,6 +158,7 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
                 valid_number: validator.isMobilePhone(formData?.contact_number, ["en-IE"]),
                 amount_of_people: formData.amount_of_people,
                 date: dateFormatIso(formData.date),
+                email: formData.email || '',
             }
         }, {
             onSuccess: async () => {
@@ -254,6 +254,13 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form.watch('contact_number')])
 
+    useEffect(() => {
+        if (form.watch('contact_number') === clients[0]?.contact_number) {
+            form.setValue('name', clients[0]?.name.trim().split(/\s+/)[0] || '')
+            form.setValue('surname', clients[0]?.name.trim().split(/\s+/).slice(1).join(' ') || '')
+            form.setValue('email', clients[0]?.email)
+        }
+    }, [clients, form])
     return (
         <Sheet
             onOpenChange={handleOpenChange}
@@ -300,6 +307,7 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
                                     <FormControl>
                                         <Input
                                             placeholder="Contact Number"
+                                            maxLength={10}
                                             type='tel'{...field}
                                         />
                                     </FormControl>
@@ -331,11 +339,7 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
                                     <FormItem>
                                         <FormLabel>Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Name" {...field} value={
-                                                form.watch('contact_number') === clients[0]?.contact_number
-                                                    ? clients[0]?.name.trim().split(/\s+/)[0] || ''
-                                                    : field.value
-                                            } />
+                                            <Input placeholder="Name" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -348,13 +352,7 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
                                     <FormItem>
                                         <FormLabel>Surname</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Surname" {...field}
-                                                value={
-                                                    form.watch('contact_number') === clients[0]?.contact_number
-                                                        ? clients[0]?.name.trim().split(/\s+/).slice(1).join(' ') || ''
-                                                        : field.value
-                                                }
-                                            />
+                                            <Input placeholder="Surname" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -368,9 +366,7 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
                                 <FormItem>
                                     <FormLabel>Email</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Email" type='email'{...field}
-                                            value={form.watch('contact_number') === clients[0]?.contact_number ? clients[0]?.email : field.value}
-                                        />
+                                        <Input placeholder="Email" type='email'{...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

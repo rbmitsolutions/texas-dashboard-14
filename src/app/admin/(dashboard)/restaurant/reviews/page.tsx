@@ -1,7 +1,6 @@
 'use client'
 
 import { reviewsColumnsTable } from "./_components/reviewsColumnsTable"
-import { ReviewsColumnsTable } from "./_components/reviewsTable"
 import SearchInput from "@/components/common/searchInput"
 import Wrap from "@/components/common/wrap"
 
@@ -10,6 +9,7 @@ import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHook
 
 //interface
 import { IQueryPagination } from "@/common/types/settings.interface"
+import { BasicTable } from "@/components/common/basicTable"
 
 export default function ReviewsPage() {
 
@@ -178,7 +178,7 @@ export default function ReviewsPage() {
             }}
             error={error}
         >
-            <ReviewsColumnsTable
+            <BasicTable
                 columns={reviewsColumnsTable}
                 data={reviews?.data || []}
             />
