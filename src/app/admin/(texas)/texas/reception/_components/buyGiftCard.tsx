@@ -110,7 +110,7 @@ export default function BuyGiftCard({ clients, setClientsParams, createGiftCard 
                 client_key: client?.id,
                 name: client?.name,
                 email: client?.email,
-                contact_number: client?.contact_number,
+                contact_number: giftCard?.contact_number,
             }
         }
 
