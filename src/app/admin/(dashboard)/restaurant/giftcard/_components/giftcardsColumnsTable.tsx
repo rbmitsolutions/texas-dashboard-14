@@ -9,17 +9,22 @@ import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.i
 import { UseMutateFunction } from "react-query"
 import LinkButton from "@/components/common/linkButton"
 import { RedirectTo } from "@/common/types/routers/endPoints.types"
-import { IToken } from "@/common/types/auth/auth.interface"
+import { IToken, Permissions } from "@/common/types/auth/auth.interface"
+import { IDELETERestaurantDataBody } from "@/hooks/restaurant/IDeleteRestaurantDataHooks.interface"
+import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
+import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 interface GiftcardsColumnsTableProps {
     updateGiftcard: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>,
+    deleteGiftcard: UseMutateFunction<void, any, IDELETERestaurantDataBody, unknown>
     user: IToken
 }
 
 export const giftcardsColumnsTable = ({
     updateGiftcard,
+    deleteGiftcard,
     user
 }: GiftcardsColumnsTableProps): ColumnDef<IGiftCards>[] => {
     return [
@@ -146,6 +151,14 @@ export const giftcardsColumnsTable = ({
                                 href={RedirectTo.CLIENT_PROFILE + '/' + row?.original?.client_key + '/bookings'}
                             />
                         }
+                        <DeleteDialogButton 
+                            onDelete={async () => deleteGiftcard({
+                                giftcard:{
+                                    id: row?.original?.id
+                                }
+                            })}
+                            isDisabled={!isUserAuthorized(user, [Permissions.ADMIN])}
+                        />
                     </div>
                 )
             },

@@ -14,7 +14,7 @@ import SearchInput from "@/components/common/searchInput"
 import Wrap from "@/components/common/wrap"
 
 //hooks
-import { useGETRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
+import { useDELETERestaurantDataHooks, useGETRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 import { IGiftCardStatus } from "@/common/types/restaurant/giftcard.interface"
 import { useAuthHooks } from "@/hooks/useAuthHooks"
 
@@ -44,6 +44,13 @@ export default function Giftcard(): JSX.Element {
     const {
         updateRestaurantData: updateGiftcard
     } = usePUTRestaurantDataHooks({
+        query: 'GIFTCARD',
+        toRefetch
+    })
+
+    const {
+        deleteRestaurantData: deleteGiftcard
+    } = useDELETERestaurantDataHooks({
         query: 'GIFTCARD',
         toRefetch
     })
@@ -229,6 +236,7 @@ export default function Giftcard(): JSX.Element {
             <GiftCardTable
                 columns={giftcardsColumnsTable({
                     updateGiftcard,
+                    deleteGiftcard,
                     user
                 })}
                 data={giftcards?.data || []}

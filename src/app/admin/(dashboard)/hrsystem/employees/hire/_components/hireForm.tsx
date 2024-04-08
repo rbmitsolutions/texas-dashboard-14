@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/common/libs/shadcn/utils";
 import { CalendarIcon } from "lucide-react";
 import SignaturePad from "react-signature-canvas";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 //libs
 import { formatDate } from "@/common/libs/date-fns/dateFormat";
@@ -20,6 +20,7 @@ import IconText from "@/components/common/iconText";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import UserApplication from "./userApplication";
 import { Input } from "@/components/ui/input";
 
 //interface
@@ -28,12 +29,12 @@ import { IUser } from "@/common/types/user/user.interface";
 
 //hooks
 import { usePOSTCompanyDataHooks } from "@/hooks/company/companyDataHooks";
-import UserApplication from "./userApplication";
 
 interface HireFormProps {
     roles: IRoles[]
+    user?: IUser
 }
-export default function HireForm({ roles }: HireFormProps): JSX.Element {
+export default function HireForm({ roles, user }: HireFormProps): JSX.Element {
     const sigCanvas = useRef(null);
 
     const {
@@ -42,6 +43,7 @@ export default function HireForm({ roles }: HireFormProps): JSX.Element {
     } = usePOSTCompanyDataHooks({
         query: 'AUTH',
     })
+
     const form = useForm<CompanyHireFormSchemaType>({
         mode: "onChange",
         resolver: zodResolver(CompanyHireFormSchema),
@@ -104,6 +106,26 @@ export default function HireForm({ roles }: HireFormProps): JSX.Element {
         })
     };
 
+    useEffect(() => {
+        if (user) {
+            form.reset({
+                name: user?.name,
+                email: user?.email,
+                commencement_date: new Date(),
+                employment_status: "",
+                fixed_salary: false,
+                issue_date: new Date(),
+                manager_name: "Michael Ryan",
+                normal_working_hours: "",
+                place_of_work: "Texas Steakout",
+                rate_per_hour: 0,
+                rate_per_hour_weekend: 0,
+                role_id: "",
+                salary: 0,
+                visa_needed: false,
+            })
+        }
+    }, [form, user])
 
     return (
         <div className='flex-col-container-center'>
@@ -476,15 +498,17 @@ export default function HireForm({ roles }: HireFormProps): JSX.Element {
                         isLoading={isLoading}
                         disabled={isLoading}
                     >
-                        Hire
+                       {user ? 'New Contract' : 'Hire Employee'}
                     </Button>
                 </form>
             </Form>
-            <div className='w-full mt-4 bg-background-soft p-4 rounded-lg'>
-                <UserApplication
-                    selectUser={handleSelectUser}
-                />
-            </div>
+            {!user &&
+                <div className='w-full mt-4 bg-background-soft p-4 rounded-lg'>
+                    <UserApplication
+                        selectUser={handleSelectUser}
+                    />
+                </div>
+            }
         </div>
     )
 }

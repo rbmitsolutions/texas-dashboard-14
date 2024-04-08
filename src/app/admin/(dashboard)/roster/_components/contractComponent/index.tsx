@@ -66,7 +66,7 @@ export default function ContractComponent({ contract }: ContractComponentProps):
         const file = await signContract({
             address: formData.address,
             contact_number: formData.contact_number,
-            contract_pdf: contract.url,
+            contract_pdf: contract.secure_url,
             pps_number: formData.pps_number,
             signature: formData.signature,
         })

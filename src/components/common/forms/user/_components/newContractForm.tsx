@@ -3,7 +3,8 @@ import { useState } from "react";
 //interfaces
 
 //components
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import HireForm from "@/app/admin/(dashboard)/hrsystem/employees/hire/_components/hireForm";
 import FileDownload from "@/components/common/fileDownload";
 import { Button } from "@/components/ui/button";
 
@@ -11,15 +12,17 @@ import { Button } from "@/components/ui/button";
 import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks";
 
 //interface
+import { IRoles } from "@/common/types/company/companyDetails.interface";
 import { IUser } from "@/common/types/user/user.interface";
 
 interface NewContractFormProps {
     user: IUser
+    roles: IRoles[]
 }
 
-export default function NewContractForm({ user }: NewContractFormProps) {
+export default function NewContractForm({ user, roles }: NewContractFormProps) {
     const [isOpen, setIsOpen] = useState(false)
-
+    const [isHireFormOpen, setIsHireFormOpen] = useState(false)
     const {
         companyAllFiles: files,
         refetchCompanyData: refetchFiles
@@ -46,11 +49,16 @@ export default function NewContractForm({ user }: NewContractFormProps) {
         }
     })
 
+    const onOpenChange = () => {
+        setIsOpen(prev => !prev)
+        setIsHireFormOpen(false)
+    }
+
 
     return (
         <Dialog
             open={isOpen}
-            onOpenChange={(open) => setIsOpen(open)}
+            onOpenChange={onOpenChange}
         >
             <DialogTrigger asChild>
                 <Button
@@ -64,26 +72,37 @@ export default function NewContractForm({ user }: NewContractFormProps) {
                 <DialogHeader>
                     <DialogTitle>Contracts</DialogTitle>
                 </DialogHeader>
-                <div>
-                    {files?.data?.map(file => {
-                        return (
-                            <FileDownload
-                                file={file}
-                                key={file.id}
-                                onDelete={refetchFiles}
-                            />
-                        )
-                    })}
-                </div>
+                <div className='flex-col-container overflow-auto max-h-[80vh]'>
+                    {isHireFormOpen ?
+                        <HireForm
+                            roles={roles}
+                            user={user}
+                        />
+                        :
+                        <>
 
-                {/* <DialogFooter>
+                            {files?.data?.length === 0 && 'No contracts'}
+                            {files?.data?.map(file => {
+                                return (
+                                    <FileDownload
+                                        file={file}
+                                        key={file.id}
+                                        onDelete={refetchFiles}
+                                    />
+                                )
+                            })}
+                        </>
+                    }
+                </div>
+                <DialogFooter>
                     <Button
-                        // onClick={handleAddOption}
+                        onClick={() => setIsHireFormOpen(prev => !prev)}
                         leftIcon="PlusCircle"
+                        variant={isHireFormOpen ? 'destructive' : 'purple'}
                     >
-                        Close
+                        {isHireFormOpen ? 'Cancel' : 'New Contract'}
                     </Button>
-                </DialogFooter> */}
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     )
