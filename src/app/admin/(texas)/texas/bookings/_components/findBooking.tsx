@@ -39,11 +39,11 @@ interface FindBookingProps {
 
 
 export default function FindBooking({ updateBooking, iconOnly, isUserAuth, deleteBooking, isLoading, clients, setGETClientsParams }: FindBookingProps): JSX.Element {
+
     const {
         restaurantAllBookings: bookings,
         setGETRestaurantDataParams: setBookingsParams,
         GETRestaurantDataParams: bookingsParams,
-        refetchRestaurantData: refetchBookingPage,
     } = useGETRestaurantDataHooks({
         query: 'BOOKINGS',
         defaultParams: {

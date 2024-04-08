@@ -1,6 +1,5 @@
 'use client'
 import { authDevicesColumnsTable } from "./_components/authDevicesColumns";
-import { AuthDevicesTables } from "./_components/authDevicesTable";
 import AuthDevice from "./_components/createAuthDevice";
 import Wrap from "@/components/common/wrap";
 
@@ -9,6 +8,7 @@ import { useDELETERestaurantDataHooks, useGETRestaurantDataHooks, usePOSTRestaur
 
 //interfaces
 import { IQueryPagination } from "@/common/types/settings.interface";
+import { BasicTable } from "@/components/common/basicTable";
 
 export default function AuthDevices() {
     const {
@@ -33,7 +33,6 @@ export default function AuthDevices() {
 
     const {
         createRestaurantData: createAuthorizedDevice,
-        isCreateRestaurantDataLoading: isLoading,
     } = usePOSTRestaurantDataHooks({
         query: 'AUTHORIZED_DEVICES',
         toRefetch
@@ -71,7 +70,7 @@ export default function AuthDevices() {
             }}
             error={error}
         >
-            <AuthDevicesTables
+            <BasicTable
                 columns={authDevicesColumnsTable({
                     deleteAuthorizedDevices
                 })}

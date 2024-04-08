@@ -36,7 +36,7 @@ export const reviewsColumnsTable: ColumnDef<IReviews>[] = [
         cell: ({ row }) => {
             return (
                 <div className="capitalize">
-                    {row?.original?.client?.name?.toLowerCase()}
+                    {row?.original?.client?.name?.toLowerCase() || 'Walk-in'} 
                 </div>
             )
         }

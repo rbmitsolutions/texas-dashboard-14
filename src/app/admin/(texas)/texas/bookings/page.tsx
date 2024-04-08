@@ -122,7 +122,7 @@ export default function BookingPage() {
             clients: {
                 all: {
                     pagination: {
-                        take: 5,
+                        take: 1,
                         skip: 0
                     },
                 }

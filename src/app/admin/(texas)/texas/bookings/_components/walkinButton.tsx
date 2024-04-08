@@ -155,7 +155,7 @@ export default function WalkinButton({ openDay, iconOnly, createBooking, clients
                                     all: {
                                         ...prev?.clients?.all,
                                         pagination: {
-                                            take: 5,
+                                            take: 1,
                                             skip: 0
                                         },
                                         contact_number: e
@@ -175,15 +175,14 @@ export default function WalkinButton({ openDay, iconOnly, createBooking, clients
                         placeholder="Search by contact number"
                     />
 
-                    {clients?.length === 0 ? <div className='flex justify-center items-center min-h-44 max-h-44 bg-background-soft'>No clients found</div>
+                    {clients?.length === 0 ? <div className='flex justify-center items-center min-h-32 max-h-32 bg-background-soft'>No clients found</div>
                         :
-                        <div className='flex-col-container overflow-auto p-2 min-h-52 max-h-52 scrollbar-thin bg-background-soft'>
-
+                        <div className='flex-col-container overflow-auto p-2 scrollbar-thin bg-background-soft'>
                             {clients?.map(client => {
                                 return (
                                     <div
                                         key={client?.id}
-                                        className={cn('flex-col-container gap-1 p-2 rounded-lg border-2', booking?.email === client?.email ? 'bg-background-soft border-primary' : 'bg-background')}
+                                        className={cn('flex-col-container gap-1 p-2 rounded-lg border-2 cursor-pointer', booking?.email === client?.email ? 'bg-background-soft border-primary' : 'bg-background')}
                                         onClick={() => {
                                             if (booking?.email === client?.email) {
                                                 cleanUserDetailsForm()

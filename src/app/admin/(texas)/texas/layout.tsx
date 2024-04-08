@@ -48,28 +48,6 @@ export default function TexasLayout({ children }: any) {
         }
     })
 
-    // const {
-    //     refetchRestaurantData: refetchTables
-    // } = useGETRestaurantDataHooks({
-    //     query: 'TABLES',
-    //     defaultParams: {
-    //         tables: {
-    //             all: {
-    //                 pagination: {
-    //                     take: 400,
-    //                     skip: 0
-    //                 },
-    //             }
-    //         }
-    //     },
-    //     UseQueryOptions: {
-    //         onSuccess: (data) => {
-    //             const tables = data as IGETTablesAllResponse
-    //             setTables(tables?.data)
-    //         },
-    //     }
-    // })
-
     const {
         refetchRestaurantData: refetchSections
     } = useGETRestaurantDataHooks({
