@@ -40,7 +40,7 @@ export default function Table({ table, waitres, reception }: TableProps) {
                 <small>{table?.number}</small>
                 <IconText
                     icon="Users"
-                    text={table?.guests}
+                    text={table?.guests_booked}
                     className="flex flex-col-reverse gap-1 mb-1"
                 />
             </div>

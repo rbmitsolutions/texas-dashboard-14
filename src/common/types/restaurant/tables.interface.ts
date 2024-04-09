@@ -7,7 +7,7 @@ export interface ISection {
   title: string;
   open: boolean;
   priority: number;
-  
+
   tables: ITable[];
   days_open: IBookingDays[]
   special_days: ISpecialDays[]
@@ -25,11 +25,12 @@ export interface IFinishedTable {
   client_id: string;
   client: string;
   booking_id?: string;
-  
+
   start_time: Date;
   end_time: Date;
   average_minutes: number;
   guests: number;
+  guests_booked: number;
   pass: number;
 
   orders_controller: IOrderController[];
@@ -38,7 +39,7 @@ export interface IFinishedTable {
   updated_at: Date;
 }
 
-export enum TableMealStatus{
+export enum TableMealStatus {
   WAITING = "waiting",
   STARTERS = "starters",
   MAIN = "main",
@@ -58,7 +59,8 @@ export interface ITable {
   is_open: boolean;
 
   guests: number;
-  
+  guests_booked: number;
+
   booking_id?: string;
   client_id?: string | null;
   client_name?: string | null;

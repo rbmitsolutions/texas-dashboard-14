@@ -245,7 +245,7 @@ export default function BookingDetails({
                     <Textarea
                         defaultValue={booking?.request || 'No Request'}
                         readOnly
-                        className='min-h-24 resize-none'
+                        className='min-h-20 resize-none'
                     />
                     <div className='grid grid-cols-[1fr,1fr,auto] items-center gap-4'>
                         <Button
