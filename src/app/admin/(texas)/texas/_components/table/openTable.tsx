@@ -1,6 +1,7 @@
 'use client'
 import { UseMutateFunction } from "react-query"
 import toast from "react-hot-toast"
+import { useState } from "react"
 
 //libs
 import { getWalkInClient } from "@/common/libs/restaurant/actions/walkinClients"
@@ -39,6 +40,7 @@ export default function OpenTableDialog({
     createBooking,
     updateTable
 }: OpenTableDialogProps) {
+    const [guests, setGuests] = useState<number>(2)
 
     const handleOpenTable = async () => {
         const walkInClient = await getWalkInClient()
@@ -48,7 +50,7 @@ export default function OpenTableDialog({
 
         await createBooking({
             booking: {
-                amount_of_people: table?.guests,
+                amount_of_people: guests,
                 contact_number: walkInClient?.contact_number,
                 date: new Date(),
                 email: walkInClient?.email,
@@ -67,6 +69,7 @@ export default function OpenTableDialog({
                 id: table?.id,
                 is_open: true,
                 start_time: new Date(),
+                guests_booked: guests,
                 client_name: 'Client Not Registered',
                 client_id: 'Client Not Registered',
                 meal_status: TableMealStatus.WAITING,
@@ -93,6 +96,23 @@ export default function OpenTableDialog({
                         A new booking will be created as a walk in client!
                     </AlertDialogDescription>
                 </AlertDialogHeader>
+                <div className='overflow-auto scrollbar-thin'>
+                    <strong>Guests</strong>
+                    <div className='flex gap-2 py-2'>
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18]?.map(g => {
+                            return (
+                                <Button
+                                    key={g}
+                                    className='h-12 min-w-16'
+                                    variant={guests === g ? 'default' : 'outline'}
+                                    onClick={() => setGuests(g)}
+                                >
+                                    {g}
+                                </Button>
+                            )
+                        })}
+                    </div>
+                </div>
                 <AlertDialogFooter
                     className='flex !justify-between w-full'
                 >
