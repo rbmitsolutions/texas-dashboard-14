@@ -16,6 +16,7 @@ export interface IPUTTablesBody {
     meal_status?: TableMealStatus
     food_ordered_at?: Date;
     open_table?: boolean;
+    guests_booked?: number;
     close_table?: {
         client_id: string
         client_name: string

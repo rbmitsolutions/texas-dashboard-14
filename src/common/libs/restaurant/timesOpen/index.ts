@@ -3,7 +3,7 @@ import { ITimesOpen } from "@/common/types/restaurant/config.interface";
 export const getCurretBookingTime = (timesOpen: ITimesOpen[]): ITimesOpen | undefined => {
     const delepoment = process.env.NODE_ENV === 'development';
 
-    if(delepoment) {
+    if (delepoment) {
         return timesOpen[0]
     }
 
@@ -22,5 +22,8 @@ export const getCurretBookingTime = (timesOpen: ITimesOpen[]): ITimesOpen | unde
 
     const currentTime = timesOpen?.find(t => t.open === formated)
 
+    if (!currentTime) {
+        return timesOpen[0]
+    }
     return currentTime;
 }
