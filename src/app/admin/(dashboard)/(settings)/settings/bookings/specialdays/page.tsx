@@ -1,11 +1,10 @@
 'use client'
-
-import { formatDate, getFirstDayOfMonth, getLastDayOfMonth } from "@/common/libs/date-fns/dateFormat"
+import { getFirstDayOfMonth, getLastDayOfMonth } from "@/common/libs/date-fns/dateFormat"
 
 //components
 import { specialDaysColumnsTable } from "./_components/specialDaysColumnsTable"
 import CreateSpecialDayForm from "./_components/createSpecialDay"
-import { SpecialDaysTable } from "./_components/specialDaysTable"
+import { BasicTable } from "@/components/common/basicTable"
 import Wrap from "@/components/common/wrap"
 
 //hooks
@@ -124,7 +123,7 @@ export default function Specialdays() {
                 className: "flex justify-between gap-4"
             }}
         >
-            <SpecialDaysTable
+            <BasicTable
                 columns={specialDaysColumnsTable({
                     deleteSpecialDay,
                 })}

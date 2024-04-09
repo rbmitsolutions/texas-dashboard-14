@@ -1,9 +1,9 @@
 'use client'
 
+import { BasicTable } from "@/components/common/basicTable"
 import CreateTimeOpenForm from "./_components/createTimesOpen"
 //components
 import { timesOpenColumnsTable } from "./_components/timesOpenColumnsTable"
-import { TimesOpenTable } from "./_components/timesOpenTable"
 import Wrap from "@/components/common/wrap"
 
 //hooks
@@ -65,7 +65,7 @@ export default function TimesOpen() {
                 className: 'flex justify-end'
             }}
         >
-            <TimesOpenTable
+            <BasicTable
                 columns={timesOpenColumnsTable({
                     updateTimesOpen
                 })}

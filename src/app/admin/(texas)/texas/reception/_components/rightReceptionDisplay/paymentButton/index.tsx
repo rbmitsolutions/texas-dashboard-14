@@ -320,10 +320,10 @@ export default function PaymentButton({
                         <Button
                             variant='outline'
                             className='h-14'
-                            onClick={() => setToPay(Number(((payTotal || 0) / (dataTable?.table?.guests || 2)).toFixed(0)))}
+                            onClick={() => setToPay(Number(((payTotal || 0) / (dataTable?.table?.guests_booked || 2)).toFixed(0)))}
                             disabled={payTotal ? false : true}
                         >
-                            {dataTable?.table?.guests} Guests
+                            {dataTable?.table?.guests_booked || 2} Guests
                         </Button>
                         <Button
                             variant='outline'

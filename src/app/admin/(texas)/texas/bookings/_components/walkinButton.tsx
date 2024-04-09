@@ -96,6 +96,7 @@ export default function WalkinButton({ openDay, iconOnly, createBooking, clients
     }
 
     const onBookingCreate = async (formData: CreateBookingFormSchemaType) => {
+
         await createBooking({
             booking: {
                 ...formData,
@@ -114,7 +115,6 @@ export default function WalkinButton({ openDay, iconOnly, createBooking, clients
                 onOpenChange(false)
             }
         })
-
     };
 
 
@@ -216,6 +216,10 @@ export default function WalkinButton({ openDay, iconOnly, createBooking, clients
                             tableSelected={tableSelected}
                             setTableSelected={setTableSelected}
                             sections={openDay?.section}
+                            tableByGuests={(guests) => setBooking(prev => ({
+                                ...prev,
+                                amount_of_people: guests
+                            }))}
                         />
                     }
                 </div>

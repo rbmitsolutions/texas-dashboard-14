@@ -17,24 +17,28 @@ import { IBookings } from "@/common/types/restaurant/bookings.interface"
 interface ISpareTables {
     section: ISection | undefined,
     guests: number
+    ppl: number
 }
 interface SelectTableProps {
     sections?: ISection[]
     tableSelected?: IGETSpareTablesReturn
     setTableSelected: Dispatch<SetStateAction<ITable | undefined>>
     booking?: IBookings
+    tableByGuests?: (ppl: number) => void
 }
 
 export default function SelectTable({
     sections,
     booking,
     tableSelected,
-    setTableSelected
+    setTableSelected,
+    tableByGuests
 }: SelectTableProps) {
     const { sections: sec } = useSectionsStore()
     const [spareTablesFilter, setSpareTablesFilter] = useState<ISpareTables>({
         section: sections ? sections[0] : sec[0],
-        guests: getBookingAmountPerTable(booking?.amount_of_people || 2)
+        guests: getBookingAmountPerTable(booking?.amount_of_people || 2),
+        ppl: booking?.amount_of_people || 2
     })
 
     const getTables = () => {
@@ -74,25 +78,49 @@ export default function SelectTable({
                     )
                 })}
             </div>
-            <div className='grid grid-cols-4 gap-2'>
-                {[2, 4, 6, 8]?.map(g => {
-                    return (
-                        <Button
-                            key={g}
-                            className='h-12'
-                            variant={spareTablesFilter?.guests === g ? 'default' : 'outline'}
-                            onClick={() => {
-                                setSpareTablesFilter(prev => ({
-                                    ...prev,
-                                    guests: g
-                                }))
-                            }}
-                        >
-                            {g}
-                        </Button>
-                    )
-                })}
-            </div>
+            {tableByGuests ?
+                <div className='flex gap-2 overflow-auto scrollbar-thin'>
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18]?.map(g => {
+                        return (
+                            <Button
+                                key={g}
+                                className='h-12 min-w-16'
+                                variant={spareTablesFilter?.ppl === g ? 'default' : 'outline'}
+                                onClick={() => {
+                                    setSpareTablesFilter(prev => ({
+                                        ...prev,
+                                        guests: getBookingAmountPerTable(g),
+                                        ppl: g
+                                    }))
+                                    tableByGuests(g)
+                                }}
+                            >
+                                {g}
+                            </Button>
+                        )
+                    })}
+                </div>
+                :
+                <div className='grid grid-cols-4 gap-2'>
+                    {[2, 4, 6, 8]?.map(g => {
+                        return (
+                            <Button
+                                key={g}
+                                className='h-12'
+                                variant={spareTablesFilter?.guests === g ? 'default' : 'outline'}
+                                onClick={() => {
+                                    setSpareTablesFilter(prev => ({
+                                        ...prev,
+                                        guests: g
+                                    }))
+                                }}
+                            >
+                                {g}
+                            </Button>
+                        )
+                    })}
+                </div>
+            }
             <div className='grid grid-cols-2 gap-2 p-2 bg-background-soft scrollbar-thin overflow-auto'>
                 {getTables()?.map(table => {
                     return (

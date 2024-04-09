@@ -4,8 +4,8 @@ import { useState } from "react"
 
 //components
 import { rolesColumnsTable } from "./_components/rolesColumns"
+import { BasicTable } from "@/components/common/basicTable"
 import CreateRoleForm from "./_components/createRoleForm"
-import { RolesTables } from "./_components/rolesTable"
 import Wrap from "@/components/common/wrap"
 
 //hooks
@@ -127,7 +127,7 @@ export default function Roles() {
                 className: 'flex justify-end'
             }}
         >
-            <RolesTables
+            <BasicTable
                 columns={rolesColumnsTable({
                     onDelete,
                     redirectTo: push,
