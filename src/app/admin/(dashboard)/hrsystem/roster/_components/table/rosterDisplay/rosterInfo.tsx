@@ -87,25 +87,29 @@ export default function RosterInfo({ roster, user, forms, shifts, duties, create
                     <Button className='w-full h-12' variant='green'>
                         Clock In - {roster?.clock_in && formatDate({
                             date: new Date(roster?.clock_in),
-                            f: 'HH:mm:ss'
+                            f: 'HH:mm:ss',
+                            iso: false
                         })}
                     </Button>
                     <Button className='w-full h-12' variant='orange'>
                         Break In - {roster?.break_in && formatDate({
                             date: new Date(roster?.break_in),
-                            f: 'HH:mm:ss'
+                            f: 'HH:mm:ss',
+                            iso: false
                         })}
                     </Button>
                     <Button className='w-full h-12' variant='yellow'>
                         Break Out - {roster?.break_out && formatDate({
                             date: new Date(roster?.break_out),
-                            f: 'HH:mm:ss'
+                            f: 'HH:mm:ss',
+                            iso: false
                         })}
                     </Button>
                     <Button className='w-full h-12' variant='destructive'>
                         Clock Out - {roster?.clock_out && formatDate({
                             date: new Date(roster?.clock_out),
-                            f: 'HH:mm:ss'
+                            f: 'HH:mm:ss',
+                            iso: false
                         })}
                     </Button>
                     {(shifts && duties && roster && user && isUserAuthorized(
