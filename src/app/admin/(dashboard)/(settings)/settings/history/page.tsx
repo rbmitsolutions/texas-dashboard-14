@@ -11,7 +11,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { historyColumnsTable } from "./_components/historyColumns"
-import { HistoryTables } from "./_components/historyTable"
+import { BasicTable } from "@/components/common/basicTable"
 import Wrap from "@/components/common/wrap"
 
 //hooks
@@ -121,7 +121,7 @@ export default function Roles() {
                 )
             }}
         >
-            <HistoryTables
+            <BasicTable
                 columns={historyColumnsTable()}
                 data={history?.data || []}
             />

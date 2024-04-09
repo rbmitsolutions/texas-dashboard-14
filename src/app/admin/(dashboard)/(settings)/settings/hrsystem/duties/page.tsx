@@ -2,8 +2,8 @@
 
 //components
 import { dutiesColumnsTable } from "./_components/dutiesColumns"
+import { BasicTable } from "@/components/common/basicTable"
 import CreateDutyForm from "./_components/createDutyForm"
-import { DutiesTables } from "./_components/dutiesTable"
 import Wrap from "@/components/common/wrap"
 
 //hooks
@@ -57,7 +57,7 @@ export default function Duties() {
         query: 'DUTIES',
         toRefetch
     })
-    
+
     return (
         <Wrap
             header={{
@@ -75,7 +75,7 @@ export default function Duties() {
                 className: 'flex justify-end'
             }}
         >
-            <DutiesTables
+            <BasicTable
                 columns={dutiesColumnsTable({
                     onDelete
                 })}

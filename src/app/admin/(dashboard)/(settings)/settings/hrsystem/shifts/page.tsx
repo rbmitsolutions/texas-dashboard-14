@@ -3,7 +3,7 @@
 //components
 import { shiftsColumnsTable } from "./_components/shiftColumns"
 import CreateShiftForm from "./_components/createShiftForm"
-import { ShiftsTables } from "./_components/shiftTable"
+import { BasicTable } from "@/components/common/basicTable"
 import Wrap from "@/components/common/wrap"
 
 //hooks
@@ -55,7 +55,7 @@ export default function Shifts() {
                 pagination: {
                     onPageChange: (pagination: IQueryPagination) => setShiftsParams(prev => ({
                         shifts: {
-                            all:{
+                            all: {
                                 pagination
                             }
                         }
@@ -72,7 +72,7 @@ export default function Shifts() {
                 className: 'flex justify-end'
             }}
         >
-            <ShiftsTables
+            <BasicTable
                 columns={shiftsColumnsTable({
                     onDelete
                 })}

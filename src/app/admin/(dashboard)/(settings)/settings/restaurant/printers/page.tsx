@@ -1,9 +1,13 @@
 'use client'
 import Wrap from "@/components/common/wrap";
-import { useDELETERestaurantDataHooks, useGETRestaurantDataHooks, usePOSTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
-import { PrintersTables } from "./_components/printersTable";
+
+//components
 import { PrintersColumnsTable } from "./_components/printersColumns";
 import CreatePrintersForm from "./_components/createPrintersForm";
+import { BasicTable } from "@/components/common/basicTable";
+
+//hooks
+import { useDELETERestaurantDataHooks, useGETRestaurantDataHooks, usePOSTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
 
 export default function PrintersSettings() {
     const {
@@ -68,7 +72,7 @@ export default function PrintersSettings() {
                     isLoading={isPrinterLoading}
                     className='rounded-xl border-2 p-4'
                 >
-                    <PrintersTables
+                    <BasicTable
                         columns={PrintersColumnsTable({
                             onDelete: (id: string) => deletePrinter({
                                 printer: {

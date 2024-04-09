@@ -1,7 +1,7 @@
 'use client'
 //components
 import { sectionsColumnsTable } from "./_components/sectionsColumnsTable"
-import { SectionsTable } from "./_components/sectionsTable"
+import { BasicTable } from "@/components/common/basicTable"
 import AddSection from "./_components/addSection"
 import { Button } from "@/components/ui/button"
 import Icon from "@/common/libs/lucida-icon"
@@ -247,7 +247,7 @@ export default function Sections() {
                     className: 'grid grid-cols-1 gap-4 md:grid-cols-[1fr,auto]'
                 }}
             >
-                <SectionsTable
+                <BasicTable
                     columns={sectionsColumnsTable({
                         addTable,
                         deleteTable,

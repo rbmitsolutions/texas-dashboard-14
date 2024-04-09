@@ -3,7 +3,7 @@
 //components
 import { departamentsColumnsTable } from "./_components/departmentsColumns"
 import CreateDepartamentForm from "./_components/createDepartamentForm"
-import { DepartamentsTables } from "./_components/departmentsTable"
+import { BasicTable } from "@/components/common/basicTable"
 import Wrap from "@/components/common/wrap"
 
 //hooks
@@ -63,7 +63,7 @@ export default function Departaments() {
                 className: 'flex justify-end'
             }}
         >
-            <DepartamentsTables
+            <BasicTable
                 columns={departamentsColumnsTable({
                     onDelete
                 })}
