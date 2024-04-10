@@ -9,7 +9,7 @@ export const CreateBookingFormSchema = z.object({
     name: z.string().min(1, "Name is required"),
     surname: z.string().min(1, "Surname is required"),
     contact_number: z.string().min(10, "000 000 0000"),
-    email: z.string().email("Invalid email address").optional(),
+    email: z.string(),
     table_id: z.string().optional()
 });
 

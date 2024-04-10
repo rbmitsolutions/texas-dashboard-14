@@ -15,14 +15,6 @@ interface OrderControllerColumnsTableProps {
 export const OrderControllerColumnsTable = ({
 }: OrderControllerColumnsTableProps): ColumnDef<IOrderController>[] => {
     return [
-        // {
-        //     id: "number",
-        //     accessorKey: "Number",
-        //     size: 40,
-        //     cell: ({ row }) => {
-        //         return row?.original?.number
-        //     }
-        // },
         {
             id: "created_at",
             accessorKey: "Date / Time",

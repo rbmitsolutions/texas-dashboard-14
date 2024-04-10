@@ -41,9 +41,6 @@ export default function FullOrderController({ orderController, orderSumary, prin
                     >
                         {orderController?.pass}
                     </Button>
-                    <Button>
-                        {orderController?.number}
-                    </Button>
                 </div>
             </div>
             {orderController?.table &&

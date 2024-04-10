@@ -72,6 +72,7 @@ interface BookingButtonProps {
 
 export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth, createBooking, clients, setGETClientsParams }: BookingButtonProps): JSX.Element {
     const [isOpen, setIsOpen] = useState(false)
+    const [selectDateIsOpen, setSelectDateIsOpen] = useState<boolean>(false)
     const { emit } = useSocketIoHooks()
 
     const form = useForm<CreateBookingFormSchemaType>({
@@ -96,10 +97,6 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
 
     const handleUpdateClientForm = (client: IClient) => {
         if (form.watch('contact_number') === client?.contact_number) {
-            form.setValue('contact_number', '')
-            form.setValue('name', '')
-            form.setValue('surname', '')
-            form.setValue('email', '')
             return
         } else {
             form.setValue('contact_number', client?.contact_number)
@@ -366,7 +363,7 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
                                 <FormItem>
                                     <FormLabel>Email</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Email" type='email'{...field} />
+                                        <Input placeholder="Email" type='email'{...field} value={field.value || ''} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -378,7 +375,9 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
                                     <FormLabel>Date</FormLabel>
-                                    <Popover>
+                                    <Popover
+                                        open={selectDateIsOpen}
+                                    >
                                         <PopoverTrigger asChild>
                                             <FormControl>
                                                 <Button
@@ -387,6 +386,7 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
                                                         "w-full pl-3 text-left font-normal bg-background-soft",
                                                         !field.value && "text-muted-foreground"
                                                     )}
+                                                    onClick={() => setSelectDateIsOpen(!selectDateIsOpen)}
                                                 >
                                                     {field.value ? (
                                                         formatDate({
@@ -407,6 +407,7 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
                                                 onSelect={(e) => {
                                                     if (e) field.onChange(e)
                                                     form.setValue('time', '')
+                                                    setSelectDateIsOpen(false)
                                                 }}
                                                 initialFocus
                                             />

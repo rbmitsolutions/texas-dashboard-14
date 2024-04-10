@@ -1,6 +1,9 @@
 import Icon from "@/common/libs/lucida-icon"
 import { UseMutateFunction } from "react-query"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+
+//libs
+import { convertCentsToEuro } from "@/common/utils/convertToEuro"
 
 //components
 import {
@@ -11,12 +14,12 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import IconText from "@/components/common/iconText"
+import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 //hooks
-import { convertCentsToEuro } from "@/common/utils/convertToEuro"
-import { Textarea } from "@/components/ui/textarea"
+import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 
 //interfaces
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
@@ -24,37 +27,35 @@ import { IGiftCards } from "@/common/types/restaurant/giftcard.interface"
 import { IToken } from "@/common/types/auth/auth.interface"
 
 interface GiftCardDialogProps {
-    giftcard: IGiftCards
-    updateGiftcard: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
+    giftcardId?: string
+    giftcard?: IGiftCards
+    updateGiftcard?: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
     user: IToken
 }
 
-export default function GiftcardDialog({ giftcard, updateGiftcard, user }: GiftCardDialogProps) {
+export default function GiftcardDialog({ giftcardId, giftcard, updateGiftcard, user }: GiftCardDialogProps) {
+    const [card, setCard] = useState<IGiftCards | null>(giftcard || null)
     const [isOpen, setIsOpen] = useState(false)
     const [code, setCode] = useState('')
 
-    // const {
-    //     companyAllTransacations: transactions
-    // } = useGETCompanyDataHooks({
-    //     query: 'TRANSACTIONS',
-    //     defaultParams: {
-    //         transactions: {
-    //             all: {
-    //                 direction: {
-    //                     in: [TransactionsDirection.VOUCHER]
-    //                 },
-    //                 gift_card_id: giftcard.id,
-    //                 pagination: {
-    //                     take: 50,
-    //                     skip: 0
-    //                 }
-    //             }
-    //         },
-    //     },
-    //     UseQueryOptions: {
-    //         enabled: isOpen
-    //     }
-    // })
+    useGETRestaurantDataHooks({
+        query: 'GIFTCARD',
+        defaultParams: {
+            giftcards: {
+                byId: {
+                    id: giftcardId!
+                }
+            }
+        },
+        UseQueryOptions: {
+            onSuccess: (data) => {
+                console.log('fetch')
+                console.log(data)
+                setCard(data as IGiftCards)
+            },
+            enabled: (isOpen && giftcardId) ? true : false,
+        }
+    })
 
     const onOpenChange = () => {
         setIsOpen(!isOpen)
@@ -62,6 +63,9 @@ export default function GiftcardDialog({ giftcard, updateGiftcard, user }: GiftC
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+
+        if (!updateGiftcard || !giftcard || !user) return
+
         await updateGiftcard({
             giftcard: {
                 one: {
@@ -95,17 +99,18 @@ export default function GiftcardDialog({ giftcard, updateGiftcard, user }: GiftC
                 </SheetHeader>
 
                 <div className="flex-col-container">
+
                     <div className='flex flex-col gap-1'>
                         <strong>Code</strong>
-                        {giftcard?.code ?
+                        {card?.code ?
                             <IconText
                                 icon='CreditCard'
-                                text={giftcard?.code || 'N/A'}
+                                text={card?.code || 'N/A'}
                             />
                             :
-                            <form 
-                            onSubmit={(e) => handleSubmit(e)}
-                            className='flex items-center gap-4'
+                            <form
+                                onSubmit={(e) => handleSubmit(e)}
+                                className='flex items-center gap-4'
                             >
                                 <Input
                                     value={code}
@@ -128,53 +133,62 @@ export default function GiftcardDialog({ giftcard, updateGiftcard, user }: GiftC
                         <strong>From</strong>
                         <IconText
                             icon='User'
-                            text={`${giftcard?.name} ${giftcard?.last_name}` || 'N/A'}
+                            text={`${card?.name} ${card?.last_name}` || 'N/A'}
                         />
                         <IconText
                             icon='Phone'
-                            text={giftcard?.contact_number || 'N/A'}
+                            text={card?.contact_number || 'N/A'}
                         />
                         <IconText
                             icon='Mail'
-                            text={giftcard?.email || 'N/A'}
+                            text={card?.email || 'N/A'}
                         />
                     </div>
                     <div className='flex flex-col gap-1'>
                         <strong>To</strong>
                         <IconText
                             icon='User'
-                            text={giftcard?.name_to || 'N/A'}
+                            text={card?.name_to || 'N/A'}
                         />
                         <IconText
                             icon='MapPin'
-                            text={giftcard?.address_to || 'N/A'}
+                            text={card?.address_to || 'N/A'}
                         />
                         <IconText
                             icon='MapPin'
-                            text={giftcard?.address_2_to || 'N/A'}
+                            text={card?.address_2_to || 'N/A'}
                         />
                         <IconText
                             icon='MapPin'
-                            text={giftcard?.city_to || 'N/A'}
+                            text={card?.city_to || 'N/A'}
                         />
                         <IconText
                             icon='MapPin'
-                            text={giftcard?.country_to || 'N/A'}
+                            text={card?.country_to || 'N/A'}
                         />
                         <IconText
                             icon='MapPin'
-                            text={giftcard?.eircode_to || 'N/A'}
+                            text={card?.eircode_to || 'N/A'}
                         />
-                    </div>
-                    <div className='flex flex-col gap-1'>
-                        <strong>Total</strong>
-                        {convertCentsToEuro(giftcard?.value || 0)}
                     </div>
                     <Textarea
-                        defaultValue={giftcard?.message || 'N/A'}
+                        defaultValue={card?.message || 'N/A'}
                         readOnly
                         className='h-40 resize-none'
                     />
+                    <div className='flex flex-col gap-1'>
+                        <strong>Total</strong>
+                        {convertCentsToEuro(card?.value || 0)}
+                        <strong className='mt-4'>Spent</strong>
+                        {convertCentsToEuro(card?.spent || 0)}
+
+                        <div className='flex-col-container items-center w-full'>
+                            <strong className='mt-4 text-xl'>Remain</strong>
+                            <strong className='text-3xl'>
+                                {convertCentsToEuro(Number(card?.value || 0) - Number(card?.spent || 0))}
+                            </strong>
+                        </div>
+                    </div>
                 </div>
             </SheetContent>
         </Sheet>

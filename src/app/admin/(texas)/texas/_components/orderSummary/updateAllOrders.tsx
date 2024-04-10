@@ -60,13 +60,6 @@ export default function UpdateAllOrderStatus({ orderController, onUpdate }: Upda
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
-                <DialogHeader>
-                    <DialogTitle className='capitalize'>
-                        <Button>
-                            {orderController?.number}
-                        </Button>
-                    </DialogTitle>
-                </DialogHeader>
                 <div className='flex-col-container'>
                     <i>
                         This action will only modify the orders with the status &ldquo;Ordered.&ldquo;
