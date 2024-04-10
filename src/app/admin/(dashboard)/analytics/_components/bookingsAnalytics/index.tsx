@@ -275,8 +275,6 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
         }
     })
 
-    console.log(bookingsGuestsData)
-
     const totalGuests = bookingsGuestsData?.reduce((acc: number, item: IDataBookingGuets) => acc + (Number(item?.amount_of_people) * item?._count._all), 0)
 
     return (
