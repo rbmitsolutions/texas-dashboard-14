@@ -17,8 +17,8 @@ import { Button } from "@/components/ui/button"
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface";
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface";
-import { IOrder, OrderStatus } from "@/common/types/restaurant/order.interface";
 import { IMenu, IMenuSection } from "@/common/types/restaurant/menu.interface";
+import { IOrder } from "@/common/types/restaurant/order.interface";
 import { ICreateNewOrder } from "@/store/restaurant/order";
 
 export interface IOrderSummary {
@@ -51,7 +51,6 @@ export const OrderSummary = ({ order, updateOrder, menuSections, splitBill, upda
 
     return (
         sortMenuSections(menuSections)?.map(s => {
-
             const orders = order?.filter(o => s?.title?.includes(o?.mn_section as string)).sort((a, b) => {
                 return a?.menu_short_title?.localeCompare(b?.menu_short_title)
             })

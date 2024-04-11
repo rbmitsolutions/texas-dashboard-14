@@ -6,7 +6,7 @@ import { useState } from "react"
 import Icon from "@/common/libs/lucida-icon"
 
 //components
-import { getOrderStatusVariant } from "@/common/libs/restaurant/order"
+import { getOrderStatusVariant, getOrderTotal } from "@/common/libs/restaurant/order"
 import { IOrder, OrderStatus } from "@/common/types/restaurant/order.interface"
 import AuthDialog from "@/components/common/authDialog"
 import { Button } from "@/components/ui/button"
@@ -54,6 +54,7 @@ export default function UpdateOrderStatus({ order, onUpdate, createOrder }: Upda
                     data: {
                         quantity: order?.quantity,
                         status: order?.status,
+                        total: order?.total,
                     }
                 }
             }
@@ -81,6 +82,7 @@ export default function UpdateOrderStatus({ order, onUpdate, createOrder }: Upda
                             mn_section: order?.mn_section,
                             mn_type: order?.mn_type,
                             to_print_ips: order?.to_print_ips,
+                            total: order?.total
                         }],
                         order_controller: {
                             waiter: token?.name,
@@ -125,6 +127,30 @@ export default function UpdateOrderStatus({ order, onUpdate, createOrder }: Upda
 
         if (!selectedTable) {
             await handleUpdate(update)
+        }
+    }
+
+    const handleUpdateOrderQuantity = async (order: IOrder, direction: 'plus' | 'minus') => {
+        if (direction === 'plus') {
+            setUpdatOrder({
+                ...order,
+                quantity: order?.quantity + 1,
+                total: getOrderTotal({
+                    ...order,
+                    quantity: order?.quantity + 1
+                })
+            })
+        }
+
+        if (direction === 'minus') {
+            setUpdatOrder({
+                ...order,
+                quantity: order?.quantity - 1,
+                total: getOrderTotal({
+                    ...order,
+                    quantity: order?.quantity - 1
+                })
+            })
         }
     }
 
@@ -187,14 +213,14 @@ export default function UpdateOrderStatus({ order, onUpdate, createOrder }: Upda
                                 <div className='flex items-center'>
                                     <Button
                                         disabled={updateOrder?.quantity === 1}
-                                        onClick={() => setUpdatOrder({ ...updateOrder, quantity: updateOrder?.quantity - 1 })}
+                                        onClick={() => handleUpdateOrderQuantity(updateOrder, 'minus')}
                                         size='iconExSm'
                                     >
                                         <Icon name='Minus' size={14} />
                                     </Button>
                                     <span className='text-center w-8'>{updateOrder?.quantity}</span>
                                     <Button
-                                        onClick={() => setUpdatOrder({ ...updateOrder, quantity: updateOrder?.quantity + 1 })}
+                                        onClick={() => handleUpdateOrderQuantity(updateOrder, 'plus')}
                                         size='iconExSm'
                                     >
                                         <Icon name='Plus' size={14} />

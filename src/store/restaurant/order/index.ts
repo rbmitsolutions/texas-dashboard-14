@@ -1,3 +1,4 @@
+import { getOrderTotal } from '@/common/libs/restaurant/order';
 import { OrderStatus } from '@/common/types/restaurant/order.interface';
 import { create, } from 'zustand';
 
@@ -20,6 +21,8 @@ export interface ICreateNewOrder {
     mn_section: string
 
     price: number
+    total: number
+
     add_ons: IAddOnsCreateOrder[]
 
     menu: string,
@@ -50,17 +53,24 @@ export const useOrderStore = create<OrderStateProps>((set): OrderStateProps => (
 
         if (orderExists) {
             const addQuantity = orderExists.quantity + order.quantity
-            return { order: state.order.map(o => o.id === order.id ? { ...o, quantity: addQuantity } : o) }
+            const newOrder = { ...orderExists, quantity: addQuantity, total: getOrderTotal({ ...orderExists, quantity: addQuantity }) }
+            return { order: state.order.map(o => o.id === order.id ? newOrder : o) }
         }
+
         return {
-            order: [...state.order, order]
+            order: [...state.order, {
+                ...order,
+                total: getOrderTotal(order)
+            }]
         }
     }),
     updateOrderQuantity: (order, incrise) => set((state) => {
         const orderExists = state.order.find(o => o.id === order.id)
+        
         if (orderExists) {
             const quantity = incrise ? orderExists.quantity + 1 : orderExists.quantity - 1
-            return { order: state.order.map(o => o.id === order.id ? { ...o, quantity } : o) }
+            const newOrder = { ...orderExists, quantity, total: getOrderTotal({ ...orderExists, quantity }) }
+            return { order: state.order.map(o => o.id === order.id ? newOrder : o) }
         }
 
         return { order: state.order }

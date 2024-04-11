@@ -48,7 +48,8 @@ export interface ICreateOrder {
   mn_section: string
 
   price: number
-
+  total: number
+  
   menu: string,
   menu_id: string
   menu_short_title: string
@@ -68,6 +69,7 @@ export interface IPOSTOrderBody {
     mn_section: string
 
     price: number
+    total: number
 
     menu: string,
     menu_id: string

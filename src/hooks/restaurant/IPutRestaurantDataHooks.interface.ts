@@ -61,6 +61,7 @@ export type IOrderPut = {
     quantity?: number;
 
     price?: number;
+    total?: number;
     description?: string;
 
     menu?: string;

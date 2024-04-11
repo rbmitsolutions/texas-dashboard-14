@@ -16,7 +16,7 @@ import LastOrders from "./lastOrders"
 
 //interface
 import { IGETMenuOrderSystemResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
-import { ISection, ITable, TableMealStatus } from "@/common/types/restaurant/tables.interface"
+import { ITable, TableMealStatus } from "@/common/types/restaurant/tables.interface"
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface"
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 import { IOrder, IOrderController } from "@/common/types/restaurant/order.interface"
@@ -39,12 +39,11 @@ interface RightOrderDisplayProps {
     createOrder: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>
     menuSections: IMenuSection[]
     orderControllers: IOrderController[]
-    updateOrder: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
     printers: IPrinters[]
     updateTable: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
 }
 
-export default function RightOrderDisplay({ order, resetOrder, menu, updateOrderQuantity, deleteOrder, replaceOrder, table, createOrder, menuSections, orderControllers, updateOrder, printers, updateTable }: RightOrderDisplayProps) {
+export default function RightOrderDisplay({ order, resetOrder, menu, updateOrderQuantity, deleteOrder, replaceOrder, table, createOrder, menuSections, orderControllers, printers, updateTable }: RightOrderDisplayProps) {
     const [toPrint, setToPrint] = useState<boolean>(true)
     const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false)
     const { push } = useRouter()
@@ -54,7 +53,6 @@ export default function RightOrderDisplay({ order, resetOrder, menu, updateOrder
         setToPrint(true)
         setIsAuthDialogOpen(!isAuthDialogOpen)
     }
-
 
     const handleAuthDialogResponse = async (token: IToken) => {
         if (token) {
