@@ -7,19 +7,23 @@ import { ITransactions } from "@/common/types/company/transactions.interface"
 import { formatDate } from "@/common/libs/date-fns/dateFormat"
 import InfoBadge from "@/components/common/infoBadge"
 import { convertCentsToEuro } from "@/common/utils/convertToEuro"
+import GiftcardDialog from "../../../restaurant/giftcard/_components/giftcardDialog"
+import { IToken } from "@/common/types/auth/auth.interface"
 
 interface InTransactionsColumnsTableProps {
     showDescription?: boolean
+    user?: IToken
 }
 
 export const InTransactionsColumnsTable = ({
-    showDescription = false
+    showDescription = false,
+    user
 }: InTransactionsColumnsTableProps): ColumnDef<ITransactions>[] => {
     return [
         {
             id: "created_at",
             accessorKey: "Date / Time",
-            size: 40,
+            size: 140,
             cell: ({ row }) => {
                 return formatDate({
                     date: row?.original?.created_at,
@@ -92,5 +96,18 @@ export const InTransactionsColumnsTable = ({
                 return convertCentsToEuro(row?.original?.total)
             },
         },
+        {
+            id: 'actions',
+            accessorKey: 'Actions',
+            size: 100,
+            cell: ({ row }) => {
+                return <>
+                    {user && <GiftcardDialog
+                        giftcardId={row?.original?.gift_card_id}
+                        user={user}
+                    />}
+                </>
+            },
+        }
     ]
 }

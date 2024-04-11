@@ -18,3 +18,6 @@ export const CustomTooltip = ({ active, payload, label }: any) => {
     return null;
 }
 
+export const CustomLegend = (legend: string) => {
+    return <small className='text-foreground/50'>{legend}</small>
+}

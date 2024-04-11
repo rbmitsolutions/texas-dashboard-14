@@ -142,7 +142,9 @@ export interface IGETOrdersQuery {
     mn_section?: {
       in: string[]
     }
+
     menu_id?: string;
+    menu?: string
 
     include?: {
       order_controller?: "1";
@@ -233,6 +235,7 @@ export interface IGETOrderControllerQuery {
   };
   analytics?: {
     by?: OrderControllerScalarFieldEnum[];
+    totalByWaiter?: '1'
     count?: '1'
     date?: {
       gte: Date;

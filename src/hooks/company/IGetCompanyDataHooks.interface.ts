@@ -368,7 +368,8 @@ export interface IGETTransactionsQuery {
     client_id?: string;
 
     valid_by_id?: string;
-
+    valid_by?: string;
+    
     payee_key?: string;
 
     created_at?: {
@@ -409,7 +410,7 @@ export interface IGETTransactionsQuery {
     client_id?: string;
 
     valid_by_id?: string;
-
+  
     payee_key?: string;
 
     created_at?: {

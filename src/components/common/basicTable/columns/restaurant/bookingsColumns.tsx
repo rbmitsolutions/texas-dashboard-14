@@ -19,11 +19,11 @@ export const BookingsColumnsTable = ({ }: BookingsColumnsTableProps): ColumnDef<
         {
             id: "date",
             accessorKey: "Date",
-            size: 80,
+            size: 140,
             cell: ({ row }) => {
                 return formatDate({
-                    date: row?.original?.date,
-                    f: 'dd/MM/yyyy',
+                    date: row?.original?.updated_at,
+                    f: 'dd/MM/yyyy HH:mm',
                     iso: false
                 })
             }
@@ -31,7 +31,7 @@ export const BookingsColumnsTable = ({ }: BookingsColumnsTableProps): ColumnDef<
         {
             id: "client",
             accessorKey: "Client",
-            size: 80,
+            size: 120,
             cell: ({ row }) => {
                 return row?.original?.client?.name || ''
             }

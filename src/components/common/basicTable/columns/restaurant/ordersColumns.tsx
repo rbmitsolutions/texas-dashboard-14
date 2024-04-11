@@ -27,6 +27,14 @@ export const OrdersColumnsTable = ({ }: OrdersColumnsTableProps): ColumnDef<IOrd
             }
         },
         {
+            id: "menu",
+            accessorKey: "Title",
+            size: 80,
+            cell: ({ row }) => {
+                return row?.original?.menu
+            }
+        },
+        {
             id: "menu_short_title",
             accessorKey: "Short Title",
             size: 80,
@@ -69,7 +77,7 @@ export const OrdersColumnsTable = ({ }: OrdersColumnsTableProps): ColumnDef<IOrd
         {
             id: "created_at",
             accessorKey: "Date / Time",
-            size: 40,
+            size: 140,
             cell: ({ row }) => {
                 return formatDate({
                     date: row?.original?.created_at,

@@ -51,15 +51,7 @@ export default function ToPrintButton({ orderController, printers }: ToPrintButt
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
-                <DialogHeader>
-                    <DialogTitle className='capitalize'>
-                        <Button>
-                            {orderController?.number}
-                        </Button>
-                    </DialogTitle>
-                </DialogHeader>
                 <div>
-
                     <div className='grid grid-cols-3 gap-2'>
                         {printers?.map(p => {
                             return (

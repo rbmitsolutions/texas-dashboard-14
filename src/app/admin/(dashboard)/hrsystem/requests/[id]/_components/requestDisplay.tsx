@@ -77,7 +77,6 @@ export default function RequestDisplay({ request }: RequestDisplayProps): JSX.El
         })
     }
 
-    console.log(request?.dates_off)
     return (
         <div className='flex-col-container-center'>
             <div className={cn('h-80 w-full rounded-2xl bg-[url("/img/background.png")] bg-center bg-no-repeat bg-cover dark:grayscale ',)} />

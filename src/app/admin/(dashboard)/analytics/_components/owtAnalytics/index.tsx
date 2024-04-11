@@ -23,9 +23,8 @@ interface OwtAnalyticsProps {
 
 export interface IWaitressesData {
     waiter: string
-    _count: {
-        _all: number
-    },
+    total: number
+    orders: number
 }
 
 export default function OwtAnalytics({ date }: OwtAnalyticsProps) {
@@ -33,13 +32,14 @@ export default function OwtAnalytics({ date }: OwtAnalyticsProps) {
 
     const {
         restaurantOrderAnalytics: waitressesData,
+        isRestaurantDataFetching: isWaitressesDataFetching,
         setGETRestaurantDataParams: setWaitressesParams
     } = useGETRestaurantDataHooks({
         query: 'ORDER_CONTROLLER',
         defaultParams: {
             orderController: {
                 analytics: {
-                    by: ['waiter'],
+                    totalByWaiter: '1',
                     date: {
                         gte: date.from,
                         lte: date.to
@@ -125,7 +125,7 @@ export default function OwtAnalytics({ date }: OwtAnalyticsProps) {
         setWaitressesParams({
             orderController: {
                 analytics: {
-                    by: ['waiter'],
+                    totalByWaiter: '1',
                     date: {
                         gte: date.from,
                         lte: date.to
@@ -204,7 +204,8 @@ export default function OwtAnalytics({ date }: OwtAnalyticsProps) {
                         }}
                         title='Top Waiter'
                         value={topWaitress?.waiter}
-                        smallValue={(String(topWaitress?._count?._all)) + ' Orders'}
+                        smallValue={(String(topWaitress?.orders)) + ' Orders'}
+                        isLoading={isWaitressesDataFetching}
                     />
                 </WrapSelect>
                 <WrapSelect
@@ -228,7 +229,7 @@ export default function OwtAnalytics({ date }: OwtAnalyticsProps) {
                             name: 'Clock',
                         }}
                         title='Avg Table Time'
-                        value={convertMinutesToHoursAndMinutes(finishedTablesAvgTime?._avg?.average_minutes?.toFixed(0) || 0) || '0h 0m'}
+                        value={convertMinutesToHoursAndMinutes(finishedTablesAvgTime?._avg?.average_minutes?.toFixed(0) || 0) || '0h 0m'}  
                     />
 
                 </WrapSelect>
@@ -238,7 +239,6 @@ export default function OwtAnalytics({ date }: OwtAnalyticsProps) {
                     {renderOwtAnalytics(selected)}
                 </div>
             }
-
         </div>
     )
 }
