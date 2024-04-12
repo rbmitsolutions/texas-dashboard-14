@@ -54,12 +54,12 @@ export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuan
                 return
             }
 
-            const to_print_ips = menuItem?.to_print_ids?.map(printer => {
+            const to_print_ips: string[] = menuItem?.to_print_ids?.map(printer => {
                 const printerData = printers?.find(p => p.id === printer)
-                return printerData?.ip
+                return printerData?.ip || ''
             })
 
-            const newOrder = {
+            const newOrder: ICreateNewOrder = {
                 id: Math.random().toString(36).substring(7),
                 add_ons: [],
                 menu: menu?.title,
@@ -70,6 +70,7 @@ export function MenuOrderItem({ menu, menuData, order, setOrder, updateOrderQuan
                 status: OrderStatus.ORDERED,
                 mn_type: menu?.mn_type?.title,
                 mn_section: menu?.mn_type?.section?.title,
+                total: 0,
                 to_print_ips
             }
 

@@ -281,7 +281,6 @@ export default function Table({ params }: { params: { id: string } }) {
                         createOrder={createOrder}
                         menuSections={menuSections?.data}
                         orderControllers={orderControllers?.data || []}
-                        updateOrder={updateOrder}
                         printers={printers}
                         updateTable={updateTable}
                     />

@@ -21,6 +21,7 @@ export interface IOrder {
   mn_section: string;
 
   price: number;
+  total: number
 
   menu: string;
   menu_id: string;
@@ -41,7 +42,7 @@ export interface IOrderController {
   id: string;
   number: number
   pass: number
-  
+
   waiter: string;
   waiter_id: string;
 
@@ -53,6 +54,7 @@ export interface IOrderController {
   finished_table: IFinishedTable | null;
   finished_table_id: string | null;
 
+  total: number
   orders: IOrder[];
 
   created_at: Date;
