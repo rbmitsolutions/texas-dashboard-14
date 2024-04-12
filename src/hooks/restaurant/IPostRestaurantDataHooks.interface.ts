@@ -34,6 +34,8 @@ export interface IPOSTOrderControllerBody {
   waiter: string;
   waiter_id: string;
 
+  total: number;
+
   client_id: string;
 
   table_id: string;
@@ -49,7 +51,7 @@ export interface ICreateOrder {
 
   price: number
   total: number
-  
+
   menu: string,
   menu_id: string
   menu_short_title: string

@@ -45,7 +45,7 @@ export default function RichText({ description, onChange }: RichTextProps) {
                     </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-5xl">
-                    <div className="grid gap-4 py-4">
+                    <div className="grid gap-4 py-4 overflow-auto">
                         <Toolbar editor={editor} />
                         <EditorContent editor={editor} />
                     </div>

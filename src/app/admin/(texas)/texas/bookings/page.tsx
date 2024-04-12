@@ -17,6 +17,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import SendEmail, { SendEmailContacts } from "@/components/common/sendEmail";
+import SendSms, { SendSmsContacts } from "@/components/common/sendSms";
+import BookingAnalyticsDialog from "./_components/bookingsAnalytics";
 import { DatePicker } from "@/components/common/datePicker";
 import BookingDetails from "./_components/bookingDetails";
 import SearchInput from "@/components/common/searchInput";
@@ -34,13 +37,14 @@ import { useAuthHooks } from "@/hooks/useAuthHooks";
 
 //hooks
 import { useTablesStore } from "@/store/restaurant/tables";
+import { useSocketIoHooks } from "@/hooks/useSocketIoHooks";
 
 //interfaces
 import { BOOKING_STATUS, IBookingPageFilter, bookingPagefilter } from "@/common/libs/restaurant/bookings";
 import { isUserAuthorized } from "@/common/libs/user/isUserAuthorized";
 import { IBookingDays } from "@/common/types/restaurant/config.interface";
 import { Permissions } from "@/common/types/auth/auth.interface";
-import { useSocketIoHooks } from "@/hooks/useSocketIoHooks";
+import { IClient } from "@/common/types/restaurant/client.interface";
 
 const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
@@ -157,6 +161,66 @@ export default function BookingPage() {
         query: 'TIMES_OPEN',
     })
 
+    const getEmailBookingContacts = useCallback((): SendEmailContacts[] => {
+        let result: SendEmailContacts[] = []
+        const unique = new Map()
+
+        bookings?.data?.map(b => {
+            if (!unique.has(b?.client?.id) && b?.status === 'confirmed') {
+                unique.set(b?.client?.id, {
+                    id: b?.client?.id,
+                    name: b?.client?.name,
+                    email: b?.client?.email
+                })
+            } else {
+                if (b?.status !== 'canceled' && b?.status === 'confirmed') {
+                    const existing = unique.get(b?.client?.id)
+                    existing.id = b?.client?.id
+                    existing.name = b?.client?.name
+                    existing.email = b?.client?.email
+                }
+            }
+        }).flat() || []
+
+        unique?.forEach(c => result.push({
+            id: c?.id || 'No ID',
+            name: c?.name || 'No Name',
+            email: c?.email || 'No Email'
+        }))
+
+        return result
+    }, [bookings?.data])
+
+    const getSmsBookingContacts = useCallback((): SendSmsContacts[] => {
+        let result: SendSmsContacts[] = []
+        const unique = new Map()
+
+        bookings?.data?.map(b => {
+            if (!unique.has(b?.client?.id) && b?.status === 'confirmed') {
+                unique.set(b?.client?.id, {
+                    id: b?.client?.id,
+                    name: b?.client?.name,
+                    contact_number: b?.client?.contact_number
+                })
+            } else {
+                if (b?.status === 'confirmed') {
+                    const existing = unique.get(b?.client?.id)
+                    existing.id = b?.client?.id
+                    existing.name = b?.client?.name
+                    existing.contact_number = b?.client?.contact_number
+                }
+            }
+        }).flat() || []
+
+        unique?.forEach((c: IClient) => c?.valid_number && result.push({
+            id: c?.id || 'No ID',
+            name: c?.name || 'No Name',
+            contact_number: c?.contact_number || 'No Contact Number',
+        }))
+
+        return result
+    }, [bookings?.data])
+
     const onDateChange = useCallback((date: Date) => {
         setOpenDayParams(({
             openDays: {
@@ -201,7 +265,7 @@ export default function BookingPage() {
             if (isMessageToMe({ event: message?.event, listemTo: [SocketIoEvent.BOOKING] })) {
                 refetchBookings()
             }
-            
+
             if (isMessageToMe({ event: message?.event, listemTo: [SocketIoEvent.TABLE, SocketIoEvent.BOOKING_CONFIG] })) {
                 refetchOpenDay()
             }
@@ -214,6 +278,21 @@ export default function BookingPage() {
     return (
         <LayoutFrame
             user={user}
+            topNavigation={{
+                content: (
+                    <div className='flex-container items-center gap-2'>
+                        <SendSms
+                            contacts={getSmsBookingContacts()}
+                        />
+                        <SendEmail
+                            contacts={getEmailBookingContacts()}
+                        />
+                        <BookingAnalyticsDialog
+                            date={date}
+                        />
+                    </div>
+                )
+            }}
             navigation={{
                 icon: {
                     icon: 'Filter',

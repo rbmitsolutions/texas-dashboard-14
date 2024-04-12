@@ -76,7 +76,7 @@ export default function PrintBill({ tableId, finishedTableId, giftCardId }: Prin
             size='sm'
             type='button'
         >
-            <PrinterIcon size={14} />
+            <PrinterIcon size={12} />
         </Button>
     )
 }

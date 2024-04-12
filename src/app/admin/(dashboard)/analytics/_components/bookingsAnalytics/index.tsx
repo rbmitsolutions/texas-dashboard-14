@@ -20,7 +20,7 @@ import WrapSelect from "../wrapSelect"
 import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 
 //interface
-import { IDataBooking, IDataBookingGuets, IDataBookingTime, transformBookingData, transformBookingTimeData } from "./utils"
+import { IDataBooking, IDataBookingGuets, IDataBookingTime, ITransformBookingTimeReturn, transformBookingData, transformBookingTimeData } from "./utils"
 import { IBookingStatus, IBookings } from "@/common/types/restaurant/bookings.interface"
 import { EndPointsTypes } from "@/common/types/routers/endPoints.types"
 
@@ -264,8 +264,10 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
 
     const barChart = transformBookingData(bookingsData as IDataBooking[])
 
-    const lineChart = transformBookingTimeData(bookingsTimeData as IDataBookingTime[])
-
+    const lineChart = transformBookingTimeData(bookingsTimeData as IDataBookingTime[]).sort((a: ITransformBookingTimeReturn, b: ITransformBookingTimeReturn) => {
+        return a?.name.localeCompare(b?.name)
+    })
+    
     const radarChart = bookingsGuestsData?.map((item: IDataBookingGuets) => {
         return {
             name: item.amount_of_people,
@@ -273,7 +275,7 @@ export default function BookingsAnalytics({ date }: BookingsAnalyticsProps) {
             bookings: item?._count._all,
             guests: (Number(item?.amount_of_people) * item?._count._all)
         }
-    })
+    }).sort((a: any, b: any) => a?.name - b?.name)
 
     const totalGuests = bookingsGuestsData?.reduce((acc: number, item: IDataBookingGuets) => acc + (Number(item?.amount_of_people) * item?._count._all), 0)
 

@@ -11,6 +11,7 @@ import AuthDialog from "@/components/common/authDialog"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
+import ChangeGuests from "./changeGuests"
 import ChangeTable from "./changeTable"
 import LastOrders from "./lastOrders"
 
@@ -89,6 +90,8 @@ export default function RightOrderDisplay({ order, resetOrder, menu, updateOrder
             meal_status = TableMealStatus.PREPARING
         }
 
+        const ocTotal = order.reduce((acc, curr) => acc + curr.total, 0);
+
         await createOrder(
             {
                 order: {
@@ -99,6 +102,7 @@ export default function RightOrderDisplay({ order, resetOrder, menu, updateOrder
                             waiter_id: taken?.user_id,
                             client_id: table?.client_id as string || 'walk_in',
                             table_id: table?.id,
+                            total: ocTotal
                         },
                         update_table: {
                             id: table?.id,
@@ -151,7 +155,7 @@ export default function RightOrderDisplay({ order, resetOrder, menu, updateOrder
             />
 
             <div className='flex-col-container h-full'>
-                <div className='grid grid-cols-[auto,auto,auto,auto] items-center gap-2'>
+                <div className='grid grid-cols-[auto,auto,auto,auto,auto] items-center gap-2'>
                     <ChangeTable
                         updateTable={updateTable}
                         table={table}
@@ -162,10 +166,14 @@ export default function RightOrderDisplay({ order, resetOrder, menu, updateOrder
                         menuSections={menuSections}
                         printers={printers}
                     />
+                    <ChangeGuests
+                        table={table}
+                        updateTable={updateTable}
+                    />
                     <Button
                         variant={status === TableMealStatus.ALL_TOGETHER ? 'orange' : 'outline'}
-                        className='w-full h-12'
                         onClick={() => setStatus(prev => prev === TableMealStatus.ALL_TOGETHER ? undefined : TableMealStatus.ALL_TOGETHER)}
+                        size='sm'
                     >
                         All Together
                     </Button>

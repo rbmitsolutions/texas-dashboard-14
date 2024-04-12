@@ -21,6 +21,9 @@ import { IToken } from "@/common/types/auth/auth.interface";
 import { useRouter } from "next/navigation";
 import DefaultPrinter from "./defaultPrinter";
 interface LayoutFrameProps {
+    topNavigation?: {
+        content?: React.ReactNode
+    }
     navigation: {
         defaultPrinter?: IPrinters[]
         icon: {
@@ -46,7 +49,7 @@ interface LayoutFrameProps {
     user: IToken
 }
 
-export default function LayoutFrame({ navigation, user, rightNavigation, children }: LayoutFrameProps) {
+export default function LayoutFrame({ topNavigation, navigation, user, rightNavigation, children }: LayoutFrameProps) {
     const { push } = useRouter()
     const gridFrame = rightNavigation ? 'grid-cols-1 md:grid-cols-[200px,1fr,340px]' : 'grid-cols-1 md:grid-cols-[200px,1fr]'
     const defaultCss = 'h-screen p-4 scrollbar-thin overflow-auto'
@@ -67,6 +70,7 @@ export default function LayoutFrame({ navigation, user, rightNavigation, childre
                             />
                         }
                     </div>
+                    {topNavigation?.content && topNavigation?.content}
                     {navigation?.return &&
                         <Button
                             onClick={() => {

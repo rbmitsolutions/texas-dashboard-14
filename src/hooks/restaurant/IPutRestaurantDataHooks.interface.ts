@@ -275,6 +275,8 @@ export interface IPUTBookingsBody {
     review_id?: string;
     table_id?: string;
 
+    name?: string;
+    email?: string;
     status?: IBookingStatus;
     has_request?: boolean;
 
