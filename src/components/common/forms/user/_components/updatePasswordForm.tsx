@@ -21,14 +21,16 @@ import { Input } from "@/components/ui/input"
 //interface
 import { IPUTUserBody } from "@/hooks/user/IPutUserDataHooks.interface"
 import { IUser } from "@/common/types/user/user.interface"
+import { cn } from "@/common/libs/shadcn/utils"
 
 interface UpdatePasswordFormProps {
     user: IUser
     onUpdate: UseMutateFunction<any, any, IPUTUserBody, unknown>
+    isAdmin?: boolean
     alwaysOpen?: boolean
 }
 
-export default function UpdatePasswordForm({ user, onUpdate, alwaysOpen = false }: UpdatePasswordFormProps) {
+export default function UpdatePasswordForm({ user, onUpdate, alwaysOpen = false, isAdmin = false }: UpdatePasswordFormProps) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const form = useForm<ChangePasswordFormSchemaType>({
@@ -76,16 +78,12 @@ export default function UpdatePasswordForm({ user, onUpdate, alwaysOpen = false 
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Change Password</AlertDialogTitle>
-                    <AlertDialogDescription>
-
-                    </AlertDialogDescription>
-
                 </AlertDialogHeader>
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmitForm)}
                         className='flex-col-container gap-4'>
-                            <strong className="text-[12px]" >Password must contain at least one letter, one number, and one special character and it can not contain the word &apos;texas&apos;, &apos;texassteak&apos;, &apos;steakout&apos;, or &apos;texassteakout&apos;.</strong>
+                        <strong className="text-[12px]" >Password must contain at least one letter, one number, and one special character and it can not contain the word &apos;texas&apos;, &apos;texassteak&apos;, &apos;steakout&apos;, or &apos;texassteakout&apos;.</strong>
                         <FormField
                             control={form.control}
                             name="password"
@@ -118,19 +116,35 @@ export default function UpdatePasswordForm({ user, onUpdate, alwaysOpen = false 
                                 </FormItem>
                             )}
                         />
-                        <div className='flex justify-end gap-4'>
-                            <Button
-                                type="button"
-                                variant='secondary'
-                                className='text-sm'
-                                onClick={onOpenChange}
-                                disabled={alwaysOpen}
-                            >Cancel</Button>
-                            <Button
-                                type="submit"
-                                className='text-sm'
-                                leftIcon="Save"
-                            >Save</Button>
+                        <div className={cn('flex flex-col gap-4 sm:flex-row', (isAdmin && user?.status) === 'Working' ? 'justify-between' : 'justify-end')}>
+                            {(isAdmin && user?.status) === 'Working' &&
+                                <Button
+                                    variant='orange'
+                                    type='button'
+                                    onClick={async () => await onUpdate({
+                                        details: {
+                                            id: user?.id,
+                                            reset_password: '1'
+                                        }
+                                    })}
+                                >
+                                    Reset Password
+                                </Button>
+                            }
+                            <div className='flex-col-container sm:flex-row'>
+                                <Button
+                                    type="button"
+                                    variant='secondary'
+                                    className='text-sm'
+                                    onClick={onOpenChange}
+                                    disabled={alwaysOpen}
+                                >Cancel</Button>
+                                <Button
+                                    type="submit"
+                                    className='text-sm'
+                                    leftIcon="Save"
+                                >Save</Button>
+                            </div>
                         </div>
                     </form>
                 </Form>

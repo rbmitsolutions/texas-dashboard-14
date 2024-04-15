@@ -6,6 +6,7 @@ export interface IPUTUserDetailsBody {
     id: string
     name?: string;
     password?: string;
+    reset_password?: '1';
     status?: IUserStatus
     roster_password?: '1'
 

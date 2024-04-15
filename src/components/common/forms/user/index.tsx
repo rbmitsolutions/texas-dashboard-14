@@ -31,7 +31,11 @@ export default function UserProfile({ user, isAdmin, roles, onUpdate }: UserProf
         <div className='flex-col-container gap-4'>
             <ProfileForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
             <div className='grid-container grid-cols-1 sm:grid-cols-2 md:pl-64 md:grid-cols-[repeat(auto-fit,minmax(200px,200px))] md:mb-6'>
-                <UpdatePasswordForm user={user} onUpdate={onUpdate} />
+                <UpdatePasswordForm
+                    user={user}
+                    onUpdate={onUpdate}
+                    isAdmin={isAdmin}
+                />
                 {isAdmin &&
                     <>
                         <Button
