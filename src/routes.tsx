@@ -436,6 +436,33 @@ const routers: IRoute[] = [
     ],
   },
   {
+    path: "/admin/stock",
+    name: "Stock",
+    icon: <Icon name='Blocks' size={14} />,
+    layout: "/admin",
+    collapse: true,
+    authorization: [
+      Permissions.ADMIN,
+      Permissions.ADMIN_GHOST,
+      Permissions.STOCK_MANAGER
+    ],
+    auth_device: true,
+    items: [
+      {
+        name: "Suppliers",
+        path: "/suppliers",
+        icon: <Icon name='Building2' size={14} />,
+        layout: "/admin/stock",
+        authorization: [
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+          Permissions.STOCK_MANAGER
+        ],
+        auth_device: true,
+      },
+    ]
+  },
+  {
     name: "Clock in",
     path: "/clockin",
     icon: <Icon name='Clock10' size={14} />,

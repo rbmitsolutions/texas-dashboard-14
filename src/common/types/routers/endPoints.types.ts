@@ -87,4 +87,5 @@ export enum RedirectTo {
     TABLE_RECEPTION = '/admin/texas/reception',
     FORM_EDIT_PAGE = 'admin/hrsystem/forms',
     FINISHED_TABLE = '/admin/texas/reception/finishedTables',
+    SUPPLIER_PROFILE = '/admin/stock/suppliers',
 }
