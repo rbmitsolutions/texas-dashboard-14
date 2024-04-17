@@ -1,4 +1,4 @@
-import { IStockCategories, IStockItem, IStockProducts, IStockSubCategories, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface";
+import { IStockCategories, IStockItem, IStockOrders, IStockProducts, IStockSubCategories, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface";
 import { IPaginationResponse, IQueryPagination } from "@/common/types/settings.interface";
 
 export interface IGETAllIStockSuppliersResponse {
@@ -238,9 +238,46 @@ export interface IGETStockProductQuery {
   };
 }
 
-export type IGETStockResponse = IGETAllIStockSuppliersResponse | IStockSuppliers | IGETAllIStockItemResponse | IStockItem | IGETAllStockSupplierBankResponse | IStockSupplierBank | IGETAllStockSupplierContactsResponse | IStockSupplierContacts | IGETAllStockSupplierAutoOrderResponse | IStockSupplierAutoOrder | IGETAllStockCategoryResponse | IStockCategories | IGETAllStockSubCategoryResponse | IStockSubCategories | IGETAllStockProductsResponse | IStockProducts
+export interface IGETAllStockOrderResponse {
+  data: IStockOrders[];
+  pagination: IPaginationResponse
+}
 
-export type IStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT'
+export interface IGETStockOrderQuery {
+  all?: {
+    title?: string;
+    supplier?: string;
+
+    product_id?: string
+
+    delivery_date?: {
+      gte: string;
+      lte: string;
+    }
+
+    include?: {
+      product?: '1'
+      order_controller?: '1'
+    };
+    pagination?: IQueryPagination;
+    orderBy?: {
+      key: keyof IStockOrders;
+      order: "asc" | "desc";
+    };
+  },
+  byId?: {
+    id: string;
+    include?: {
+      product?: '1'
+      order_controller?: '1'
+    };
+  };
+}
+
+
+export type IGETStockResponse = IGETAllIStockSuppliersResponse | IStockSuppliers | IGETAllIStockItemResponse | IStockItem | IGETAllStockSupplierBankResponse | IStockSupplierBank | IGETAllStockSupplierContactsResponse | IStockSupplierContacts | IGETAllStockSupplierAutoOrderResponse | IStockSupplierAutoOrder | IGETAllStockCategoryResponse | IStockCategories | IGETAllStockSubCategoryResponse | IStockSubCategories | IGETAllStockProductsResponse | IStockProducts | IGETAllStockOrderResponse | IStockOrders
+
+export type IStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER'
 
 export interface IGETStockDataQuery {
   supplier?: IGETStockSuppliersQuery
@@ -251,5 +288,6 @@ export interface IGETStockDataQuery {
   category?: IGETStockCategoryQuery
   sub_category?: IGETStockSubCategoryQuery
   product?: IGETStockProductQuery
+  order?: IGETStockOrderQuery
 }
 

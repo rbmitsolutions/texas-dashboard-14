@@ -63,11 +63,23 @@ export interface IPOSTStockProductBody {
   item_id: string;
 }
 
+export interface IPOSTStockOrderBody {
+  title: string
+  supplier: string
+  product_id: string
+  product_quantity: number
+  total_quantity: number
+  deposit?: number
+  price_per_unit: number
+  vat: number
+  total: number
+  delivery_date?: Date
+  order_controller_id: string
+}
 
-export type IPOSTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT'
+export type IPOSTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER'
 
-export type IPOSTStockDataRerturn = IStockSuppliers | IStockItem | IStockSupplierBank | IStockSupplierContacts | IStockSupplierAutoOrder | IStockCategories | IStockSubCategories | IPOSTStockProductBody
-
+export type IPOSTStockDataRerturn = IStockSuppliers | IStockItem | IStockSupplierBank | IStockSupplierContacts | IStockSupplierAutoOrder | IStockCategories | IStockSubCategories | IPOSTStockProductBody | IPOSTStockOrderBody
 export interface IPOSTStockBody {
   supplier?: IPOSTStockSuppliersBody
   item?: IPOSTStockItemBody
@@ -77,4 +89,5 @@ export interface IPOSTStockBody {
   category?: IPOSTStockCategoryBody
   sub_category?: IPOSTStockSubCategoryBody
   product?: IPOSTStockProductBody
+  order?: IPOSTStockOrderBody
 }

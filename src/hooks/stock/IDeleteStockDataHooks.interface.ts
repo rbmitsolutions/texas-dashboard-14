@@ -24,4 +24,7 @@ export interface IDELETEStockDataBody {
   product?: {
     id: string;
   }
+  order?: {
+    id: string;
+  }
 }

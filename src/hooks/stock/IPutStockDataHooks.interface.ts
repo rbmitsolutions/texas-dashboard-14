@@ -81,8 +81,22 @@ export interface IPUTStockProductBody {
     item_id?: string;
 }
 
+export interface IPUTStockOrderBody {
+    id: string;
+    title?: string
+    supplier?: string
+    product_id?: string
+    product_quantity?: number
+    total_quantity?: number
+    deposit?: number
+    price_per_unit?: number
+    vat?: number
+    total?: number
+    delivery_date?: Date
+    order_controller_id?: string
+}
 
-export type IPUTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT'
+export type IPUTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER'
 
 export interface IPUTStockBody {
     supplier?: IPUTStockSuppliersBody
@@ -93,4 +107,5 @@ export interface IPUTStockBody {
     category?: IPUTStockCategoryBody
     sub_category?: IPUTStockSubCategoryBody
     product?: IPUTStockProductBody
+    order?: IPUTStockOrderBody
 }

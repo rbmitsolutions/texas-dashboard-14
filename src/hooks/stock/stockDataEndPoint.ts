@@ -81,4 +81,14 @@ export const stockEndPoint = {
         createSucess: 'Product created successfully!',
         createError: "Product creation failed!",
     },
+    ORDER: {
+        url: EndPointsTypes['STOCK_ORDER_ENDPOINT'],
+        queryParams: 'Order',
+        updateSucess: "Order updated successfully!",
+        updateError: "Order update failed!",
+        deleteSucess: "Order deleted successfully!",
+        deleteError: "Order delete failed!",
+        createSucess: 'Order created successfully!',
+        createError: "Order creation failed!",
+    }
 }

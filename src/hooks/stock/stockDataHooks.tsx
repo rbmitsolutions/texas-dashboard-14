@@ -8,11 +8,11 @@ import { AxiosRequestConfig } from "axios";
 import toast from "react-hot-toast";
 
 //interfaces
-import { IGETAllIStockItemResponse, IGETAllIStockSuppliersResponse, IGETAllStockCategoryResponse, IGETAllStockProductsResponse, IGETAllStockSubCategoryResponse, IGETAllStockSupplierAutoOrderResponse, IGETAllStockSupplierBankResponse, IGETAllStockSupplierContactsResponse, IGETStockDataQuery, IGETStockResponse, IStockDataQueryType } from "./IGetStockDataHooks.interface";
+import { IGETAllIStockItemResponse, IGETAllIStockSuppliersResponse, IGETAllStockCategoryResponse, IGETAllStockOrderResponse, IGETAllStockProductsResponse, IGETAllStockSubCategoryResponse, IGETAllStockSupplierAutoOrderResponse, IGETAllStockSupplierBankResponse, IGETAllStockSupplierContactsResponse, IGETStockDataQuery, IGETStockResponse, IStockDataQueryType } from "./IGetStockDataHooks.interface";
 import { IPOSTStockBody, IPOSTStockDataQueryType, IPOSTStockDataRerturn } from "./IPostStockDataHooks.interface";
 import { IDELETEStockDataBody, IDELETEStockDataQueryType } from "./IDeleteStockDataHooks.interface";
 import { IPUTStockBody, IPUTStockDataQueryType } from "./IPutStockDataHooks.interface";
-import { IStockCategories, IStockItem, IStockSubCategories, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface";
+import { IStockCategories, IStockItem, IStockOrders, IStockSubCategories, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface";
 
 interface IUseGETStockDataHooks {
     query: IStockDataQueryType,
@@ -90,6 +90,8 @@ export function useGETStockDataHooks({
         stockSubCategory: data as IStockSubCategories,
         stockAllProducts: data as IGETAllStockProductsResponse,
         stockProducts: data as IStockItem,
+        stockAllOrder: data as IGETAllStockOrderResponse,
+        stockOrder: data as IStockOrders,
 
         isStockDataFetching: isFetching,
         stockDataError: error ? true : false,
