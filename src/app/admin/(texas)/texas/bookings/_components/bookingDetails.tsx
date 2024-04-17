@@ -280,7 +280,7 @@ export default function BookingDetails({
                         />
                         <DeleteDialogButton
                             onDelete={() => handleDeleteBooking(booking?.id)}
-                            isDisabled={!isUserAuth || booking?.status === 'canceled' || booking?.status === 'arrived'}
+                            isDisabled={!isUserAuth}
                         />
                     </div>
                     {toSetTable &&

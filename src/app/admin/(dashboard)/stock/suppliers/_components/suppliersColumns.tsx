@@ -50,7 +50,7 @@ export const StockSuppliersColumnsTable = ({ }: StockSuppliersColumnsTableProps)
             cell: ({ row }) => {
                 return (
                     <div>
-                        <Icon name={row.original.auto_order_id ? 'Check' : 'X'} className={row.original.auto_order_id ? 'text-green-500' : 'text-red-500'} />
+                        <Icon name={row.original.auto_order ? 'Check' : 'X'} className={row.original.auto_order ? 'text-green-500' : 'text-red-500'} />
                     </div>
                 )
             }

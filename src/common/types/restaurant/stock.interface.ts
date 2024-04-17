@@ -4,11 +4,10 @@ export interface IStockSuppliers {
     address: string
 
     auto_order?: IStockSupplierAutoOrder
-    auto_order_id?: string
+    bank_details?: IStockSupplierBank
 
     orders_controller: IStockOrdersController[]
     contacts: IStockSupplierContacts[]
-    bank_details: IStockSupplierBank[]
     categories: IStockCategories[]
     products: IStockProducts[]
 
@@ -20,11 +19,10 @@ export interface IStockSuppliers {
 
 export interface IStockSupplierBank {
     id: string
-    title?: string
+    title: string
 
     iban: string
     bic: string
-    primary: boolean
 
     supplier_id: string
     supplier: IStockSuppliers
@@ -35,8 +33,8 @@ export interface IStockSupplierBank {
 
 export interface IStockSupplierContacts {
     id: string
-    name: string
 
+    name: string
     email?: string
     contact_numer?: string
 
@@ -50,6 +48,7 @@ export interface IStockSupplierContacts {
 
 export interface IStockSupplierAutoOrder {
     id: string
+
     week_day: string
     email: string
     last_order_date?: Date
@@ -81,7 +80,6 @@ export interface IStockSubCategories {
 
     created_at: Date
     updated_at: Date
-
 }
 
 
@@ -95,6 +93,7 @@ export enum StockItemTypes {
     GR = 'gr',
     ROLL = 'roll',
     PIECE = 'piece',
+    KW = 'kw',
 }
 
 export interface IStockItem {
@@ -136,10 +135,10 @@ export interface IStockProducts {
     updated_at: Date
 }
 
-export enum StockOrderStatus {
-    DELIVERED = 'delivered',
-    ORDERED = 'ordered',
-}
+// export enum StockOrderStatus {
+//     DELIVERED = 'delivered',
+//     ORDERED = 'ordered',
+// }
 export interface IStockOrders {
     id: string
     title: string   // ISotckItems / title
@@ -156,10 +155,9 @@ export interface IStockOrders {
     vat: number //default 0
     total: number // (product_quantity * price_per_unit) * vat  //default 0
 
-    order_date: Date
     delivery_date?: Date
 
-    status: StockOrderStatus // default ordered
+    // status: StockOrderStatus // default ordered
 
     order_controller: IStockOrdersController
     order_controller_id: string
@@ -182,3 +180,15 @@ export interface IStockOrdersController {
     created_at: Date
     updated_at: Date
 }
+
+// export interface IStockUsage {
+//     id: string
+//     usage: number
+//     date: Date
+
+//     item: IStockItem
+//     item_id: string
+
+//     created_at: Date
+//     updated_at: Date
+// }

@@ -93,44 +93,8 @@ const routers: IRoute[] = [
         collapse: false,
         auth_device: true,
       },
-      // {
-      //   name: "Bar / Desserts",
-      //   path: "",
-      //   icon: <Icon name='ChefHat' size={14} />,
-      //   // icon: <Wrench />,
-      //   layout: "/admin/texas/orders/bardessert",
-      //   authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST, Permissions.ORDERS],
-      //   collapse: false,
-      //   auth_device: true,
-      // },
     ]
   },
-  // {
-  //   name: "HACCP",
-  //   path: "",
-  //   icon: <Icon name='AArrowDown' size={14} />,
-  //   // icon: <Wrench />,
-  //   layout: "/admin/texas/waiters",
-  //   authorization: ["my_profile"],
-  //   collapse: false,
-  // },
-  // {
-  //   path: "/live",
-  //   name: "Restaurant Live",
-  //   icon: <Icon name='AArrowDown' size={14} />,
-  //   // icon: <ForkKnife />,
-  //   layout: "/admin",
-  //   authorization: ["admin", 'admin-ghost'],
-  // },
-  // {
-  //   path: "/analytic",
-  //   name: "Analytic",
-  //   layout: "/admin",
-  //   icon: <Icon name='AArrowDown' size={14} />,
-  //   // icon: <ChartBar />,
-  //   collapse: false,
-  //   authorization: ["admin", 'admin-ghost'],
-  // },
   {
     path: "/admin/restaurant",
     name: "Restaurant",
@@ -138,29 +102,13 @@ const routers: IRoute[] = [
     icon: <Icon name='ChefHat' size={14} />,
     collapse: true,
     auth_device: true,
-    // authorization: ["admin", 'admin-ghost', "booking_reader", "menu"],
     authorization: [
       Permissions.ADMIN,
       Permissions.ADMIN_GHOST,
       Permissions.MENU,
       Permissions.BOOKING_ADM
     ],
-    //need [menu-list, menu-create]
     items: [
-      // {
-      //   name: "Analytics",
-      //   path: "/analytics",
-      //   icon: <Icon name='AArrowDown' size={14} />,
-      //   layout: "/admin/restaurant",
-      //   authorization: ["admin", 'admin-ghost'],
-      // },
-      // {
-      //   name: "Bookings",
-      //   path: "/bookings",
-      //   icon: <Icon name='AArrowDown' size={14} />,
-      //   layout: "/admin/restaurant",
-      //   authorization: ["admin", 'admin-ghost', "booking_reader"],
-      // },
       {
         name: "Reviews",
         path: "/reviews",
@@ -207,29 +155,24 @@ const routers: IRoute[] = [
           Permissions.MENU
         ],
         auth_device: true,
-        //need [menu-list, menu-create]
         items: [
           {
             name: "All",
             path: "/all",
             icon: <Icon name='Utensils' size={14} />,
             layout: "/admin/restaurant/menu",
-            // authorization: ["admin", 'admin-ghost', 'menu'],
             authorization: [
               Permissions.ADMIN,
               Permissions.ADMIN_GHOST,
               Permissions.MENU
             ],
             auth_device: true,
-            //routes [GET-MENU, GET-MENU-SECTION]
-            //need [menu-list]
           },
           {
             name: "Create",
             path: "/create/section",
             icon: <Icon name='UtensilsCrossed' size={14} />,
             layout: "/admin/restaurant/menu",
-            // authorization: ["admin", 'admin-ghost', 'menu', 'menu-create'],
             authorization: [
               Permissions.ADMIN,
               Permissions.ADMIN_GHOST,
@@ -237,8 +180,6 @@ const routers: IRoute[] = [
               Permissions.MENU_CREATE
             ],
             auth_device: true,
-            //routes [GET-MENU, GET-PRINTERS GET-MENU_ADD_ONS, POST-MENU_ADD_ONS, PUT-MENU_ADD_ONS, DELETE-MENU_ADD_ONS, GET-MENU_SECTION, GET-MENU_TYPES, POST-MENU_SECTION, DELETE-MENU_SECTION, POST-MENU_TYPE, DELETE-MENU_TYPE]
-            //meed [menu-create]
           },
         ],
       },
@@ -250,14 +191,12 @@ const routers: IRoute[] = [
     icon: <Icon name='Building' size={14} />,
     layout: "/admin",
     collapse: true,
-    // authorization: ["admin", 'admin-ghost', 'haccp_admin'],
     authorization: [
       Permissions.ADMIN,
       Permissions.ADMIN_GHOST,
       Permissions.HACCP_ADMIN
     ],
     auth_device: true,
-    //need [user-list, user-list-filled, haccp-list, haccp-create, form-data-list]
     items: [
       {
         name: "Employees",
@@ -275,16 +214,7 @@ const routers: IRoute[] = [
             layout: "/admin/hrsystem/employees",
             authorization: [Permissions.ADMIN, Permissions.ADMIN_GHOST],
             auth_device: true,
-            //rotas [GET-USER, GET-DEPARTAMENTS]
-            //need [user-list]
           },
-          // {
-          //   name: "Performance",
-          //   path: "/performance",
-          //   icon: <Icon name='AArrowDown' size={14} />,
-          //   layout: "/admin/hrsystem/employees",
-          //   authorization: ["admin", 'admin-ghost'],
-          // },
           {
             name: "Hire",
             path: "/hire",
@@ -435,33 +365,33 @@ const routers: IRoute[] = [
       }
     ],
   },
-  {
-    path: "/admin/stock",
-    name: "Stock",
-    icon: <Icon name='Blocks' size={14} />,
-    layout: "/admin",
-    collapse: true,
-    authorization: [
-      Permissions.ADMIN,
-      Permissions.ADMIN_GHOST,
-      Permissions.STOCK_MANAGER
-    ],
-    auth_device: true,
-    items: [
-      {
-        name: "Suppliers",
-        path: "/suppliers",
-        icon: <Icon name='Building2' size={14} />,
-        layout: "/admin/stock",
-        authorization: [
-          Permissions.ADMIN,
-          Permissions.ADMIN_GHOST,
-          Permissions.STOCK_MANAGER
-        ],
-        auth_device: true,
-      },
-    ]
-  },
+  // {
+  //   path: "/admin/stock",
+  //   name: "Stock",
+  //   icon: <Icon name='Blocks' size={14} />,
+  //   layout: "/admin",
+  //   collapse: true,
+  //   authorization: [
+  //     Permissions.ADMIN,
+  //     Permissions.ADMIN_GHOST,
+  //     Permissions.STOCK_MANAGER
+  //   ],
+  //   auth_device: true,
+  //   items: [
+  //     {
+  //       name: "Suppliers",
+  //       path: "/suppliers",
+  //       icon: <Icon name='Building2' size={14} />,
+  //       layout: "/admin/stock",
+  //       authorization: [
+  //         Permissions.ADMIN,
+  //         Permissions.ADMIN_GHOST,
+  //         Permissions.STOCK_MANAGER
+  //       ],
+  //       auth_device: true,
+  //     },
+  //   ]
+  // },
   {
     name: "Clock in",
     path: "/clockin",

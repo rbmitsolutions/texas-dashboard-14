@@ -2,12 +2,15 @@
 
 //components
 import { StockSuppliersColumnsTable } from "@/app/admin/(dashboard)/stock/suppliers/_components/suppliersColumns"
+import NewSupplierDialog from "./_components/newSupplierDialog"
 import { BasicTable } from "@/components/common/basicTable"
 import Wrap from "@/components/common/wrap"
 
+//hooks
+import { useGETStockDataHooks, usePOSTStockDataHooks } from "@/hooks/stock/stockDataHooks"
+
 //interfaces
 import { IStockSuppliers } from "@/common/types/restaurant/stock.interface"
-import NewSupplierDialog from "./_components/newSupplierDialog"
 
 const data: IStockSuppliers[] = [
     {
@@ -25,7 +28,6 @@ const data: IStockSuppliers[] = [
             created_at: new Date(),
             updated_at: new Date()
         },
-        auto_order_id: 'undefined',
         categories: [{
             id: '1',
             title: 'Bar',
@@ -43,7 +45,7 @@ const data: IStockSuppliers[] = [
         }],
         orders_controller: [],
         contacts: [],
-        bank_details: [],
+        bank_details: undefined,
         products: [],
 
         spent: 0,
@@ -54,6 +56,35 @@ const data: IStockSuppliers[] = [
 ]
 
 export default function Suppliers() {
+
+    const {
+        stockAllSuppliers: suppliers,
+        refetchStockData: toRefetch
+    } = useGETStockDataHooks({
+        query: 'SUPPLIERS',
+        defaultParams: {
+            supplier: {
+                all: {
+                    pagination: {
+                        skip: 0,
+                        take: 20
+                    },
+                    include: {
+                        oc: '1',
+                        products: '1',
+                    }
+                }
+            }
+        }
+    })
+
+    const {
+        createStockData: createSupplier
+    } = usePOSTStockDataHooks({
+        query: 'SUPPLIERS',
+        toRefetch
+    })
+
     return (
         <Wrap
             header={{
@@ -77,14 +108,16 @@ export default function Suppliers() {
             actions={{
                 toRight: (
                     <div className='flex justify-end items-center gap-4'>
-                        <NewSupplierDialog />
+                        <NewSupplierDialog
+                            createSupplier={createSupplier}
+                        />
                     </div >
                 ),
             }}
         >
             <BasicTable
                 columns={StockSuppliersColumnsTable({})}
-                data={data}
+                data={suppliers?.data || data}
             />
         </Wrap>
     )

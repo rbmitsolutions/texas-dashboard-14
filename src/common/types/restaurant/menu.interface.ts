@@ -1,3 +1,5 @@
+import { IStockItem } from "./stock.interface"
+
 export enum Allergens {
   GLUTEN = 'Gluten',
   CRUSTACEANS = 'Crustaceans',
@@ -88,10 +90,21 @@ export interface IMenu {
 
   f_options: IMenu[] // sao as opcoes do produto que aparece no segundo pop-up (f: fallowing)
   fby_options: IMenu[] // optcões que estao seguindo esse produto (fby: fallowed by)
-  
+
   options_priority: number // ordem que vai aparecer no app
 
-  // stock_items: IStockItem[] 
+  to_make?: IMenuToMake[]
+
+  created_at: Date
+  updated_at: Date
+}
+
+export interface IMenuToMake {
+  id: string
+
+  item: IStockItem
+  quantity: number
+
   created_at: Date
   updated_at: Date
 }

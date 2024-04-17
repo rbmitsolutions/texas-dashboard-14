@@ -52,6 +52,12 @@ export enum EndPointsTypes {
     RESTAURANT_PRINTERS_ENDPOINT = '/restaurant/printers',
     RESTAURANT_MENU_ENDPOINT = '/restaurant/menu',
 
+    STOCK_SUPPLIERS_ENDPOINT = '/stock/supplier',
+    STOCK_SUPPLIER_BANK_ENDPOINT = '/stock/supplier-bank',
+    STOCK_SUPPLIER_CONTACT_ENDPOINT = '/stock/supplier-contact',
+    STOCK_SUPPLIER_AUTO_ORDER_ENDPOINT = '/stock/supplier-auto-order',
+    STOCK_ITEM_ENDPOINT = '/stock/item',
+
     APP_CLOCKIN_ENDPOINT = '/app/clockin',
     APP_DAYROSTER_ENDPOINT = '/app/dayroster',
 
