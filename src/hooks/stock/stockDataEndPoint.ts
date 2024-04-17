@@ -90,5 +90,15 @@ export const stockEndPoint = {
         deleteError: "Order delete failed!",
         createSucess: 'Order created successfully!',
         createError: "Order creation failed!",
-    }
+    },
+    ORDER_CONTROLLER: {
+        url: EndPointsTypes['STOCK_ORDER_CONTROLLER_ENDPOINT'],
+        queryParams: 'OrderController',
+        updateSucess: "Order Controller updated successfully!",
+        updateError: "Order Controller update failed!",
+        deleteSucess: "Order Controller deleted successfully!",
+        deleteError: "Order Controller delete failed!",
+        createSucess: 'Order Controller created successfully!',
+        createError: "Order Controller creation failed!",
+    },
 }

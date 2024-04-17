@@ -1,4 +1,4 @@
-export type IDELETEStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT'
+export type IDELETEStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER' | 'ORDER_CONTROLLER'
 export interface IDELETEStockDataBody {
   supplier?: {
     id: string;
@@ -25,6 +25,9 @@ export interface IDELETEStockDataBody {
     id: string;
   }
   order?: {
+    id: string;
+  }
+  order_controller?: {
     id: string;
   }
 }

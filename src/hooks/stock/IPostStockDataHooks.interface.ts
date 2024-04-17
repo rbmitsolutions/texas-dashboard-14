@@ -77,9 +77,17 @@ export interface IPOSTStockOrderBody {
   order_controller_id: string
 }
 
-export type IPOSTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER'
+export interface IPOSTStockOrderControllerBody {
+  paid: boolean;
+  supplier_id: string;
+  total: number
+}
 
-export type IPOSTStockDataRerturn = IStockSuppliers | IStockItem | IStockSupplierBank | IStockSupplierContacts | IStockSupplierAutoOrder | IStockCategories | IStockSubCategories | IPOSTStockProductBody | IPOSTStockOrderBody
+
+export type IPOSTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER' | 'ORDER_CONTROLLER'
+
+export type IPOSTStockDataRerturn = IStockSuppliers | IStockItem | IStockSupplierBank | IStockSupplierContacts | IStockSupplierAutoOrder | IStockCategories | IStockSubCategories | IPOSTStockProductBody | IPOSTStockOrderBody | IPOSTStockOrderControllerBody
+
 export interface IPOSTStockBody {
   supplier?: IPOSTStockSuppliersBody
   item?: IPOSTStockItemBody
@@ -90,4 +98,5 @@ export interface IPOSTStockBody {
   sub_category?: IPOSTStockSubCategoryBody
   product?: IPOSTStockProductBody
   order?: IPOSTStockOrderBody
+  order_controller?: IPOSTStockOrderControllerBody
 }

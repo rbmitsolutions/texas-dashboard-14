@@ -61,6 +61,7 @@ export enum EndPointsTypes {
     STOCK_SUB_CATEGORY_ENDPOINT = '/stock/sub-category',
     STOCK_PRODUCT_ENDPOINT = '/stock/product',
     STOCK_ORDER_ENDPOINT = '/stock/order',
+    STOCK_ORDER_CONTROLLER_ENDPOINT = '/stock/order-controller',
 
     APP_CLOCKIN_ENDPOINT = '/app/clockin',
     APP_DAYROSTER_ENDPOINT = '/app/dayroster',

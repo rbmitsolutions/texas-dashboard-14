@@ -96,7 +96,14 @@ export interface IPUTStockOrderBody {
     order_controller_id?: string
 }
 
-export type IPUTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER'
+export interface IPUTStockOrderControllerBody {
+    id: string;
+    paid?: boolean;
+    supplier_id?: string;
+    total?: number;
+}
+
+export type IPUTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER' | 'ORDER_CONTROLLER'
 
 export interface IPUTStockBody {
     supplier?: IPUTStockSuppliersBody
@@ -108,4 +115,5 @@ export interface IPUTStockBody {
     sub_category?: IPUTStockSubCategoryBody
     product?: IPUTStockProductBody
     order?: IPUTStockOrderBody
+    order_controller?: IPUTStockOrderControllerBody
 }
