@@ -51,4 +51,14 @@ export const stockEndPoint = {
         createSucess: 'Supplier Contact created successfully!',
         createError: "Supplier Contact creation failed!",
     },
+    CATEGORY: {
+        url: EndPointsTypes['STOCK_CATEGORY_ENDPOINT'],
+        queryParams: 'Category',
+        updateSucess: "Category updated successfully!",
+        updateError: "Category update failed!",
+        deleteSucess: "Category deleted successfully!",
+        deleteError: "Category delete failed!",
+        createSucess: 'Category created successfully!',
+        createError: "Category creation failed!",
+    },
 }
