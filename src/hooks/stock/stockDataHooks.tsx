@@ -8,11 +8,11 @@ import { AxiosRequestConfig } from "axios";
 import toast from "react-hot-toast";
 
 //interfaces
-import { IGETAllIStockItemResponse, IGETAllIStockSuppliersResponse, IGETAllStockCategoryResponse, IGETAllStockSupplierAutoOrderResponse, IGETAllStockSupplierBankResponse, IGETAllStockSupplierContactsResponse, IGETStockDataQuery, IGETStockResponse, IStockDataQueryType } from "./IGetStockDataHooks.interface";
+import { IGETAllIStockItemResponse, IGETAllIStockSuppliersResponse, IGETAllStockCategoryResponse, IGETAllStockSubCategoryResponse, IGETAllStockSupplierAutoOrderResponse, IGETAllStockSupplierBankResponse, IGETAllStockSupplierContactsResponse, IGETStockDataQuery, IGETStockResponse, IStockDataQueryType } from "./IGetStockDataHooks.interface";
 import { IPOSTStockBody, IPOSTStockDataQueryType, IPOSTStockDataRerturn } from "./IPostStockDataHooks.interface";
 import { IDELETEStockDataBody, IDELETEStockDataQueryType } from "./IDeleteStockDataHooks.interface";
 import { IPUTStockBody, IPUTStockDataQueryType } from "./IPutStockDataHooks.interface";
-import { IStockCategories, IStockItem, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface";
+import { IStockCategories, IStockItem, IStockSubCategories, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface";
 
 interface IUseGETStockDataHooks {
     query: IStockDataQueryType,
@@ -86,6 +86,8 @@ export function useGETStockDataHooks({
         stockAutoOrder: data as IStockSupplierAutoOrder,
         stockAllCategory: data as IGETAllStockCategoryResponse,
         stockCategory: data as IStockCategories,
+        stockAllSubCategory: data as IGETAllStockSubCategoryResponse,
+        stockSubCategory: data as IStockSubCategories,
 
         isStockDataFetching: isFetching,
         stockDataError: error ? true : false,

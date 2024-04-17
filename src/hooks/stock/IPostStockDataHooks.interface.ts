@@ -1,4 +1,4 @@
-import { IStockCategories, IStockItem, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface"
+import { IStockCategories, IStockItem, IStockSubCategories, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface"
 
 export interface IPOSTStockSuppliersBody {
   title: string;
@@ -45,10 +45,15 @@ export interface IPOSTStockCategoryBody {
   };
 }
 
+export interface IPOSTStockSubCategoryBody {
+  title: string;
+  category_id: string;
+}
 
-export type IPOSTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY'
 
-export type IPOSTStockDataRerturn = IStockSuppliers | IStockItem | IStockSupplierBank | IStockSupplierContacts | IStockSupplierAutoOrder | IStockCategories
+export type IPOSTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY'
+
+export type IPOSTStockDataRerturn = IStockSuppliers | IStockItem | IStockSupplierBank | IStockSupplierContacts | IStockSupplierAutoOrder | IStockCategories | IStockSubCategories
 
 export interface IPOSTStockBody {
   supplier?: IPOSTStockSuppliersBody
@@ -57,4 +62,5 @@ export interface IPOSTStockBody {
   contact?: IPOSTStockSupplierContactsBody
   auto_order?: IPOSTStockSupplierAutoOrderBody
   category?: IPOSTStockCategoryBody
+  sub_category?: IPOSTStockSubCategoryBody
 }

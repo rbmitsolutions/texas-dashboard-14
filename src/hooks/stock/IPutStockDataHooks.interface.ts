@@ -56,7 +56,13 @@ export interface IPUTStockCategoryBody {
     }
 }
 
-export type IPUTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY'
+export interface IPUTStockSubCategoryBody {
+    id: string;
+    title: string;
+    category_id: string;
+}
+
+export type IPUTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY'
 
 export interface IPUTStockBody {
     supplier?: IPUTStockSuppliersBody
@@ -65,4 +71,5 @@ export interface IPUTStockBody {
     contact?: IPUTStockSupplierContactsBody
     auto_order?: IPUTStockSupplierAutoOrderBody
     category?: IPUTStockCategoryBody
+    sub_category?: IPUTStockSubCategoryBody
 }

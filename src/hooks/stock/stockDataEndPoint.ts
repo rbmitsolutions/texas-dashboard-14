@@ -61,4 +61,14 @@ export const stockEndPoint = {
         createSucess: 'Category created successfully!',
         createError: "Category creation failed!",
     },
+    SUB_CATEGORY: {
+        url: EndPointsTypes['STOCK_SUB_CATEGORY_ENDPOINT'],
+        queryParams: 'SubCategory',
+        updateSucess: "Sub Category updated successfully!",
+        updateError: "Sub Category update failed!",
+        deleteSucess: "Sub Category deleted successfully!",
+        deleteError: "Sub Category delete failed!",
+        createSucess: 'Sub Category created successfully!',
+        createError: "Sub Category creation failed!",
+    },
 }

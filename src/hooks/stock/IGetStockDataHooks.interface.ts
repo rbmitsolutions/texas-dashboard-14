@@ -1,4 +1,4 @@
-import { IStockCategories, IStockItem, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface";
+import { IStockCategories, IStockItem, IStockSubCategories, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface";
 import { IPaginationResponse, IQueryPagination } from "@/common/types/settings.interface";
 
 export interface IGETAllIStockSuppliersResponse {
@@ -172,9 +172,35 @@ export interface IGETStockCategoryQuery {
   };
 }
 
-export type IGETStockResponse = IGETAllIStockSuppliersResponse | IStockSuppliers | IGETAllIStockItemResponse | IStockItem | IGETAllStockSupplierBankResponse | IStockSupplierBank | IGETAllStockSupplierContactsResponse | IStockSupplierContacts | IGETAllStockSupplierAutoOrderResponse | IStockSupplierAutoOrder | IGETAllStockCategoryResponse | IStockCategories
+export interface IGETAllStockSubCategoryResponse {
+  data: IStockSubCategories[];
+  pagination: IPaginationResponse
+}
 
-export type IStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY'
+export interface IGETStockSubCategoryQuery {
+  all?: {
+      title?: string;
+      include?: {
+          category?: "1";
+      };
+      pagination?: IQueryPagination;
+      orderBy?: {
+          key: keyof IStockSubCategories;
+          order: "asc" | "desc";
+      };
+  },
+  byId?: {
+      id: string;
+      include?: {
+          category?: "1";
+      };
+  };
+}
+
+
+export type IGETStockResponse = IGETAllIStockSuppliersResponse | IStockSuppliers | IGETAllIStockItemResponse | IStockItem | IGETAllStockSupplierBankResponse | IStockSupplierBank | IGETAllStockSupplierContactsResponse | IStockSupplierContacts | IGETAllStockSupplierAutoOrderResponse | IStockSupplierAutoOrder | IGETAllStockCategoryResponse | IStockCategories | IGETAllStockSubCategoryResponse | IStockSubCategories
+
+export type IStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY'  | 'SUB_CATEGORY'
 
 export interface IGETStockDataQuery {
   supplier?: IGETStockSuppliersQuery
@@ -183,5 +209,6 @@ export interface IGETStockDataQuery {
   contacts?: IGETStockSupplierContactsQuery
   auto_order?: IGETStockSupplierAutoOrderQuery
   category?: IGETStockCategoryQuery
+  sub_category?: IGETStockSubCategoryQuery
 }
 
