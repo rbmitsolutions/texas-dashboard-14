@@ -1,5 +1,3 @@
-import { UseMutateFunction } from "react-query"
-
 //components
 import {
     Sheet,
@@ -30,8 +28,8 @@ export default function LastOrders({ ordersController, menu, menuSections, print
             <SheetTrigger asChild>
                 <Button
                     variant='blue'
-                    className='w-full h-12'
                     leftIcon='Utensils'
+                    size='sm'
                 >
                     {ordersController?.length}
                 </Button>

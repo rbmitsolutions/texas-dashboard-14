@@ -46,15 +46,15 @@ export default function UpdateOrderStatus({ order, onUpdate, createOrder }: Upda
         setIsOpen(!isOpen)
     }
 
-    const handleUpdate = async (order: IOrder) => {
+    const handleUpdate = async (o: IOrder) => {
         await onUpdate({
             order: {
                 order: {
-                    id: order.id,
+                    id: o.id,
                     data: {
-                        quantity: order?.quantity,
-                        status: order?.status,
-                        total: order?.total,
+                        quantity: o?.quantity,
+                        status: o?.status,
+                        total: o?.total,
                     }
                 }
             }
@@ -89,6 +89,7 @@ export default function UpdateOrderStatus({ order, onUpdate, createOrder }: Upda
                             waiter_id: token?.user_id,
                             client_id: selectedTable?.client_id! as string,
                             table_id: selectedTable?.id!,
+                            total: order?.total
                         },
                         update_table: {
                             id: selectedTable?.id!,
@@ -102,7 +103,8 @@ export default function UpdateOrderStatus({ order, onUpdate, createOrder }: Upda
                     await handleUpdate({
                         ...updateOrder,
                         id: updateOrder?.id,
-                        status: OrderStatus.CANCELLED
+                        status: OrderStatus.CANCELLED,
+                        total: 0
                     })
                 },
                 onError: (err) => {
@@ -119,6 +121,7 @@ export default function UpdateOrderStatus({ order, onUpdate, createOrder }: Upda
         const update = {
             ...order,
             status: selectedTable ? OrderStatus.CANCELLED : order?.status,
+            total: selectedTable ? 0 : order?.total
         }
 
         if (selectedTable) {
@@ -204,10 +207,6 @@ export default function UpdateOrderStatus({ order, onUpdate, createOrder }: Upda
                                         </Button>
                                     )
                                 })}
-                                {/* <SelectTable
-                                    setTableSelected={setSelectedTable}
-                                    tableSelected={selectedTable}
-                                /> */}
                             </div>
                             <div className='grid grid-cols-[auto,1fr] gap-4'>
                                 <div className='flex items-center'>
@@ -241,7 +240,7 @@ export default function UpdateOrderStatus({ order, onUpdate, createOrder }: Upda
                             className='capitalize h-14 '
                             variant={getOrderStatusVariant(OrderStatus.CANCELLED)}
                             onClick={() => {
-                                setUpdatOrder({ ...updateOrder, status: OrderStatus.CANCELLED })
+                                setUpdatOrder({ ...updateOrder, status: OrderStatus.CANCELLED, total: 0 })
                                 setIsAuthOpen(true)
                             }}
                         >

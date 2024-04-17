@@ -128,6 +128,7 @@ export default function SendSms({ contacts, size = 'icon' }: SendSmsProps) {
                         <Button
                             leftIcon='Send'
                             onClick={form.handleSubmit(onSubmitForm)}
+                            disabled={contacts?.length === 0 || !form.formState.isValid}
                         >Send</Button>
                     </SheetClose>
                 </SheetFooter>

@@ -50,8 +50,8 @@ return (
     >
         <DialogTrigger asChild>
             <Button
-                className="h-12 w-12 p-2"
                 variant='orange'
+                size='sm'
             >
                 <Dice4 size={16} />
             </Button>

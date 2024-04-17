@@ -87,7 +87,7 @@ export default function SendEmail({ contacts, size = 'icon' }: SendEmaiLProps) {
                     size={size}
                     disabled={!isUserAuthorized(
                         user,
-                        [Permissions.SEND_SMS]
+                        [Permissions.SEND_EMAIL]
                     )}
                 >
                     <Icon name="Mail" />
@@ -97,7 +97,7 @@ export default function SendEmail({ contacts, size = 'icon' }: SendEmaiLProps) {
                 <SheetHeader>
                     <SheetTitle>Email To</SheetTitle>
                 </SheetHeader>
-                <div className="flex-col-container">
+                <div className="flex-col-container overflow-auto">
                     <div className='flex flex-wrap items-start gap-2 max-h-40 overflow-auto scrollbar-thin'>
                         {contacts?.map(c => {
                             return <Badge key={c.id}>{c.name}</Badge>

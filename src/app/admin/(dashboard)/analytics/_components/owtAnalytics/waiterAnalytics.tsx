@@ -110,17 +110,8 @@ export default function WaiterAnalytics({ data, date }: WaiterAnalyticsProps) {
 
             let finalData: any[] = []
 
-            // const uniqueOrders = new Map()
             orderController?.map(oc => {
                 oc?.orders?.map(o => {
-
-                    // if (!uniqueOrders.has(o?.id)) {
-                    //     uniqueOrders.set(o?.id, o)
-                    // } else {
-                    //     const existingOrder = uniqueOrders.get(o?.id)
-                    //     existingOrder.quantity += o?.quantity
-                    //     existingOrder.total += getOrderTotal(o)
-                    // }
                     finalData.push({
                         Date: formatDate({
                             date: o?.created_at,
@@ -134,20 +125,6 @@ export default function WaiterAnalytics({ data, date }: WaiterAnalyticsProps) {
                     })
                 })
             })
-
-            // uniqueOrders.forEach(value => {
-            //     finalData.push({
-            //         Date: formatDate({
-            //             date: value?.created_at,
-            //             f: 'dd/MM/yyyy'
-            //         }),
-            //         Quantity: value?.quantity,
-            //         Status: value?.status,
-            //         Item: value?.menu,
-            //         ShortTitle: value?.menu_short_title,
-            //         Total: value?.price,
-            //     })
-            // })
 
             return finalData || []
         } catch (err) {

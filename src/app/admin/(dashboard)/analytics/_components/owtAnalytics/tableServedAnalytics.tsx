@@ -114,7 +114,7 @@ export default function TablesServedAnalytics({ date }: TablesServedAnalyticsPro
 
     return (
         <div className='flex-col-container gap-4'>
-            <div className='grid grid-cols-4 gap-4'>
+            <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6'>
                 {finishedTablesCount?.sort((a: ITablesServedData, b: ITablesServedData) => {
                     return a.guests - b.guests
                 })?.map((data: ITablesServedData) => {

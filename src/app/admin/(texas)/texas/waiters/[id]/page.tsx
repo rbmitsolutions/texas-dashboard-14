@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { addDaysToDate, getFirstTimeOfTheDay } from "@/common/libs/date-fns/dateFormat";
 import { RedirectTo } from "@/common/types/routers/endPoints.types";
 import { useRouter } from "next/navigation";
@@ -190,7 +190,7 @@ export default function Table({ params }: { params: { id: string } }) {
         }
     })
 
-    useEffect(() => {
+    const fetchFromSocket = useCallback(() => {
         socket.on("message", (message: ISocketMessage) => {
             if (isMessageToMe({ event: message?.event, listemTo: [SocketIoEvent.ORDER] }) && message?.message === params?.id) {
 
@@ -203,7 +203,11 @@ export default function Table({ params }: { params: { id: string } }) {
         () => {
             socket.off("message");
         }
-    }, [params?.id, refetchOrdersController, refetchTable]);
+    }, [isMessageToMe, params?.id, refetchOrdersController, refetchTable])
+
+    useEffect(() => {
+        fetchFromSocket()
+    }, [fetchFromSocket]);
 
     return (
         <LayoutFrame

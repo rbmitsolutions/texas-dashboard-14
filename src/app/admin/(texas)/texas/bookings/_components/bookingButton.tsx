@@ -170,6 +170,8 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
             await booking.updateBooking({
                 booking: {
                     ...formData,
+                    name: formData?.name + ' ' + formData?.surname,
+                    email: formData?.email,
                     date: dateFormatIso(formData.date),
                     id: booking?.data?.id,
                     status: 'confirmed'
