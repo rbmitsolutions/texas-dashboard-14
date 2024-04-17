@@ -11,6 +11,16 @@ export interface IPUTStockItemBody {
     max_stock?: number
     min_stock?: number
     type?: string
+    connect?: {
+        products?: {
+            id: string[]
+        },
+    },
+    disconnect?: {
+        products?: {
+            id: string[]
+        },
+    },
 }
 
 export interface IPUTStockSupplierBankBody {

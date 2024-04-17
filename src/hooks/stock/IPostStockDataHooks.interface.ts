@@ -11,6 +11,11 @@ export interface IPOSTStockItemBody {
   max_stock: number
   min_stock: number
   type: string
+  connect?: {
+    products?: {
+      id: string[]
+    },
+  },
 }
 
 export interface IPOSTStockSupplierBankBody {
