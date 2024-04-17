@@ -8,7 +8,7 @@ import { AxiosRequestConfig } from "axios";
 import toast from "react-hot-toast";
 
 //interfaces
-import { IGETAllIStockItemResponse, IGETAllIStockSuppliersResponse, IGETAllStockCategoryResponse, IGETAllStockSubCategoryResponse, IGETAllStockSupplierAutoOrderResponse, IGETAllStockSupplierBankResponse, IGETAllStockSupplierContactsResponse, IGETStockDataQuery, IGETStockResponse, IStockDataQueryType } from "./IGetStockDataHooks.interface";
+import { IGETAllIStockItemResponse, IGETAllIStockSuppliersResponse, IGETAllStockCategoryResponse, IGETAllStockProductsResponse, IGETAllStockSubCategoryResponse, IGETAllStockSupplierAutoOrderResponse, IGETAllStockSupplierBankResponse, IGETAllStockSupplierContactsResponse, IGETStockDataQuery, IGETStockResponse, IStockDataQueryType } from "./IGetStockDataHooks.interface";
 import { IPOSTStockBody, IPOSTStockDataQueryType, IPOSTStockDataRerturn } from "./IPostStockDataHooks.interface";
 import { IDELETEStockDataBody, IDELETEStockDataQueryType } from "./IDeleteStockDataHooks.interface";
 import { IPUTStockBody, IPUTStockDataQueryType } from "./IPutStockDataHooks.interface";
@@ -88,6 +88,8 @@ export function useGETStockDataHooks({
         stockCategory: data as IStockCategories,
         stockAllSubCategory: data as IGETAllStockSubCategoryResponse,
         stockSubCategory: data as IStockSubCategories,
+        stockAllProducts: data as IGETAllStockProductsResponse,
+        stockProducts: data as IStockItem,
 
         isStockDataFetching: isFetching,
         stockDataError: error ? true : false,

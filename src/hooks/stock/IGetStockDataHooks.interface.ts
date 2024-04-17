@@ -1,4 +1,4 @@
-import { IStockCategories, IStockItem, IStockSubCategories, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface";
+import { IStockCategories, IStockItem, IStockProducts, IStockSubCategories, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface";
 import { IPaginationResponse, IQueryPagination } from "@/common/types/settings.interface";
 
 export interface IGETAllIStockSuppliersResponse {
@@ -179,28 +179,68 @@ export interface IGETAllStockSubCategoryResponse {
 
 export interface IGETStockSubCategoryQuery {
   all?: {
-      title?: string;
-      include?: {
-          category?: "1";
-      };
-      pagination?: IQueryPagination;
-      orderBy?: {
-          key: keyof IStockSubCategories;
-          order: "asc" | "desc";
-      };
+    title?: string;
+    include?: {
+      category?: "1";
+    };
+    pagination?: IQueryPagination;
+    orderBy?: {
+      key: keyof IStockSubCategories;
+      order: "asc" | "desc";
+    };
   },
   byId?: {
-      id: string;
-      include?: {
-          category?: "1";
-      };
+    id: string;
+    include?: {
+      category?: "1";
+    };
   };
 }
 
+export interface IGETAllStockProductsResponse {
+  data: IStockProducts[];
+  pagination: IPaginationResponse
+}
 
-export type IGETStockResponse = IGETAllIStockSuppliersResponse | IStockSuppliers | IGETAllIStockItemResponse | IStockItem | IGETAllStockSupplierBankResponse | IStockSupplierBank | IGETAllStockSupplierContactsResponse | IStockSupplierContacts | IGETAllStockSupplierAutoOrderResponse | IStockSupplierAutoOrder | IGETAllStockCategoryResponse | IStockCategories | IGETAllStockSubCategoryResponse | IStockSubCategories
+export interface IGETStockProductQuery {
+  all?: {
+    title?: string;
+    code?: string;
 
-export type IStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY'  | 'SUB_CATEGORY'
+    include?: {
+      supplier?: "1";
+      item?: "1";
+      orders?: '1' | {
+        date?: {
+          gte: Date;
+          lte: Date;
+        }
+      }
+    };
+    pagination?: IQueryPagination;
+    orderBy?: {
+      key: keyof IStockProducts;
+      order: "asc" | "desc";
+    };
+  },
+  byId?: {
+    id: string;
+    include?: {
+      supplier?: "1";
+      item?: "1";
+      orders?: '1' | {
+        date?: {
+          gte: Date;
+          lte: Date;
+        }
+      }
+    };
+  };
+}
+
+export type IGETStockResponse = IGETAllIStockSuppliersResponse | IStockSuppliers | IGETAllIStockItemResponse | IStockItem | IGETAllStockSupplierBankResponse | IStockSupplierBank | IGETAllStockSupplierContactsResponse | IStockSupplierContacts | IGETAllStockSupplierAutoOrderResponse | IStockSupplierAutoOrder | IGETAllStockCategoryResponse | IStockCategories | IGETAllStockSubCategoryResponse | IStockSubCategories | IGETAllStockProductsResponse | IStockProducts
+
+export type IStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT'
 
 export interface IGETStockDataQuery {
   supplier?: IGETStockSuppliersQuery
@@ -210,5 +250,6 @@ export interface IGETStockDataQuery {
   auto_order?: IGETStockSupplierAutoOrderQuery
   category?: IGETStockCategoryQuery
   sub_category?: IGETStockSubCategoryQuery
+  product?: IGETStockProductQuery
 }
 

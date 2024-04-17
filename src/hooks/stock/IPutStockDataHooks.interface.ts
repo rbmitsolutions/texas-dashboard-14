@@ -72,7 +72,17 @@ export interface IPUTStockSubCategoryBody {
     category_id: string;
 }
 
-export type IPUTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY'
+export interface IPUTStockProductBody {
+    id: string;
+    title?: string;
+    code?: string;
+    pack_quantity?: number;
+    supplier_id?: string;
+    item_id?: string;
+}
+
+
+export type IPUTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT'
 
 export interface IPUTStockBody {
     supplier?: IPUTStockSuppliersBody
@@ -82,4 +92,5 @@ export interface IPUTStockBody {
     auto_order?: IPUTStockSupplierAutoOrderBody
     category?: IPUTStockCategoryBody
     sub_category?: IPUTStockSubCategoryBody
+    product?: IPUTStockProductBody
 }
