@@ -80,15 +80,12 @@ export default function RosterInfo({ roster, user, forms, shifts, duties, create
         })
     }
 
-    const handleUpdateRosterDayInLuie = async () => {
+    const handleUpdateRosterDayInLieu = async (dayInLieu: boolean) => {
         await updateRoster({
             roster: {
                 one: {
                     id: roster?.id,
-                    duty: "Day in Luie",
-                    shift: "Day Off",
-                    status: "confirmed",
-                    day_in_lieu: true,
+                    day_in_lieu: dayInLieu,
                 }
             }
         })
@@ -178,11 +175,11 @@ export default function RosterInfo({ roster, user, forms, shifts, duties, create
                                     leftIcon="TentTree"
                                     disabled={!isUserAuthorized(
                                         UserToken,
-                                        [Permissions.ADMIN]) || roster?.day_in_lieu
+                                        [Permissions.ADMIN]) 
                                     }
 
                                 >
-                                    Update to Day in Luie
+                                    {roster?.day_in_lieu ? 'Remove Day in Lieu' : 'Update to Day in Lieu'}
                                 </Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
@@ -197,9 +194,11 @@ export default function RosterInfo({ roster, user, forms, shifts, duties, create
                                     <AlertDialogAction asChild>
                                         <Button
                                             leftIcon='TentTree'
-                                            onClick={handleUpdateRosterDayInLuie}
+                                            onClick={() => {
+                                                handleUpdateRosterDayInLieu(!roster?.day_in_lieu)
+                                            }}
                                         >
-                                            Day in Luie
+                                           {roster?.day_in_lieu ? 'Remove Day in Lieu' : 'Day in Lieu'}
                                         </Button>
                                     </AlertDialogAction>
                                 </AlertDialogFooter>

@@ -35,7 +35,7 @@ export const RosterAnalyticsColumnsTable = ({
             cell: ({ row }) => {
                 return (
                     <div >
-                        {row?.original?.duty}
+                        {row?.original?.day_in_lieu ? 'Day in Lieu' : row?.original?.duty}
                     </div>
                 )
             }
@@ -47,7 +47,7 @@ export const RosterAnalyticsColumnsTable = ({
             cell: ({ row }) => {
                 return (
                     <div >
-                        {row?.original?.shift}
+                        {row?.original?.day_in_lieu ? 'Day in Lieu' : row?.original?.shift}
                     </div>
                 )
             }
@@ -107,7 +107,7 @@ export const RosterAnalyticsColumnsTable = ({
             cell: ({ row }) => {
                 return (
                     <div >
-                       {(row?.original?.clock_out && !row?.original?.day_in_lieu) && formatDate({
+                        {(row?.original?.clock_out && !row?.original?.day_in_lieu) && formatDate({
                             date: new Date(row?.original?.clock_out),
                             f: 'HH:mm:ss',
                             iso: false
