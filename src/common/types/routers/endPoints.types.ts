@@ -62,6 +62,7 @@ export enum EndPointsTypes {
     STOCK_PRODUCT_ENDPOINT = '/stock/product',
     STOCK_ORDER_ENDPOINT = '/stock/order',
     STOCK_ORDER_CONTROLLER_ENDPOINT = '/stock/order-controller',
+    STOCK_EXTRA_ITEM_ENTRY_ENDPOINT = '/stock/extra-item-entry',
 
     APP_CLOCKIN_ENDPOINT = '/app/clockin',
     APP_DAYROSTER_ENDPOINT = '/app/dayroster',
@@ -99,4 +100,8 @@ export enum RedirectTo {
     FORM_EDIT_PAGE = 'admin/hrsystem/forms',
     FINISHED_TABLE = '/admin/texas/reception/finishedTables',
     SUPPLIER_PROFILE = '/admin/stock/suppliers',
+    ITEM_PROFILE = '/admin/stock/stock',
+    NEW_ORDER = '/admin/stock/new-order',
+    PRODUCT_PROFILE = '/admin/stock/suppliers',
+    STOCK_ORDER_CONTROLLER_PROFILE = '/admin/stock/orders',
 }

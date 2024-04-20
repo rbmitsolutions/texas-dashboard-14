@@ -11,7 +11,6 @@ import { ColumnDef } from "@tanstack/react-table"
 //interface
 import { IStockSuppliers } from "@/common/types/restaurant/stock.interface"
 import { RedirectTo } from "@/common/types/routers/endPoints.types"
-import AutoOrderSupplier from "./autoOrderSupplier"
 
 export interface StockSuppliersColumnsTableProps {
 
@@ -27,6 +26,18 @@ export const StockSuppliersColumnsTable = ({ }: StockSuppliersColumnsTableProps)
                 return (
                     <div className='capitalize'>
                         {row?.original?.title?.toLowerCase()}
+                    </div>
+                )
+            }
+        },
+        {
+            accessorKey: "categories",
+            header: () => <div className="text-left">Categories</div>,
+            size: 200,
+            cell: ({ row }) => {
+                return (
+                    <div className='flex flex-wrap gap-2'>
+                        {row?.original?.categories?.map((category, index) => { return <span key={index}>{category?.title}</span> })}
                     </div>
                 )
             }
@@ -51,18 +62,6 @@ export const StockSuppliersColumnsTable = ({ }: StockSuppliersColumnsTableProps)
                 return (
                     <div>
                         <Icon name={row.original.auto_order ? 'Check' : 'X'} className={row.original.auto_order ? 'text-green-500' : 'text-red-500'} />
-                    </div>
-                )
-            }
-        },
-        {
-            accessorKey: "categories",
-            header: () => <div className="text-left">Categories</div>,
-            size: 200,
-            cell: ({ row }) => {
-                return (
-                    <div className='flex flex-wrap gap-2'>
-                        {row?.original?.categories?.map((category, index) => { return <span key={index}>{category?.title}</span> })}
                     </div>
                 )
             }

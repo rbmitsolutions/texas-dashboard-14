@@ -10,6 +10,17 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import RosterTasksDisplay from "../rosterTasksDisplay"
 import AddTaskToRoster from "../addTaskToRoster"
 import { Button } from "@/components/ui/button"
@@ -34,11 +45,11 @@ import { IForm } from "@/common/types/company/form.interface"
 import { IUser } from "@/common/types/user/user.interface"
 
 interface RosterInfoProps {
-    forms: IForm[]
+    forms?: IForm[]
     roster: IRoster
     updateRoster: UseMutateFunction<any, any, IPUTCompanyBody, unknown>
-    createRosterTask: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
-    deleteRosterTask: UseMutateFunction<void, any, IDELETECompanyDataBody, unknown>
+    createRosterTask?: UseMutateFunction<IPOSTCompanyDataRerturn, any, IPOSTCompanyBody, unknown>
+    deleteRosterTask?: UseMutateFunction<void, any, IDELETECompanyDataBody, unknown>
     shifts?: IShifts[]
     duties?: IDuties[]
     user?: IUser
@@ -47,7 +58,7 @@ interface RosterInfoProps {
 
 export default function RosterInfo({ roster, user, forms, shifts, duties, createRosterTask, deleteRosterTask, updateRoster, buttonClassName }: RosterInfoProps): JSX.Element {
     const { user: UserToken } = useAuthHooks()
-    const handleUpdateRoster = async () => {
+    const handleUpdateRosterSickDay = async () => {
         await updateRoster({
             roster: {
                 one: {
@@ -69,6 +80,20 @@ export default function RosterInfo({ roster, user, forms, shifts, duties, create
         })
     }
 
+    const handleUpdateRosterDayInLuie = async () => {
+        await updateRoster({
+            roster: {
+                one: {
+                    id: roster?.id,
+                    duty: "Day in Luie",
+                    shift: "Day Off",
+                    status: "confirmed",
+                    day_in_lieu: true,
+                }
+            }
+        })
+    }
+
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -85,28 +110,28 @@ export default function RosterInfo({ roster, user, forms, shifts, duties, create
                 </SheetHeader>
                 <div className='flex-col-container overflow-auto scrollbar-thin'>
                     <Button className='w-full h-12' variant='green'>
-                        Clock In - {roster?.clock_in && formatDate({
+                        Clock In - {(roster?.clock_in && !roster?.day_in_lieu) && formatDate({
                             date: new Date(roster?.clock_in),
                             f: 'HH:mm:ss',
                             iso: false
                         })}
                     </Button>
                     <Button className='w-full h-12' variant='orange'>
-                        Break In - {roster?.break_in && formatDate({
+                        Break In - {(roster?.break_in && !roster?.day_in_lieu) && formatDate({
                             date: new Date(roster?.break_in),
                             f: 'HH:mm:ss',
                             iso: false
                         })}
                     </Button>
                     <Button className='w-full h-12' variant='yellow'>
-                        Break Out - {roster?.break_out && formatDate({
+                        Break Out - {(roster?.break_out && !roster?.day_in_lieu) && formatDate({
                             date: new Date(roster?.break_out),
                             f: 'HH:mm:ss',
                             iso: false
                         })}
                     </Button>
                     <Button className='w-full h-12' variant='destructive'>
-                        Clock Out - {roster?.clock_out && formatDate({
+                        Clock Out - {(roster?.clock_out && !roster?.day_in_lieu) && formatDate({
                             date: new Date(roster?.clock_out),
                             f: 'HH:mm:ss',
                             iso: false
@@ -123,15 +148,17 @@ export default function RosterInfo({ roster, user, forms, shifts, duties, create
                             user={user}
                             roster={roster}
                         />}
-                    <div>
-                        <strong className='mr-2'>Tasks</strong>
-                        <AddTaskToRoster
-                            createRosterTask={createRosterTask}
-                            forms={forms}
-                            roster={roster}
-                        />
-                    </div>
-                    {roster?.tasks?.map(t => {
+                    {(forms && createRosterTask) &&
+                        <div>
+                            <strong className='mr-2'>Tasks</strong>
+                            <AddTaskToRoster
+                                createRosterTask={createRosterTask}
+                                forms={forms}
+                                roster={roster}
+                            />
+                        </div>
+                    }
+                    {deleteRosterTask && roster?.tasks?.map(t => {
                         return (
                             <RosterTasksDisplay
                                 key={t?.id}
@@ -142,18 +169,78 @@ export default function RosterInfo({ roster, user, forms, shifts, duties, create
                     })}
                 </div>
                 <SheetFooter>
-                    <Button
-                        className='w-full h-12'
-                        variant='purple'
-                        leftIcon="Stethoscope"
-                        disabled={!isUserAuthorized(
-                            UserToken,
-                            [Permissions.ADMIN]
-                        ) || roster?.status === 'dayoff' || roster?.status === 'holiday' || roster?.status === 'sickday'}
-                        onClick={handleUpdateRoster}
-                    >
-                        Update to Sick Day
-                    </Button>
+                    <div className='flex-col-container w-full'>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button
+                                    className='w-full h-12'
+                                    variant='pink'
+                                    leftIcon="TentTree"
+                                    disabled={!isUserAuthorized(
+                                        UserToken,
+                                        [Permissions.ADMIN]) || roster?.day_in_lieu
+                                    }
+
+                                >
+                                    Update to Day in Luie
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction asChild>
+                                        <Button
+                                            leftIcon='TentTree'
+                                            onClick={handleUpdateRosterDayInLuie}
+                                        >
+                                            Day in Luie
+                                        </Button>
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button
+                                    className='w-full h-12'
+                                    variant='purple'
+                                    leftIcon="Stethoscope"
+                                    disabled={!isUserAuthorized(
+                                        UserToken,
+                                        [Permissions.ADMIN]
+                                    ) || roster?.status === 'dayoff' || roster?.status === 'holiday' || roster?.status === 'sickday'}
+                                >
+                                    Update to Sick Day
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction asChild>
+                                        <Button
+                                            leftIcon='Stethoscope'
+                                            onClick={handleUpdateRosterSickDay}
+                                        >
+                                            Sick Day
+                                        </Button>
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    </div>
                 </SheetFooter>
             </SheetContent>
         </Sheet>

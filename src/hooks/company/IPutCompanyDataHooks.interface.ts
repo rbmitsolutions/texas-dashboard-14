@@ -42,6 +42,7 @@ export interface IPUTRosterBody {
         hours?: number;
         forgot_to_clock_out?: boolean;
         week_payment_preview?: number;
+        day_in_lieu?: boolean;
     }
     many?: {
         between: {

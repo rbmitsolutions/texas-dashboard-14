@@ -1,4 +1,4 @@
-import { IStockCategories, IStockItem, IStockOrders, IStockOrdersController, IStockProducts, IStockSubCategories, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface";
+import { IStockCategories, IStockExtraItemEntry, IStockItem, IStockOrders, IStockOrdersController, IStockProducts, IStockSubCategories, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface";
 import { IPaginationResponse, IQueryPagination } from "@/common/types/settings.interface";
 
 export interface IGETAllIStockSuppliersResponse {
@@ -28,6 +28,9 @@ export interface IGETStockSuppliersQuery {
       auto_order?: "1";
       bank?: "1";
     };
+    category?: {
+      in: string[]
+    }
     pagination?: IQueryPagination
     orderBy?: {
       key: keyof IStockSuppliers;
@@ -44,10 +47,24 @@ export interface IGETAllIStockItemResponse {
 export interface IGETStockItemQuery {
   all?: {
     title?: string;
-    type?: string;
+    unit?: string;
     include?: {
       products?: "1";
+      extra_entries?: "1";
+      history?: "1";
+      category?: "1";
+      sub_category?: "1";
+      item?: "1";
     };
+    category?: {
+      id: string[]
+    }
+    sub_category?: {
+      id: string[]
+    }
+    item?: {
+      id: string;
+    }
     pagination?: IQueryPagination;
     orderBy?: {
       key: keyof IStockItem;
@@ -58,7 +75,11 @@ export interface IGETStockItemQuery {
     id: string;
     include?: {
       products?: "1";
-
+      extra_entries?: "1";
+      history?: "1";
+      category?: "1";
+      sub_category?: "1";
+      item?: "1";
     };
   };
 }
@@ -147,7 +168,7 @@ export interface IGETStockSupplierAutoOrderQuery {
 }
 
 export interface IGETAllStockCategoryResponse {
-  data: IStockSupplierAutoOrder[];
+  data: IStockCategories[];
   pagination: IPaginationResponse
 }
 export interface IGETStockCategoryQuery {
@@ -206,12 +227,18 @@ export interface IGETStockProductQuery {
   all?: {
     title?: string;
     code?: string;
-
+    supplier_id?: {
+      in: string[];
+    }
     include?: {
       supplier?: "1";
       item?: "1";
       orders?: '1' | {
         date?: {
+          gte: Date;
+          lte: Date;
+        },
+        delivery_date?: '1' | '0' | {
           gte: Date;
           lte: Date;
         }
@@ -245,10 +272,14 @@ export interface IGETAllStockOrderResponse {
 
 export interface IGETStockOrderQuery {
   all?: {
-    title?: string;
     supplier?: string;
 
     product_id?: string
+
+    item?: {
+      title?: string;
+      id: string[]
+    }
 
     delivery_date?: {
       gte: string;
@@ -258,6 +289,7 @@ export interface IGETStockOrderQuery {
     include?: {
       product?: '1'
       order_controller?: '1'
+      item?: '1'
     };
     pagination?: IQueryPagination;
     orderBy?: {
@@ -270,6 +302,7 @@ export interface IGETStockOrderQuery {
     include?: {
       product?: '1'
       order_controller?: '1'
+      item?: '1'
     };
   };
 }
@@ -283,8 +316,9 @@ export interface IGETStockOrderControllerQuery {
   all?: {
     paid?: '1' | '0';
 
-    supplier_id?: {
-      in: string[]
+    supplier?: {
+      title?: string;
+      id?: string[]
     }
 
     date?: {
@@ -293,8 +327,8 @@ export interface IGETStockOrderControllerQuery {
     }
 
     include?: {
-      orders: '1'
-      supplier: '1'
+      orders?: '1'
+      supplier?: '1'
     };
 
     pagination?: IQueryPagination;
@@ -306,17 +340,44 @@ export interface IGETStockOrderControllerQuery {
   byId?: {
     id: string;
     include?: {
-      orders: '1'
-      supplier: '1'
+      orders?: '1'
+      supplier?: '1'
     };
 
   };
 }
 
+export interface IGETAllStockExtraItemEntryResponse {
+  data: IStockOrdersController[];
+  pagination: IPaginationResponse
+}
 
-export type IGETStockResponse = IGETAllIStockSuppliersResponse | IStockSuppliers | IGETAllIStockItemResponse | IStockItem | IGETAllStockSupplierBankResponse | IStockSupplierBank | IGETAllStockSupplierContactsResponse | IStockSupplierContacts | IGETAllStockSupplierAutoOrderResponse | IStockSupplierAutoOrder | IGETAllStockCategoryResponse | IStockCategories | IGETAllStockSubCategoryResponse | IStockSubCategories | IGETAllStockProductsResponse | IStockProducts | IGETAllStockOrderResponse | IStockOrders | IGETAllStockOrderControllerResponse | IStockOrdersController
+export interface IGETStockExtraItemEntryQuery {
+  all?: {
+    entry_by?: string
+    item_id?: {
+      in: string[]
+    }
+    include?: {
+      item: '1'
+    };
+    pagination?: IQueryPagination;
+    orderBy?: {
+      key: keyof IStockExtraItemEntry
+      order: "asc" | "desc";
+    };
+  },
+  byId?: {
+    id: string;
+    include?: {
+      item: '1'
+    };
+  };
+}
 
-export type IStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER' | 'ORDER_CONTROLLER'
+export type IGETStockResponse = IGETAllIStockSuppliersResponse | IStockSuppliers | IGETAllIStockItemResponse | IStockItem | IGETAllStockSupplierBankResponse | IStockSupplierBank | IGETAllStockSupplierContactsResponse | IStockSupplierContacts | IGETAllStockSupplierAutoOrderResponse | IStockSupplierAutoOrder | IGETAllStockCategoryResponse | IStockCategories | IGETAllStockSubCategoryResponse | IStockSubCategories | IGETAllStockProductsResponse | IStockProducts | IGETAllStockOrderResponse | IStockOrders | IGETAllStockOrderControllerResponse | IStockOrdersController | IGETAllStockExtraItemEntryResponse | IStockExtraItemEntry
+
+export type IStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER' | 'ORDER_CONTROLLER' | 'EXTRA_ITEM_ENTRY'
 
 export interface IGETStockDataQuery {
   supplier?: IGETStockSuppliersQuery
@@ -329,5 +390,6 @@ export interface IGETStockDataQuery {
   product?: IGETStockProductQuery
   order?: IGETStockOrderQuery
   order_controller?: IGETStockOrderControllerQuery
+  extra_item_entry?: IGETStockExtraItemEntryQuery
 }
 

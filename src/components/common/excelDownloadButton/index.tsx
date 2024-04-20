@@ -22,7 +22,6 @@ export default function ExcelDownloadButton({ fileName, onDownload, isLoading = 
     const handleDownload = async () => {
         const data = await onDownload();
 
-        console.log(data)
         if (!data?.length) {
             toast.error('No data to download');
             return;

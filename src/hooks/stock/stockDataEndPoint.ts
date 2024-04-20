@@ -101,4 +101,14 @@ export const stockEndPoint = {
         createSucess: 'Order Controller created successfully!',
         createError: "Order Controller creation failed!",
     },
+    EXTRA_ITEM_ENTRY: {
+        url: EndPointsTypes['STOCK_EXTRA_ITEM_ENTRY_ENDPOINT'],
+        queryParams: 'ExtraItemEntry',
+        updateSucess: "Extra Item Entry updated successfully!",
+        updateError: "Extra Item Entry update failed!",
+        deleteSucess: "Extra Item Entry deleted successfully!",
+        deleteError: "Extra Item Entry delete failed!",
+        createSucess: 'Extra Item Entry created successfully!',
+        createError: "Extra Item Entry creation failed!",
+    },
 }

@@ -2,6 +2,16 @@ export interface IPUTStockSuppliersBody {
     id: string;
     title?: string;
     address?: string;
+    connect?: {
+        categories?: {
+            id: string[]
+        }
+    }
+    disconnect?: {
+        categories?: {
+            id: string[]
+        }
+    }
 }
 
 export interface IPUTStockItemBody {
@@ -10,7 +20,10 @@ export interface IPUTStockItemBody {
     stock?: number
     max_stock?: number
     min_stock?: number
-    type?: string
+    unit?: string
+    volume?: number
+    category_id?: string
+    sub_category_id?: string
     connect?: {
         products?: {
             id: string[]
@@ -83,17 +96,20 @@ export interface IPUTStockProductBody {
 
 export interface IPUTStockOrderBody {
     id: string;
-    title?: string
+    item_id?: string
     supplier?: string
     product_id?: string
     product_quantity?: number
-    total_quantity?: number
+    volume_quantity?: number
     deposit?: number
-    price_per_unit?: number
     vat?: number
     total?: number
-    delivery_date?: Date
-    order_controller_id?: string
+    delivery_date?: string
+
+    //auto update
+    one_product_price?: number
+    one_volume_price?: number
+    product_price?: number
 }
 
 export interface IPUTStockOrderControllerBody {

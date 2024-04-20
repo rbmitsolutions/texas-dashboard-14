@@ -13,10 +13,6 @@ export interface IRoute {
   auth_device: boolean;
 }
 
-//algumas rotas como bookings serão pegadas do back-end
-// e verificadas se o usuario tem permissao / device authorization 
-// caso ele tenha permissao e esteja no device da rota o fetch será feito
-
 const routers: IRoute[] = [
   {
     path: "/analytics",
@@ -365,33 +361,81 @@ const routers: IRoute[] = [
       }
     ],
   },
-  // {
-  //   path: "/admin/stock",
-  //   name: "Stock",
-  //   icon: <Icon name='Blocks' size={14} />,
-  //   layout: "/admin",
-  //   collapse: true,
-  //   authorization: [
-  //     Permissions.ADMIN,
-  //     Permissions.ADMIN_GHOST,
-  //     Permissions.STOCK_MANAGER
-  //   ],
-  //   auth_device: true,
-  //   items: [
-  //     {
-  //       name: "Suppliers",
-  //       path: "/suppliers",
-  //       icon: <Icon name='Building2' size={14} />,
-  //       layout: "/admin/stock",
-  //       authorization: [
-  //         Permissions.ADMIN,
-  //         Permissions.ADMIN_GHOST,
-  //         Permissions.STOCK_MANAGER
-  //       ],
-  //       auth_device: true,
-  //     },
-  //   ]
-  // },
+  {
+    path: "/admin/stock",
+    name: "Stock",
+    icon: <Icon name='Blocks' size={14} />,
+    layout: "/admin",
+    collapse: true,
+    authorization: [
+      Permissions.ADMIN,
+      Permissions.ADMIN_GHOST,
+      Permissions.STOCK_MANAGER
+    ],
+    auth_device: true,
+    items: [
+      {
+        name: "Stock",
+        path: "/stock",
+        icon: <Icon name='Building2' size={14} />,
+        layout: "/admin/stock",
+        authorization: [
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+          Permissions.STOCK_MANAGER
+        ],
+        auth_device: true,
+      },
+      {
+        name: "New Order",
+        path: "/new-order",
+        icon: <Icon name='Truck' size={14} />,
+        layout: "/admin/stock",
+        authorization: [
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+          Permissions.STOCK_MANAGER
+        ],
+        auth_device: true,
+      },
+      {
+        name: "Orders",
+        path: "/orders",
+        icon: <Icon name='PackageCheck' size={14} />,
+        layout: "/admin/stock",
+        authorization: [
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+          Permissions.STOCK_MANAGER
+        ],
+        auth_device: true,
+      },
+      {
+        name: "Suppliers",
+        path: "/suppliers",
+        icon: <Icon name='Building2' size={14} />,
+        layout: "/admin/stock",
+        authorization: [
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+          Permissions.STOCK_MANAGER
+        ],
+        auth_device: true,
+      },
+      {
+        name: "Config",
+        path: "/config",
+        icon: <Icon name='Settings' size={14} />,
+        layout: "/admin/stock",
+        authorization: [
+          Permissions.ADMIN,
+          Permissions.ADMIN_GHOST,
+          Permissions.STOCK_MANAGER
+        ],
+        auth_device: true,
+      },
+    ]
+  },
   {
     name: "Clock in",
     path: "/clockin",

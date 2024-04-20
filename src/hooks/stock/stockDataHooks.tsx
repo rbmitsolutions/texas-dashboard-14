@@ -8,11 +8,11 @@ import { AxiosRequestConfig } from "axios";
 import toast from "react-hot-toast";
 
 //interfaces
-import { IGETAllIStockItemResponse, IGETAllIStockSuppliersResponse, IGETAllStockCategoryResponse, IGETAllStockOrderControllerResponse, IGETAllStockOrderResponse, IGETAllStockProductsResponse, IGETAllStockSubCategoryResponse, IGETAllStockSupplierAutoOrderResponse, IGETAllStockSupplierBankResponse, IGETAllStockSupplierContactsResponse, IGETStockDataQuery, IGETStockResponse, IStockDataQueryType } from "./IGetStockDataHooks.interface";
+import { IGETAllIStockItemResponse, IGETAllIStockSuppliersResponse, IGETAllStockCategoryResponse, IGETAllStockExtraItemEntryResponse, IGETAllStockOrderControllerResponse, IGETAllStockOrderResponse, IGETAllStockProductsResponse, IGETAllStockSubCategoryResponse, IGETAllStockSupplierAutoOrderResponse, IGETAllStockSupplierBankResponse, IGETAllStockSupplierContactsResponse, IGETStockDataQuery, IGETStockResponse, IStockDataQueryType } from "./IGetStockDataHooks.interface";
 import { IPOSTStockBody, IPOSTStockDataQueryType, IPOSTStockDataRerturn } from "./IPostStockDataHooks.interface";
 import { IDELETEStockDataBody, IDELETEStockDataQueryType } from "./IDeleteStockDataHooks.interface";
 import { IPUTStockBody, IPUTStockDataQueryType } from "./IPutStockDataHooks.interface";
-import { IStockCategories, IStockItem, IStockOrders, IStockOrdersController, IStockSubCategories, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface";
+import { IStockCategories, IStockExtraItemEntry, IStockItem, IStockOrders, IStockOrdersController, IStockSubCategories, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface";
 
 interface IUseGETStockDataHooks {
     query: IStockDataQueryType,
@@ -94,6 +94,8 @@ export function useGETStockDataHooks({
         stockOrder: data as IStockOrders,
         stockAllOrderController: data as IGETAllStockOrderControllerResponse,
         stockOrderController: data as IStockOrdersController,
+        stockAllExtraItemEntry: data as IGETAllStockExtraItemEntryResponse,
+        stockExtraItemEntry: data as IStockExtraItemEntry,
 
         isStockDataFetching: isFetching,
         stockDataError: error ? true : false,

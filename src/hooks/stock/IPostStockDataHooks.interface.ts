@@ -3,18 +3,25 @@ import { IStockCategories, IStockItem, IStockSubCategories, IStockSupplierAutoOr
 export interface IPOSTStockSuppliersBody {
   title: string;
   address: string;
+  connect: {
+    categories: {
+      id: string[]
+    }
+  }
 }
 
 export interface IPOSTStockItemBody {
   title: string;
-  stock: number
   max_stock: number
   min_stock: number
-  type: string
+  unit: string
+  volume: number
+  category_id: string
+  sub_category_id: string
   connect?: {
-    products?: {
-      id: string[]
-    },
+      products?: {
+          id: string[]
+      },
   },
 }
 
@@ -27,8 +34,8 @@ export interface IPOSTStockSupplierBankBody {
 
 export interface IPOSTStockSupplierContactsBody {
   name: string;
-  email: string;
-  contact_number: string;
+  email?: string;
+  contact_number?: string;
   supplier_id: string;
 }
 
@@ -63,18 +70,21 @@ export interface IPOSTStockProductBody {
   item_id: string;
 }
 
-export interface IPOSTStockOrderBody {
-  title: string
+export interface IPOSTCreateOrder {
+  item_id: string
   supplier: string
   product_id: string
   product_quantity: number
-  total_quantity: number
-  deposit?: number
-  price_per_unit: number
-  vat: number
-  total: number
-  delivery_date?: Date
-  order_controller_id: string
+  volume_quantity: number
+  supplier_id: string
+}
+
+export interface IPOSTStockOrderBody {
+  one?: IPOSTCreateOrder
+  many?: {
+    orders: IPOSTCreateOrder[],
+    supplier_id: string
+  }
 }
 
 export interface IPOSTStockOrderControllerBody {
@@ -83,10 +93,19 @@ export interface IPOSTStockOrderControllerBody {
   total: number
 }
 
+export interface IPOSTStockExtraItemEntryBody {
+  item_id: string;
+  quantity: number;
+  description?: string;
+  entry_by_id: string;
+  entry_by: string
+  new_stock: number;
+  old_stock: number;
+}
 
-export type IPOSTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER' | 'ORDER_CONTROLLER'
+export type IPOSTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER' | 'ORDER_CONTROLLER' | 'EXTRA_ITEM_ENTRY'
 
-export type IPOSTStockDataRerturn = IStockSuppliers | IStockItem | IStockSupplierBank | IStockSupplierContacts | IStockSupplierAutoOrder | IStockCategories | IStockSubCategories | IPOSTStockProductBody | IPOSTStockOrderBody | IPOSTStockOrderControllerBody
+export type IPOSTStockDataRerturn = IStockSuppliers | IStockItem | IStockSupplierBank | IStockSupplierContacts | IStockSupplierAutoOrder | IStockCategories | IStockSubCategories | IPOSTStockProductBody | IPOSTStockOrderBody | IPOSTStockOrderControllerBody | IPOSTStockExtraItemEntryBody
 
 export interface IPOSTStockBody {
   supplier?: IPOSTStockSuppliersBody
@@ -99,4 +118,5 @@ export interface IPOSTStockBody {
   product?: IPOSTStockProductBody
   order?: IPOSTStockOrderBody
   order_controller?: IPOSTStockOrderControllerBody
+  extra_item_entry?: IPOSTStockExtraItemEntryBody
 }
