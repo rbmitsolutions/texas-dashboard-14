@@ -327,7 +327,10 @@ export interface IGETStockOrderControllerQuery {
     }
 
     include?: {
-      orders?: '1'
+      orders?: '1' | {
+        product?: '1'
+        item?: '1'
+      }
       supplier?: '1'
     };
 
@@ -340,7 +343,10 @@ export interface IGETStockOrderControllerQuery {
   byId?: {
     id: string;
     include?: {
-      orders?: '1'
+      orders?: '1' | {
+        product?: '1'
+        item?: '1'
+      }
       supplier?: '1'
     };
 

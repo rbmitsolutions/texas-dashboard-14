@@ -10,7 +10,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Skeleton } from "@/components/ui/skeleton"
-import { formatDate } from "@/common/libs/date-fns/dateFormat"
+import { convertIfValueIsDate, formatDate } from "@/common/libs/date-fns/dateFormat"
 import { IFormData } from "@/common/types/company/form.interface"
 
 interface FormDataTableProps<TData, TValue> {
@@ -24,24 +24,6 @@ export function FormDataTable<TData, TValue>({
 }: FormDataTableProps<TData, TValue>) {
 
     if (isFetching) return <FormDataTable.Skeleton />
-
-    const convertIfValueIsDate = (value: string) => {
-        const dateTimeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
-        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-
-        if (dateTimeRegex.test(value)) {
-            return formatDate({
-                date: new Date(value),
-                f: 'dd/MM/yyyy HH:mm'
-            })
-        } else if (dateRegex.test(value)) {
-            return formatDate({
-                date: new Date(value)
-            })
-        }
-
-        return value
-    }
 
     return (
         <div className="rounded-md border">

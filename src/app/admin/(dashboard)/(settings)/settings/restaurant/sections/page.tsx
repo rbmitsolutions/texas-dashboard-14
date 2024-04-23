@@ -1,4 +1,5 @@
 'use client'
+
 //components
 import { sectionsColumnsTable } from "./_components/sectionsColumnsTable"
 import { BasicTable } from "@/components/common/basicTable"

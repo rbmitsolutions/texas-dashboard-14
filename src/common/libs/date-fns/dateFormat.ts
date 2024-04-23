@@ -125,3 +125,21 @@ export const getMonth = (number: number): string => {
             return ''
     }
 }
+
+export const convertIfValueIsDate = (value: string) => {
+    const dateTimeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+    if (dateTimeRegex.test(value)) {
+        return formatDate({
+            date: new Date(value),
+            f: 'dd/MM/yyyy HH:mm'
+        })
+    } else if (dateRegex.test(value)) {
+        return formatDate({
+            date: new Date(value)
+        })
+    }
+
+    return value
+}
