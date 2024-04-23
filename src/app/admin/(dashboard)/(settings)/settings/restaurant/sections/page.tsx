@@ -98,6 +98,13 @@ export default function Sections() {
         toRefetch
     })
 
+    const {
+        updateRestaurantData: editTable,
+    } = usePUTRestaurantDataHooks({
+        query: 'TABLES',
+        toRefetch
+    })
+
     const dayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
     return (
@@ -254,6 +261,8 @@ export default function Sections() {
                         deleteTable,
                         deleteSection,
                         editSection,
+                        editTable,
+                        sections: sections?.data || [],
                         daysOpen: daysOpen?.data || []
                     })}
                     data={sections?.data || []}

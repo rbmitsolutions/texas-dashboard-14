@@ -12,25 +12,30 @@ import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.i
 import { cn } from "@/common/libs/shadcn/utils"
 import { IBookingDays } from "@/common/types/restaurant/config.interface"
 import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
+import TableDialog from "./tableDialog"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
 interface SectionsColumnsTableProps {
     daysOpen: IBookingDays[]
+    sections: ISection[]
     addTable: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>
     deleteTable: UseMutateFunction<void, any, IDELETERestaurantDataBody, unknown>
     deleteSection: UseMutateFunction<void, any, IDELETERestaurantDataBody, unknown>
     editSection: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
+    editTable: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
 }
 
 const dayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 export const sectionsColumnsTable = ({
     addTable,
+    sections,
     deleteTable,
     deleteSection,
     editSection,
+    editTable,
     daysOpen
 }: SectionsColumnsTableProps): ColumnDef<ISection>[] => {
     return [
@@ -87,21 +92,13 @@ export const sectionsColumnsTable = ({
                         }
                         {row?.original?.tables?.sort((a, b) => a.number < b.number ? -1 : 1).map(t => {
                             return (
-                                <DeleteDialogButton
+                                <TableDialog 
                                     key={t?.id}
-                                    onDelete={async () => await deleteTable({
-                                        table: {
-                                            id: t?.id
-                                        }
-                                    })}
-                                    isDisabled={t?.is_open}
-                                >
-                                    <div
-                                        className='flex items-center bg-background-soft rounded-lg cursor-pointer p-2 hover:bg-red-300 dark:hover:bg-red-800'
-                                    >
-                                        Nº: {t?.number} / Seats: {t?.guests} / <div className={cn("h-3 w-3 rounded-full ml-2", t?.is_open ? 'bg-green-600' : 'bg-red-500')} />
-                                    </div>
-                                </DeleteDialogButton>
+                                    table={t}
+                                    deleteTable={deleteTable}
+                                    sections={sections}
+                                    editTable={editTable}
+                                />
                             )
                         })}
                     </div>
