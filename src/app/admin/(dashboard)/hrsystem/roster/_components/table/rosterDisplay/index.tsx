@@ -53,7 +53,8 @@ export default function RosterDisplay({ roster, forms, createRosterTask, deleteR
                 <div className='flex flex-col gap-2'>
                     {roster?.map(r => {
                         return (
-                            <div key={r.id} className={cn('flex flex-col relative h-full gap-2 rounded-md p-2', rosterBackground(r?.status!, true))}>
+                            <div key={r.id} className={cn('flex flex-col relative h-full gap-2 rounded-md p-2',
+                                r.day_in_lieu ? 'bg-pink-300 dark:bg-pink-900' : rosterBackground(r?.status!, true))}>
                                 {r?.paid && (
                                     <Icon
                                         name='Banknote'
@@ -101,8 +102,10 @@ export default function RosterDisplay({ roster, forms, createRosterTask, deleteR
                                     </div>
                                 </div>
                                 <div className='flex flex-col'>
-                                    <small className='text-[10px] font-bold line-clamp-1'>{r.duty}</small>
-                                    <small className='text-[10px]'>{r.shift}</small>
+                                    <small className='text-[10px] font-bold line-clamp-1'>{
+                                        r?.day_in_lieu ? 'Day In Lieu' : r.duty}</small>
+                                    <small className='text-[10px]'>{
+                                        r?.day_in_lieu ? 'Day In Lieu' : r.shift}</small>
                                 </div>
                             </div>
                         )

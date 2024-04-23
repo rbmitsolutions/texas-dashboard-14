@@ -52,6 +52,18 @@ export enum EndPointsTypes {
     RESTAURANT_PRINTERS_ENDPOINT = '/restaurant/printers',
     RESTAURANT_MENU_ENDPOINT = '/restaurant/menu',
 
+    STOCK_SUPPLIERS_ENDPOINT = '/stock/supplier',
+    STOCK_SUPPLIER_BANK_ENDPOINT = '/stock/supplier-bank',
+    STOCK_SUPPLIER_CONTACT_ENDPOINT = '/stock/supplier-contact',
+    STOCK_SUPPLIER_AUTO_ORDER_ENDPOINT = '/stock/supplier-auto-order',
+    STOCK_ITEM_ENDPOINT = '/stock/item',
+    STOCK_CATEGORY_ENDPOINT = '/stock/category',
+    STOCK_SUB_CATEGORY_ENDPOINT = '/stock/sub-category',
+    STOCK_PRODUCT_ENDPOINT = '/stock/product',
+    STOCK_ORDER_ENDPOINT = '/stock/order',
+    STOCK_ORDER_CONTROLLER_ENDPOINT = '/stock/order-controller',
+    STOCK_EXTRA_ITEM_ENTRY_ENDPOINT = '/stock/extra-item-entry',
+
     APP_CLOCKIN_ENDPOINT = '/app/clockin',
     APP_DAYROSTER_ENDPOINT = '/app/dayroster',
 
@@ -87,4 +99,9 @@ export enum RedirectTo {
     TABLE_RECEPTION = '/admin/texas/reception',
     FORM_EDIT_PAGE = 'admin/hrsystem/forms',
     FINISHED_TABLE = '/admin/texas/reception/finishedTables',
+    SUPPLIER_PROFILE = '/admin/stock/suppliers',
+    ITEM_PROFILE = '/admin/stock/stock',
+    NEW_ORDER = '/admin/stock/new-order',
+    PRODUCT_PROFILE = '/admin/stock/suppliers',
+    STOCK_ORDER_CONTROLLER_PROFILE = '/admin/stock/orders',
 }

@@ -26,6 +26,8 @@ export enum Permissions {
   ROSTER_TASKS = 'roster_tasks',
   DAY_ROSTER = 'day_roster',
 
+  STOCK_MANAGER = 'stock_manager',
+  STOCK_TAKE = 'stock_take',
 }
 
 export interface IToken {

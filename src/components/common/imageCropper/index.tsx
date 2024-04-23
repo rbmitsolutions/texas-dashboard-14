@@ -160,15 +160,6 @@ export default function ImageCropper({ image, cropSize, cropShape = 'rect', onSa
                                 onZoomChange={setZoom}
                             />
                         </div>
-                        {/* <div className='flex justify-center w-full'>
-                            <Slider
-                                defaultValue={[rotation]}
-                                max={360}
-                                step={1}
-                                className="w-60"
-                                onChange={(value) => console.log(value)}
-                            />
-                        </div> */}
                     </>
                 }
                 {onSave &&

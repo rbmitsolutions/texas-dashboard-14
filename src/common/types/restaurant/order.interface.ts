@@ -34,6 +34,8 @@ export interface IOrder {
   order_controller: IOrderController;
   order_controller_id: string;
 
+  cost_to_make: number;
+  
   created_at: Date;
   updated_at: Date;
 }

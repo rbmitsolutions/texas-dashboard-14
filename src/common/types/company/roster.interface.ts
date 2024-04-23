@@ -33,6 +33,7 @@ export interface IRoster {
     available?: boolean;
     forgot_to_clock_out?: boolean;
     absence?: boolean;
+    day_in_lieu?: boolean;
 
     tasks_title?: string[];
     status?: IRosterStatus;
