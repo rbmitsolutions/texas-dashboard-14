@@ -153,7 +153,7 @@ export default function MenuItemsToMake({ menu }: MenuItemsToMakeProps) {
             <div className='flex-col-container mt-4'>
                 <IconText
                     icon='Euro'
-                    text={'Sale Price ' + convertCentsToEuro(menu?.price || 0)}
+                    text={'Sale Price ' + convertCentsToEuro(menu?.value || 0)}
 
                 />
                 <IconText

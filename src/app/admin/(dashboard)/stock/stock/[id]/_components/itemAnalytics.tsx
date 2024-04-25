@@ -144,7 +144,7 @@ export default function ItemAnalytics({ item }: ItemAnalyticsProps) {
 
     const lineChart = transformLastOrderPriceData(date, orderAnalyticsGroup || [], item) || []
 
-    const bestPrice: ILastOrderPrice = orderAnalyticsGroup?.reduce((prev: any, current: ILastOrderPrice) => (prev._sum?.one_volume_price < current._sum?.one_volume_price) ? prev : current)
+    const bestPrice: ILastOrderPrice = orderAnalyticsGroup?.length > 0 ? orderAnalyticsGroup?.reduce((prev: any, current: ILastOrderPrice) => (prev._sum?.one_volume_price < current._sum?.one_volume_price) ? prev : current) : {}
 
     const expensivePrice = lineChart?.reduce((prev, current) => (prev.total > current.total) ? prev : current)
 

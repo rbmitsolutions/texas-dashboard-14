@@ -152,7 +152,6 @@ export default function Item({ params }: { params: { id: string } }) {
 
     return (
         <div>
-
             <div className=''>
                 <div className='flex-col-container justify-center items-center gap-0 py-8'>
                     <h1 className='text-xl font-bold'>{item?.title}</h1>
