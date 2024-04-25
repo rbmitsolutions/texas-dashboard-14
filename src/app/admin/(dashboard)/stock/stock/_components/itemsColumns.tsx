@@ -113,8 +113,8 @@ export const StockItemColumnsTable = ({ createEntry, user }: StockItemColumnsTab
 
         {
             accessorKey: "last_order_date",
-            header: () => <div className="text-left">Last Order / Date</div>,
-            size: 150,
+            header: () => <div className="text-left">L.O. / Date</div>,
+            size: 120,
             cell: ({ row }) => {
                 return (
                     <div className='capitalize'>
@@ -129,15 +129,13 @@ export const StockItemColumnsTable = ({ createEntry, user }: StockItemColumnsTab
             }
         },
         {
-            accessorKey: "last_order_one_vol_price",
-            header: () => <div className="text-left">Last Order / Price</div>,
-            size: 150,
+            accessorKey: "las_order_unit_price",
+            header: () => <div className="text-left">L.O./ Unit Price</div>,
+            size: 120,
             cell: ({ row }) => {
                 return (
                     <div className='capitalize'>
-                        {row?.original?.last_order_one_vol_price ?
-                            convertCentsToEuro(row?.original?.last_order_one_vol_price) : '-'
-                        }
+                        {convertCentsToEuro(row?.original?.volume * (row?.original?.last_order_one_vol_price || 0))}
                     </div>
                 )
             }

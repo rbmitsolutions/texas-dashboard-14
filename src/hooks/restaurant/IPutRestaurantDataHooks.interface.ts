@@ -6,6 +6,7 @@ import { TableMealStatus } from "@/common/types/restaurant/tables.interface";
 
 export interface IPUTTablesBody {
     id: string;
+    number?: number;
     client_id?: string | null;
     client_name?: string | null;
     booking_id?: string | null;

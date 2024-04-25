@@ -146,7 +146,7 @@ export default function Order({ params }: { params: { id: string } }) {
     return (
         <div className='flex-col-container items-center'>
             <h3 className='text-2xl font-bold'>{supplier?.title}</h3>
-            <div className='grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] max-w-4xl gap-4'>
+            <div className='grid grid-cols-1fr gap-4 md:grid-cols-2'>
                 {products?.data?.map(product => {
                     return (
                         <NewOrder

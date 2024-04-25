@@ -1,4 +1,5 @@
 'use client'
+
 //components
 import { sectionsColumnsTable } from "./_components/sectionsColumnsTable"
 import { BasicTable } from "@/components/common/basicTable"
@@ -94,6 +95,13 @@ export default function Sections() {
         updateRestaurantData: editSection,
     } = usePUTRestaurantDataHooks({
         query: 'SECTIONS',
+        toRefetch
+    })
+
+    const {
+        updateRestaurantData: editTable,
+    } = usePUTRestaurantDataHooks({
+        query: 'TABLES',
         toRefetch
     })
 
@@ -253,6 +261,8 @@ export default function Sections() {
                         deleteTable,
                         deleteSection,
                         editSection,
+                        editTable,
+                        sections: sections?.data || [],
                         daysOpen: daysOpen?.data || []
                     })}
                     data={sections?.data || []}

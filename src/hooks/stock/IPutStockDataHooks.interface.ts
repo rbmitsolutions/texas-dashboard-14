@@ -1,3 +1,5 @@
+import { IPOSTFormDataBody } from "../company/IPostCompanyDataHooks.interface";
+
 export interface IPUTStockSuppliersBody {
     id: string;
     title?: string;
@@ -104,7 +106,10 @@ export interface IPUTStockOrderBody {
     deposit?: number
     vat?: number
     total?: number
-    delivery_date?: string
+    delivery_date?: Date
+    haccp_data_id?: string
+    
+    haccp?: IPOSTFormDataBody
 
     //auto update
     one_product_price?: number

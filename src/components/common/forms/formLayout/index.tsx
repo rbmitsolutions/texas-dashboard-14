@@ -60,6 +60,7 @@ export default function FormLayout({ form, onSubmit, toReset = false }: FormLayo
             setPage(prev => ({ ...prev, page: prev?.page + 1 }))
             return
         }
+        
         const values: IFormBuildInput[][] = form?.inputs?.map(inputs => {
             return inputs?.map(input => {
                 return {

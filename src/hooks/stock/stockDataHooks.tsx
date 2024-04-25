@@ -77,7 +77,7 @@ export function useGETStockDataHooks({
         stockAllSuppliers: data as IGETAllIStockSuppliersResponse,
         stockSupplier: data as IStockSuppliers,
         stockSupplierBank: data as IGETAllStockSupplierBankResponse,
-        supplierBank:data as IStockSupplierBank,
+        supplierBank: data as IStockSupplierBank,
         stockAllItem: data as IGETAllIStockItemResponse,
         stockItem: data as IStockItem,
         stockAllContacts: data as IGETAllStockSupplierContactsResponse,
@@ -154,13 +154,15 @@ export interface IUsePutStockDataHooks {
     AxiosRequestConfig?: AxiosRequestConfig,
     UseMutationOptions?: UseMutationOptions<any, unknown, IPUTStockBody>
     toRefetch?: () => void
+    showNotification?: boolean
 }
 
 export function usePUTStockDataHooks({
     query,
     AxiosRequestConfig,
     UseMutationOptions,
-    toRefetch
+    toRefetch,
+    showNotification = true
 }: IUsePutStockDataHooks) {
 
     const { mutate, isLoading } = useMutation(
@@ -174,7 +176,7 @@ export function usePUTStockDataHooks({
         {
             onSuccess: (data) => {
                 toRefetch && toRefetch()
-                toast.success(stockEndPoint[query].updateSucess)
+                showNotification && toast.success(stockEndPoint[query].updateSucess)
             },
             onError: (error: any) => {
                 toast.error(error.response.data.message || stockEndPoint[query].updateError)

@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 
+//libs
+import { numbersArray } from "@/common/libs/zod/forms/stock/deliveOrderForm";
+
 //components
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import IconText from "@/components/common/iconText";
@@ -30,8 +33,6 @@ export default function NewOrder({ order, supplier, product, handleUpdateNewOrde
             supplier_id: supplier?.id
         })
     }
-
-    const numbersArray = Array.from(Array(101).keys());
 
     useEffect(() => {
         setValue(order?.find(o => o.product_id === product?.id)?.product_quantity || 0)

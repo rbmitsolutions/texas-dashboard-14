@@ -160,18 +160,20 @@ export interface IStockOrders {
     product_quantity: number //default 0
     volume_quantity: number // product_quantity * item.volume //default 0
 
-    product_price: number //default 0
+    product_price: number //default 0 / product.one_product_price * product_quantity
     one_product_price: number // product_price / product.pack_quantity //default 0
     one_volume_price: number // (product_price / product.pack_quantity) / item.volume //default 0
 
     deposit: number //default 0
     vat: number //default 0
-    total: number // (product_price * product_quantity) + deposit + vat //default 0 cents
+    total: number // (product_price * product_quantity) + ()deposit +  //default 0 cents
 
     delivery_date?: Date
 
     order_controller: IStockOrdersController
     order_controller_id: string
+
+    haccp_data_id?: string
 
     created_at: Date
     updated_at: Date
