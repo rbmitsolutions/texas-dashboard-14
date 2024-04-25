@@ -16,13 +16,15 @@ import { useGETStockDataHooks } from "@/hooks/stock/stockDataHooks";
 
 //interface
 import { IMenu } from "@/common/types/restaurant/menu.interface";
+import { useParams } from "next/navigation";
 
 interface MenuItemsToMakeProps {
     menu: IMenu
 }
 
 export default function MenuItemsToMake({ menu }: MenuItemsToMakeProps) {
-
+    const { id } = useParams<{ id: string }>()
+    
     const {
         restaurantAllMenuToMake: menuToMake,
         refetchRestaurantData: toRefetch
@@ -32,7 +34,7 @@ export default function MenuItemsToMake({ menu }: MenuItemsToMakeProps) {
             menu_to_make: {
                 all: {
                     in: {
-                        menu_id: [menu?.id]
+                        menu_id: [id]
                     },
                     pagination: {
                         take: 40,
@@ -45,7 +47,7 @@ export default function MenuItemsToMake({ menu }: MenuItemsToMakeProps) {
             }
         },
         UseQueryOptions: {
-            enabled: !!menu?.id
+            enabled: !!id
         }
     })
 

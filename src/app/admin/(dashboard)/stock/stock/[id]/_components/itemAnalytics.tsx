@@ -163,7 +163,7 @@ export default function ItemAnalytics({ item }: ItemAnalyticsProps) {
                 />
             </div>
             <div className='grid grid-cols-1'>
-                <div className='min-h-[400px]'>
+                <div className='min-h-[400px] max-h-[400px]'>
                     <LineChart
                         data={lineChart}
                         legend='Last Order Price'
