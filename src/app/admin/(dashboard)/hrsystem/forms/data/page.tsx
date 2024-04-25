@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button"
 import Wrap from "@/components/common/wrap"
 
 //hooks
-import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
+import { useDELETECompanyDataHooks, useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
 
 //interfaces
 import { IFormData } from "@/common/types/company/form.interface"
@@ -67,6 +67,7 @@ export default function Data() {
             }
         }
     })
+
 
     const byFormOptions = forms?.data?.map(form => {
         return {

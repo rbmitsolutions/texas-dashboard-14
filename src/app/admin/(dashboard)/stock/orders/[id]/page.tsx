@@ -61,6 +61,7 @@ export default function StockOrderControllerPage({ params }: { params: { id: str
 
     const {
         updateStockData: updateOrder,
+        isUpdateStockDataLoading: isUpdateOrderLoading
     } = usePUTStockDataHooks({
         query: 'ORDER',
         showNotification: false,
@@ -68,7 +69,8 @@ export default function StockOrderControllerPage({ params }: { params: { id: str
     })
 
     const {
-        deleteStockData: deleteOrder
+        deleteStockData: deleteOrder,
+        isDeleteStockDataLoading: isDeleteOrderLoading
     } = useDELETEStockDataHooks({
         query: 'ORDER',
         toRefetch
@@ -159,6 +161,7 @@ export default function StockOrderControllerPage({ params }: { params: { id: str
                                     supplier={ordersController?.supplier || {}}
                                     updateOrder={updateOrder}
                                     deleteOrder={deleteOrder}
+                                    isLoading={isUpdateOrderLoading || isDeleteOrderLoading}
                                 />
                             )
                         })}

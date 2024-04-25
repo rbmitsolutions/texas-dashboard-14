@@ -12,6 +12,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { convertIfValueIsDate, formatDate } from "@/common/libs/date-fns/dateFormat"
 import { IFormData } from "@/common/types/company/form.interface"
+import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
 
 interface FormDataTableProps<TData, TValue> {
     data: IFormData[]
@@ -32,6 +33,7 @@ export function FormDataTable<TData, TValue>({
                     <TableRow>
                         <TableHead className='w-40'>Info</TableHead>
                         <TableHead>Data</TableHead>
+                        <TableHead>Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -64,6 +66,12 @@ export function FormDataTable<TData, TValue>({
                                             )
                                         })}
                                     </div>
+                                </TableCell>
+                                <TableCell>
+                                        <DeleteDialogButton 
+                                            onDelete={() => { console.log('delete') }}
+                                            isDisabled={true}
+                                        />
                                 </TableCell>
                             </TableRow>
                         )

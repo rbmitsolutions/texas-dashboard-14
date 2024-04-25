@@ -35,9 +35,10 @@ interface NotDeliveredOrderProps {
     user: IToken
     updateOrder: UseMutateFunction<any, any, IPUTStockBody, unknown>
     deleteOrder: UseMutateFunction<void, any, IDELETEStockDataBody, unknown>
+    isLoading: boolean
 }
 
-export default function NotDeliveredOrder({ supplier, order, user, updateOrder, deleteOrder }: NotDeliveredOrderProps) {
+export default function NotDeliveredOrder({ supplier, order, user, updateOrder, deleteOrder, isLoading }: NotDeliveredOrderProps) {
     const [submitError, setSubmitError] = useState("");
 
     const form = useForm<DeliveryOrderFormSchemaType>({
@@ -361,9 +362,9 @@ export default function NotDeliveredOrder({ supplier, order, user, updateOrder, 
                     />
                     <Button
                         type="submit"
-                        disabled={form.formState.isSubmitting}
                         leftIcon='Lock'
-                        isLoading={false}
+                        isLoading={form.formState.isSubmitting}
+                        disabled={isLoading}
                     >
                         Save
                     </Button>

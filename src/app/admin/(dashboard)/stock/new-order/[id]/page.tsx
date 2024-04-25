@@ -163,7 +163,7 @@ export default function Order({ params }: { params: { id: string } }) {
                 className='mt-4'
                 isLoading={isCreateOrderLoading}
                 leftIcon="Send"
-                disabled={!order?.length}
+                disabled={!order?.length || isCreateOrderLoading}
             >
                 Send Order
             </Button>
