@@ -9,6 +9,7 @@ import Icon from "@/common/libs/lucida-icon"
 import { Switch } from "@/components/ui/switch"
 import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
 import { IPUTMenuBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
+import { RedirectTo } from "@/common/types/routers/endPoints.types"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -127,7 +128,7 @@ export const menuColumnsTable = ({
                         <Button
                             variant='orange'
                             size='iconSm'
-                            onClick={() => redirectTo(`/admin/restaurant/menu/all/${row?.original?.id}`)}
+                            onClick={() => redirectTo(`${RedirectTo.MENU_PROFILE}/${row?.original?.id}`)}
                             disabled={!allowUpdate}
                         >
 

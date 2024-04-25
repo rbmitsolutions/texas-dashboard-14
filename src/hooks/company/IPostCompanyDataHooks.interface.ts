@@ -5,6 +5,7 @@ import { IForm, IFormData, IFormSection } from "@/common/types/company/form.inte
 import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
 import { IRoster, IRosterTasks } from "@/common/types/company/roster.interface";
 import { ITransactions, TransactionsDirection, TransactionsMethod, TransactionsType } from "@/common/types/company/transactions.interface";
+import { INotification } from "@/common/types/messages";
 
 
 export interface IPOSTTransaction {
@@ -146,9 +147,15 @@ export interface IPOSTDocumentsBody {
     file: any
 }
 
-export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "REQUESTS" | 'DUTIES' | 'SHIFTS' | 'ROSTER' | 'ROSTER_TASKS' | 'TRANSACTIONS' | "AUTH" | "DEPARTAMENTS" | 'ROLES' | "CONTACTS" | "LINKS" | "DOCUMENTS"
+export interface IPOSTNotificationBody {
+    type: INotification['type'];
+    message: INotification['message'];
+    key_id: INotification['key_id'];
+}
 
-export type IPOSTCompanyDataRerturn = IRoster | IHaccpReports | IForm | IFormSection | IFormData | IShifts | IDuties | IRosterTasks | ITransactions | IDepartments | IRoles | ICompanyContacts | ICompanyLinks | IFiles
+export type IPOSTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "REQUESTS" | 'DUTIES' | 'SHIFTS' | 'ROSTER' | 'ROSTER_TASKS' | 'TRANSACTIONS' | "AUTH" | "DEPARTAMENTS" | 'ROLES' | "CONTACTS" | "LINKS" | "DOCUMENTS" | "NOTIFICATION"
+
+export type IPOSTCompanyDataRerturn = IRoster | IHaccpReports | IForm | IFormSection | IFormData | IShifts | IDuties | IRosterTasks | ITransactions | IDepartments | IRoles | ICompanyContacts | ICompanyLinks | IFiles | INotification
 export interface IPOSTCompanyBody {
     roster?: IPOSTRosterBody,
     rosterTask?: IPOSTRosterTasksBody
@@ -165,4 +172,5 @@ export interface IPOSTCompanyBody {
     contact?: IPOSTTCompanyContactsBody
     link?: IPOSTTCompanyLinksBody
     document?: IPOSTDocumentsBody
+    notification?: IPOSTNotificationBody
 }

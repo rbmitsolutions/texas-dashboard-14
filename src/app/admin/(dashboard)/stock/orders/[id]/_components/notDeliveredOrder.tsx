@@ -19,23 +19,25 @@ import {
 import { DeleteDialogButton } from "@/components/common/deleteDialogButton";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 //interface
 import { DeliveryOrderFormSchema, DeliveryOrderFormSchemaType, DeliveryVehicle, PackagingOptions, numbersArray, temperatureArray } from "@/common/libs/zod/forms/stock/deliveOrderForm";
 import { IStockOrders, IStockSuppliers } from "@/common/types/restaurant/stock.interface"
 import { IPOSTFormDataBody } from "@/hooks/company/IPostCompanyDataHooks.interface";
 import { IPUTStockBody } from "@/hooks/stock/IPutStockDataHooks.interface";
+import { IDELETEStockDataBody } from "@/hooks/stock/IDeleteStockDataHooks.interface";
 import { IToken } from "@/common/types/auth/auth.interface";
-import { Input } from "@/components/ui/input";
 
 interface NotDeliveredOrderProps {
     supplier: IStockSuppliers
     order: IStockOrders
     user: IToken
     updateOrder: UseMutateFunction<any, any, IPUTStockBody, unknown>
+    deleteOrder: UseMutateFunction<void, any, IDELETEStockDataBody, unknown>
 }
 
-export default function NotDeliveredOrder({ supplier, order, user, updateOrder }: NotDeliveredOrderProps) {
+export default function NotDeliveredOrder({ supplier, order, user, updateOrder, deleteOrder }: NotDeliveredOrderProps) {
     const [submitError, setSubmitError] = useState("");
 
     const form = useForm<DeliveryOrderFormSchemaType>({
@@ -180,7 +182,11 @@ export default function NotDeliveredOrder({ supplier, order, user, updateOrder }
                     {order?.product?.title}
                 </strong>
                 <DeleteDialogButton
-                    onDelete={() => console.log('delete')}
+                    onDelete={async () => await deleteOrder({
+                        order: {
+                            id: order?.id
+                        }
+                    })}
                 />
             </div>
             <Form {...form}>

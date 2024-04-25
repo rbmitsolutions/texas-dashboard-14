@@ -47,8 +47,6 @@ export default function Data() {
         }
     })
 
-    console.log(formsData)
-
     const {
         companyAllFormData: forms,
         isCompanyDataLoading: isFormsLoading,

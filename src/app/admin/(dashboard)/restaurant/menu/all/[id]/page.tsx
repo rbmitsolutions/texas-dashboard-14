@@ -8,8 +8,9 @@ import { CreateMenuFormSchema, CreateMenuFormSchemaType } from "@/common/libs/zo
 import { getOptionsPriorityValueAsKeyString, getUpdateMenuInfo } from "../_components/config"
 import CreateUpdateMenuForm from "../../create/_components/createUpdateMenuForm"
 import UploadMenuImages from "../../create/item/_components/uploadMenuImages"
-import Wrap from "@/components/common/wrap"
+import MenuItemsToMake from "../../_components/menuItemsToMake"
 import { Form } from "@/components/ui/form"
+import Wrap from "@/components/common/wrap"
 
 //hooks
 import { useGETRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
@@ -25,7 +26,7 @@ export default function MenuItemPage(params: { params: { id: string } }) {
             menu: {
                 byId: {
                     id: params?.params?.id,
-                }
+                },
             }
         }
     })
@@ -231,6 +232,7 @@ export default function MenuItemPage(params: { params: { id: string } }) {
     useEffect(() => {
         form.setValue('mn_type_id', menu?.mn_type_id)
     }, [form, menu?.mn_type_id, section])
+
     return (
         <Wrap
             header={{
@@ -279,6 +281,9 @@ export default function MenuItemPage(params: { params: { id: string } }) {
                         </div>
                         <div className='flex flex-col gap-4 xl:order-2'>
                             <UploadMenuImages form={form} />
+                            <MenuItemsToMake 
+                                menu={menu}
+                            />
                         </div>
                     </div>
                 </form>

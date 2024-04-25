@@ -3,10 +3,9 @@ import { useCallback, useEffect } from "react"
 
 //libs
 import { convertCentsToEuro } from "@/common/utils/convertToEuro"
-import { cn } from "@/common/libs/shadcn/utils"
 
 //components
-import { InTransactionsColumnsTable } from "./inTransactionsColumns"
+import { InTransactionsColumnsTable } from "../inTransactionsColumns"
 import { BasicTable } from "@/components/common/basicTable"
 import InfoBox from "@/components/common/infoBox"
 import Wrap from "@/components/common/wrap"
@@ -16,9 +15,9 @@ import { TransactionsDirection, TransactionsStatus, PayrollTransactionsType } fr
 
 //hooks
 import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
-import WrapSelect from "../wrapSelect"
+import WrapSelect from "../../wrapSelect"
 
-interface OutAnalyticsProps {
+interface PayrollOutAnalytics {
     date: {
         from: Date
         to: Date
@@ -30,7 +29,8 @@ interface IOutDirection {
     type: PayrollTransactionsType
 }
 
-export default function OutAnalytics({ date }: OutAnalyticsProps) {
+export default function PayrollOutAnalytics({ date }: PayrollOutAnalytics) {
+
     const {
         companyTransactionAnalytics: outData,
         setGETCompanyDataParams: setOutParams,
@@ -130,6 +130,10 @@ export default function OutAnalytics({ date }: OutAnalyticsProps) {
                     ...prev?.transactions?.all,
                     type: {
                         in: types
+                    },
+                    pagination: {
+                        take: 20,
+                        skip: 0
                     }
                 }
             }

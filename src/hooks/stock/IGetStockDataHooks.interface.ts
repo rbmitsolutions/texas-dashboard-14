@@ -1,4 +1,4 @@
-import { IStockCategories, IStockExtraItemEntry, IStockItem, IStockOrders, IStockOrdersController, IStockProducts, IStockSubCategories, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface";
+import { IStockCategories, IStockExtraItemEntry, IStockItem, IStockItemHistory, IStockOrders, IStockOrdersController, IStockProducts, IStockSubCategories, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface";
 import { IPaginationResponse, IQueryPagination } from "@/common/types/settings.interface";
 
 export interface IGETAllIStockSuppliersResponse {
@@ -270,6 +270,8 @@ export interface IGETAllStockOrderResponse {
   pagination: IPaginationResponse
 }
 
+export type IStockOrderScalarFieldEnum = 'id' | 'item_id' | 'supplier' | 'product_id' | 'product_quantity' | 'volume_quantity' | 'product_price' | 'one_product_price' | 'one_volume_price' | 'deposit' | 'vat' | 'total' | 'delivery_date' | 'order_controller_id' | 'haccp_data_id' | 'created_at' | 'updated_at'
+
 export interface IGETStockOrderQuery {
   all?: {
     supplier?: string;
@@ -282,8 +284,8 @@ export interface IGETStockOrderQuery {
     }
 
     delivery_date?: {
-      gte: string;
-      lte: string;
+      gte: Date;
+      lte: Date;
     }
 
     include?: {
@@ -305,6 +307,45 @@ export interface IGETStockOrderQuery {
       item?: '1'
     };
   };
+  analytics?: {
+    supplier?: {
+      in: string[]
+    }
+
+    item?: {
+      in: string[]
+    }
+
+    product_id?: {
+      in: string[]
+    }
+
+    delivery_date?: {
+      gte: Date;
+      lte: Date;
+    }
+
+    created_at?: {
+      gte: Date;
+      lte: Date;
+    }
+
+    _sum?: {
+      product_quantity?: '1';
+      volume_quantity?: '1';
+      product_price?: '1';
+      one_product_price?: '1';
+      one_volume_price?: '1';
+      deposit?: '1';
+      vat?: '1';
+      total?: '1';
+    }
+    groupBy?: {
+      by: IStockOrderScalarFieldEnum[]
+    }
+    aggregate?: '1'
+    count?: '1'
+  }
 }
 
 export interface IGETAllStockOrderControllerResponse {
@@ -322,8 +363,8 @@ export interface IGETStockOrderControllerQuery {
     }
 
     date?: {
-      gte: string;
-      lte: string;
+      gte: Date;
+      lte: Date;
     }
 
     include?: {
@@ -349,12 +390,23 @@ export interface IGETStockOrderControllerQuery {
       }
       supplier?: '1'
     };
-
   };
+  analytics?: {
+    supplier_id?: {
+      in: string[]
+    }
+    date?: {
+      gte: string;
+      lte: string;
+    },
+
+    count?: '1'
+    groupByPaid?: '1'
+  }
 }
 
 export interface IGETAllStockExtraItemEntryResponse {
-  data: IStockOrdersController[];
+  data: IStockExtraItemEntry[];
   pagination: IPaginationResponse
 }
 
@@ -381,9 +433,35 @@ export interface IGETStockExtraItemEntryQuery {
   };
 }
 
-export type IGETStockResponse = IGETAllIStockSuppliersResponse | IStockSuppliers | IGETAllIStockItemResponse | IStockItem | IGETAllStockSupplierBankResponse | IStockSupplierBank | IGETAllStockSupplierContactsResponse | IStockSupplierContacts | IGETAllStockSupplierAutoOrderResponse | IStockSupplierAutoOrder | IGETAllStockCategoryResponse | IStockCategories | IGETAllStockSubCategoryResponse | IStockSubCategories | IGETAllStockProductsResponse | IStockProducts | IGETAllStockOrderResponse | IStockOrders | IGETAllStockOrderControllerResponse | IStockOrdersController | IGETAllStockExtraItemEntryResponse | IStockExtraItemEntry
+export interface IGETAllStockItemHistoryResponse {
+  data: IStockItemHistory[];
+  pagination: IPaginationResponse
+}
 
-export type IStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER' | 'ORDER_CONTROLLER' | 'EXTRA_ITEM_ENTRY'
+export interface IGETStockItemHistoryQuery {
+  all?: {
+    menu?: string
+
+    item_id?: string[]
+    menu_id?: string[]
+    order_id?: string[]
+
+    include?: {
+      item?: '1'
+    };
+
+    pagination?: IQueryPagination;
+    orderBy?: {
+      key: keyof IStockItemHistory
+      order: "asc" | "desc";
+    };
+  },
+}
+
+
+export type IGETStockResponse = IGETAllIStockSuppliersResponse | IStockSuppliers | IGETAllIStockItemResponse | IStockItem | IGETAllStockSupplierBankResponse | IStockSupplierBank | IGETAllStockSupplierContactsResponse | IStockSupplierContacts | IGETAllStockSupplierAutoOrderResponse | IStockSupplierAutoOrder | IGETAllStockCategoryResponse | IStockCategories | IGETAllStockSubCategoryResponse | IStockSubCategories | IGETAllStockProductsResponse | IStockProducts | IGETAllStockOrderResponse | IStockOrders | IGETAllStockOrderControllerResponse | IStockOrdersController | IGETAllStockExtraItemEntryResponse | IStockExtraItemEntry | IGETAllStockItemHistoryResponse
+
+export type IStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER' | 'ORDER_CONTROLLER' | 'EXTRA_ITEM_ENTRY' | 'ITEM_HISTORY'
 
 export interface IGETStockDataQuery {
   supplier?: IGETStockSuppliersQuery
@@ -397,5 +475,6 @@ export interface IGETStockDataQuery {
   order?: IGETStockOrderQuery
   order_controller?: IGETStockOrderControllerQuery
   extra_item_entry?: IGETStockExtraItemEntryQuery
+  item_history?: IGETStockItemHistoryQuery
 }
 

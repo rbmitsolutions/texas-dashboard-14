@@ -1,17 +1,17 @@
 'use client'
 
-//utils
-import { convertCentsToEuro } from "@/common/utils/convertToEuro"
-
 //components
+import OrdersControllerTable from "../../_components/ordersControllerTable/ordersControllerTable"
 import CreateUpdateContact from "./_components/supplierContact/createUpdateContact"
 import ContactContainer from "./_components/supplierContact/contactContainer"
 import NewSupplierDialog from "../_components/newSupplierDialog"
 import ProductsTable from "./_components/products/prodcutsTable"
 import CreateUpdateBank from "./_components/supplierBank"
+import SupplierAnalytics from "./_components/analytics"
 
 //hooks
-import { useGETStockDataHooks, usePOSTStockDataHooks, usePUTStockDataHooks } from "@/hooks/stock/stockDataHooks"
+import { useDELETEStockDataHooks, useGETStockDataHooks, usePOSTStockDataHooks, usePUTStockDataHooks } from "@/hooks/stock/stockDataHooks"
+import SupplerAutoOrderForm from "./[product]/_components/supplerAutoOrderForm"
 
 const styles = {
     container: 'p-4 bg-background-soft shadow-sm'
@@ -64,6 +64,35 @@ export default function Supplier({ params }: { params: { id: string } }) {
                     supplier_id: {
                         in: [params.id]
                     }
+                }
+            }
+        },
+        UseQueryOptions: {
+            enabled: !!params.id
+        }
+    })
+
+    const {
+        stockAllOrderController: ordersController,
+        GETStockDataParams: ordersControllerParams,
+        setGETStockDataParams: setOrdersControllerParams,
+        refetchStockData: toRefetchOrderController
+    } = useGETStockDataHooks({
+        query: 'ORDER_CONTROLLER',
+        defaultParams: {
+            order_controller: {
+                all: {
+                    supplier: {
+                        id: [params.id]
+                    },
+                    pagination: {
+                        skip: 0,
+                        take: 20
+                    },
+                    include: {
+                        orders: '1',
+                        supplier: '1',
+                    },
                 }
             }
         },
@@ -155,11 +184,39 @@ export default function Supplier({ params }: { params: { id: string } }) {
         toRefetch
     })
 
+    const {
+        createStockData: createAutoOrder
+    } = usePOSTStockDataHooks({
+        query: 'SUPPLIER_AUTO_ORDER',
+        toRefetch
+    })
+
+    const {
+        updateStockData: updateAutoOrder,
+    } = usePUTStockDataHooks({
+        query: 'SUPPLIER_AUTO_ORDER',
+        toRefetch
+    })
+
+    const {
+        updateStockData: updateOrderController
+    } = usePUTStockDataHooks({
+        query: 'ORDER_CONTROLLER',
+        toRefetch: toRefetchOrderController
+    })
+
+    const {
+        deleteStockData: deleteOrderController
+    } = useDELETEStockDataHooks({
+        query: 'ORDER_CONTROLLER',
+        toRefetch: toRefetchOrderController
+    })
+
     return (
         <div>
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-[500px,1fr]'>
+            <div className='grid grid-cols-1 gap-4'>
                 <div className='flex-col-container'>
-                    <aside className={styles.container}>
+                    <div className={styles.container}>
                         <div className='flex-col-container item-center'>
                             <div className='flex-col-container justify-center items-center h-40 rounded-md w-full bg-[url("/img/background.png")] bg-center bg-no-repeat bg-cover dark:opacity-60 dark:grayscale' />
                             <div className='flex-col-container gap-2 items-center p-4 -mt-20 z-10 max-w-80 rounded-lg m-auto bg-background shadow-md'>
@@ -188,46 +245,72 @@ export default function Supplier({ params }: { params: { id: string } }) {
                                     createContact={createContact}
                                 />
                             </div>
-                            <div className='mt-2'>
-                                <CreateUpdateBank
-                                    bank={supplier?.bank_details}
-                                    createBank={createBank}
-                                    supplier_id={params.id}
-                                    updateBank={updateBank}
-                                />
-                            </div>
                         </div>
-                    </aside>
-                    {supplier?.contacts?.map(contact => {
-                        return (
-                            <div
-                                key={contact.id}
-                                className={styles.container}
-                            >
-                                <ContactContainer
-                                    contact={contact}
-                                    updateContact={updateContact}
-                                />
-                            </div>
-                        )
-                    })}
-
+                    </div>
+                    <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
+                        {supplier?.contacts?.map(contact => {
+                            return (
+                                <div
+                                    key={contact.id}
+                                    className={styles.container}
+                                >
+                                    <ContactContainer
+                                        contact={contact}
+                                        updateContact={updateContact}
+                                    />
+                                </div>
+                            )
+                        })}
+                    </div>
+                    <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                        <div className={styles.container}>
+                            <CreateUpdateBank
+                                bank={supplier?.bank_details}
+                                createBank={createBank}
+                                supplier_id={params.id}
+                                updateBank={updateBank}
+                            />
+                        </div>
+                        <div className={styles.container}>
+                            <SupplerAutoOrderForm
+                                supplier_id={params.id}
+                                createSupplierAutoOrder={createAutoOrder}
+                                update={{
+                                    updateSupplierAutoOrder: updateAutoOrder,
+                                    auto_order: supplier?.auto_order
+                                }}
+                            />
+                        </div>
+                    </div>
                 </div>
-                <main className=''>
-                    <strong className='font-bold text-xl text-white'>{convertCentsToEuro(supplier?.spent || 0)}</strong>
-                    <ProductsTable
-                        products={products}
-                        productParams={productsParams}
-                        setProductParams={setProductsParams}
-                        createProduct={createProduct}
-                        updateProduct={updateProduct}
-                        items={{
-                            items: items?.data || [],
-                            itemsParams,
-                            setItemsParams
-                        }}
+                <main className='flex-col-container gap-8'>
+                    <SupplierAnalytics
                         supplier_id={params.id}
                     />
+                    <div className={styles?.container}>
+                        <OrdersControllerTable
+                            ordersController={ordersController}
+                            ordersControllerParams={ordersControllerParams}
+                            setOrdersControllerParams={setOrdersControllerParams}
+                            updateOrderController={updateOrderController}
+                            deleteOrderController={deleteOrderController}
+                        />
+                    </div>
+                    <div className={styles?.container}>
+                        <ProductsTable
+                            products={products}
+                            productParams={productsParams}
+                            setProductParams={setProductsParams}
+                            createProduct={createProduct}
+                            updateProduct={updateProduct}
+                            items={{
+                                items: items?.data || [],
+                                itemsParams,
+                                setItemsParams
+                            }}
+                            supplier_id={params.id}
+                        />
+                    </div>
                 </main>
             </div>
         </div>

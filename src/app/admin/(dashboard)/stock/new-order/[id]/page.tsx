@@ -12,6 +12,8 @@ import { useGETStockDataHooks, usePOSTStockDataHooks } from "@/hooks/stock/stock
 
 //interfaces
 import { Button } from "@/components/ui/button"
+import { RedirectTo } from "@/common/types/routers/endPoints.types"
+import { useRouter } from "next/navigation"
 
 export interface INewOrder {
     item_id: string
@@ -23,6 +25,7 @@ export interface INewOrder {
 }
 
 export default function Order({ params }: { params: { id: string } }) {
+    const { push } = useRouter()
     const [order, setOrder] = useState<INewOrder[]>([])
 
     const {
@@ -79,11 +82,6 @@ export default function Order({ params }: { params: { id: string } }) {
     } = usePOSTStockDataHooks({
         query: 'ORDER',
         toRefetch,
-        UseMutationOptions: {
-            onSuccess: () => {
-                setOrder([])
-            }
-        }
     })
 
     const handleUpdateNewOrder = (newOrder: INewOrder) => {
@@ -120,6 +118,7 @@ export default function Order({ params }: { params: { id: string } }) {
             onSuccess: async () => {
                 setOrder([])
                 await localStorage.removeItem('createStockOrder')
+                push(RedirectTo.STOCK_NEW_ORDER)
             }
         })
     }

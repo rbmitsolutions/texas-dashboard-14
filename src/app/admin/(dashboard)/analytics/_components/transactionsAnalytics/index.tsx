@@ -17,6 +17,7 @@ import { PayrollTransactionsType, TransactionsDirection, TransactionsStatus } fr
 //hooks
 import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
 import InAnalytics from "./inAnalytics"
+import { useGETStockDataHooks } from "@/hooks/stock/stockDataHooks"
 
 interface TransactionsAnalyticsProps {
     date: {
@@ -29,6 +30,10 @@ interface IDataDirection {
     _sum: { total: number }
     status: TransactionsStatus
     direction: TransactionsDirection
+}
+
+interface IStockTotal {
+    _sum: { total: number }
 }
 
 export default function TransactionsAnalytics({ date }: TransactionsAnalyticsProps) {
@@ -51,6 +56,27 @@ export default function TransactionsAnalytics({ date }: TransactionsAnalyticsPro
                         gte: date?.from,
                         lte: date?.to
                     },
+                }
+            }
+        }
+    })
+
+    const {
+        stockOrderAnalytics,
+        setGETStockDataParams: setStockOrderParams,
+    } = useGETStockDataHooks({
+        query: 'ORDER',
+        defaultParams: {
+            order: {
+                analytics: {
+                    created_at: {
+                        gte: date?.from,
+                        lte: date?.to
+                    },
+                    _sum: {
+                        total: '1'
+                    },
+                    aggregate: '1'
                 }
             }
         }
@@ -105,7 +131,13 @@ export default function TransactionsAnalytics({ date }: TransactionsAnalyticsPro
             case TransactionsDirection.TIP:
                 return <TipsAnalytics date={date} />
             case TransactionsDirection.OUT:
-                return <OutAnalytics date={date} />
+                return <OutAnalytics
+                    date={date}
+                    totals={{
+                        payroll: outData?.length > 0 ? outData[0]?._sum?.total : 0,
+                        orders: stockOrderAnalytics?._sum?.total || 0
+                    }}
+                />
             default:
                 return <div />
         }
@@ -140,12 +172,29 @@ export default function TransactionsAnalytics({ date }: TransactionsAnalyticsPro
                 }
             }
         }))
-
-    }, [setDirectionParams, setOutData]);
+        setStockOrderParams(prev => ({
+            order: {
+                analytics: {
+                    ...prev?.order?.analytics,
+                    created_at: {
+                        gte: date?.from,
+                        lte: date?.to
+                    },
+                }
+            }
+        }))
+    }, [setDirectionParams, setOutData, setStockOrderParams]);
 
     useEffect(() => {
         onDateChange(date)
     }, [date, onDateChange])
+
+    const outTotal = (outData: IDataDirection[], stockTotal: IStockTotal) => {
+        const payroll = outData?.length > 0 ? outData[0]?._sum?.total : 0
+        const stock = stockTotal?._sum?.total || 0
+
+        return payroll + stock
+    }
 
     return (
         <div className='flex-col-container'>
@@ -181,7 +230,7 @@ export default function TransactionsAnalytics({ date }: TransactionsAnalyticsPro
                             name: 'PieChart',
                         }}
                         title='Out'
-                        value={convertCentsToEuro(outData?.length > 0 ? outData[0]?._sum?.total : 0)}
+                        value={convertCentsToEuro(outTotal(outData, stockOrderAnalytics) || 0)}
                         smallValue={directionSmallText(TransactionsDirection.OUT)}
 
                     />

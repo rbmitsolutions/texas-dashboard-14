@@ -188,7 +188,7 @@ export interface IStockOrdersController {
     supplier: IStockSuppliers
     supplier_id: string
 
-    total: number // sum of orders total (vat included) //default 0 cents
+    file_id?: string
 
     created_at: Date
     updated_at: Date
@@ -219,6 +219,7 @@ export interface IStockItemHistory {
     item_id: string
 
     quantity: number
+    
     menu: string
     menu_id: string
 

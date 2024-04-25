@@ -7,6 +7,7 @@ import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
 import { IRequests, IRequestsStatus, IRequestsType } from "@/common/types/company/requests.interface";
 import { IRoster, IRosterStatus, IRosterTasks } from "@/common/types/company/roster.interface";
 import { ITransactions, TransactionsDirection, TransactionsMethod, TransactionsStatus, TransactionsType } from "@/common/types/company/transactions.interface";
+import { INotification } from "@/common/types/messages";
 import { IPaginationResponse, IQueryPagination } from "@/common/types/settings.interface";
 import { IUser, IUserStatus } from "@/common/types/user/user.interface";
 
@@ -369,7 +370,7 @@ export interface IGETTransactionsQuery {
 
     valid_by_id?: string;
     valid_by?: string;
-    
+
     payee_key?: string;
 
     created_at?: {
@@ -410,7 +411,7 @@ export interface IGETTransactionsQuery {
     client_id?: string;
 
     valid_by_id?: string;
-  
+
     payee_key?: string;
 
     created_at?: {
@@ -438,11 +439,26 @@ export interface IGETHistoryQuery {
 }
 
 
+export interface IGetAllNotificationResponse {
+  data: INotification[]
+  pagination: IPaginationResponse
+}
 
-export type IGETCompanyResponse = IGETCompanyRosterResponse | IHaccpReportsResponse | IHaccpReports | IFormsGetAllResponse | IForm | IFormSectionGetAllResponse | IFormSection | IGETFormDataQuery | IFormData | IFiles | IRequests | IRequestsGetAllResponse | ICompanyDetailsResponse | IGETRolesResponse | IRoles | IGETAllDepartamentsResponse | IDepartments | IGETCompanyAllFilesResponse | IGETShiftsQuery | IGETDutiesQuery | IRosterPageResponse | IGETRosterTaskResponse | IUserExtraPaymentData | IGetAllTransactionsResponse
+export interface IGETNotificationQuery {
+  all?: {
+    type?: INotification['type'];
+    pagination?: IQueryPagination
+    orderBy?: {
+      key: keyof INotification
+      order: "asc" | "desc";
+    };
+  }
+}
 
-export type ICompanyDataQueryType = 'ROSTER' | "ROLES" | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "FILES" | "REQUESTS" | 'DETAILS' | "DEPARTAMENTS" | "DUTIES" | "SHIFTS" | 'ROSTER_TASKS' | "TRANSACTIONS" | "HISTORY"
 
+export type IGETCompanyResponse = IGETCompanyRosterResponse | IHaccpReportsResponse | IHaccpReports | IFormsGetAllResponse | IForm | IFormSectionGetAllResponse | IFormSection | IGETFormDataQuery | IFormData | IFiles | IRequests | IRequestsGetAllResponse | ICompanyDetailsResponse | IGETRolesResponse | IRoles | IGETAllDepartamentsResponse | IDepartments | IGETCompanyAllFilesResponse | IGETShiftsQuery | IGETDutiesQuery | IRosterPageResponse | IGETRosterTaskResponse | IUserExtraPaymentData | IGetAllTransactionsResponse | IGetAllNotificationResponse
+
+export type ICompanyDataQueryType = 'ROSTER' | "ROLES" | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "FILES" | "REQUESTS" | 'DETAILS' | "DEPARTAMENTS" | "DUTIES" | "SHIFTS" | 'ROSTER_TASKS' | "TRANSACTIONS" | "HISTORY" | 'NOTIFICATION'
 export interface IGETCompanyDataQuery {
   roster?: IGETCompanyRosterQuery
   haccpReports?: IGETHaccpReportsQuery
@@ -459,4 +475,5 @@ export interface IGETCompanyDataQuery {
   rosterTask?: IGETCompanyRosterQuery
   transactions?: IGETTransactionsQuery
   history?: IGETHistoryQuery
+  notification?: IGETNotificationQuery
 }

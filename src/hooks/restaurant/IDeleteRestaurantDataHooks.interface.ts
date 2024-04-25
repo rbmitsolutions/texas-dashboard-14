@@ -1,4 +1,4 @@
-export type IDELETERestaurantDataQueryType = 'BOOKINGS' | "TABLES" | "SECTIONS" | 'MENU' | 'GIFTCARD' | 'AUTHORIZED_DEVICES' | 'SPECIAL_DAYS' | 'TIMES_OPEN' | "PRINTERS" | 'MENU_SECTION' | 'MENU_TYPE' | 'MENU_ADD_ONS' | 'MENU_ADD_ONS_OPTIONS' | "FINISHED_TABLE"
+export type IDELETERestaurantDataQueryType = 'BOOKINGS' | "TABLES" | "SECTIONS" | 'MENU' | 'GIFTCARD' | 'AUTHORIZED_DEVICES' | 'SPECIAL_DAYS' | 'TIMES_OPEN' | "PRINTERS" | 'MENU_SECTION' | 'MENU_TYPE' | 'MENU_ADD_ONS' | 'MENU_ADD_ONS_OPTIONS' | "FINISHED_TABLE" | 'MENU_TO_MAKE'
 export interface IDELETERestaurantDataBody {
   booking?: {
     id: string;
@@ -37,6 +37,9 @@ export interface IDELETERestaurantDataBody {
     id: string
   },
   menu_add_ons_options?: {
+    id: string
+  }
+  menu_to_make?: {
     id: string
   }
   finishedTable?: {

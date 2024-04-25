@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { api } from "@/common/libs/axios/api";
 import { restaurantEndPoint } from "./restaurantDataEndPoint";
-import { IAllAuthorizedDevicesResponse, IAllOrderControllerResponse, IAllOrdersResponse, IFinishedTableAllResponse, IGETAllBookingsResponse, IGETAllReviewsResponse, IGETMenuAddOnsResponse, IGETMenuSectionsResponse, IGETMenuTypesResponse, IGETPrintersResponse, IGETRestaurantDataQuery, IGETRestaurantResponse, IGETTablesAllResponse, IGetAllClientsResponse, IGiftCardReponse, IGETMenuResponse, IOpenDaysGetAllResponse, IRestaurantDataQueryType, IGETMenuOrderSystemResponse, IGETSectionResponse, ITimesOpenWebsiteConfigResponse, IBookingPageResponse, IAllSpecialDaysResponse } from "./IGetRestaurantDataHooks.interface";
+import { IAllAuthorizedDevicesResponse, IAllOrderControllerResponse, IAllOrdersResponse, IFinishedTableAllResponse, IGETAllBookingsResponse, IGETAllReviewsResponse, IGETMenuAddOnsResponse, IGETMenuSectionsResponse, IGETMenuTypesResponse, IGETPrintersResponse, IGETRestaurantDataQuery, IGETRestaurantResponse, IGETTablesAllResponse, IGetAllClientsResponse, IGiftCardReponse, IGETMenuResponse, IOpenDaysGetAllResponse, IRestaurantDataQueryType, IGETMenuOrderSystemResponse, IGETSectionResponse, ITimesOpenWebsiteConfigResponse, IBookingPageResponse, IAllSpecialDaysResponse, IGETMenuToMakeQuery, IMenuToMakeResponse } from "./IGetRestaurantDataHooks.interface";
 import { IPOSTRestaurantBody, IPOSTRestaurantDataQueryType, IPOSTRestaurantDataRerturn } from "./IPostRestaurantDataHooks.interface";
 import { IPUTRestaurantBody, IPUTRestaurantDataQueryType } from "./IPutRestaurantDataHooks.interface";
 import { IDELETERestaurantDataBody, IDELETERestaurantDataQueryType } from "./IDeleteRestaurantDataHooks.interface";
@@ -114,6 +114,7 @@ export function useGETRestaurantDataHooks({
         restaurantBookingPageData: data as IBookingPageResponse,
         restaurantAllSpecialDays: data as IAllSpecialDaysResponse,
         restuarantTimesOpen: data as ITimesOpen[],
+        restaurantAllMenuToMake: data as IMenuToMakeResponse,
 
         isRestaurantDataFetching: isFetching,
         restaurantDataError: error ? true : false,

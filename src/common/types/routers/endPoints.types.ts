@@ -48,6 +48,7 @@ export enum EndPointsTypes {
     RESTAURANT_MENU_ADD_ONS_OPTIONS_ENDPOINT = '/restaurant/menu-add-ons-options',
     RESTAURANT_MENU_SECTION_ENDPOINT = '/restaurant/menu-sections',
     RESTAURANT_MENU_ADD_ONS_ENDPOINT = '/restaurant/menu-add-ons',
+    RESTAURANT_MENU_TO_MAKE_ENDPOINT = '/restaurant/menu-to-make',
     RESTAURANT_MENU_TYPES_ENDPOINT = '/restaurant/menu-type',
     RESTAURANT_PRINTERS_ENDPOINT = '/restaurant/printers',
     RESTAURANT_MENU_ENDPOINT = '/restaurant/menu',
@@ -57,6 +58,7 @@ export enum EndPointsTypes {
     STOCK_SUPPLIER_CONTACT_ENDPOINT = '/stock/supplier-contact',
     STOCK_SUPPLIER_AUTO_ORDER_ENDPOINT = '/stock/supplier-auto-order',
     STOCK_ITEM_ENDPOINT = '/stock/item',
+    STOCK_ITEM_HISTORY_ENDPOINT = '/stock/item-history',
     STOCK_CATEGORY_ENDPOINT = '/stock/category',
     STOCK_SUB_CATEGORY_ENDPOINT = '/stock/sub-category',
     STOCK_PRODUCT_ENDPOINT = '/stock/product',
@@ -83,14 +85,17 @@ export enum EndPointsTypes {
     USER_FILES_ENDPOINT = '/user/files',
     USER_ENDPOINT = "/user",
 
-    SERVICES_OPENAI_ENDPOINT = "/services/openai",
+    SERVICES_NOTIFICATION_ENDPOINT = "/services/notification",
     SERVICES_HISTORY_ENDPOINT = "/services/history",
+    SERVICES_OPENAI_ENDPOINT = "/services/openai",
     SERVICES_POYNT_ENDPOINT = "/services/poynt",
     SERVICES_EMAIL_ENDPOINT = "/services/email",
     SERVICES_SMS_ENDPOINT = "/services/sms"
 }
 
 export enum RedirectTo {
+    REVIEWS = '/admin/restaurant/reviews',
+    REQUEST_PROFILE = '/admin/hrsystem/requests',
     WAITERS = '/admin/texas/waiters',
     RECEPTION = '/admin/texas/reception',
     USER_PROFILE = '/admin/hrsystem/employees/all',
@@ -104,4 +109,6 @@ export enum RedirectTo {
     NEW_ORDER = '/admin/stock/new-order',
     PRODUCT_PROFILE = '/admin/stock/suppliers',
     STOCK_ORDER_CONTROLLER_PROFILE = '/admin/stock/orders',
+    STOCK_NEW_ORDER = '/admin/stock/new-order',
+    MENU_PROFILE = '/admin/restaurant/menu/all'
 }

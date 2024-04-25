@@ -8,7 +8,7 @@ import { AxiosRequestConfig } from "axios";
 import toast from "react-hot-toast";
 
 //interfaces
-import { IGETAllIStockItemResponse, IGETAllIStockSuppliersResponse, IGETAllStockCategoryResponse, IGETAllStockExtraItemEntryResponse, IGETAllStockOrderControllerResponse, IGETAllStockOrderResponse, IGETAllStockProductsResponse, IGETAllStockSubCategoryResponse, IGETAllStockSupplierAutoOrderResponse, IGETAllStockSupplierBankResponse, IGETAllStockSupplierContactsResponse, IGETStockDataQuery, IGETStockResponse, IStockDataQueryType } from "./IGetStockDataHooks.interface";
+import { IGETAllIStockItemResponse, IGETAllIStockSuppliersResponse, IGETAllStockCategoryResponse, IGETAllStockExtraItemEntryResponse, IGETAllStockItemHistoryResponse, IGETAllStockOrderControllerResponse, IGETAllStockOrderResponse, IGETAllStockProductsResponse, IGETAllStockSubCategoryResponse, IGETAllStockSupplierAutoOrderResponse, IGETAllStockSupplierBankResponse, IGETAllStockSupplierContactsResponse, IGETStockDataQuery, IGETStockResponse, IStockDataQueryType } from "./IGetStockDataHooks.interface";
 import { IPOSTStockBody, IPOSTStockDataQueryType, IPOSTStockDataRerturn } from "./IPostStockDataHooks.interface";
 import { IDELETEStockDataBody, IDELETEStockDataQueryType } from "./IDeleteStockDataHooks.interface";
 import { IPUTStockBody, IPUTStockDataQueryType } from "./IPutStockDataHooks.interface";
@@ -96,6 +96,9 @@ export function useGETStockDataHooks({
         stockOrderController: data as IStockOrdersController,
         stockAllExtraItemEntry: data as IGETAllStockExtraItemEntryResponse,
         stockExtraItemEntry: data as IStockExtraItemEntry,
+        stockOrderAnalytics: data as any,
+        stockOrderControllerAnalytics: data as any,
+        stockAllItemHistory: data as IGETAllStockItemHistoryResponse,
 
         isStockDataFetching: isFetching,
         stockDataError: error ? true : false,

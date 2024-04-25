@@ -3,7 +3,7 @@ import { IBookingStatus, IBookings, IReviews, IReviewsType } from "@/common/type
 import { IClient } from "@/common/types/restaurant/client.interface";
 import { IBookingDays, ISpecialDays, ITimesOpen } from "@/common/types/restaurant/config.interface";
 import { IGiftCardStatus, IGiftCards } from "@/common/types/restaurant/giftcard.interface";
-import { IMenu, IMenuAddOns, IMenuSection, IMenuType } from "@/common/types/restaurant/menu.interface";
+import { IMenu, IMenuAddOns, IMenuSection, IMenuToMake, IMenuType } from "@/common/types/restaurant/menu.interface";
 import { IOrder, IOrderController, OrderStatus } from "@/common/types/restaurant/order.interface";
 import { IPrinters } from "@/common/types/restaurant/printers.interface";
 import { IFinishedTable, ISection, ITable, TableMealStatus } from "@/common/types/restaurant/tables.interface";
@@ -767,10 +767,36 @@ export interface IGETTimesOpenBody {
   }
 }
 
+export interface IMenuToMakeResponse {
+  data: IMenuToMake[];
+  pagination: IPaginationResponse
+}
 
-export type IGETRestaurantResponse = IGETAllBookingsResponse | IBookings | IGETTablesAllResponse | ITable | IAllOrdersResponse | IOrder | IAllOrderControllerResponse | IOrderController | IGetAllClientsResponse | IClient | IGETSectionResponse | ISection | IGETMenuResponse | IMenu | IFinishedTableAllResponse | IFinishedTable | IGETAllReviewsResponse | IReviews | IGiftCardReponse | IGiftCards | IGETAuthorizedQuery | IAllSpecialDaysResponse | ISpecialDays | IOpenDaysGetAllResponse | IBookingDays | IGETPrintersResponse | IGETMenuSectionsResponse | IGETMenuTypesResponse | IGETMenuAddOnsResponse | IGETMenuOrderSystemResponse[] | ITimesOpenWebsiteConfigResponse | IBookingPageResponse | ITimesOpen[]
+export interface IGETMenuToMakeQuery {
+  all?: {
+    in?: {
+      menu_id?: string[]
+      item_id?: string[]
+    }
 
-export type IRestaurantDataQueryType = 'BOOKINGS' | 'TABLES' | "ORDER" | "ORDER_CONTROLLER" | 'CLIENTS' | "SECTIONS" | "MENU" | "FINISHED_TABLE" | "REVIEWS" | "GIFTCARD" | "AUTHORIZED_DEVICES" | 'SPECIAL_DAYS' | 'OPEN_DAYS' | 'PRINTERS' | 'MENU_SECTION' | 'MENU_TYPE' | 'MENU_ADD_ONS' | 'TIMES_OPEN'
+    includes?: {
+      menu?: '1'
+      item?: '1'
+    }
+
+    orderBy?: {
+      key: keyof IMenuToMake
+      order: "asc" | "desc";
+    };
+
+    pagination: IQueryPagination;
+  };
+}
+
+
+export type IGETRestaurantResponse = IGETAllBookingsResponse | IBookings | IGETTablesAllResponse | ITable | IAllOrdersResponse | IOrder | IAllOrderControllerResponse | IOrderController | IGetAllClientsResponse | IClient | IGETSectionResponse | ISection | IGETMenuResponse | IMenu | IFinishedTableAllResponse | IFinishedTable | IGETAllReviewsResponse | IReviews | IGiftCardReponse | IGiftCards | IGETAuthorizedQuery | IAllSpecialDaysResponse | ISpecialDays | IOpenDaysGetAllResponse | IBookingDays | IGETPrintersResponse | IGETMenuSectionsResponse | IGETMenuTypesResponse | IGETMenuAddOnsResponse | IGETMenuOrderSystemResponse[] | ITimesOpenWebsiteConfigResponse | IBookingPageResponse | ITimesOpen[] | IMenuToMakeResponse
+
+export type IRestaurantDataQueryType = 'BOOKINGS' | 'TABLES' | "ORDER" | "ORDER_CONTROLLER" | 'CLIENTS' | "SECTIONS" | "MENU" | "FINISHED_TABLE" | "REVIEWS" | "GIFTCARD" | "AUTHORIZED_DEVICES" | 'SPECIAL_DAYS' | 'OPEN_DAYS' | 'PRINTERS' | 'MENU_SECTION' | 'MENU_TYPE' | 'MENU_ADD_ONS' | 'TIMES_OPEN' | 'MENU_TO_MAKE'
 
 export interface IGETRestaurantDataQuery {
   bookings?: IGETBookingsQuery
@@ -780,6 +806,7 @@ export interface IGETRestaurantDataQuery {
   clients?: IGETClientQuery
   sections?: IGETSectionQuery
   menu?: IGETMenuQuery
+  menu_to_make?: IGETMenuToMakeQuery
   finishedTables?: IGETFinishedTableQuery
   reviews?: IGETReviewsQuery
   giftcards?: IGETGiftCardQuery

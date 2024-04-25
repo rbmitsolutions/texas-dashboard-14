@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { api } from "@/common/libs/axios/api";
 
 //interface
-import { ICompanyAllFormsDataReponse, ICompanyDataQueryType, ICompanyDetailsResponse, IFormSectionGetAllResponse, IFormsGetAllResponse, IGETAllDepartamentsResponse, IGETAllDutiesResponse, IGETAllShiftsResponse, IGETCompanyAllFilesResponse, IGETCompanyDataQuery, IGETCompanyResponse, IGETCompanyRosterResponse, IGETHistoryResponse, IGETRolesResponse, IGETRosterTaskResponse, IGetAllTransactionsResponse, IHaccpReportsResponse, IRequestsGetAllResponse, IRosterPageResponse, IRosterPaymentPageResponse } from "./IGetCompanyDataHooks.interface";
+import { ICompanyAllFormsDataReponse, ICompanyDataQueryType, ICompanyDetailsResponse, IFormSectionGetAllResponse, IFormsGetAllResponse, IGETAllDepartamentsResponse, IGETAllDutiesResponse, IGETAllShiftsResponse, IGETCompanyAllFilesResponse, IGETCompanyDataQuery, IGETCompanyResponse, IGETCompanyRosterResponse, IGETHistoryResponse, IGETRolesResponse, IGETRosterTaskResponse, IGetAllNotificationResponse, IGetAllTransactionsResponse, IHaccpReportsResponse, IRequestsGetAllResponse, IRosterPageResponse, IRosterPaymentPageResponse } from "./IGetCompanyDataHooks.interface";
 import { IDELETECompanyDataBody, IDELETECompanyDataQueryType } from "./IDeleteCompanyDataHooks.interface";
 import { IPOSTCompanyBody, IPOSTCompanyDataQueryType, IPOSTCompanyDataRerturn } from "./IPostCompanyDataHooks.interface";
 import { IPUTCompanyBody, IPUTCompanyDataQueryType } from "./IPutCompanyDataHooks.interface";
@@ -108,6 +108,7 @@ export function useGETCompanyDataHooks({
         companyTransactionAnalytics: data as any,
         compnayTransaction: data as ITransactions,
         companayAllHistory: data as IGETHistoryResponse,
+        serviceNotification: data as IGetAllNotificationResponse,
 
         isCompanyDataFetching: isFetching,
         companyDataError: error ? true : false,
@@ -166,13 +167,15 @@ export interface IUsePutCompanyDataHooks {
     AxiosRequestConfig?: AxiosRequestConfig,
     UseMutationOptions?: UseMutationOptions<any, unknown, IPUTCompanyBody>
     toRefetch?: () => void
+    showToast?: boolean
 }
 
 export function usePUTCompanyDataHooks({
     query,
     AxiosRequestConfig,
     UseMutationOptions,
-    toRefetch
+    toRefetch,
+    showToast = true
 }: IUsePutCompanyDataHooks) {
 
     const { mutate, isLoading } = useMutation(
@@ -186,7 +189,7 @@ export function usePUTCompanyDataHooks({
         {
             onSuccess: (data) => {
                 toRefetch && toRefetch()
-                toast.success(companyEndPoint[query].updateSucess)
+                showToast && toast.success(companyEndPoint[query].updateSucess)
             },
             onError: (error: any) => {
                 toast.error(error.response.data.message || companyEndPoint[query].updateError)
@@ -206,13 +209,15 @@ export interface IUseDELETECompanyDataHooks {
     AxiosRequestConfig?: AxiosRequestConfig
     UseMutationOptions?: UseMutationOptions<void, unknown, IDELETECompanyDataBody>
     toRefetch?: () => void
+    showToast?: boolean
 }
 
 export function useDELETECompanyDataHooks({
     query,
     AxiosRequestConfig,
     UseMutationOptions,
-    toRefetch
+    toRefetch,
+    showToast = true
 }: IUseDELETECompanyDataHooks) {
 
     const { mutate, isLoading } = useMutation(
@@ -229,7 +234,7 @@ export function useDELETECompanyDataHooks({
         {
             onSuccess: () => {
                 toRefetch && toRefetch()
-                toast.success(companyEndPoint[query].deleteSucess)
+                showToast && toast.success(companyEndPoint[query].deleteSucess)
             },
             onError: (error: any) => {
                 toast.error(error.response.data.message || companyEndPoint[query].deleteError)

@@ -192,4 +192,14 @@ export const companyEndPoint = {
         createSucess: 'History created successfully!',
         createError: "History creation failed!",
     },
+    NOTIFICATION: {
+        url: EndPointsTypes['SERVICES_NOTIFICATION_ENDPOINT'],
+        queryParams: 'notification',
+        updateSucess: "Notification updated successfully!",
+        updateError: "Notification update failed!",
+        deleteSucess: "Notification deleted successfully!",
+        deleteError: "Notification delete failed!",
+        createSucess: 'Notification created successfully!',
+        createError: "Notification creation failed!",
+    },
 }

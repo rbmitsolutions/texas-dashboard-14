@@ -1,6 +1,7 @@
 import { IRequestsStatus, IRequestsType } from "@/common/types/company/requests.interface";
 import { IRosterStatus } from "@/common/types/company/roster.interface";
 import { TransactionsDirection, TransactionsMethod, TransactionsStatus, TransactionsType } from "@/common/types/company/transactions.interface";
+import { INotification } from "@/common/types/messages";
 
 export interface IPUTHaccpReportsBody {
     title: string
@@ -157,8 +158,14 @@ export interface IPUTCompanyDetailsBody {
     registration_number?: string
 }
 
+export interface IPUTNotificationBody {
+    id: string;
+    type?: INotification['type'];
+    message?: INotification['message'];
+    key_id?: INotification['key_id'];
+}
 
-export type IPUTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "DUTIES" | "SHIFTS" | 'REQUESTS' | "ROLES" | "DETAILS" | "TRANSACTIONS"
+export type IPUTCompanyDataQueryType = 'ROSTER' | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "DUTIES" | "SHIFTS" | 'REQUESTS' | "ROLES" | "DETAILS" | "TRANSACTIONS" | "NOTIFICATION"
 export interface IPUTCompanyBody {
     roster?: IPUTRosterBody,
     haccpReport?: IPUTHaccpReportsBody
@@ -170,4 +177,5 @@ export interface IPUTCompanyBody {
     role?: IPUTRolesBody
     info?: IPUTCompanyDetailsBody
     transaction?: IPUTTransactionsBody
+    notification?: IPUTNotificationBody
 }

@@ -45,7 +45,7 @@ export default function NewItemEntryDialog({ item, createEntry, user }: NewItemE
 
     const onSubmitForm: SubmitHandler<CreateExtraItemEntryFormSchemaType> = async (formData) => {
         const quantity = formData?.quantity * item?.volume
-  
+
         await createEntry({
             extra_item_entry: {
                 entry_by: user?.name,
@@ -103,7 +103,7 @@ export default function NewItemEntryDialog({ item, createEntry, user }: NewItemE
                                     />
                                     <FormMessage />
                                     <FormDescription>
-                                        Current Stock: {item?.stock} {item?.unit}
+                                        Current Stock:  {item?.stock > 0 ? (item?.stock / item?.volume).toFixed(0) : item?.stock}
                                     </FormDescription>
                                 </FormItem>
                             )}

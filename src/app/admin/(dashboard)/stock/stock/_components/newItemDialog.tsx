@@ -92,6 +92,7 @@ export default function NewItemDialog({ update, createItem, categories }: NewIte
 
     useEffect(() => {
         if (update?.item) {
+            setCategory(categories?.categories?.find(c => c?.id === update?.item?.category_id) || null)
             form.reset({
                 title: update?.item?.title || '',
                 max_stock: update?.item?.max_stock || 0,
@@ -99,9 +100,10 @@ export default function NewItemDialog({ update, createItem, categories }: NewIte
                 category_id: update?.item?.category_id || '',
                 sub_category_id: update?.item?.sub_category_id || '',
                 unit: (update?.item?.unit as any) || StockItemUnit.UNIT,
+                volume: update?.item?.volume || 0,
             })
         }
-    }, [form, update?.item])
+    }, [categories?.categories, form, update?.item])
 
     return (
         <Dialog

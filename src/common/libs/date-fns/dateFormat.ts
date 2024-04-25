@@ -1,5 +1,7 @@
 import { isToday as isTodayFns, format, addDays, subDays, startOfMonth, endOfMonth, startOfDay, endOfDay, startOfWeek, parse, parseISO, addMinutes, isWithinInterval, isBefore, formatISO, eachDayOfInterval } from "date-fns";
 
+export const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
 export const dateFormatIso = (date: Date): Date => {
     return new Date(formatISO(new Date(date), { representation: 'date' }) + "T00:00:00.000Z")
 }

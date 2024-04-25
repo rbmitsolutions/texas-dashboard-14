@@ -13,9 +13,9 @@ import NewProductDialog from "./newProductDialog"
 
 //interfaces
 import { IPOSTStockBody, IPOSTStockDataRerturn } from "@/hooks/stock/IPostStockDataHooks.interface";
-import { IStockItem, IStockProducts } from "@/common/types/restaurant/stock.interface";
-import { IPUTStockBody } from "@/hooks/stock/IPutStockDataHooks.interface";
 import { IGETAllStockProductsResponse, IGETStockDataQuery } from "@/hooks/stock/IGetStockDataHooks.interface";
+import { IPUTStockBody } from "@/hooks/stock/IPutStockDataHooks.interface";
+import { IStockItem } from "@/common/types/restaurant/stock.interface";
 
 interface ProductsTableProps {
     products: IGETAllStockProductsResponse
@@ -35,10 +35,9 @@ export default function ProductsTable({
     products,
     productParams,
     setProductParams,
-    updateProduct,
     createProduct,
     items,
-    supplier_id
+    supplier_id,
 }: ProductsTableProps) {
     return (
         <Wrap
@@ -66,19 +65,20 @@ export default function ProductsTable({
                         product: {
                             all: {
                                 ...prev?.product?.all,
-                                title: search
+                                code: search
                             }
                         }
                     })),
-                    value: productParams?.product?.all?.title || ''
+                    value: productParams?.product?.all?.code || '',
+                    placeholder: 'Search by code'
                 },
                 toRight: (
                     <div >
-                      <NewProductDialog
+                        <NewProductDialog
                             items={items}
                             createProduct={createProduct}
                             supplier_id={supplier_id}
-                        /> 
+                        />
                     </div >
                 ),
                 className: 'grid grid-cols-[1fr,auto]'
@@ -86,7 +86,6 @@ export default function ProductsTable({
         >
             <BasicTable
                 columns={StockProductsColumnsTable({
-
                 })}
                 data={products?.data || []}
             />
