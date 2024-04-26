@@ -91,7 +91,7 @@ export default function Stock() {
                         }
                     })),
                     pagination: items?.pagination,
-                    queryPagination: params?.supplier?.all?.pagination!,
+                    queryPagination: params?.item?.all?.pagination!,
                 }
             }}
             actions={{

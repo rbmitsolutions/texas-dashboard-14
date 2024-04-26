@@ -117,30 +117,30 @@ export default function Order({ params }: { params: { id: string } }) {
         }, {
             onSuccess: async () => {
                 setOrder([])
-                await localStorage.removeItem('createStockOrder')
+                // await localStorage.removeItem('createStockOrder')
                 push(RedirectTo.STOCK_NEW_ORDER)
             }
         })
     }
 
-    const saveLocal = useDebounce(() => {
-        localStorage.setItem('createStockOrder', JSON.stringify(order))
-    }, 2000)
+    // const saveLocal = useDebounce(() => {
+    //     localStorage.setItem('createStockOrder', JSON.stringify(order))
+    // }, 2000)
 
 
-    const getLocal = () => {
-        const local = localStorage.getItem('createStockOrder')
-        if (!local) return
-        setOrder(JSON.parse(local))
-    }
+    // const getLocal = () => {
+    //     const local = localStorage.getItem('createStockOrder')
+    //     if (!local) return
+    //     setOrder(JSON.parse(local))
+    // }
 
-    useEffect(() => {
-        saveLocal()
-    }, [order, saveLocal])
+    // useEffect(() => {
+    //     saveLocal()
+    // }, [order, saveLocal])
 
-    useEffect(() => {
-        getLocal()
-    }, [])
+    // useEffect(() => {
+    //     getLocal()
+    // }, [])
 
     return (
         <div className='flex-col-container items-center'>
