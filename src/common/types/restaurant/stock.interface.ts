@@ -53,6 +53,7 @@ export interface IStockSupplierAutoOrder {
 
     week_day: string
     email: string
+    email_cc: string[]
     last_order_date?: Date
 
     supplier_id: string

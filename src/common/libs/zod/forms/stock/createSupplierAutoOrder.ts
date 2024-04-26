@@ -5,6 +5,9 @@ export const CreateSupplierAutoOrderTypeFormSchema = z.object({
     email: z.string().email({
         message: "Invalid email address",
     }),
+    email_cc: z.array(z.string().email({
+        message: "Invalid email address",
+    }))
 });
 
 export type CreateSupplierAutoOrderTypeFormSchemaType = z.infer<typeof CreateSupplierAutoOrderTypeFormSchema>;

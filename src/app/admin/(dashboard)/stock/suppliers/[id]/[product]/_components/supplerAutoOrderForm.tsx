@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UseMutateFunction } from "react-query";
@@ -31,6 +31,8 @@ import { IStockSupplierAutoOrder } from "@/common/types/restaurant/stock.interfa
 import { IPOSTStockBody, IPOSTStockDataRerturn } from "@/hooks/stock/IPostStockDataHooks.interface";
 import { IPUTStockBody } from "@/hooks/stock/IPutStockDataHooks.interface";
 import { daysOfWeek } from "@/common/libs/date-fns/dateFormat";
+import { DeleteDialogButton } from "@/components/common/deleteDialogButton";
+import Icon from "@/common/libs/lucida-icon";
 
 export interface SupplerAutoOrderFormProps {
     supplier_id: string
@@ -46,12 +48,15 @@ export default function SupplerAutoOrderForm({
     createSupplierAutoOrder,
     update
 }: SupplerAutoOrderFormProps) {
+    const [email_cc, setEmailCc] = useState<string>('')
+
     const form = useForm<CreateSupplierAutoOrderTypeFormSchemaType>({
         mode: "onChange",
         resolver: zodResolver(CreateSupplierAutoOrderTypeFormSchema),
         defaultValues: {
             week_day: 'Monday',
-            email: ''
+            email: '',
+            email_cc: []
         },
     });
 
@@ -84,8 +89,9 @@ export default function SupplerAutoOrderForm({
     useEffect(() => {
         if (update?.auto_order) {
             form.reset({
-                week_day: update?.auto_order.week_day,
-                email: update?.auto_order.email
+                week_day: update?.auto_order?.week_day,
+                email: update?.auto_order?.email,
+                email_cc: update?.auto_order?.email_cc
             })
         }
     }, [form, update])
@@ -147,6 +153,41 @@ export default function SupplerAutoOrderForm({
                             </FormItem>
                         )}
                     />
+
+                    {form.watch('email_cc')?.map((email, index) => {
+                        return (
+                            <div key={index} className='flex-container justify-between items-center p-2 rounded-md bg-background-soft'>
+                                <small>{email} </small>
+                                <DeleteDialogButton
+                                    onDelete={async () => {
+                                        form.setValue('email_cc', form.watch('email_cc')?.filter((_, i) => i !== index))
+                                        await onSubmitForm(form.getValues())
+                                    }}
+                                />
+                            </div>
+                        )
+                    })}
+
+                    <div className='flex-container justify-between p-1 items-center'>
+                        <Input
+                            placeholder="CC Email"
+                            type='email'
+                            value={email_cc}
+                            onChange={(e) => setEmailCc(e.target.value)}
+                        />
+                        <Button
+                            type='button'
+                            size='iconExSm'
+                            onClick={async () => {
+                                form.setValue('email_cc', [...form.getValues('email_cc'), email_cc])
+                                setEmailCc('')
+                                await onSubmitForm(form.getValues())
+                            }}
+                        >
+                            <Icon name='Plus' />
+                        </Button>
+                    </div>
+
                     <Button
                         variant='blue'
                         leftIcon='Save'

@@ -58,6 +58,7 @@ export interface IPUTStockSupplierAutoOrderBody {
     id: string;
     week_day?: string;
     email?: string;
+    email_cc?: string[]
 }
 
 export interface IPUTStockCategoryBody {

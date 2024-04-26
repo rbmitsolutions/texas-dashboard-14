@@ -35,6 +35,7 @@ export function DeleteDialogButton({ isDisabled, onDelete, buttonText, buttonPro
                         size='iconExSm'
                         variant='destructive'
                         disabled={isDisabled}
+                        type='button'
                     >
                         <Icon name='Trash2' size={14} />
                     </Button>
@@ -55,6 +56,7 @@ export function DeleteDialogButton({ isDisabled, onDelete, buttonText, buttonPro
                             onClick={undo ? undo?.onUndo : onDelete}
                             className={undo ? '!bg-green-400' : '!bg-red-400'}
                             disabled={isDisabled}
+                            type='button'
                         >
                             {undo ? undo.buttonText : buttonText ? buttonText : 'Delete'}
                         </Button>

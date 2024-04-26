@@ -43,6 +43,7 @@ export interface IPOSTStockSupplierAutoOrderBody {
   week_day: string;
   email: string;
   supplier_id: string;
+  email_cc?: string[]
 }
 
 export interface IPOSTStockCategoryBody {

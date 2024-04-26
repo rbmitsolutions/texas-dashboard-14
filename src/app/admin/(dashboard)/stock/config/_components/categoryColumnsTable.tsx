@@ -6,14 +6,15 @@ import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
 import { ColumnDef } from "@tanstack/react-table"
 
 //interface
-import { IStockCategories } from "@/common/types/restaurant/stock.interface"
 import { IDELETEStockDataBody } from "@/hooks/stock/IDeleteStockDataHooks.interface"
+import { IStockCategories } from "@/common/types/restaurant/stock.interface"
 
 export interface StockCategoryColumnsTableProps {
+    deleteSubCategory: UseMutateFunction<void, any, IDELETEStockDataBody, unknown>
     deleteCategory: UseMutateFunction<void, any, IDELETEStockDataBody, unknown>
 }
 
-export const StockCategoryColumnsTable = ({ deleteCategory }: StockCategoryColumnsTableProps): ColumnDef<IStockCategories>[] => {
+export const StockCategoryColumnsTable = ({ deleteCategory, deleteSubCategory }: StockCategoryColumnsTableProps): ColumnDef<IStockCategories>[] => {
     return [
         {
             accessorKey: "title",
@@ -38,7 +39,7 @@ export const StockCategoryColumnsTable = ({ deleteCategory }: StockCategoryColum
                             return (
                                 <DeleteDialogButton
                                     key={sub?.id}
-                                    onDelete={async () => await deleteCategory({
+                                    onDelete={async () => await deleteSubCategory({
                                         sub_category: {
                                             id: sub?.id
                                         }
@@ -58,6 +59,27 @@ export const StockCategoryColumnsTable = ({ deleteCategory }: StockCategoryColum
                 )
             }
         },
+        {
+            accessorKey: 'actions',
+            header: 'Actions',
+            cell: ({ row }) => {
+                return (
+                    <div className='flex-container px-2'>
+                        <DeleteDialogButton
+                            onDelete={async () => await deleteCategory({
+                                category: {
+                                    id: row?.original?.id
+                                }
+                            })}
+                            isDisabled={row?.original?.sub_categories?.length > 0}
+                            buttonProps={{
+                                size: 'iconSm'
+                            }}
+                        />
+                    </div>
+                )
+            }
+        }
     ]
 
 }
