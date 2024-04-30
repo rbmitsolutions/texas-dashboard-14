@@ -14,6 +14,7 @@ import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks";
 //interface
 import { IRoles } from "@/common/types/company/companyDetails.interface";
 import { IUser } from "@/common/types/user/user.interface";
+import { IFilesAs } from "@/common/types/company/files.interface";
 
 interface NewContractFormProps {
     user: IUser
@@ -35,7 +36,7 @@ export default function NewContractForm({ user, roles }: NewContractFormProps) {
                         key: [user?.id],
                     },
                     as: {
-                        in: ['contract', 'contract-filed', 'contract-signed']
+                        in: [IFilesAs.CONTRACT, IFilesAs.CONTRACT_FILED, IFilesAs.CONTRACT_SIGNED]
                     },
                     pagination: {
                         take: 10,
@@ -48,7 +49,7 @@ export default function NewContractForm({ user, roles }: NewContractFormProps) {
             enabled: isOpen
         }
     })
-
+    
     const onOpenChange = () => {
         setIsOpen(prev => !prev)
         setIsHireFormOpen(false)
