@@ -43,7 +43,7 @@ export const RosterAnalyticsColumnsTable = ({
         {
             id: "shift",
             accessorKey: "Shift",
-            size: 100,
+            size: 150,
             cell: ({ row }) => {
                 return (
                     <div >

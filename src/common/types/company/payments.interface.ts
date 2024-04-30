@@ -15,4 +15,7 @@ export interface IPayments {
     file?: string;
     file_id?: string;
     key?: string;
+
+    created_at: Date;
+    updated_at: Date;
 }

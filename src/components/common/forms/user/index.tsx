@@ -5,6 +5,7 @@ import ProfileForm from "./profileForm";
 
 //components
 import EmergencyContactForm from "./_components/emergencyContactForm";
+import RosterAnalytics from "./_components/analytics/rosterAnalytics";
 import UpdatePasswordForm from "./_components/updatePasswordForm";
 import { DeleteDialogButton } from "../../deleteDialogButton";
 import NewContractForm from "./_components/newContractForm";
@@ -12,14 +13,14 @@ import VisaDetailsForm from "./_components/visaDetailsForm";
 import BankDetailsForm from "./_components/bankDetailsForm";
 import UpdateRoleForm from "./_components/updateRoleForm";
 import PaymentDetails from "./_components/paymentDetails";
+import UserAnalytics from "./_components/analytics";
 import { Button } from "@/components/ui/button";
 
 //interface
 import { IRoles } from "@/common/types/company/companyDetails.interface";
 import { IPUTUserBody } from "@/hooks/user/IPutUserDataHooks.interface";
 import { IUser } from "@/common/types/user/user.interface";
-import UserAnalytics from "./_components/analytics";
-import RosterAnalytics from "./_components/analytics/rosterAnalytics";
+import PaymentsAnalytics from "./_components/analytics/paymentsAnalytics";
 
 interface UserProfileProps {
     user: IUser
@@ -93,7 +94,14 @@ export default function UserProfile({ user, isAdmin, roles, onUpdate }: UserProf
             {isAdmin &&
                 <>
                     <UserAnalytics user={user} isAdmin={isAdmin} />
-                    <RosterAnalytics user={user} />
+                    <div className='grid grid-cols-2 gap-4'>
+                        <RosterAnalytics user={user} />
+                        <PaymentsAnalytics
+                            user={user}
+                            isAdmin={isAdmin}
+                        />
+                    </div>
+
                     <PaymentDetails user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
                 </>
             }
