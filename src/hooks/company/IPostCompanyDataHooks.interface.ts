@@ -5,7 +5,7 @@ import { IForm, IFormData, IFormSection } from "@/common/types/company/form.inte
 import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
 import { IRoster, IRosterTasks } from "@/common/types/company/roster.interface";
 import { ITransactions, TransactionsDirection, TransactionsMethod, TransactionsType } from "@/common/types/company/transactions.interface";
-import { INotification } from "@/common/types/messages";
+import { INotification } from "@/common/types/notifications.interface";
 
 
 export interface IPOSTTransaction {

@@ -1,5 +1,20 @@
-export type IFilesType = "image" | 'pdf'
-export type IFilesAs = 'avatar' | 'document' | 'contract' | 'contract-signed' | 'contract-filed' | 'cv' | 'report' | 'menu' | 'stock-order-controller'
+export enum IFilesType {
+    IMAGE = 'image',
+    PDF = 'pdf',
+}
+
+export enum IFilesAs {
+    AVATAR = 'avatar',
+    DOCUMENT = 'document',
+    CONTRACT = 'contract',
+    CONTRACT_SIGNED = 'contract-signed',
+    CONTRACT_FILED = 'contract-filed',
+    CV = 'cv',
+    REPORT = 'report',
+    MENU = 'menu',
+    STOCK_ORDER_CONTROLLER = 'stock-order-controller'
+}
+
 export interface IFiles {
     id: string
 

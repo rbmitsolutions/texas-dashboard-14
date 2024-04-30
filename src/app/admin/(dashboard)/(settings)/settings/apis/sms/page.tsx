@@ -29,7 +29,7 @@ export default function Sms() {
 
     return (
         <div>
-            <div className='flex-container justify-center items-center gap-8 py-10'>
+            <div className='flex-container justify-center items-center gap-8 py-14'>
                 <div
                     className='flex-col-container gap-2 items-center justify-center '
                 >

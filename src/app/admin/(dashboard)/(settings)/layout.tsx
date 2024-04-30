@@ -78,19 +78,14 @@ const bookingsComponents = [
 ]
 const apisComponents = [
     {
-        title: "Email",
-        href: "/admin/settings/apis/email",
-        description: "Email Api",
-    },
-    {
         title: "Sms",
         href: "/admin/settings/apis/sms",
         description: "Sms Api",
     },
     {
-        title: "Images",
-        href: "/admin/settings/apis/images",
-        description: "Images Api",
+        title: "Files",
+        href: "/admin/settings/apis/files",
+        description: "Files Api",
     },
 ]
 

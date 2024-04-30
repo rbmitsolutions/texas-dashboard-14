@@ -30,7 +30,7 @@ const navigation = [
     },
     {
         title: 'Apis',
-        path: '/admin/settings/apis/email'
+        path: '/admin/settings/apis/files'
     },
     {
         title: 'History',

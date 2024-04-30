@@ -17,7 +17,7 @@ export const TransactionsColumnsTable = ({ }: TransactionsColumnsTableProps): Co
         {
             id: "date",
             accessorKey: "Date",
-            size: 120,
+            size: 80,
             cell: ({ row }) => {
                 return formatDate({
                     date: row?.original?.date || row?.original?.created_at,
@@ -26,33 +26,59 @@ export const TransactionsColumnsTable = ({ }: TransactionsColumnsTableProps): Co
                 })
             }
         },
+
         {
-            id: "description",
-            accessorKey: "description",
-            size: 250,
+            id: "method",
+            header: () => <div className="text-left">Method</div>,
+            size: 60,
             cell: ({ row }) => {
-                return <div className='capitalize'>{row?.original?.description || ''} </div>
+                return <div className='capitalize'>{row?.original?.method || ''} </div>
+            }
+        },
+        {
+            id: "valid_by",
+            size: 120,
+            header: () => <div className="text-left">Valid By</div>,
+            cell: ({ row }) => {
+                return <div className='capitalize'>{row?.original?.valid_by?.toLowerCase() || ''}</div>
+            }
+        },
+
+        {
+            id: "payee",
+            size: 120,
+            header: () => <div className="text-left">Payee</div>,
+            cell: ({ row }) => {
+                return <div className='capitalize'>{row?.original?.payee?.toLowerCase() || ''}</div>
             }
         },
         {
             id: "type",
-            accessorKey: "type",
+            header: () => <div className="text-left">Type</div>,
             size: 80,
             cell: ({ row }) => {
                 return <div className='capitalize'>{row?.original?.type || ''}</div>
             }
         },
         {
-            id: "valid_by",
-            accessorKey: "valid_by",
-            size: 120,
+            id: "description",
+            header: () => <div className="text-left">Description</div>,
+            size: 250,
             cell: ({ row }) => {
-                return <div className='capitalize'>{row?.original?.valid_by?.toLowerCase() || ''}</div>
+                return <div className='capitalize'>{row?.original?.type !== 'closed-table' && row?.original?.description || ''} </div>
+            }
+        },
+        {
+            id: "direction",
+            accessorKey: "Direction",
+            size: 60,
+            cell: ({ row }) => {
+                return <div className='capitalize'>{row?.original?.direction || ''} </div>
             }
         },
         {
             id: "total",
-            accessorKey: "total",
+            header: () => <div className="text-left">Total</div>,
             size: 80,
             cell: ({ row }) => {
                 return <div>{convertCentsToEuro(row?.original?.total || 0)}</div>

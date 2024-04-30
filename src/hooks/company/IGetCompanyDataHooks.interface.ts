@@ -7,7 +7,7 @@ import { IHaccpReports } from "@/common/types/company/haccpReports.interface";
 import { IRequests, IRequestsStatus, IRequestsType } from "@/common/types/company/requests.interface";
 import { IRoster, IRosterStatus, IRosterTasks } from "@/common/types/company/roster.interface";
 import { ITransactions, TransactionsDirection, TransactionsMethod, TransactionsStatus, TransactionsType } from "@/common/types/company/transactions.interface";
-import { INotification } from "@/common/types/messages";
+import { INotification } from "@/common/types/notifications.interface";
 import { IPaginationResponse, IQueryPagination } from "@/common/types/settings.interface";
 import { IUser, IUserStatus } from "@/common/types/user/user.interface";
 
@@ -372,7 +372,7 @@ export interface IGETTransactionsQuery {
     valid_by?: string;
 
     payee_key?: string;
-
+    payee?: string;
     created_at?: {
       gte: Date;
       lte: Date;

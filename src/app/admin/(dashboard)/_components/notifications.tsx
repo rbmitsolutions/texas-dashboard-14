@@ -22,7 +22,7 @@ import Wrap from "@/components/common/wrap"
 import { useDELETECompanyDataHooks, useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks"
 
 //interfaces
-import { INotification, NotificationRedirectTo } from "@/common/types/messages"
+import { INotification, NotificationRedirectTo, NotificationType } from "@/common/types/notifications.interface"
 import { IQueryPagination } from "@/common/types/settings.interface"
 
 export default function Notifications() {
@@ -60,7 +60,11 @@ export default function Notifications() {
     }
 
     const onNotificationClick = async (notification: INotification) => {
-        push(NotificationRedirectTo[notification?.type])
+        if(notification?.type === NotificationType.CONTRACT_SIGNED) {
+            push(NotificationRedirectTo[notification?.type] + `/` + notification?.key_id)
+        } else {
+            push(NotificationRedirectTo[notification?.type])
+        }
         onOpenChange()
     }
 

@@ -1,7 +1,7 @@
 import { IRequestsStatus, IRequestsType } from "@/common/types/company/requests.interface";
 import { IRosterStatus } from "@/common/types/company/roster.interface";
 import { TransactionsDirection, TransactionsMethod, TransactionsStatus, TransactionsType } from "@/common/types/company/transactions.interface";
-import { INotification } from "@/common/types/messages";
+import { INotification } from "@/common/types/notifications.interface";
 
 export interface IPUTHaccpReportsBody {
     title: string

@@ -110,5 +110,7 @@ export enum RedirectTo {
     PRODUCT_PROFILE = '/admin/stock/suppliers',
     STOCK_ORDER_CONTROLLER_PROFILE = '/admin/stock/orders',
     STOCK_NEW_ORDER = '/admin/stock/new-order',
-    MENU_PROFILE = '/admin/restaurant/menu/all'
+    MENU_PROFILE = '/admin/restaurant/menu/all',
+    GIFTCARD_PAGE = '/admin/restaurant/giftcard',
+    SMS_CONFIG_PAGE = '/admin/settings/apis/sms'
 }
