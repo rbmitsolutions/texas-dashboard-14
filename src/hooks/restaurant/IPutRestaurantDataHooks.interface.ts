@@ -224,7 +224,7 @@ export interface IPUTMenuAddOnsBody {
 }
 
 export interface IPUTMenuBody {
-    menu: {
+    menu?: {
         id: string
         title?: string
         short_title?: string
@@ -261,6 +261,10 @@ export interface IPUTMenuBody {
     highlight?: {
         id: string
     }
+    transferImages?:{
+        from_id: string
+        to_id: string
+      }
 }
 
 

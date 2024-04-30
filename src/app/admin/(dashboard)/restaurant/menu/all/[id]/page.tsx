@@ -149,7 +149,6 @@ export default function MenuItemPage(params: { params: { id: string } }) {
         query: 'MENU',
     })
 
-
     const form = useForm<CreateMenuFormSchemaType>({
         mode: "onChange",
         resolver: zodResolver(CreateMenuFormSchema),
@@ -280,8 +279,10 @@ export default function MenuItemPage(params: { params: { id: string } }) {
                             />
                         </div>
                         <div className='flex flex-col gap-4 xl:order-2'>
-                            <UploadMenuImages form={form} />
-                            <MenuItemsToMake 
+                            <UploadMenuImages
+                                form={form}
+                            />
+                            <MenuItemsToMake
                                 menu={menu}
                             />
                         </div>

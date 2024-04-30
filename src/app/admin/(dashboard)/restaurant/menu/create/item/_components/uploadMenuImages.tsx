@@ -2,9 +2,10 @@ import { cn } from "@/common/libs/shadcn/utils";
 import Image from "next/image";
 
 //components
+import { ExtendedCreateMenuFormType } from "../../_components/createUpdateMenuForm";
 import { convertCentsToEuro } from "@/common/utils/convertToEuro";
 import ImageCropper from "@/components/common/imageCropper";
-import { ExtendedCreateMenuFormType } from "../../_components/createUpdateMenuForm";
+import TransferMenuImages from "./transferMenuImages";
 import { ImagesPath } from "@/common/types/imgs";
 
 export interface UploadMenuImagesProps {
@@ -61,6 +62,7 @@ export default function UploadMenuImages({ form }: UploadMenuImagesProps) {
                     </h1>
                     <p className='text-justify line-clamp-3 break-all'>{form.watch('description')}</p>
                     <strong className='text-xl'>{convertCentsToEuro(form.watch('value') || 0)}</strong>
+                    <TransferMenuImages/>
                 </div>
             </div>
             <div className='flex-container items-center justify-center flex-wrap rounded-lg border-2 p-4'>
