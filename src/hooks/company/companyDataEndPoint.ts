@@ -202,4 +202,14 @@ export const companyEndPoint = {
         createSucess: 'Notification created successfully!',
         createError: "Notification creation failed!",
     },
+    SMS: {
+        url: EndPointsTypes['SERVICES_SMS_ENDPOINT'],
+        queryParams: 'sms',
+        updateSucess: "SMS updated successfully!",
+        updateError: "SMS update failed!",
+        deleteSucess: "SMS deleted successfully!",
+        deleteError: "SMS delete failed!",
+        createSucess: 'SMS created successfully!',
+        createError: "SMS creation failed!",
+    },
 }

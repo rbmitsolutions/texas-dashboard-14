@@ -455,10 +455,41 @@ export interface IGETNotificationQuery {
   }
 }
 
+export interface IGETSmsMessage {
+  callback_url: string | null
+  campaign_id: string | null
+  cost: number
+  created_at: string
+  failed_reason: string | null
+  id: string
+  is_api: boolean
+  message: string
+  scheduled_for: string | null
+  sender_id: string
+  sent_at: string
+  sms_count: number
+  status: string
+  timezone: string | null
+  to: string
+  type: string
+  updated_at: string
+}
+export interface IGETSmsResponse {
+  balance: {
+    balance: number
+    currency: string
+  },
+  messages: IGETSmsMessage[]
+}
+
+export interface IGETSmsQuery {
+  api?: '1'
+}
+
 
 export type IGETCompanyResponse = IGETCompanyRosterResponse | IHaccpReportsResponse | IHaccpReports | IFormsGetAllResponse | IForm | IFormSectionGetAllResponse | IFormSection | IGETFormDataQuery | IFormData | IFiles | IRequests | IRequestsGetAllResponse | ICompanyDetailsResponse | IGETRolesResponse | IRoles | IGETAllDepartamentsResponse | IDepartments | IGETCompanyAllFilesResponse | IGETShiftsQuery | IGETDutiesQuery | IRosterPageResponse | IGETRosterTaskResponse | IUserExtraPaymentData | IGetAllTransactionsResponse | IGetAllNotificationResponse
 
-export type ICompanyDataQueryType = 'ROSTER' | "ROLES" | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "FILES" | "REQUESTS" | 'DETAILS' | "DEPARTAMENTS" | "DUTIES" | "SHIFTS" | 'ROSTER_TASKS' | "TRANSACTIONS" | "HISTORY" | 'NOTIFICATION'
+export type ICompanyDataQueryType = 'ROSTER' | "ROLES" | 'HACCP_REPORTS' | 'FORMS' | "FORM_SECTION" | "FORM_DATA" | "FILES" | "REQUESTS" | 'DETAILS' | "DEPARTAMENTS" | "DUTIES" | "SHIFTS" | 'ROSTER_TASKS' | "TRANSACTIONS" | "HISTORY" | 'NOTIFICATION' | 'SMS'
 export interface IGETCompanyDataQuery {
   roster?: IGETCompanyRosterQuery
   haccpReports?: IGETHaccpReportsQuery
@@ -476,4 +507,5 @@ export interface IGETCompanyDataQuery {
   transactions?: IGETTransactionsQuery
   history?: IGETHistoryQuery
   notification?: IGETNotificationQuery
+  sms?: IGETSmsQuery
 }
