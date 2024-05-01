@@ -91,20 +91,17 @@ export default function UserProfile({ user, isAdmin, roles, onUpdate }: UserProf
                     </>
                 }
             </div>
+            <UserAnalytics user={user} isAdmin={isAdmin} />
             {isAdmin &&
-                <>
-                    <UserAnalytics user={user} isAdmin={isAdmin} />
-                    <div className='grid grid-cols-2 gap-4'>
-                        <RosterAnalytics user={user} />
-                        <PaymentsAnalytics
-                            user={user}
-                            isAdmin={isAdmin}
-                        />
-                    </div>
-
-                    <PaymentDetails user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
-                </>
+                <div className='grid grid-cols-2 gap-4'>
+                    <RosterAnalytics user={user} />
+                    <PaymentsAnalytics
+                        user={user}
+                        isAdmin={isAdmin}
+                    />
+                </div>
             }
+            <PaymentDetails user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
             <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
                 <DetailsForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
                 <EmergencyContactForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
