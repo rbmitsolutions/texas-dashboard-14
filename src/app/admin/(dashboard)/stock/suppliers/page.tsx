@@ -58,6 +58,14 @@ export default function Suppliers() {
         toRefetch
     })
 
+    const categoriesOptions = categories?.data?.map(category => {
+        return {
+            label: category?.title,
+            value: category?.id
+        }
+    }) || []
+
+    
     return (
         <Wrap
             header={{
@@ -79,6 +87,32 @@ export default function Suppliers() {
                 }
             }}
             actions={{
+                optionsPopover: {
+                    options: [
+                        {
+                            label: 'Category',
+                            value: params?.item?.all?.category?.id[0] || '',
+                            placeholder: 'Category',
+                            onChange: (e: string) => setParams(prev => ({
+                                supplier: {
+                                    all: {
+                                        ...prev?.supplier?.all,
+                                        category: {
+                                            in: e === 'all' ? [] : [e]
+                                        }
+                                    }
+                                }
+                            })),
+                            options: [
+                                {
+                                    label: 'All',
+                                    value: 'all'
+                                },
+                                ...categoriesOptions
+                            ]
+                        }
+                    ]
+                },
                 toRight: (
                     <div className='flex justify-end items-center gap-4'>
                         <NewSupplierDialog
@@ -87,6 +121,7 @@ export default function Suppliers() {
                         />
                     </div >
                 ),
+                className: 'flex-container justify-end w-full gap-4 items-center',
             }}
         >
             <BasicTable

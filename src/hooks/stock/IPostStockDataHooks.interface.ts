@@ -1,4 +1,4 @@
-import { IStockCategories, IStockItem, IStockSubCategories, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface"
+import { IStockCategories, IStockExtraItemEntry, IStockItem, IStockItemHistory, IStockOrdersController, IStockSubCategories, IStockSupplierAutoOrder, IStockSupplierBank, IStockSupplierContacts, IStockSuppliers } from "@/common/types/restaurant/stock.interface"
 
 export interface IPOSTStockSuppliersBody {
   title: string;
@@ -19,9 +19,9 @@ export interface IPOSTStockItemBody {
   category_id: string
   sub_category_id: string
   connect?: {
-      products?: {
-          id: string[]
-      },
+    products?: {
+      id: string[]
+    },
   },
 }
 
@@ -43,6 +43,7 @@ export interface IPOSTStockSupplierAutoOrderBody {
   week_day: string;
   email: string;
   supplier_id: string;
+  email_cc?: string[]
 }
 
 export interface IPOSTStockCategoryBody {
@@ -103,9 +104,18 @@ export interface IPOSTStockExtraItemEntryBody {
   old_stock: number;
 }
 
-export type IPOSTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER' | 'ORDER_CONTROLLER' | 'EXTRA_ITEM_ENTRY'
+export interface IPOSTStockItemHistoryBody {
+  menu: string
+  item_id: string;
+  quantity: number;
+  menu_id: string;
+  order_id: string;
+}
 
-export type IPOSTStockDataRerturn = IStockSuppliers | IStockItem | IStockSupplierBank | IStockSupplierContacts | IStockSupplierAutoOrder | IStockCategories | IStockSubCategories | IPOSTStockProductBody | IPOSTStockOrderBody | IPOSTStockOrderControllerBody | IPOSTStockExtraItemEntryBody
+
+export type IPOSTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER' | 'ORDER_CONTROLLER' | 'EXTRA_ITEM_ENTRY' | 'ITEM_HISTORY' 
+
+export type IPOSTStockDataRerturn = IStockSuppliers | IStockItem | IStockSupplierBank | IStockSupplierContacts | IStockSupplierAutoOrder | IStockCategories | IStockSubCategories | IPOSTStockProductBody | IPOSTStockOrderBody | IStockOrdersController| IStockExtraItemEntry| IStockItemHistory
 
 export interface IPOSTStockBody {
   supplier?: IPOSTStockSuppliersBody
@@ -119,4 +129,5 @@ export interface IPOSTStockBody {
   order?: IPOSTStockOrderBody
   order_controller?: IPOSTStockOrderControllerBody
   extra_item_entry?: IPOSTStockExtraItemEntryBody
+  item_history?: IPOSTStockItemHistoryBody
 }

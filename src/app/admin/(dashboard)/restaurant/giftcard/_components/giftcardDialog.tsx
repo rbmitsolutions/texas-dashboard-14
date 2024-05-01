@@ -49,8 +49,6 @@ export default function GiftcardDialog({ giftcardId, giftcard, updateGiftcard, u
         },
         UseQueryOptions: {
             onSuccess: (data) => {
-                console.log('fetch')
-                console.log(data)
                 setCard(data as IGiftCards)
             },
             enabled: (isOpen && giftcardId) ? true : false,

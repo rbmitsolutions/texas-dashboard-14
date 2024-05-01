@@ -21,6 +21,16 @@ export const stockEndPoint = {
         createSucess: 'Item created successfully!',
         createError: "Item creation failed!",
     },
+    ITEM_HISTORY: {
+        url: EndPointsTypes['STOCK_ITEM_HISTORY_ENDPOINT'],
+        queryParams: 'ItemHistory',
+        updateSucess: "Item History updated successfully!",
+        updateError: "Item History update failed!",
+        deleteSucess: "Item History deleted successfully!",
+        deleteError: "Item History delete failed!",
+        createSucess: 'Item History created successfully!',
+        createError: "Item History creation failed!",
+    },
     SUPPLIER_BANK: {
         url: EndPointsTypes['STOCK_SUPPLIER_BANK_ENDPOINT'],
         queryParams: 'SupplierBank',

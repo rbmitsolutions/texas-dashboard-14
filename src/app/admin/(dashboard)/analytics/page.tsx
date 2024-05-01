@@ -54,9 +54,9 @@ export default function Analytics() {
                     toDate={new Date()}
                 />
             </div>
-             <BookingsAnalytics date={date} />
+            <BookingsAnalytics date={date} />
             <TransactionsAnalytics date={date} />
-            <SalesAnalytics date={date} /> 
+            <SalesAnalytics date={date} />
             <OwtAnalytics date={date} />
         </div>
     )

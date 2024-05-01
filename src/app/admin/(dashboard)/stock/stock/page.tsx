@@ -73,6 +73,13 @@ export default function Stock() {
         toRefetch
     })
 
+    const categoriesOptions = categories?.data?.map(category => {
+        return {
+            label: category?.title,
+            value: category?.id
+        }
+    }) || []
+
     return (
         <Wrap
             header={{
@@ -91,7 +98,7 @@ export default function Stock() {
                         }
                     })),
                     pagination: items?.pagination,
-                    queryPagination: params?.supplier?.all?.pagination!,
+                    queryPagination: params?.item?.all?.pagination!,
                 }
             }}
             actions={{
@@ -106,6 +113,36 @@ export default function Stock() {
                     })),
                     value: params?.item?.all?.title || ''
                 },
+                optionsPopover: {
+                    options: [
+                        {
+                            label: 'Category',
+                            value: params?.item?.all?.category?.id[0] || '',
+                            placeholder: 'Category',
+                            onChange: (e: string) => setParams(prev => ({
+                                item: {
+                                    all: {
+                                        ...prev?.item?.all,
+                                        pagination: {
+                                            take: 20,
+                                            skip: 0
+                                        },
+                                        category: {
+                                            id: e === 'all' ? [] : [e]
+                                        }
+                                    }
+                                }
+                            })),
+                            options: [
+                                {
+                                    label: 'All',
+                                    value: 'all'
+                                },
+                                ...categoriesOptions
+                            ]
+                        }
+                    ]
+                },
                 toRight: (
                     <div >
                         <NewItemDialog
@@ -118,7 +155,7 @@ export default function Stock() {
                         />
                     </div >
                 ),
-                className: 'grid grid-cols-[1fr,auto]'
+                className: 'grid grid-cols-[1fr,auto,auto] gap-4 items-center',
             }}
         >
             <BasicTable

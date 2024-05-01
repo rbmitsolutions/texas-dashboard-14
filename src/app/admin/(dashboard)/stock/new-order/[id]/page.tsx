@@ -12,6 +12,8 @@ import { useGETStockDataHooks, usePOSTStockDataHooks } from "@/hooks/stock/stock
 
 //interfaces
 import { Button } from "@/components/ui/button"
+import { RedirectTo } from "@/common/types/routers/endPoints.types"
+import { useRouter } from "next/navigation"
 
 export interface INewOrder {
     item_id: string
@@ -23,6 +25,7 @@ export interface INewOrder {
 }
 
 export default function Order({ params }: { params: { id: string } }) {
+    const { push } = useRouter()
     const [order, setOrder] = useState<INewOrder[]>([])
 
     const {
@@ -79,11 +82,6 @@ export default function Order({ params }: { params: { id: string } }) {
     } = usePOSTStockDataHooks({
         query: 'ORDER',
         toRefetch,
-        UseMutationOptions: {
-            onSuccess: () => {
-                setOrder([])
-            }
-        }
     })
 
     const handleUpdateNewOrder = (newOrder: INewOrder) => {
@@ -119,29 +117,30 @@ export default function Order({ params }: { params: { id: string } }) {
         }, {
             onSuccess: async () => {
                 setOrder([])
-                await localStorage.removeItem('createStockOrder')
+                // await localStorage.removeItem('createStockOrder')
+                push(RedirectTo.STOCK_NEW_ORDER)
             }
         })
     }
 
-    const saveLocal = useDebounce(() => {
-        localStorage.setItem('createStockOrder', JSON.stringify(order))
-    }, 2000)
+    // const saveLocal = useDebounce(() => {
+    //     localStorage.setItem('createStockOrder', JSON.stringify(order))
+    // }, 2000)
 
 
-    const getLocal = () => {
-        const local = localStorage.getItem('createStockOrder')
-        if (!local) return
-        setOrder(JSON.parse(local))
-    }
+    // const getLocal = () => {
+    //     const local = localStorage.getItem('createStockOrder')
+    //     if (!local) return
+    //     setOrder(JSON.parse(local))
+    // }
 
-    useEffect(() => {
-        saveLocal()
-    }, [order, saveLocal])
+    // useEffect(() => {
+    //     saveLocal()
+    // }, [order, saveLocal])
 
-    useEffect(() => {
-        getLocal()
-    }, [])
+    // useEffect(() => {
+    //     getLocal()
+    // }, [])
 
     return (
         <div className='flex-col-container items-center'>
@@ -164,7 +163,7 @@ export default function Order({ params }: { params: { id: string } }) {
                 className='mt-4'
                 isLoading={isCreateOrderLoading}
                 leftIcon="Send"
-                disabled={!order?.length}
+                disabled={!order?.length || isCreateOrderLoading}
             >
                 Send Order
             </Button>

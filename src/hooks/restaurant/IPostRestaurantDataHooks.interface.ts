@@ -1,5 +1,5 @@
 import { IBookingStatus, IBookings } from "@/common/types/restaurant/bookings.interface";
-import { IMenu, IMenuAddOns, IMenuSection, IMenuType } from "@/common/types/restaurant/menu.interface";
+import { IMenu, IMenuAddOns, IMenuSection, IMenuToMake, IMenuType } from "@/common/types/restaurant/menu.interface";
 import { IOrder, IOrderController, OrderStatus } from "@/common/types/restaurant/order.interface";
 import { IPUTTablesBody } from "./IPutRestaurantDataHooks.interface";
 import { IGiftCardStatus, IGiftCards } from "@/common/types/restaurant/giftcard.interface";
@@ -239,10 +239,16 @@ export interface IPOSTMenuBody {
   options_priority: number
 }
 
-export type IPOSTRestaurantDataQueryType = 'BOOKINGS' | 'TABLES' | "ORDER" | "ORDER_CONTROLLER" | 'SECTIONS' | "MENU" | "GIFTCARD" | "AUTHORIZED_DEVICES" | 'SPECIAL_DAYS' | 'TIMES_OPEN' | "PRINTERS" | 'MENU_SECTION' |
-  'MENU_TYPE' | "MENU_ADD_ONS" | 'MENU_ADD_ONS_OPTIONS' | 'TO_PRINT'
+export interface IPOSTMenuToMakeBody {
+  quantity: number;
+  menu_id: string;
+  item_id: string;
+}
 
-export type IPOSTRestaurantDataRerturn = IBookings | ITable | IOrder | IOrderController | ISection | IMenu | IGiftCards | IAuthorizedDevices | ISpecialDays | ITimesOpen | IPrinters | IMenuSection | IMenuType | IMenuAddOns
+export type IPOSTRestaurantDataQueryType = 'BOOKINGS' | 'TABLES' | "ORDER" | "ORDER_CONTROLLER" | 'SECTIONS' | "MENU" | "GIFTCARD" | "AUTHORIZED_DEVICES" | 'SPECIAL_DAYS' | 'TIMES_OPEN' | "PRINTERS" | 'MENU_SECTION' |
+  'MENU_TYPE' | "MENU_ADD_ONS" | 'MENU_ADD_ONS_OPTIONS' | 'TO_PRINT' | 'MENU_TO_MAKE'
+
+export type IPOSTRestaurantDataRerturn = IBookings | ITable | IOrder | IOrderController | ISection | IMenu | IGiftCards | IAuthorizedDevices | ISpecialDays | ITimesOpen | IPrinters | IMenuSection | IMenuType | IMenuAddOns | IMenuToMake
 
 export interface IPOSTRestaurantBody {
   booking?: IPOSTBookingsBody
@@ -261,4 +267,5 @@ export interface IPOSTRestaurantBody {
   menu_add_ons?: IPOSTMenuAddOnsBody
   menu_section?: IPOSTMenuSectionsBody
   menu_add_ons_options?: IPOSTMenuAddOnsOptionsBody
+  menu_to_make?: IPOSTMenuToMakeBody
 }

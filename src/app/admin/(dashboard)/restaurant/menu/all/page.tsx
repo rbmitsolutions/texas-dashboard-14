@@ -243,7 +243,7 @@ export default function AllMenuPage() {
                     udpateMenu: (data) => updateMenu({
                         menu: {
                             menu: {
-                                ...data
+                                ...data!
                             }
                         }
                     }),

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { UseMutateFunction } from "react-query";
 
 //libs
 import { convertCentsToEuro } from "@/common/utils/convertToEuro";
@@ -16,11 +17,12 @@ import {
 } from "@/components/ui/table"
 import { DeleteDialogButton } from "@/components/common/deleteDialogButton";
 import FormDataDialog from "@/components/common/formDataDialog";
-import ItemDescriptionDialog from "./itemDescriptionDialog";
+import ItemDescriptionDialog from "../../../_components/itemDescriptionDialog";
 import StockOrderInput from "./stockOrderInput";
 
 //interfaces
 import { IStockOrders, IStockOrdersController, IStockSuppliers } from "@/common/types/restaurant/stock.interface";
+import { IDELETEStockDataBody } from "@/hooks/stock/IDeleteStockDataHooks.interface";
 import { IOrderChange } from "../page";
 
 interface StockOrderAuthorizedTableProps {
@@ -28,9 +30,10 @@ interface StockOrderAuthorizedTableProps {
     orders: IStockOrders[]
     supplier: IStockSuppliers
     onOrderChange: (data: IOrderChange) => void
+    deleteOrder: UseMutateFunction<void, any, IDELETEStockDataBody, unknown>
 }
 
-export default function StockOrderAuthorizedTable({ orderController, orders, supplier, onOrderChange }: StockOrderAuthorizedTableProps) {
+export default function StockOrderAuthorizedTable({ orderController, orders, supplier, onOrderChange, deleteOrder }: StockOrderAuthorizedTableProps) {
     const [code, setCode] = useState<string>('')
     const [filteredOrders, setFilteredOrders] = useState<IStockOrders[]>([])
 
@@ -141,10 +144,13 @@ export default function StockOrderAuthorizedTable({ orderController, orders, sup
                                         {convertCentsToEuro(order?.total)}
                                     </strong>
                                 </TableCell>
-                                <TableCell className='flex-container items-center'>
+                                <TableCell className='flex-container items-center mt-1'>
                                     <DeleteDialogButton
-                                        onDelete={() => console.log('delete')}
-
+                                        onDelete={ async () => await deleteOrder({
+                                            order: {
+                                                id: order?.id
+                                            }
+                                        })}
                                     />
                                     <FormDataDialog
                                         formDataId={order?.haccp_data_id}

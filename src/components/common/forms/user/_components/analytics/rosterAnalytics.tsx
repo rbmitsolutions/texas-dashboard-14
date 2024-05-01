@@ -129,7 +129,7 @@ export default function RosterAnalytics({ user }: RosterAnalyticsProps) {
                     },
                 },
 
-                className: 'flex-container justify-end'
+                className: 'flex-container'
             }}
             className="bg-background-soft p-4 rounded-lg"
         >

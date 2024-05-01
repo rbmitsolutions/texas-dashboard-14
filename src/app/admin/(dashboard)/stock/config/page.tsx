@@ -49,11 +49,19 @@ export default function Config() {
     })
 
     const {
-        deleteStockData: deleteCategory
+        deleteStockData: deleteSubCategory
     } = useDELETEStockDataHooks({
         query: 'SUB_CATEGORY',
         toRefetch
     })
+
+    const {
+        deleteStockData: deleteCategory
+    } = useDELETEStockDataHooks({
+        query: 'CATEGORY',
+        toRefetch
+    })
+
 
     return (
         <div className='grid grid-cols-1 gap-4 lg:grid-cols-[1fr,400px]'>
@@ -79,7 +87,8 @@ export default function Config() {
             >
                 <BasicTable
                     columns={StockCategoryColumnsTable({
-                        deleteCategory
+                        deleteCategory,
+                        deleteSubCategory
                     })}
                     data={categories?.data || []}
                 />

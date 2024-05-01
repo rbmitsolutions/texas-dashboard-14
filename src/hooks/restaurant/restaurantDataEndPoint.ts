@@ -201,4 +201,14 @@ export const restaurantEndPoint = {
         createSucess: 'Prerequisite Option created successfully!',
         createError: "Prerequisite Option creation failed!",
     },
+    MENU_TO_MAKE: {
+        url: EndPointsTypes['RESTAURANT_MENU_TO_MAKE_ENDPOINT'],
+        queryParams: 'Menu Add Ons',
+        updateSucess: "Menu to make Option updated successfully!",
+        updateError: "Menu to make Option update failed!",
+        deleteSucess: "Menu to make Option deleted successfully!",
+        deleteError: "Menu to make Option delete failed!",
+        createSucess: 'Menu to make Option created successfully!',
+        createError: "Menu to make Option creation failed!",
+    },
 }

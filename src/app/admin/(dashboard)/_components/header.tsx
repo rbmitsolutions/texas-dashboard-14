@@ -17,6 +17,7 @@ import Icon from "@/common/libs/lucida-icon";
 
 //store
 import { useSideBarStore } from "@/store/sideBar";
+import Notifications from "./notifications";
 
 export function Header() {
     const router = useRouter()
@@ -32,17 +33,22 @@ export function Header() {
                 <Button size='icon' variant='outline' className='h-8 w-8 flex items-center xl:hidden' onClick={toggleSideBar}>
                     <Icon name='List' size={14} />
                 </Button>
-                <div className='flex flex-col'>
-                    {isParamsRouter ?
-                        <>
-                            <span className='capitalize text-[10px]'>/{splitPathname[splitPathname?.length - 2]}/</span>
-                            <span className='capitalize text-xs'>{splitPathname[splitPathname?.length - 1]}</span>
-                        </>
-                        :
-                        <Button size='iconSm' onClick={() => router.back()}>
-                            <Icon name='ChevronLeft' size={18} />
-                        </Button>
+                <div className='flex-container'>
+                    {isUserAuthorized(user, [Permissions.ADMIN, Permissions.ADMIN_GHOST]) &&
+                        <Notifications />
                     }
+                    <div className='flex flex-col'>
+                        {isParamsRouter ?
+                            <>
+                                <span className='capitalize text-[10px]'>/{splitPathname[splitPathname?.length - 2]}/</span>
+                                <span className='capitalize text-xs'>{splitPathname[splitPathname?.length - 1]}</span>
+                            </>
+                            :
+                            <Button size='iconSm' onClick={() => router.back()}>
+                                <Icon name='ChevronLeft' size={18} />
+                            </Button>
+                        }
+                    </div>
                 </div>
             </div>
             {isUserAuthorized(user, [Permissions.ADMIN, Permissions.ADMIN_GHOST]) &&

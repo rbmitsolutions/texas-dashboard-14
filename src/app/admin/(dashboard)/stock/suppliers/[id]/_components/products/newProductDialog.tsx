@@ -45,7 +45,6 @@ interface NewProductDialogProps {
 }
 
 export default function NewProductDialog({ update, createProduct, supplier_id, items }: NewProductDialogProps) {
-
     const form = useForm<CreateProductTypeFormSchemaType>({
         mode: "onChange",
         resolver: zodResolver(CreateProductTypeFormSchema),

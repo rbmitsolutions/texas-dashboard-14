@@ -26,7 +26,7 @@ import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaur
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface"
 import { IToken, Permissions } from "@/common/types/auth/auth.interface"
 import { ITable } from "@/common/types/restaurant/tables.interface"
-import { ErrorMessages } from "@/common/types/messages"
+import { ErrorMessages } from "@/common/types/notifications.interface"
 
 interface UpdateOrderStatusProps {
     order: IOrder

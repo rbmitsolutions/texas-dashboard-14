@@ -1,21 +1,8 @@
 'use client'
 
-//components
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-import { StockOrderControllerColumns } from "./_components/stoclOrderControllerColumnsTable"
-import { BasicTable } from "@/components/common/basicTable"
-import Wrap from "@/components/common/wrap"
-
 //hooks
-import { useGETStockDataHooks, usePUTStockDataHooks } from "@/hooks/stock/stockDataHooks"
+import { useDELETEStockDataHooks, useGETStockDataHooks, usePUTStockDataHooks } from "@/hooks/stock/stockDataHooks"
+import OrdersControllerTable from "../_components/ordersControllerTable/ordersControllerTable"
 
 export default function Orders() {
     const {
@@ -48,66 +35,20 @@ export default function Orders() {
         toRefetch
     })
 
+    const {
+        deleteStockData: deleteOrderController
+    } = useDELETEStockDataHooks({
+        query: 'ORDER_CONTROLLER',
+        toRefetch
+    })
+
     return (
-        <Wrap
-            header={{
-                title: {
-                    icon: 'PackageOpen',
-                    title: 'Orders'
-                },
-                pagination: {
-                    onPageChange: (pagination) => setOrdersControllerParams(prev => ({
-                        order_controller: {
-                            all: {
-                                ...prev?.order_controller?.all,
-                                pagination
-                            }
-                        }
-                    })),
-                    pagination: ordersController?.pagination,
-                    queryPagination: ordersControllerParams?.order_controller?.all?.pagination!,
-                }
-            }}
-            actions={{
-                searchInput: {
-                    onSearchChange: (search) => setOrdersControllerParams(prev => ({
-                        order_controller: {
-                            all: {
-                                ...prev?.order_controller?.all,
-                                supplier: {
-                                    title: search
-                                }
-                            }
-                        }
-                    })),
-                    value: ordersControllerParams?.order_controller?.all?.supplier?.title || '',
-                    placeholder: 'Search by supplier'
-                },
-                toRight: (
-                    <div>
-                        <Select>
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Paid" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                <SelectLabel>Sort by</SelectLabel>
-                                    <SelectItem value='all'>All</SelectItem>
-                                    <SelectItem value='0'>Yes</SelectItem>
-                                    <SelectItem value='1'>No</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                )
-            }}
-        >
-            <BasicTable
-                columns={StockOrderControllerColumns({
-                    updateOrderController
-                })}
-                data={ordersController?.data || []}
-            />
-        </Wrap >
+        <OrdersControllerTable 
+            ordersController={ordersController}
+            ordersControllerParams={ordersControllerParams}
+            setOrdersControllerParams={setOrdersControllerParams}
+            updateOrderController={updateOrderController}
+            deleteOrderController={deleteOrderController}
+        />
     )
 }

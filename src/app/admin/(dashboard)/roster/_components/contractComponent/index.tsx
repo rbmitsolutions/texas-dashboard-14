@@ -26,7 +26,7 @@ import Icon from "@/common/libs/lucida-icon";
 import { usePUTUserDataHooks } from "@/hooks/user/useUserDataHooks";
 
 //interface 
-import { IFiles } from "@/common/types/company/files.interface"
+import { IFiles, IFilesAs, IFilesType } from "@/common/types/company/files.interface"
 
 interface ContractComponentProps {
     contract: IFiles
@@ -73,11 +73,11 @@ export default function ContractComponent({ contract }: ContractComponentProps):
 
         await updateFile({
             file: {
-                as: 'contract-signed',
+                as: IFilesAs.CONTRACT_SIGNED,
                 file,
                 id: contract?.id,
                 key: contract?.key,
-                type: 'pdf'
+                type: IFilesType.PDF
             }
         }, {
             onSuccess: () => {

@@ -111,7 +111,7 @@ export default function NewSupplierDialog({ categories, update, createSupplier }
                     variant='orange'
                     leftIcon={update ? 'RefreshCcw' : 'Plus'}
                 >
-                    {update ? 'Update' : 'New Supplier'}
+                    {update ? 'Update' : 'Supplier'}
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">

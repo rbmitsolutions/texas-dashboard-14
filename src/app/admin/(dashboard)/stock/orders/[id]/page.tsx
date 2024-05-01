@@ -9,7 +9,7 @@ import StockOrderAuthorizedTable from "./_components/stockOrderAuthorizedTable"
 import NotDeliveredOrder from "./_components/notDeliveredOrder"
 
 //hooks
-import { useGETStockDataHooks, usePUTStockDataHooks } from "@/hooks/stock/stockDataHooks"
+import { useDELETEStockDataHooks, useGETStockDataHooks, usePUTStockDataHooks } from "@/hooks/stock/stockDataHooks"
 import { useAuthHooks } from "@/hooks/useAuthHooks"
 
 //interface
@@ -61,10 +61,19 @@ export default function StockOrderControllerPage({ params }: { params: { id: str
 
     const {
         updateStockData: updateOrder,
+        isUpdateStockDataLoading: isUpdateOrderLoading
     } = usePUTStockDataHooks({
         query: 'ORDER',
         showNotification: false,
         toRefetch,
+    })
+
+    const {
+        deleteStockData: deleteOrder,
+        isDeleteStockDataLoading: isDeleteOrderLoading
+    } = useDELETEStockDataHooks({
+        query: 'ORDER',
+        toRefetch
     })
 
     const handleSaveOrder = async (order: IStockOrders) => {
@@ -72,7 +81,6 @@ export default function StockOrderControllerPage({ params }: { params: { id: str
             order
         })
     }
-
 
     const onOrderChange = async (data: IOrderChange) => {
         const order = ordersDelivered?.find(order => order.id === data?.orderId)
@@ -135,6 +143,7 @@ export default function StockOrderControllerPage({ params }: { params: { id: str
                             orders={ordersDelivered || []}
                             supplier={ordersController?.supplier || {}}
                             onOrderChange={onOrderChange}
+                            deleteOrder={deleteOrder}
                         />
                     </div>
                 </>
@@ -151,6 +160,8 @@ export default function StockOrderControllerPage({ params }: { params: { id: str
                                     user={user}
                                     supplier={ordersController?.supplier || {}}
                                     updateOrder={updateOrder}
+                                    deleteOrder={deleteOrder}
+                                    isLoading={isUpdateOrderLoading || isDeleteOrderLoading}
                                 />
                             )
                         })}

@@ -41,14 +41,14 @@ export default function ItemDescriptionDialog({ item }: ItemDescriptionDialogPro
                     <DialogTitle className='capitalize'>{item?.title}</DialogTitle>
                 </DialogHeader>
                 <div className='flex-col-container'>
-                    <div className='flex-container justify-between'>
-                        <small>{item?.title}</small>
+                    <div className='flex-container justify-between items-center'>
+                        <small>{item?.title} / {item?.volume} {item?.unit}</small>
                         <LinkButton
                             href={RedirectTo.ITEM_PROFILE + '/' + item?.id}
                         />
                     </div>
                     <strong className={cn('flex-container items-center gap-1', item?.stock < item?.min_stock && 'text-red-500')}>
-                        Stock: {item?.stock > 0 ? (item?.stock / item?.volume).toFixed(0) : item?.stock}
+                        Stock: {item?.stock > 0 ? (item?.stock / item?.volume).toFixed(0) : item?.stock} or {item?.stock.toFixed(2)} {item?.unit}
                     </strong>
                     <small>Min. Stock: {item?.min_stock}</small>
                     <small>Max. Stock: {item?.max_stock}</small>

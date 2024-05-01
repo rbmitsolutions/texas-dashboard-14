@@ -224,7 +224,7 @@ export interface IPUTMenuAddOnsBody {
 }
 
 export interface IPUTMenuBody {
-    menu: {
+    menu?: {
         id: string
         title?: string
         short_title?: string
@@ -261,6 +261,10 @@ export interface IPUTMenuBody {
     highlight?: {
         id: string
     }
+    transferImages?:{
+        from_id: string
+        to_id: string
+      }
 }
 
 
@@ -287,8 +291,15 @@ export interface IPUTBookingsBody {
     client_id?: string;
 }
 
+export interface IPUTMenuToMakeBody {
+    id: string
+    quantity?: number;
+    menu_id?: string;
+    item_id?: string;
+}
 
-export type IPUTRestaurantDataQueryType = 'BOOKINGS' | "TABLES" | "ORDER" | "CLIENTS" | "SECTIONS" | "MENU" | "GIFTCARD" | "AUTHORIZED_DEVICES" | 'SPECIAL_DAYS' | 'TIMES_OPEN' | "PRINTERS" | 'MENU_SECTION' | 'MENU_TYPE' | 'MENU_ADD_ONS'
+
+export type IPUTRestaurantDataQueryType = 'BOOKINGS' | "TABLES" | "ORDER" | "CLIENTS" | "SECTIONS" | "MENU" | "GIFTCARD" | "AUTHORIZED_DEVICES" | 'SPECIAL_DAYS' | 'TIMES_OPEN' | "PRINTERS" | 'MENU_SECTION' | 'MENU_TYPE' | 'MENU_ADD_ONS' | 'MENU_TO_MAKE'
 
 export interface IPUTRestaurantBody {
     booking?: IPUTBookingsBody
@@ -305,4 +316,5 @@ export interface IPUTRestaurantBody {
     menu_section?: IPUTMenuSectionsBody
     menu_type?: IPUTMenuTypesBody
     menu_add_ons?: IPUTMenuAddOnsBody
+    menu_to_make?: IPUTMenuToMakeBody
 }

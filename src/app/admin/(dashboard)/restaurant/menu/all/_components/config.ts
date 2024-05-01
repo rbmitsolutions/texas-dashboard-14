@@ -38,32 +38,32 @@ export const getUpdateMenuInfo = (data: CreateMenuFormSchemaType, menu: IMenu, f
     } as IPUTMenuBody
 
     if(hasThumbnailChanged) {
-        updatedMenu.menu.thumbnail = data.thumbnail
+        updatedMenu.menu!.thumbnail = data.thumbnail
     }
 
     if(hasImagesChanged) {
-        updatedMenu.menu.images = {
+        updatedMenu.menu!.images = {
             add: data.images?.filter(f => !files?.map((option) => option.url).includes(f)).filter(f => f !== "") as string[],
             remove: files?.filter(f => !data.images?.includes(f.url)).map(f => f.id) as string[]
         }
     }
 
     if(hasFOptionsChanged) {
-        updatedMenu.menu.f_options = {
+        updatedMenu.menu!.f_options = {
             remove: menu.f_options?.map(o => o?.id).filter(o => !data.f_options?.includes(o)),
             add: data.f_options?.filter(f => !menu.f_options?.map(o => o?.id).includes(f)).filter(f => f !== "")
         }
     }
 
     if(hasGoWithChanged) {
-        updatedMenu.menu.go_with_ids = {
+        updatedMenu.menu!.go_with_ids = {
             remove: menu.go_with_ids?.map(o => o).filter(o => !data.go_with_ids?.includes(o)),
             add: data.go_with_ids?.filter(f => !menu.go_with_ids?.map(o => o).includes(f)).filter(f => f !== "")
         }
     }
 
     if(hadAddOnsChanged) {
-        updatedMenu.menu.add_ons = {
+        updatedMenu.menu!.add_ons = {
             remove: menu.add_ons?.map(o => o?.id).filter(o => !data.add_ons?.includes(o)),
             add: data.add_ons?.filter(f => !menu.add_ons?.map(o => o?.id).includes(f)).filter(f => f !== "")
         }

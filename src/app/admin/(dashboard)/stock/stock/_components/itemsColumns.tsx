@@ -70,15 +70,15 @@ export const StockItemColumnsTable = ({ createEntry, user }: StockItemColumnsTab
                 return (
                     <HoverCard>
                         <HoverCardTrigger>
-                            <strong className={cn('flex-container items-center gap-1', row?.original?.stock < row?.original?.min_stock && 'text-red-500')}>
-                                {row?.original?.stock > 0 ? (row?.original?.stock / row?.original?.volume).toFixed(0) : row?.original?.stock}
+                            <strong className={cn('flex-container items-center gap-1', row?.original?.stock < (row?.original?.min_stock * row?.original?.volume) && 'text-red-500')}>
+                                {row?.original?.stock > 0 ? (Math.floor(row?.original?.stock / row?.original?.volume)) : row?.original?.stock}
                                 <Icon name='Info' />
                             </strong>
                         </HoverCardTrigger>
                         <HoverCardContent>
                             {row?.original?.stock > 0 ?
                                 <div>
-                                    {row?.original?.stock / row?.original?.volume} {row.original?.title} or {row?.original?.stock} {row?.original?.unit}
+                                    {(row?.original?.stock / row?.original?.volume).toFixed(2)} {row.original?.title} or {row?.original?.stock.toFixed(2)} {row?.original?.unit}
                                 </div>
                                 : 'Out of Stock'}
                         </HoverCardContent>

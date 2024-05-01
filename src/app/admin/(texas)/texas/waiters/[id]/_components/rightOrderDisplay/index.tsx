@@ -27,7 +27,7 @@ import { IToken, Permissions } from "@/common/types/auth/auth.interface"
 import { IMenuSection } from "@/common/types/restaurant/menu.interface"
 import { RedirectTo } from "@/common/types/routers/endPoints.types"
 import { ICreateNewOrder } from "@/store/restaurant/order"
-import { ErrorMessages } from "@/common/types/messages"
+import { ErrorMessages } from "@/common/types/notifications.interface"
 
 interface RightOrderDisplayProps {
     order: ICreateNewOrder[]

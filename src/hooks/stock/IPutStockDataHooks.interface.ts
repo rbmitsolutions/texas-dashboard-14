@@ -58,6 +58,7 @@ export interface IPUTStockSupplierAutoOrderBody {
     id: string;
     week_day?: string;
     email?: string;
+    email_cc?: string[]
 }
 
 export interface IPUTStockCategoryBody {
@@ -108,7 +109,7 @@ export interface IPUTStockOrderBody {
     total?: number
     delivery_date?: Date
     haccp_data_id?: string
-    
+
     haccp?: IPOSTFormDataBody
 
     //auto update
@@ -124,8 +125,15 @@ export interface IPUTStockOrderControllerBody {
     total?: number;
 }
 
-export type IPUTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER' | 'ORDER_CONTROLLER'
+export interface IPUTStockItemHistoryBody {
+    id: string;
+    item_id?: string;
+    quantity?: number;
+    menu_id?: string;
+    order_id?: string;
+}
 
+export type IPUTStockDataQueryType = 'SUPPLIERS' | 'ITEM' | 'SUPPLIER_BANK' | 'SUPPLIER_CONTACT' | 'SUPPLIER_AUTO_ORDER' | 'CATEGORY' | 'SUB_CATEGORY' | 'PRODUCT' | 'ORDER' | 'ORDER_CONTROLLER' | 'ITEM_HISTORY'
 export interface IPUTStockBody {
     supplier?: IPUTStockSuppliersBody
     item?: IPUTStockItemBody
@@ -137,4 +145,5 @@ export interface IPUTStockBody {
     product?: IPUTStockProductBody
     order?: IPUTStockOrderBody
     order_controller?: IPUTStockOrderControllerBody
+    item_history?: IPUTStockItemHistoryBody
 }
