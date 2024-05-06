@@ -11,6 +11,8 @@ export enum NotificationType {
     GIFTCARD = "giftcard",
     SMS_BALANCE = "sms balance",
     CONTRACT_SIGNED = "contract signed",
+    JOB_APPLICATION = "job application",
+    USER_FILE_UPLOADED = "user file uploaded",
 }
 
 export enum NotificationRedirectTo {
@@ -20,6 +22,8 @@ export enum NotificationRedirectTo {
     giftcard = RedirectTo.GIFTCARD_PAGE,
     'sms balance' = RedirectTo.SMS_CONFIG_PAGE,
     'contract signed' = RedirectTo.USER_PROFILE,
+    'job application' = RedirectTo.JOB_APPLICATION,
+    "user file uploaded" = RedirectTo.USER_PROFILE,
 }
 
 export interface INotification {

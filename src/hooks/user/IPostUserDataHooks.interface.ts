@@ -1,3 +1,4 @@
+import { IFiles, IFilesAs, IFilesType } from "@/common/types/company/files.interface";
 import { IRequests, IRequestsType } from "@/common/types/company/requests.interface";
 
 
@@ -7,10 +8,17 @@ export interface IPOSTUserRequestsBody {
     dates_off?: string;
 }
 
-export type IPOSTUserDataQueryType = 'USER_REQUESTS'
+export interface IPOSTUserFilesBody {
+    key: string
+    as: IFilesAs
+    type: IFilesType
+    file: any
+}
 
-export type IPOSTUserDataRerturn = IRequests
+export type IPOSTUserDataQueryType = 'USER_REQUESTS' | 'USER_FILES'
 
+export type IPOSTUserDataRerturn = IRequests 
 export interface IPOSTUserBody {
     request?: IPOSTUserRequestsBody
+    file?: IPOSTUserFilesBody
 }

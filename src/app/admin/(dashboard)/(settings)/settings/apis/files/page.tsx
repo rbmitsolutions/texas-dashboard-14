@@ -6,7 +6,7 @@ import FileRender from "./_components/fileRender";
 import Wrap from "@/components/common/wrap";
 
 //hooks
-import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks";
+import { useDELETECompanyDataHooks, useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks";
 import { IFilesAs } from "@/common/types/company/files.interface";
 
 export default function Images() {
@@ -14,7 +14,8 @@ export default function Images() {
         companyAllFiles: files,
         setGETCompanyDataParams: setFilesParams,
         GETCompanyDataParams: filesParams,
-        isCompanyDataFetching: isFilesFetching
+        isCompanyDataFetching: isFilesFetching,
+        refetchCompanyData: toRefetch
     } = useGETCompanyDataHooks({
         query: 'FILES',
         defaultParams: {
@@ -28,6 +29,13 @@ export default function Images() {
                 }
             }
         },
+    })
+
+    const {
+        deleteCompanyData: deleteFile
+    } = useDELETECompanyDataHooks({
+        query: 'FILES',
+        toRefetch
     })
 
     const filesOptions = Object.values(IFilesAs).map(as => ({
@@ -102,7 +110,11 @@ export default function Images() {
                     className='w-full grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] items-start justify-start gap-4 space-y-2'
                 >
                     {files?.data?.map(file => {
-                        return <FileRender file={file} key={file.id} />
+                        return <FileRender
+                            file={file}
+                            key={file.id}
+                            deleteFile={deleteFile}
+                        />
                     })}
                 </div>
             </Wrap>

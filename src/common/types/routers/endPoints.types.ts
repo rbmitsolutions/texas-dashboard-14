@@ -112,5 +112,6 @@ export enum RedirectTo {
     STOCK_NEW_ORDER = '/admin/stock/new-order',
     MENU_PROFILE = '/admin/restaurant/menu/all',
     GIFTCARD_PAGE = '/admin/restaurant/giftcard',
-    SMS_CONFIG_PAGE = '/admin/settings/apis/sms'
+    SMS_CONFIG_PAGE = '/admin/settings/apis/sms',
+    JOB_APPLICATION = '/admin/hrsystem/employees/hire',
 }

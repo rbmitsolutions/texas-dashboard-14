@@ -16,11 +16,14 @@ import Icon from "@/common/libs/lucida-icon";
 import { useAuthHooks } from "@/hooks/useAuthHooks";
 
 //store
-import { useGETUserDataHooks, usePUTUserDataHooks } from "@/hooks/user/useUserDataHooks";
+import { useGETUserDataHooks, usePOSTUserDataHooks, usePUTUserDataHooks } from "@/hooks/user/useUserDataHooks";
 import { useSideBarStore } from "@/store/sideBar";
 
 //interface
 import { IUser } from "@/common/types/user/user.interface";
+import { IUserProfileCompletedResponse } from "@/hooks/user/IGetUserDataHooks.interface";
+import UploadImportantDocument from "./_components/uploadImportantDocument";
+import { IFilesAs } from "@/common/types/company/files.interface";
 
 interface SidebarProps {
     alwaysFixed?: boolean
@@ -28,7 +31,14 @@ interface SidebarProps {
 export function Sidebar({ alwaysFixed = false }: SidebarProps) {
     const { user } = useAuthHooks()
     const { isOpen, toggleSideBar } = useSideBarStore()
-    const [preRendered, setPreRendered] = useState(false);
+    const [preRendered, setPreRendered] = useState<boolean>(false);
+    const [userProfileCompleted, setUserProfileCompleted] = useState<IUserProfileCompletedResponse>({
+        id: '',
+        passport_uploaded: true,
+        password_updated: true,
+        poa_uploaded: true,
+        pps_uploaded: true,
+    });
 
     useEffect(() => {
         setPreRendered(true);
@@ -36,7 +46,6 @@ export function Sidebar({ alwaysFixed = false }: SidebarProps) {
 
     //todo: remove it and use it on the token
     const {
-        userProfileCompleted,
         refetchUserData: toRefetch
     } = useGETUserDataHooks({
         query: 'DETAILS',
@@ -47,12 +56,26 @@ export function Sidebar({ alwaysFixed = false }: SidebarProps) {
                 }
             }
         },
+        UseQueryOptions: {
+            onSuccess: (data) => {
+                const response: IUserProfileCompletedResponse = data as any
+                setUserProfileCompleted(response)
+            }
+        }
     })
 
     const {
         updateuserData: updateDetails,
     } = usePUTUserDataHooks({
         query: 'DETAILS',
+        toRefetch
+    })
+
+    const {
+        createUserData: uploadFile,
+        isCreateUserDataLoading: isUploadFileLoading
+    } = usePOSTUserDataHooks({
+        query: 'USER_FILES',
         toRefetch
     })
 
@@ -71,6 +94,33 @@ export function Sidebar({ alwaysFixed = false }: SidebarProps) {
                     alwaysOpen={!userProfileCompleted?.password_updated}
                 />
             }
+
+            {!userProfileCompleted?.passport_uploaded &&
+                <UploadImportantDocument
+                    user={user}
+                    docAs={IFilesAs.USER_PASSPORT}
+                    uploadFile={uploadFile}
+                    isLoading={isUploadFileLoading}
+                />
+            }
+            {!userProfileCompleted?.poa_uploaded &&
+                <UploadImportantDocument
+                    user={user}
+                    docAs={IFilesAs.USER_POA}
+                    uploadFile={uploadFile}
+                    isLoading={isUploadFileLoading}
+                />
+            }
+
+            {!userProfileCompleted?.pps_uploaded &&
+                <UploadImportantDocument
+                    user={user}
+                    docAs={IFilesAs.USER_PPS}
+                    uploadFile={uploadFile}
+                    isLoading={isUploadFileLoading}
+                />
+            }
+
             <div className={cn('fixed top-0 h-screen w-full z-40 bg-[rgba(0,0,0,0.15)] duration-75', isOpen ? "left-0" : 'left-[-100%]', alwaysFixed ? 'xl:fixed' : 'xl:hidden')} onClick={toggleSideBar} />
             <nav className={cn('fixed flex-col-container top-0 z-50 h-screen w-[80%] max-w-72 gap-10 py-8 px-4 transition-[left] bg-background duration-500 border-r-2 md:duration-300 xl:sticky xl:flex-col-container xl:w-full xl:gap-10', isOpen ? "left-0" : 'left-[-100%]', alwaysFixed && 'xl:fixed')}>
                 <div className='flex-container-center'>

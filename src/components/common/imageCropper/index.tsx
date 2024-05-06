@@ -164,16 +164,16 @@ export default function ImageCropper({ image, cropSize, cropShape = 'rect', onSa
                 }
                 {onSave &&
                     <DialogFooter className='mt-4'>
-                        <Button
-                            disabled={!image}
-                            isLoading={isLoading}
-                            onClick={handleDelete}
-                            leftIcon="Trash"
-                            variant='destructive'
-                        >
-                            Remove
-                        </Button>
-                        <div className='flex gap-4 w-full justify-end'>
+                        <div className='flex gap-4 w-full justify-between'>
+                            <Button
+                                disabled={!image}
+                                isLoading={isLoading}
+                                onClick={handleDelete}
+                                leftIcon="Trash"
+                                variant='destructive'
+                            >
+                                Remove
+                            </Button>
                             <Button
                                 variant='secondary'
                                 disabled={isLoading}

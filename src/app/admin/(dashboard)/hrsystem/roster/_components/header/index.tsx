@@ -15,6 +15,8 @@ import { convertCentsToEuro } from "@/common/utils/convertToEuro"
 //hooks
 import { IGETCompanyDataQuery, IRosterPageResponse } from "@/hooks/company/IGetCompanyDataHooks.interface"
 import { IPUTCompanyBody } from "@/hooks/company/IPutCompanyDataHooks.interface"
+import ExcelDownloadButton from "@/components/common/excelDownloadButton"
+
 
 interface RosterHeaderProps {
     payments_data: IRosterPageResponse['payments_data']
@@ -27,6 +29,35 @@ interface RosterHeaderProps {
 }
 
 export default function RosterHeader({ payments_data, isLoading, error, setUsers, users, usersParams, updateRoster }: RosterHeaderProps): JSX.Element {
+
+    const rosterDownload = async (): Promise<any[] | undefined> => {
+        const data = users?.map(user => {
+            let object: any = {
+                Name: user?.name,
+                Mon: '',
+                Tue: '',
+                Wed: '',
+                Thu: '',
+                Fri: '',
+                Sat: '',
+                Sun: '',
+                'Scheduled Hours': user?.preview_hours,
+                'Scheduled Payments': user?.preview_roster,
+                'Actual Hours': user?.roster_hours,
+                'Actual Payments': user?.total_roster
+            }
+
+            user?.roster?.forEach(r => {
+                if (r?.week_day) {
+                    object[r.week_day as any] = `${r?.duty} / ${r?.shift}`
+                }
+            })
+
+            return object
+
+        })
+        return data
+    }
 
     return (
         <header className='flex-col-container'>
@@ -76,7 +107,11 @@ export default function RosterHeader({ payments_data, isLoading, error, setUsers
                     }))}
                     custom="max-w-lg"
                 />
-                <div className='flex gap-2'>
+                <div className='flex gap-2 items-center'>
+                    <ExcelDownloadButton
+                        fileName="Roster"
+                        onDownload={async () => await rosterDownload()}
+                    />
                     <SendEmail
                         contacts={users?.filter(u => {
                             return {
