@@ -60,7 +60,7 @@ export default function Notifications() {
     }
 
     const onNotificationClick = async (notification: INotification) => {
-        if(notification?.type === NotificationType.CONTRACT_SIGNED) {
+        if(notification?.type === NotificationType.CONTRACT_SIGNED || notification?.type === NotificationType.USER_FILE_UPLOADED) {
             push(NotificationRedirectTo[notification?.type] + `/` + notification?.key_id)
         } else {
             push(NotificationRedirectTo[notification?.type])

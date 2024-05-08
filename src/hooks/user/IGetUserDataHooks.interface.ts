@@ -20,6 +20,9 @@ export interface IGetAllUserResponse {
 export interface IUserProfileCompletedResponse {
     id: string
     password_updated: boolean
+    passport_uploaded: boolean
+    poa_uploaded: boolean
+    pps_uploaded: boolean
 }
 
 export interface IGETUserQuery {

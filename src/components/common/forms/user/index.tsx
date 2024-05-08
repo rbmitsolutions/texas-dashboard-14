@@ -21,6 +21,7 @@ import { IRoles } from "@/common/types/company/companyDetails.interface";
 import { IPUTUserBody } from "@/hooks/user/IPutUserDataHooks.interface";
 import { IUser } from "@/common/types/user/user.interface";
 import PaymentsAnalytics from "./_components/analytics/paymentsAnalytics";
+import UserDocuments from "./_components/usesDocuments";
 
 interface UserProfileProps {
     user: IUser
@@ -108,6 +109,9 @@ export default function UserProfile({ user, isAdmin, roles, onUpdate }: UserProf
                 <BankDetailsForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
             </div>
             <VisaDetailsForm user={user} isAdmin={isAdmin} onUpdate={onUpdate} />
+            {isAdmin &&
+                <UserDocuments user={user} />
+            }
         </div>
     )
 }

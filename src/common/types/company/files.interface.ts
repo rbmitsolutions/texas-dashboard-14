@@ -12,7 +12,11 @@ export enum IFilesAs {
     CV = 'cv',
     REPORT = 'report',
     MENU = 'menu',
-    STOCK_ORDER_CONTROLLER = 'stock-order-controller'
+    STOCK_ORDER_CONTROLLER = 'stock-order-controller',
+    USER_DOCUMENTS = 'user-docs',
+    USER_PASSPORT = 'user-passport',
+    USER_POA = 'user-poa',
+    USER_PPS = 'user-pps',
 }
 
 export interface IFiles {
