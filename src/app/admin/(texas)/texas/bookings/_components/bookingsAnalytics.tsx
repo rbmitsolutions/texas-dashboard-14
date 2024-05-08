@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { Area, Bar, Radar } from "recharts"
+import { Area } from "recharts"
 
 //libs
 import { formatDate } from "@/common/libs/date-fns/dateFormat"

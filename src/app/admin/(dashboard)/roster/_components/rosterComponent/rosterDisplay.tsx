@@ -51,8 +51,12 @@ export default function RosterDisplay({ roster, updateRoster }: RosterDisplayPro
                         disabled={new Date(roster?.date!) < new Date() || roster?.status === 'confirmed'}
                     />
                 </div>
-                <span className="capitalize">{roster?.duty?.toLowerCase()}</span>
-                <span className="capitalize">{roster?.shift?.toLowerCase()}</span>
+                <span className="capitalize">
+                    {roster?.day_in_lieu ? 'Day In Lieu' : roster?.duty}
+                </span>
+                <span className="capitalize">
+                    {roster?.day_in_lieu ? 'Day In Lieu' : roster?.shift}
+                </span>
                 {roster?.tasks?.map(task => {
                     return (
                         <Button
@@ -66,7 +70,7 @@ export default function RosterDisplay({ roster, updateRoster }: RosterDisplayPro
                     )
                 })}
             </div>
-            <div className={cn('w-8 min-w-8 max-w-8 rounded-r-md', rosterBackground(roster?.status!, true))} />
+            <div className={cn('w-8 min-w-8 max-w-8 rounded-r-md', roster?.day_in_lieu ? 'bg-pink-300 dark:bg-pink-900' : rosterBackground(roster?.status!, true))} />
         </div >
     )
 }

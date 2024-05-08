@@ -112,7 +112,8 @@ export default function RosterContainer({
                             title: {
                                 icon: 'SquareStack',
                                 title: d?.title
-                            }
+                            },
+                            screenShot: true
                         }}
                         actions={{
                             className: 'flex justify-start',
