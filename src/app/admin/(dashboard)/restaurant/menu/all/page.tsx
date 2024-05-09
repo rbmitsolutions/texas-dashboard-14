@@ -4,8 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 
 //copmponents
-import { menuColumnsTable } from "./_components/menuColumns"
-import { MenuTables } from "./_components/menuTable"
+import { menuColumnsTable } from "../../../../../../components/common/basicTable/columns/restaurant/menuColumns"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import Wrap from "@/components/common/wrap"
@@ -17,6 +16,7 @@ import { Permissions } from "@/common/types/auth/auth.interface"
 //hooks
 import { useDELETERestaurantDataHooks, useGETRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 import { useAuthHooks } from "@/hooks/useAuthHooks"
+import { BasicTable } from "@/components/common/basicTable"
 
 export default function AllMenuPage() {
     const { user } = useAuthHooks()
@@ -224,7 +224,7 @@ export default function AllMenuPage() {
                 className: 'grid grid-cols-1 justify-end items-center gap-4 lg:grid-cols-[1fr,300px,40px]'
             }}
         >
-            <MenuTables
+            <BasicTable
                 columns={menuColumnsTable({
                     redirectTo: (path: string) => router.push(path),
                     allowUpdate: isUserAuthorized(
