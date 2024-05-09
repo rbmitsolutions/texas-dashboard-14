@@ -103,9 +103,9 @@ export default function RosterDisplay({ roster, forms, createRosterTask, deleteR
                                 </div>
                                 <div className='flex flex-col'>
                                     <small className='text-[10px] font-bold line-clamp-1'>{
-                                        r?.day_in_lieu ? 'Day In Lieu' : r.duty}</small>
+                                        r?.day_in_lieu ? 'Day In Lieu' : r?.duty}</small>
                                     <small className='text-[10px]'>{
-                                        r?.day_in_lieu ? 'Day In Lieu' : r.shift}</small>
+                                        r?.day_in_lieu ? 'Day In Lieu' : r?.shift}</small>
                                 </div>
                             </div>
                         )

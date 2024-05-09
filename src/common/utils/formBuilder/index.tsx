@@ -18,6 +18,7 @@ export function fieldBuilder(
   input: IFormBuildInput,
   form: UseFormReturn<FieldValues, any, undefined>,
 ): React.ReactNode {
+  
   switch (input?.type) {
     case "input":
       return (
@@ -73,6 +74,11 @@ export function fieldBuilder(
                       </FormItem>
                     )
                   })}
+                  {input?.description &&
+                    <FormDescription>
+                      {input?.description}
+                    </FormDescription>
+                  }
                 </RadioGroup>
               </FormControl>
               <FormMessage />
