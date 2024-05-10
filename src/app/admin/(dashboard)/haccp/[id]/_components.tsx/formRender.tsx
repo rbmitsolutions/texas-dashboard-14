@@ -13,6 +13,7 @@ import { IToken, Permissions } from "@/common/types/auth/auth.interface";
 import { IForm } from "@/common/types/company/form.interface";
 import { IFormBuildInput } from "@/common/utils/formBuilder";
 import toast from "react-hot-toast";
+import ReturnPageDialog from "@/components/common/returnPageDialog";
 
 interface FormRenderProps {
     form: IForm
@@ -21,6 +22,7 @@ export default function FormRender({ form }: FormRenderProps): JSX.Element {
     const [isOpen, setIsOpen] = useState(false)
     const [data, setData] = useState<IFormBuildInput[][]>([[]])
     const [toResetSign, setToResetSign] = useState<boolean>(false)
+    const [returnPageDialog, setReturnPageDialog] = useState<boolean>(false)
 
     const {
         createCompanyData: createCompanyDataForm
@@ -59,6 +61,8 @@ export default function FormRender({ form }: FormRenderProps): JSX.Element {
         }, {
             onSuccess: () => {
                 toast.success('Form submitted successfully')
+                setReturnPageDialog(true)
+
                 //call the resetForm function inside the formLayout component
                 resetForm();
             },
@@ -70,6 +74,11 @@ export default function FormRender({ form }: FormRenderProps): JSX.Element {
 
     return (
         <>
+            <ReturnPageDialog
+                isOpen={returnPageDialog}
+                onToggleDialog={() => setReturnPageDialog(!returnPageDialog)}
+                message='Form submitted successfully!'
+            />
             <AuthDialog
                 isOpen={isOpen}
                 toggleAuthDialog={toggleAuthDialog}

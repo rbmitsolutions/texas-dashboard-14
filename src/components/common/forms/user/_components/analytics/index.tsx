@@ -15,6 +15,7 @@ import { useGETUserDataHooks } from "@/hooks/user/useUserDataHooks"
 
 //interface
 import { IUser } from "@/common/types/user/user.interface"
+import { PayrollTransactionsType } from "@/common/types/company/transactions.interface"
 
 interface UserAnalyticsProps {
     user: IUser
@@ -29,6 +30,11 @@ interface YearlyAnalytics {
             total: number
         }
     }[]
+}
+
+interface ITotalDataReturn {
+    name: PayrollTransactionsType
+    value: number
 }
 
 interface TotalByType {
@@ -73,7 +79,7 @@ export default function UserAnalytics({ user, isAdmin }: UserAnalyticsProps) {
         return chartDataItem;
     })
 
-    const totalData = (yearlyAnalytics: YearlyAnalytics[]) => {
+    const totalData = (yearlyAnalytics: YearlyAnalytics[]): ITotalDataReturn[] => {
         const totalByType: TotalByType = {};
 
         yearlyAnalytics?.forEach((yearlyData) => {
@@ -92,13 +98,14 @@ export default function UserAnalytics({ user, isAdmin }: UserAnalyticsProps) {
         }
 
         const result = Object.keys(totalByType).map((type) => ({
-            name: type,
+            name: type as PayrollTransactionsType,
             value: (totalByType[type]),
         }));
 
         return result;
     }
 
+    const data = totalData(year) || []
     return (
         <div className='flex-col-container gap-4 mt-4'>
             <div className='flex justify-end gap-4'>
@@ -185,33 +192,29 @@ export default function UserAnalytics({ user, isAdmin }: UserAnalyticsProps) {
                     />
                 </LineChart>
             </div>
-            <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
-                {totalData(year)?.map((data) => {
-                    if (data?.name === 'holiday') {
-                        return (
-                            <InfoBox
-                                key={data?.name}
-                                title={data?.name}
-                                icon={{
-                                    name: 'DollarSign',
-                                }}
-                                value={convertCentsToEuro((holidayTotal() | 0 - data?.value))}
-                                smallValue={`${convertCentsToEuro((data?.value | 0))} Paid`}
-                            />
-                        )
-                    }
-                    return (
-                        <InfoBox
-                            key={data?.name}
-                            title={data?.name}
+            <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6'>
+                {Object.values(PayrollTransactionsType).map(type => {
+                    const t = data.find((d) => d.name === type)
+
+                    if (t) {
+                        return <InfoBox
+                            key={t?.name}
+                            title={t?.name === 'holiday' ? 'Holiday Paid' : t?.name}
                             icon={{
                                 name: 'DollarSign',
                             }}
-                            value={convertCentsToEuro(data?.value)}
-                            smallValue={data?.name === 'payroll' ? `Holiday Ent. ${convertCentsToEuro(holidayTotal() | 0)}` : ''}
+                            value={convertCentsToEuro(t?.value)}
                         />
-                    )
+                    }
                 })}
+                <InfoBox
+                    title='Holiday Due'
+                    icon={{
+                        name: 'DollarSign',
+                    }}
+                    value={convertCentsToEuro(holidayTotal())}
+                    smallValue="8% of P. - Holiday"
+                />
             </div>
         </div>
     )

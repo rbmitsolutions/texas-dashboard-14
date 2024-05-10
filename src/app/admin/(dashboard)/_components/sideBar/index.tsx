@@ -29,6 +29,7 @@ interface SidebarProps {
     alwaysFixed?: boolean
 }
 export function Sidebar({ alwaysFixed = false }: SidebarProps) {
+    const development = process.env.NEXT_PUBLIC_NODE_ENV === 'development'
     const { user } = useAuthHooks()
     const { isOpen, toggleSideBar } = useSideBarStore()
     const [preRendered, setPreRendered] = useState<boolean>(false);
@@ -44,7 +45,6 @@ export function Sidebar({ alwaysFixed = false }: SidebarProps) {
         setPreRendered(true);
     }, [])
 
-    //todo: remove it and use it on the token
     const {
         refetchUserData: toRefetch
     } = useGETUserDataHooks({
@@ -85,7 +85,7 @@ export function Sidebar({ alwaysFixed = false }: SidebarProps) {
 
     return (
         <>
-            {!userProfileCompleted?.password_updated &&
+            {!development && !userProfileCompleted?.password_updated &&
                 <UpdatePasswordForm
                     user={{
                         id: user?.user_id
@@ -95,7 +95,7 @@ export function Sidebar({ alwaysFixed = false }: SidebarProps) {
                 />
             }
 
-            {!userProfileCompleted?.passport_uploaded &&
+            {!development && !userProfileCompleted?.passport_uploaded &&
                 <UploadImportantDocument
                     user={user}
                     docAs={IFilesAs.USER_PASSPORT}
@@ -103,7 +103,7 @@ export function Sidebar({ alwaysFixed = false }: SidebarProps) {
                     isLoading={isUploadFileLoading}
                 />
             }
-            {!userProfileCompleted?.poa_uploaded &&
+            {!development && !userProfileCompleted?.poa_uploaded &&
                 <UploadImportantDocument
                     user={user}
                     docAs={IFilesAs.USER_POA}
@@ -112,7 +112,7 @@ export function Sidebar({ alwaysFixed = false }: SidebarProps) {
                 />
             }
 
-            {!userProfileCompleted?.pps_uploaded &&
+            {!development && !userProfileCompleted?.pps_uploaded &&
                 <UploadImportantDocument
                     user={user}
                     docAs={IFilesAs.USER_PPS}
