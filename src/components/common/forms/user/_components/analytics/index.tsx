@@ -62,10 +62,12 @@ export default function UserAnalytics({ user, isAdmin }: UserAnalyticsProps) {
         }
     })
 
-    const holidayTotal = (): number => {
+    const holidayDue = (): number => {
         const totalPayRollPaid = year?.filter((item: YearlyAnalytics) => item?.total?.find((curr) => curr.type === 'payroll'))?.map((item: YearlyAnalytics) => item?.total?.find((curr) => curr.type === 'payroll')?._sum.total)?.reduce((acc: number, curr: YearlyAnalytics['month']) => acc + curr, 0) || 0
 
-        return totalPayRollPaid * 0.08
+        const holidayPaid = year?.filter((item: YearlyAnalytics) => item?.total?.find((curr) => curr.type === 'holiday'))?.map((item: YearlyAnalytics) => item?.total?.find((curr) => curr.type === 'holiday')?._sum.total)?.reduce((acc: number, curr: YearlyAnalytics['month']) => acc + curr, 0) || 0
+
+        return (totalPayRollPaid * 0.08) - holidayPaid
     }
 
 
@@ -212,7 +214,7 @@ export default function UserAnalytics({ user, isAdmin }: UserAnalyticsProps) {
                     icon={{
                         name: 'DollarSign',
                     }}
-                    value={convertCentsToEuro(holidayTotal())}
+                    value={convertCentsToEuro(holidayDue())}
                     smallValue="8% of P. - Holiday"
                 />
             </div>

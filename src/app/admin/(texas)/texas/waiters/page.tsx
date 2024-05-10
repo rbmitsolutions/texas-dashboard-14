@@ -27,7 +27,11 @@ import { ISocketMessage, SocketIoEvent } from '@/common/libs/socketIo/types';
 import { TableMealStatus } from '@/common/types/restaurant/tables.interface';
 import { IGETTablesAllResponse } from '@/hooks/restaurant/IGetRestaurantDataHooks.interface';
 
-const socket = io(process.env.NEXT_PUBLIC_URL! as string);
+const socket = io(process.env.NEXT_PUBLIC_URL! as string, {
+    path: '/socket.io',
+    transports: ['websocket'],
+    secure: true,
+});
 
 export default function Tables() {
     const { tablesFilter, setTablesFilter, getTablesFiltered, setTables } = useTablesStore()
