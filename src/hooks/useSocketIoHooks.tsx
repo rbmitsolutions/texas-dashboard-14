@@ -1,7 +1,11 @@
 import { ISocketMessage, SocketIoEvent, SocketIoFrom } from "@/common/libs/socketIo/types";
 import { io } from "socket.io-client";
 
-const socket = io(process.env.NEXT_PUBLIC_URL! as string);
+const socket = io(process.env.NEXT_PUBLIC_URL! as string, {
+  path: '/socket.io',
+  transports: ['websocket'],
+  secure: true,
+});
 
 interface IsMessageToMe {
   event: SocketIoEvent[];
