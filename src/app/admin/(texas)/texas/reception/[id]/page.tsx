@@ -46,11 +46,7 @@ export interface IDataTable {
     }
 }
 
-const socket = io(process.env.NEXT_PUBLIC_URL! as string, {
-    path: '/socket.io',
-    transports: ['websocket'],
-    secure: true,
-});
+const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
 export default function Table({ params }: { params: { id: string } }) {
     const { menuSections } = useMenuSectionsStore()

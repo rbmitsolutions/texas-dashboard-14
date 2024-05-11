@@ -46,11 +46,7 @@ import { IBookingDays } from "@/common/types/restaurant/config.interface";
 import { Permissions } from "@/common/types/auth/auth.interface";
 import { IClient } from "@/common/types/restaurant/client.interface";
 
-const socket = io(process.env.NEXT_PUBLIC_URL! as string, {
-    path: '/socket.io',
-    transports: ['websocket'],
-    secure: true,
-});
+const socket = io(process.env.NEXT_PUBLIC_URL! as string);
 
 export default function BookingPage() {
     const { user } = useAuthHooks()
