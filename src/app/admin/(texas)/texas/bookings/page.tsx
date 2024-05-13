@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { cn } from "@/common/libs/shadcn/utils";
 
 //libs
-import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types";
+import { ISocketMessage, SocketIoEvent, socket } from "@/common/libs/socketIo/types";
 import { dateFormatIso, formatDate, getFirstTimeOfTheDay, getLastTimeOfTheDay } from "@/common/libs/date-fns/dateFormat";
 
 //components
@@ -46,11 +46,11 @@ import { IBookingDays } from "@/common/types/restaurant/config.interface";
 import { Permissions } from "@/common/types/auth/auth.interface";
 import { IClient } from "@/common/types/restaurant/client.interface";
 
-const socket = io(process.env.NEXT_PUBLIC_URL! as string, {
-    path: '/socket.io',
-    transports: ['websocket'],
-    secure: true,
-});
+// const socket = io(process.env.NEXT_PUBLIC_URL! as string, {
+//     path: '/socket.io',
+//     transports: ['websocket'],
+//     secure: true,
+// });
 
 export default function BookingPage() {
     const { user } = useAuthHooks()

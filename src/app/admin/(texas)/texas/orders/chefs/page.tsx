@@ -29,14 +29,14 @@ import { useSocketIoHooks } from "@/hooks/useSocketIoHooks";
 //interface
 import { IGETTablesAllResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 import { ITable, TableMealStatus } from "@/common/types/restaurant/tables.interface";
-import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types";
+import { ISocketMessage, SocketIoEvent, socket } from "@/common/libs/socketIo/types";
 import { OrderStatus } from "@/common/types/restaurant/order.interface";
 
-const socket = io(process.env.NEXT_PUBLIC_URL! as string, {
-    path: '/socket.io',
-    transports: ['websocket'],
-    secure: true,
-});
+// const socket = io(process.env.NEXT_PUBLIC_URL! as string, {
+//     path: '/socket.io',
+//     transports: ['websocket'],
+//     secure: true,
+// });
 
 export default function Chefs() {
     const [tables, setTables] = useState<ITable[]>([])

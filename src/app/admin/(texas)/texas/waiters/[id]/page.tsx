@@ -29,14 +29,14 @@ import { usePrintersStore } from "@/store/restaurant/printers";
 
 //interfaces
 import { IMenuOrderSystemFilter, useOrderSystemHooks } from "@/hooks/useOrderSystemHooks";
-import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types";
+import { ISocketMessage, SocketIoEvent, socket } from "@/common/libs/socketIo/types";
 import { ITable } from "@/common/types/restaurant/tables.interface";
 
-const socket = io(process.env.NEXT_PUBLIC_URL! as string, {
-    path: '/socket.io',
-    transports: ['websocket'],
-    secure: true,
-});
+// const socket = io(process.env.NEXT_PUBLIC_URL! as string, {
+//     path: '/socket.io',
+//     transports: ['websocket'],
+//     secure: true,
+// });
 
 export default function Table({ params }: { params: { id: string } }) {
     const { setOrder, order, resetOrder, updateOrderQuantity, deleteOrder, replaceOrder } = useOrderStore()
@@ -197,7 +197,6 @@ export default function Table({ params }: { params: { id: string } }) {
     const fetchFromSocket = useCallback(() => {
         socket.on("message", (message: ISocketMessage) => {
             if (isMessageToMe({ event: message?.event, listemTo: [SocketIoEvent.ORDER] }) && message?.message === params?.id) {
-
                 refetchOrdersController()
             }
             if (isMessageToMe({ event: message?.event, listemTo: [SocketIoEvent.TABLE] }) && message?.message === params?.id) {

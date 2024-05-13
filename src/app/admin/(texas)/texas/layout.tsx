@@ -12,14 +12,14 @@ import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHook
 
 //interface
 import { IGETMenuSectionsResponse, IGETPrintersResponse, IGETSectionResponse, IGETTablesAllResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
-import { ISocketMessage, SocketIoEvent } from "@/common/libs/socketIo/types"
+import { ISocketMessage, SocketIoEvent, socket } from "@/common/libs/socketIo/types"
 import { useSocketIoHooks } from "@/hooks/useSocketIoHooks"
 
-const socket = io(process.env.NEXT_PUBLIC_URL! as string, {
-    path: '/socket.io',
-    transports: ['websocket'],
-    secure: true,
-});
+// const socket = io(process.env.NEXT_PUBLIC_URL! as string, {
+//     path: '/socket.io',
+//     transports: ['websocket'],
+//     secure: true,
+// });
 
 export default function TexasLayout({ children }: any) {
     const { menuSections, setMenuSections } = useMenuSectionsStore()
@@ -117,7 +117,6 @@ export default function TexasLayout({ children }: any) {
     }, [isMessageToMe, refetchSections]);
 
     useEffect(() => {
-
         if (printers?.length === 0) {
             refetchPrinters()
         }
@@ -133,7 +132,7 @@ export default function TexasLayout({ children }: any) {
     }, [menuSections?.length, printers?.length, refetchMenuSections, refetchPrinters, refetchSections, sections?.length])
 
     return (
-        <div className=''>
+        <div>
             {children}
         </div>
     )
