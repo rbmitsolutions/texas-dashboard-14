@@ -32,7 +32,7 @@ import { usePrintersStore } from '@/store/restaurant/printers';
 import { ITransactions, TableTransactionsType, TransactionsStatus } from '@/common/types/company/transactions.interface';
 import { IAllOrderControllerResponse } from '@/hooks/restaurant/IGetRestaurantDataHooks.interface';
 import { IGetAllTransactionsResponse } from '@/hooks/company/IGetCompanyDataHooks.interface';
-import { ISocketMessage, SocketIoEvent } from '@/common/libs/socketIo/types';
+import { ISocketMessage, SocketIoEvent, socket } from '@/common/libs/socketIo/types';
 import { IOrderController } from '@/common/types/restaurant/order.interface';
 import { ITable } from '@/common/types/restaurant/tables.interface';
 
@@ -46,7 +46,11 @@ export interface IDataTable {
     }
 }
 
-const socket = io(process.env.NEXT_PUBLIC_URL! as string);
+// const socket = io(process.env.NEXT_PUBLIC_URL! as string, {
+//     path: '/socket.io',
+//     transports: ['websocket'],
+//     secure: true,
+// });
 
 export default function Table({ params }: { params: { id: string } }) {
     const { menuSections } = useMenuSectionsStore()

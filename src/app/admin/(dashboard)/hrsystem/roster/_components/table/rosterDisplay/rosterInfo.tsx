@@ -175,7 +175,8 @@ export default function RosterInfo({ roster, user, forms, shifts, duties, create
                                     leftIcon="TentTree"
                                     disabled={!isUserAuthorized(
                                         UserToken,
-                                        [Permissions.ADMIN]) 
+                                        [Permissions.ADMIN])
+                                        || roster?.day_in_lieu
                                     }
 
                                 >
@@ -197,8 +198,9 @@ export default function RosterInfo({ roster, user, forms, shifts, duties, create
                                             onClick={() => {
                                                 handleUpdateRosterDayInLieu(!roster?.day_in_lieu)
                                             }}
+                                            disabled={roster?.day_in_lieu}
                                         >
-                                           {roster?.day_in_lieu ? 'Remove Day in Lieu' : 'Day in Lieu'}
+                                            {roster?.day_in_lieu ? 'Remove Day in Lieu' : 'Day in Lieu'}
                                         </Button>
                                     </AlertDialogAction>
                                 </AlertDialogFooter>

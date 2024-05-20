@@ -15,8 +15,8 @@ export enum PayrollTransactionsType {
   PAYROLL = "payroll",
   ADJUSTMENT = "adjustment",
   TIPS = "tips",
+  BANK_HOLIDAY_PAY = "bank holiday pay",
   HOLIDAY = "holiday",
-  BANK_HOLIDAY_PAY = "bank holiday pay"
 }
 export enum TransactionsMethod {
   CASH = "cash",

@@ -126,6 +126,7 @@ export default function AddToRoster({
                 <Button
                     size='iconExSm'
                     variant='outline'
+                    disabled={user?.status === 'Filled'}
                 >
                     <Icon name="Plus" />
                 </Button>

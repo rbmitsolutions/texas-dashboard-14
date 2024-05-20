@@ -21,6 +21,7 @@ import { cn } from "@/common/libs/shadcn/utils";
 //interfaces
 import { IPUTUserBody } from "@/hooks/user/IPutUserDataHooks.interface"
 import { Skeleton } from "@/components/ui/skeleton";
+import { isValid, parse } from "date-fns";
 
 interface DetailsFormProps {
     user: IUser
@@ -29,6 +30,8 @@ interface DetailsFormProps {
 }
 export default function DetailsForm({ user, isAdmin, onUpdate }: DetailsFormProps) {
     const [preRendered, setPreRendered] = useState<boolean>(false);
+    const [inputValue, setInputValue] = useState<string>('');
+
     const form = useForm<UserDetailsFormSchemaType>({
         mode: "onChange",
         resolver: zodResolver(UserDetailsFormSchema),
@@ -44,6 +47,17 @@ export default function DetailsForm({ user, isAdmin, onUpdate }: DetailsFormProp
         },
     });
 
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const parsedDate = parse(e.target.value, "dd/MM/yyyy", new Date());
+        if (isValid(parsedDate)) {
+            form.setValue('date_of_birthday', new Date(formatDate({
+                date: parsedDate,
+                f: 'yyyy-MM-dd'
+            })));
+        }
+        setInputValue(e.target.value);
+    };
 
     const onSubmitForm: SubmitHandler<UserDetailsFormSchemaType> = async (formData) => {
         await onUpdate({
@@ -124,7 +138,6 @@ export default function DetailsForm({ user, isAdmin, onUpdate }: DetailsFormProp
                                     <PopoverTrigger asChild >
                                         <FormControl>
                                             <Button
-                                                disabled={isAdmin}
                                                 variant={"outline"}
                                                 className={cn(
                                                     "w-full pl-3 text-left font-normal",
@@ -134,7 +147,7 @@ export default function DetailsForm({ user, isAdmin, onUpdate }: DetailsFormProp
                                                 {field.value ? (
                                                     formatDate({
                                                         date: field.value,
-                                                        f: 'PPP'
+                                                        f: 'dd/MM/yyyy'
                                                     })
                                                 ) : (
                                                     <span>Pick a date</span>
@@ -144,14 +157,23 @@ export default function DetailsForm({ user, isAdmin, onUpdate }: DetailsFormProp
                                         </FormControl>
                                     </PopoverTrigger>
                                     <PopoverContent className="w-auto p-0" align="start">
+                                        <Input
+                                            style={{ fontSize: "inherit" }}
+                                            id="booking-input"
+                                            type="text"
+                                            value={inputValue}
+                                            placeholder="dd/MM/yyyy"
+                                            onChange={handleInputChange}
+                                            className='m-auto w-48 text-center border-2 rounded-xl my-4'
+                                        />
                                         <Calendar
                                             mode="single"
-                                            selected={new Date(field.value)}
+                                            captionLayout="dropdown"
+                                            selected={new Date(field.value || new Date())}
                                             onSelect={field.onChange}
                                             disabled={(date) =>
                                                 date > new Date() || date < new Date("1900-01-01")
                                             }
-                                            initialFocus
                                         />
                                     </PopoverContent>
                                 </Popover>
@@ -167,7 +189,6 @@ export default function DetailsForm({ user, isAdmin, onUpdate }: DetailsFormProp
                                 <FormLabel>Contact Number</FormLabel>
                                 <FormControl>
                                     <Input
-                                        readOnly={isAdmin}
                                         type="tell"
                                         placeholder="Contact Number"
                                         {...field}
@@ -183,7 +204,7 @@ export default function DetailsForm({ user, isAdmin, onUpdate }: DetailsFormProp
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Shirt Size</FormLabel>
-                                <Select disabled={isAdmin} onValueChange={field.onChange} defaultValue={field.value}>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Shirt Size" />
@@ -211,7 +232,6 @@ export default function DetailsForm({ user, isAdmin, onUpdate }: DetailsFormProp
                                 <FormLabel>Address</FormLabel>
                                 <FormControl>
                                     <Input
-                                        readOnly={isAdmin}
                                         type="text"
                                         placeholder="Address"
                                         {...field}
@@ -229,7 +249,6 @@ export default function DetailsForm({ user, isAdmin, onUpdate }: DetailsFormProp
                                 <FormLabel>City</FormLabel>
                                 <FormControl>
                                     <Input
-                                        readOnly={isAdmin}
                                         type="text"
                                         placeholder="City"
                                         {...field}
@@ -247,7 +266,6 @@ export default function DetailsForm({ user, isAdmin, onUpdate }: DetailsFormProp
                                 <FormLabel>Country</FormLabel>
                                 <FormControl>
                                     <Input
-                                        readOnly={isAdmin}
                                         type="text"
                                         placeholder="Country"
                                         {...field}
@@ -257,15 +275,13 @@ export default function DetailsForm({ user, isAdmin, onUpdate }: DetailsFormProp
                             </FormItem>
                         )}
                     />
-                    {!isAdmin &&
-                        <Button
-                            leftIcon='Save'
-                            type='submit'
-                            className='self-end'
-                        >
-                            Save
-                        </Button>
-                    }
+                    <Button
+                        leftIcon='Save'
+                        type='submit'
+                        className='self-end'
+                    >
+                        Save
+                    </Button>
                 </form>
             </Form>
         </Wrap>

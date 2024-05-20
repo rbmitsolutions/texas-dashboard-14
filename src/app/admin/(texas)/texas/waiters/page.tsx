@@ -18,16 +18,20 @@ import { useSocketIoHooks } from '@/hooks/useSocketIoHooks';
 import { useAuthHooks } from '@/hooks/useAuthHooks';
 
 //store
+import { usePrintersStore } from '@/store/restaurant/printers';
+import { useSectionsStore } from '@/store/restaurant/sections';
 import { useTablesStore } from '@/store/restaurant/tables';
 
 //interfaces
-import { usePrintersStore } from '@/store/restaurant/printers';
-import { useSectionsStore } from '@/store/restaurant/sections';
-import { ISocketMessage, SocketIoEvent } from '@/common/libs/socketIo/types';
+import { ISocketMessage, SocketIoEvent, socket } from '@/common/libs/socketIo/types';
 import { TableMealStatus } from '@/common/types/restaurant/tables.interface';
 import { IGETTablesAllResponse } from '@/hooks/restaurant/IGetRestaurantDataHooks.interface';
 
-const socket = io(process.env.NEXT_PUBLIC_URL! as string);
+// const socket = io(process.env.NEXT_PUBLIC_URL! as string, {
+//     path: '/socket.io',
+//     transports: ['websocket'],
+//     secure: true,
+// });
 
 export default function Tables() {
     const { tablesFilter, setTablesFilter, getTablesFiltered, setTables } = useTablesStore()

@@ -104,7 +104,7 @@ export function RosterTableMemo({ users, duties, shifts, forms, createRosterTask
                     return (
                         <tr
                             key={user?.id}
-                            className='h-20 border-b-[1px] border-foreground/20 odd:bg-background-soft'
+                            className={cn('h-20 border-b-[1px] border-foreground/20 odd:bg-background-soft', user?.status === 'Filled' && ' !bg-red-100 dark:!bg-red-900/20')}
                         >
                             <td>
                                 <div className='flex flex-col p-1'>
