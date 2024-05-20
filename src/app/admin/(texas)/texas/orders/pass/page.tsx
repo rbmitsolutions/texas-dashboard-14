@@ -88,9 +88,9 @@ export default function Pass() {
                 refetchTables()
             }
         });
-        () => {
-            socket.off("message");
-        }
+        // () => {
+        //     socket.off("message");
+        // }
     }, [isMessageToMe, refetchTables]);
 
     return (

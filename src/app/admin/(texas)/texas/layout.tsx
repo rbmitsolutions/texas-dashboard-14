@@ -111,9 +111,9 @@ export default function TexasLayout({ children }: any) {
                 refetchSections()
             }
         });
-        () => {
-            socket.off("message");
-        }
+        // () => {
+        //     socket.off("message");
+        // }
     }, [isMessageToMe, refetchSections]);
 
     useEffect(() => {

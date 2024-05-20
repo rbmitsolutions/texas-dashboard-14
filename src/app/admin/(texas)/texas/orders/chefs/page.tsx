@@ -158,9 +158,9 @@ export default function Chefs() {
                 refetchTables()
             }
         });
-        () => {
-            socket.off("message");
-        }
+        // () => {
+        //     socket.off("message");
+        // }
     }, [isMessageToMe, refetchTables]);
 
     return (

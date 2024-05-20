@@ -300,9 +300,9 @@ export default function Table({ params }: { params: { id: string } }) {
                 refetchTable()
             }
         });
-        () => {
-            socket.off("message");
-        }
+        // () => {
+        //     socket.off("message");
+        // }
     }, [params?.id, refetchOrdersController, refetchTransactions, refetchTable, isMessageToMe]);
 
     return (

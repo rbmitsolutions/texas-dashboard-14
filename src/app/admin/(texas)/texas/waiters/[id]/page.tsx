@@ -203,9 +203,9 @@ export default function Table({ params }: { params: { id: string } }) {
                 refetchTable()
             }
         });
-        () => {
-            socket.off("message");
-        }
+        // () => {
+        //     socket.off("message");
+        // }
     }, [isMessageToMe, params?.id, refetchOrdersController, refetchTable])
 
     useEffect(() => {
