@@ -1,4 +1,4 @@
-import { IClient } from "./client.interface";
+import { IClientSchema } from "@/common/libs/zod/forms/restaurant/clientsForm";
 import { ITable } from "./tables.interface";
 
 export type IBookingStatus =
@@ -33,7 +33,7 @@ export interface IBookings {
   time: string;
 
   client_id?: string;
-  client?: IClient
+  client?: IClientSchema
 
   created_at: Date;
   updated_at: Date;
@@ -63,7 +63,7 @@ export interface IReviews {
 
   date: Date;
 
-  client: IClient;
+  client: IClientSchema;
   client_id: string;
   key?: string;
 

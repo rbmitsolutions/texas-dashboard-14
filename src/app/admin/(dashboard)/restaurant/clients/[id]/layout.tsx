@@ -1,9 +1,17 @@
 'use client'
 import { useParams, usePathname } from "next/navigation";
-import { cn } from "@/common/libs/shadcn/utils";
-import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
 import Link from "next/link";
+
+//libs
+import { cn } from "@/common/libs/shadcn/utils";
+
+//components
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import IconText from "@/components/common/iconText";
+
+//hooks
+import { useGETRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks";
+import EditUserProfileDialog from "../_components/editUserProfileDialog";
 
 interface CreateMenuLayoutProps {
     children: React.ReactNode;
@@ -14,7 +22,8 @@ export default function ClientPageLayout({ children }: CreateMenuLayoutProps) {
     const params = useParams()
 
     const {
-        restaurantClient: client
+        restaurantClient: client,
+        refetchRestaurantData: toRefetch
     } = useGETRestaurantDataHooks({
         query: 'CLIENTS',
         defaultParams: {
@@ -26,6 +35,13 @@ export default function ClientPageLayout({ children }: CreateMenuLayoutProps) {
         }
     })
 
+    const {
+        updateRestaurantData: updateClient,
+        isUpdateRestaurantDataLoading: isUpdateClientLoading
+    } = usePUTRestaurantDataHooks({
+        query: 'CLIENTS',
+        toRefetch
+    })
 
     const linkStyle = (active: boolean) => `bg-foreground/5 p-2 rounded-t-lg text-sm hover:bg-foreground/10 ${active && 'border-b-2 border-b-primary'}`
 
@@ -45,7 +61,22 @@ export default function ClientPageLayout({ children }: CreateMenuLayoutProps) {
                     <h1 className='capitalize text-center mt-2'>{client?.name?.toLowerCase()}</h1>
                 </div>
             </div>
-            <div className='flex flex-wrap items-center gap-4 mt-4 md:mt-20'>
+            <div className='flex-container my-6 md:mt-4 md:ml-64 md:mb-6'>
+                <EditUserProfileDialog 
+                    client={client}
+                    udpateClient={updateClient}
+                    isUpdateClientLoading={isUpdateClientLoading}
+                />
+                <IconText
+                    icon="Mail"
+                    text={client?.email || 'No email'}
+                />
+                <IconText
+                    icon="Phone"
+                    text={client?.contact_number || 'No contact number'}
+                />
+            </div>
+            <div className='flex flex-wrap items-center gap-4'>
                 <Link
                     className={cn(linkStyle(pathname === `/admin/restaurant/clients/${params?.id}/bookings`))}
                     href={`/admin/restaurant/clients/${params?.id}/bookings`}

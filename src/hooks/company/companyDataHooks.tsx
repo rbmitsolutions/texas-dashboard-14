@@ -21,7 +21,7 @@ import { IRoles } from "@/common/types/company/companyDetails.interface";
 import { IDepartments } from "@/common/types/company/departaments.interface";
 import { ITransactions } from "@/common/types/company/transactions.interface";
 
-interface IUseGETCompanyDataHooks {
+export interface IUseGETCompanyDataHooks {
     query: ICompanyDataQueryType,
     keepParmas?: boolean
     defaultParams?: IGETCompanyDataQuery,

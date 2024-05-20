@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { CSVLink } from "react-csv";
+import toast from "react-hot-toast";
 
 //libs
 import Icon from "@/common/libs/lucida-icon";
 
 //components
 import { Button } from "@/components/ui/button";
-import toast from "react-hot-toast";
 
 interface ExcelDownloadButtonProps {
     fileName: string
@@ -15,7 +15,6 @@ interface ExcelDownloadButtonProps {
 }
 
 export default function ExcelDownloadButton({ fileName, onDownload, isLoading = false }: ExcelDownloadButtonProps) {
-
     const [csvDownload, setCsvDownload] = useState<any[]>([]);
     const csvRef = useRef(null);
 
@@ -42,6 +41,7 @@ export default function ExcelDownloadButton({ fileName, onDownload, isLoading = 
     return (
         <>
             <Button
+                data-testid='excel-download-button'
                 size='iconExSm'
                 variant='orange'
                 onClick={handleDownload}
@@ -54,7 +54,7 @@ export default function ExcelDownloadButton({ fileName, onDownload, isLoading = 
                     />
                 }
             </Button>
-            <div className='none'>
+            <div className='none' data-testid='csv-link-container'>
                 <CSVLink
                     ref={csvRef}
                     data={csvDownload}

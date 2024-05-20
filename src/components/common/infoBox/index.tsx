@@ -23,7 +23,9 @@ export default function InfoBox({
         <div className='flex items-center justify-end p-3 gap-4 rounded-xl bg-background-soft'>
             <div>
                 {isLoading || error ?
-                    <LoadingError isLoading={isLoading} error={error} />
+                    <div data-testid="loading-error-component">
+                        <LoadingError isLoading={isLoading} error={error} />
+                    </div>
                     :
                     <div className='flex flex-col items-end'>
                         <p className='text-xs font-bold text-slate-400 dark:text-slate-500 line-clamp-1 capitalize'>{title.toLocaleLowerCase()}</p>

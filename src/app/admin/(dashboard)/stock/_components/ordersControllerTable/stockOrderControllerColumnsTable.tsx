@@ -1,57 +1,29 @@
 "use client"
 import { UseMutateFunction } from "react-query"
-import toast from "react-hot-toast"
 
 //libs
 import { convertCentsToEuro } from "@/common/utils/convertToEuro"
 import { formatDate } from "@/common/libs/date-fns/dateFormat"
-import { api } from "@/common/libs/axios/api"
-import Icon from "@/common/libs/lucida-icon"
 
 //components
+import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
+import FileDownloadButton from "@/components/common/fileDownloadButton"
 import LinkButton from "@/components/common/linkButton"
 import { ColumnDef } from "@tanstack/react-table"
 import { Switch } from "@/components/ui/switch"
-import { Button } from "@/components/ui/button"
 
 //interface
 import { IStockOrdersController } from "@/common/types/restaurant/stock.interface"
-import { IPUTStockBody } from "@/hooks/stock/IPutStockDataHooks.interface"
-import { EndPointsTypes, RedirectTo } from "@/common/types/routers/endPoints.types"
 import { IDELETEStockDataBody } from "@/hooks/stock/IDeleteStockDataHooks.interface"
-import { IFiles } from "@/common/types/company/files.interface"
-import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
+import { IPUTStockBody } from "@/hooks/stock/IPutStockDataHooks.interface"
+import { RedirectTo } from "@/common/types/routers/endPoints.types"
 
 export interface StockOrderControllerColumnsProps {
     updateOrderController: UseMutateFunction<any, any, IPUTStockBody, unknown>
     deleteOrderController: UseMutateFunction<void, any, IDELETEStockDataBody, unknown>
 }
 
-const onDownload = async (file_id: string) => {
-    try {
-        const { data } = await api.get<IFiles>(EndPointsTypes.COMPANY_FILES_ENDPOINT, {
-            params: {
-                files: {
-                    byId: {
-                        id: file_id
-                    }
-                }
-            }
-        })
 
-        const link = document.createElement('a')
-        link.href = data.url
-        link.download = data.title
-        link.target = '_blank'
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-
-
-    } catch (err) {
-        toast.error('File not found!')
-    }
-};
 
 export const StockOrderControllerColumns = ({
     updateOrderController,
@@ -122,7 +94,7 @@ export const StockOrderControllerColumns = ({
                     <div>
                         <Switch
                             disabled={hasOrderNotDelivered}
-                            checked={row?.original?.paid }
+                            checked={row?.original?.paid}
                             onCheckedChange={async () => await updateOrderController({
                                 order_controller: {
                                     id: row?.original?.id,
@@ -155,14 +127,10 @@ export const StockOrderControllerColumns = ({
                             }
                             isDisabled={row?.original?.orders?.length > 0}
                         />
-                        <Button
-                            disabled={!row?.original?.file_id}
-                            size='iconSm'
-                            onClick={() => onDownload(row.original.file_id!)}
+                        <FileDownloadButton
+                            file_id={row?.original?.file_id}
+                        />
 
-                        >
-                            <Icon name='FileText' size={18} />
-                        </Button>
                         <LinkButton
                             href={RedirectTo.STOCK_ORDER_CONTROLLER_PROFILE + `/${row?.original?.id}`}
                         />

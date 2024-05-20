@@ -1,23 +1,24 @@
 'use client'
+
 //components
-import { clientsColumnsTable } from "./_components/clientsColumnsTable"
-import { ClientsTable } from "./_components/clientsTable"
+import { clientsColumnsTable } from "@/components/common/basicTable/columns/restaurant/clientsColumns"
+import { BasicTable } from "@/components/common/basicTable"
+import { Switch } from "@/components/ui/switch"
 import Wrap from "@/components/common/wrap"
 
 //hooks
-import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
+import { useGETRestaurantDataHooks, usePUTRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHooks"
 
 //interface
 import { IQueryPagination } from "@/common/types/settings.interface"
-import { FormLabel } from "@/components/ui/form"
-import { Switch } from "@/components/ui/switch"
 
 export default function Clients() {
     const {
         restaurantAllClients: allClients,
         setGETRestaurantDataParams: setAllClients,
         isRestaurantDataFetching: isClientsFetching,
-        GETRestaurantDataParams: allClientsParams
+        GETRestaurantDataParams: allClientsParams,
+        refetchRestaurantData: toRefetch
     } = useGETRestaurantDataHooks({
         query: 'CLIENTS',
         keepParmas: true,
@@ -35,6 +36,14 @@ export default function Clients() {
                 }
             }
         }
+    })
+
+    const {
+        updateRestaurantData: updateClient,
+        isUpdateRestaurantDataLoading: isUpdateClientLoading,
+    } = usePUTRestaurantDataHooks({
+        query: 'CLIENTS',
+        toRefetch
     })
 
 
@@ -173,8 +182,11 @@ export default function Clients() {
                     className: 'grid grid-cols-[1fr,auto,auto] gap-4 items-center'
                 }}
             >
-                <ClientsTable
-                    columns={clientsColumnsTable}
+                <BasicTable
+                    columns={clientsColumnsTable({
+                        isUpdateClientLoading,
+                        updateClient,
+                    })}
                     data={allClients?.data || []}
                 />
             </Wrap>

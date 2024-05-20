@@ -57,8 +57,6 @@ export default function InfoBadge({ status, className }: InfoBadgeProps) {
             case 'walk_in':
             case TableMealStatus.ALL_TOGETHER.toLocaleLowerCase().replace(" ", ""):
                 return 'bg-pink-600 dark:bg-pink-300 hover:bg-pink-700 dark:hover:bg-pink-400'
-            default:
-                return 'bg-green-600 dark:bg-green-300 hover:bg-green-700 dark:hover:bg-green-400'
         }
     }
 

@@ -25,7 +25,7 @@ import { useGETRestaurantDataHooks } from "@/hooks/restaurant/restaurantDataHook
 import { IGETRestaurantDataQuery } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 import { IDELETERestaurantDataBody } from "@/hooks/restaurant/IDeleteRestaurantDataHooks.interface";
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface";
-import { IClient } from "@/common/types/restaurant/client.interface";
+import { IClientSchema } from "@/common/libs/zod/forms/restaurant/clientsForm";
 
 interface FindBookingProps {
     iconOnly?: boolean;
@@ -33,7 +33,7 @@ interface FindBookingProps {
     updateBooking: UseMutateFunction<any, any, IPUTRestaurantBody, unknown>
     isUserAuth: boolean
     isLoading: boolean
-    clients: IClient[],
+    clients: IClientSchema[],
     setGETClientsParams: Dispatch<SetStateAction<IGETRestaurantDataQuery>>,
 }
 

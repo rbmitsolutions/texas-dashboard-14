@@ -99,16 +99,14 @@ export type IClientPut = {
 
 
 export interface IPUTClientBody {
-    data: {
-        client?: {
-            id: string;
-        } & IClientPut;
-        many?: {
-            id: {
-                in: string[];
-            };
-            data: IClientPut;
+    client?: {
+        id: string;
+    } & IClientPut;
+    many?: {
+        id: {
+            in: string[];
         };
+        data: IClientPut;
     };
 }
 
@@ -261,10 +259,10 @@ export interface IPUTMenuBody {
     highlight?: {
         id: string
     }
-    transferImages?:{
+    transferImages?: {
         from_id: string
         to_id: string
-      }
+    }
 }
 
 

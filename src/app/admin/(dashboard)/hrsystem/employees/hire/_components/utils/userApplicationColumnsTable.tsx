@@ -1,51 +1,19 @@
 "use client"
-import toast from "react-hot-toast"
 import { ColumnDef } from "@tanstack/react-table"
 import Icon from "@/common/libs/lucida-icon"
 
 //libs
 import { formatDate } from "@/common/libs/date-fns/dateFormat"
-import { api } from "@/common/libs/axios/api"
 
 //components
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import FileDownloadButton from "@/components/common/fileDownloadButton"
+import UserDisplay from "@/components/common/userDisplay"
 import LinkButton from "@/components/common/linkButton"
 import { Button } from "@/components/ui/button"
 
 //interface
-import { EndPointsTypes, RedirectTo } from "@/common/types/routers/endPoints.types"
+import { RedirectTo } from "@/common/types/routers/endPoints.types"
 import { IAvailableDays, IJobApplicationValues, IUser } from "@/common/types/user/user.interface"
-import { IFiles } from "@/common/types/company/files.interface"
-import UserDisplay from "@/components/common/userDisplay"
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-
-const onDownload = async (file_id: string) => {
-    try {
-        const { data } = await api.get<IFiles>(EndPointsTypes.COMPANY_FILES_ENDPOINT, {
-            params: {
-                files: {
-                    byId: {
-                        id: file_id
-                    }
-                }
-            }
-        })
-
-        const link = document.createElement('a')
-        link.href = data.url
-        link.download = data.title
-        link.target = '_blank'
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-
-
-    } catch (err) {
-        toast.error('File not found!')
-    }
-};
 
 interface UserApplicationColumnsTableProps {
     selectUser: (user: IUser) => void
@@ -183,12 +151,9 @@ export const userApplicationColumnsTable = ({
                         >
                             <Icon name='UserPlus' />
                         </Button>
-                        <Button
-                            size='sm'
-                            className='cursor-pointer'
-                            onClick={() => onDownload(row?.original?.job_application?.cv_id!)}
-                            leftIcon="Download"
-                        >CV</Button>
+                        <FileDownloadButton
+                            file_id={row?.original?.job_application?.cv_id}
+                        />
                         <LinkButton
                             href={`${RedirectTo.USER_PROFILE}/${row?.original?.id}`}
                         />

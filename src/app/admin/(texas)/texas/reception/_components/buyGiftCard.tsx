@@ -30,10 +30,10 @@ import { GiftCardPaymentsType, TransactionsDirection, TransactionsMethod } from 
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface"
 import { IGETRestaurantDataQuery } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
 import { IToken, Permissions } from "@/common/types/auth/auth.interface"
-import { IClient } from "@/common/types/restaurant/client.interface"
+import { IClientSchema } from "@/common/libs/zod/forms/restaurant/clientsForm"
 
 interface BuyGiftCardProps {
-    clients: IClient[],
+    clients: IClientSchema[],
     setClientsParams: Dispatch<SetStateAction<IGETRestaurantDataQuery>>,
     createGiftCard: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>
 }

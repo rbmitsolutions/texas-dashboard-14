@@ -1,13 +1,14 @@
+import React from "react";
 import { Toaster } from "react-hot-toast";
 import ThemeProvider from "./theme";
 import { AuthHooksContextProvider } from "@/context/auth/AuthContext";
 import ReactQueryProvider from "./react-query";
 
-export default function AppProvider({
+export const AppProvider = ({
   children,
 }: {
   children: React.ReactNode;
-}) {
+}) => {
   return (
     <ThemeProvider
       attribute="class"
@@ -25,3 +26,4 @@ export default function AppProvider({
     </ThemeProvider>
   );
 }
+

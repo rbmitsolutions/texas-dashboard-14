@@ -12,11 +12,11 @@ import { IDELETERestaurantDataBody, IDELETERestaurantDataQueryType } from "./IDe
 import { IBookings, IReviews } from "@/common/types/restaurant/bookings.interface";
 import { IFinishedTable, ITable } from "@/common/types/restaurant/tables.interface";
 import { IOrder, IOrderController } from "@/common/types/restaurant/order.interface";
-import { IClient } from "@/common/types/restaurant/client.interface";
 import { IGiftCards } from "@/common/types/restaurant/giftcard.interface";
 import { IAuthorizedDevices } from "@/common/types/restaurant/authorizedDevices.interface";
 import { IMenu } from "@/common/types/restaurant/menu.interface";
 import { IBookingDays, ITimesOpen } from "@/common/types/restaurant/config.interface";
+import { IClientSchema } from "@/common/libs/zod/forms/restaurant/clientsForm";
 
 interface IUseGETRestaurantDataHooks {
     query: IRestaurantDataQueryType,
@@ -90,7 +90,7 @@ export function useGETRestaurantDataHooks({
         restaurantOrderController: data as IOrderController,
         restaurantOrderAnalytics: data as any,
         restaurantAllClients: data as IGetAllClientsResponse,
-        restaurantClient: data as IClient,
+        restaurantClient: data as IClientSchema,
         restaurantAllFinishedTables: data as IFinishedTableAllResponse,
         restaurantFinishedTable: data as IFinishedTable,
         restaurantFinishedTableAnalytics: data as any,

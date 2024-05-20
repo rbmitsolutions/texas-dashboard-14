@@ -3,13 +3,13 @@ import { api } from "@/common/libs/axios/api";
 
 //interfaces
 import { EndPointsTypes } from "@/common/types/routers/endPoints.types";
-import { IClient } from "@/common/types/restaurant/client.interface";
+import { IClientSchema } from "../../zod/forms/restaurant/clientsForm";
 
-export const getWalkInClient = async (): Promise<IClient> => {
+export const getWalkInClient = async (): Promise<IClientSchema> => {
     const tokenKey: string = process.env.NEXT_PUBLIC_WALKIN_COOKIE_KEY! as string;
     const cookie = await parseCookies()
 
-    let token: IClient | undefined
+    let token: IClientSchema | undefined
 
     if (cookie[tokenKey]) {
         token = JSON.parse(cookie[tokenKey])
@@ -20,7 +20,7 @@ export const getWalkInClient = async (): Promise<IClient> => {
     }
 
     try {
-        const { data: walkInClient } = await api.get<IClient>(
+        const { data: walkInClient } = await api.get<IClientSchema>(
             EndPointsTypes.RESTAURANT_CLIENT_ENDPOINT, {
             params: {
                 clients: {

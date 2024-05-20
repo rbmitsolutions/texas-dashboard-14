@@ -35,7 +35,9 @@ export const KeyPadDisplay = ({ displayValue, onChange, buttonClassName, deleteB
     return (
         <div className="p-2">
             <div className={cn("flex justify-center items-center bg-background-soft h-16 rounded-lg shadow-lg", displayClassName)}>
-                <h2 className="text-3xl">{displayValue || '  -  '}</h2>
+                <h2
+                    data-testid="keypad-display"
+                    className="text-3xl">{displayValue || '  -  '}</h2>
             </div>
             <div className="mt-6">
                 <div className="grid grid-cols-3 gap-4">

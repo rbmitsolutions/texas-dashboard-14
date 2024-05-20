@@ -35,9 +35,9 @@ import { IDELETERestaurantDataBody } from "@/hooks/restaurant/IDeleteRestaurantD
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface";
 import { ISection, ITable } from "@/common/types/restaurant/tables.interface";
 import { IBookings } from "@/common/types/restaurant/bookings.interface";
-import { IClient } from "@/common/types/restaurant/client.interface";
 import { RedirectTo } from "@/common/types/routers/endPoints.types";
 import { SocketIoEvent } from "@/common/libs/socketIo/types";
+import { IClientSchema } from "@/common/libs/zod/forms/restaurant/clientsForm";
 
 interface BookingDetailsProps {
     booking: IBookings
@@ -48,7 +48,7 @@ interface BookingDetailsProps {
         sections: ISection[]
     }
     isUpdateBookingLoading: boolean
-    clients: IClient[],
+    clients: IClientSchema[],
     setGETClientsParams: Dispatch<SetStateAction<IGETRestaurantDataQuery>>,
 }
 

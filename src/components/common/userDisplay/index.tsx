@@ -52,7 +52,6 @@ export default function UserDisplay({ user, smallText, displayClass, titleClass 
                             {user?.name?.split('')[0]}
                         </AvatarFallback>
                     </Avatar>
-
                 </div>
             </DialogContent>
         </Dialog>

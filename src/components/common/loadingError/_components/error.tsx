@@ -6,6 +6,6 @@ interface ErrorProps {
 
 export default function Error({ className = '' }: ErrorProps): JSX.Element {
     return (
-        <p className={cn("text-xl", className)} >&#128557;</p>
+        <p data-testid='error-component' className={cn("text-xl", className)} >&#128557;</p>
     )
 }

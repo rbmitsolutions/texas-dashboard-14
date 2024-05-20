@@ -4,9 +4,9 @@ import { EndPointsTypes } from "@/common/types/routers/endPoints.types"
 import { cookies } from "next/headers"
 import { api } from "../../axios/api"
 import { IGETClientQuery, IGetAllClientsResponse } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface"
-import { IClient } from "@/common/types/restaurant/client.interface"
+import { IClientSchema } from "../../zod/forms/restaurant/clientsForm"
 
-export const getClients = async (params: IGETClientQuery): Promise<IGetAllClientsResponse | IClient> => {
+export const getClients = async (params: IGETClientQuery): Promise<IGetAllClientsResponse | IClientSchema> => {
     const cookie = cookies().get(process.env.NEXT_PUBLIC_AUTH_COOKIE_KEY as string)
     const cookieStore: IToken = JSON.parse(cookie?.value!)
 
@@ -29,6 +29,6 @@ export const getClients = async (params: IGETClientQuery): Promise<IGetAllClient
     if (params?.all) {
         return data?.data as IGetAllClientsResponse
     } else {
-        return data?.data as IClient
+        return data?.data as IClientSchema
     }
 }

@@ -1,9 +1,7 @@
 "use client"
 import { ColumnDef } from "@tanstack/react-table"
 import { UseMutateFunction } from "react-query"
-import Icon from "@/common/libs/lucida-icon"
 import { ArrowUpDown } from "lucide-react"
-import toast from "react-hot-toast"
 
 //components
 import { Button } from "@/components/ui/button"
@@ -13,38 +11,10 @@ import { IDELETECompanyDataBody } from "@/hooks/company/IDeleteCompanyDataHooks.
 
 //libs
 import { IHaccpReports } from "@/common/types/company/haccpReports.interface"
-import { EndPointsTypes } from "@/common/types/routers/endPoints.types"
-import { IFiles } from "@/common/types/company/files.interface"
 import { formatDate } from "@/common/libs/date-fns/dateFormat"
 import { IToken } from "@/common/types/auth/auth.interface"
-import { api } from "@/common/libs/axios/api"
 import { DeleteDialogButton } from "@/components/common/deleteDialogButton"
-
-const onDownload = async (file_id: string) => {
-    try {
-        const { data } = await api.get<IFiles>(EndPointsTypes.COMPANY_FILES_ENDPOINT, {
-            params: {
-                files: {
-                    byId: {
-                        id: file_id
-                    }
-                }
-            }
-        })
-
-        const link = document.createElement('a')
-        link.href = data.url
-        link.download = data.title
-        link.target = '_blank'
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-
-
-    } catch (err) {
-        toast.error('File not found!')
-    }
-};
+import FileDownloadButton from "@/components/common/fileDownloadButton"
 
 
 interface IColumsReports {
@@ -147,6 +117,9 @@ export const columnsReports = ({
             cell: ({ row }) => {
                 return (
                     <div className='flex-container px-2'>
+                        <FileDownloadButton
+                            file_id={row.original.file_id}
+                        />
                         <DeleteDialogButton
                             onDelete={() => deleteHaccpReport({
                                 haccpReport: {
@@ -156,16 +129,9 @@ export const columnsReports = ({
                             })}
                             isDisabled={isDeleteLoading || user?.user_id !== row.original.created_by_id}
                             buttonProps={{
-                                size:'iconSm'
+                                size: 'iconSm'
                             }}
                         />
-                        <Button
-                            size='iconSm'
-                            onClick={() => onDownload(row.original.file_id)}
-
-                        >
-                            <Icon name='FileText' size={18} />
-                        </Button>
                     </div>
                 )
             }

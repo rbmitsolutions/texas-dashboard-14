@@ -36,6 +36,8 @@ export function DeleteDialogButton({ isDisabled, onDelete, buttonText, buttonPro
                         variant='destructive'
                         disabled={isDisabled}
                         type='button'
+                        data-testid='delete-dialog-button'
+                        aria-label='Delete Dialog Button'
                     >
                         <Icon name='Trash2' size={14} />
                     </Button>

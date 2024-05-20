@@ -29,15 +29,15 @@ import { CreateBookingFormSchemaType } from "@/common/libs/zod/forms/restaurant/
 import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaurant/IPostRestaurantDataHooks.interface";
 import { IGETRestaurantDataQuery } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 import { IBookingDays, ITimesOpen } from "@/common/types/restaurant/config.interface";
-import { IClient } from "@/common/types/restaurant/client.interface";
 import { ITable } from "@/common/types/restaurant/tables.interface";
 import { SocketIoEvent } from "@/common/libs/socketIo/types";
+import { IClientSchema } from "@/common/libs/zod/forms/restaurant/clientsForm";
 
 interface WalkinButtonProps {
     openDay: IBookingDays
     iconOnly?: boolean;
     createBooking: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>
-    clients: IClient[],
+    clients: IClientSchema[],
     setGETClientsParams: Dispatch<SetStateAction<IGETRestaurantDataQuery>>
     GETClientsParams: IGETRestaurantDataQuery
 }

@@ -55,7 +55,7 @@ import { IPOSTRestaurantBody, IPOSTRestaurantDataRerturn } from "@/hooks/restaur
 import { IGETRestaurantDataQuery } from "@/hooks/restaurant/IGetRestaurantDataHooks.interface";
 import { IPUTRestaurantBody } from "@/hooks/restaurant/IPutRestaurantDataHooks.interface";
 import { IBookings } from "@/common/types/restaurant/bookings.interface";
-import { IClient } from "@/common/types/restaurant/client.interface";
+import { IClientSchema } from "@/common/libs/zod/forms/restaurant/clientsForm";
 interface BookingButtonProps {
     iconOnly?: boolean;
     booking?: {
@@ -66,7 +66,7 @@ interface BookingButtonProps {
     createBooking?: UseMutateFunction<IPOSTRestaurantDataRerturn, any, IPOSTRestaurantBody, unknown>
     isUserAuth: boolean
     isLoading: boolean
-    clients: IClient[],
+    clients: IClientSchema[],
     setGETClientsParams: Dispatch<SetStateAction<IGETRestaurantDataQuery>>,
 }
 
@@ -95,7 +95,7 @@ export default function BookingButton({ iconOnly, isLoading, booking, isUserAuth
         form.reset()
     }
 
-    const handleUpdateClientForm = (client: IClient) => {
+    const handleUpdateClientForm = (client: IClientSchema) => {
         if (form.watch('contact_number') === client?.contact_number) {
             return
         } else {

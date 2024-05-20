@@ -5,11 +5,12 @@ import { useState } from "react";
 //components
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import HireForm from "@/app/admin/(dashboard)/hrsystem/employees/hire/_components/hireForm";
-import FileDownload from "@/components/common/fileDownload";
+import { DeleteDialogButton } from "@/components/common/deleteDialogButton";
+import FileDownloadButton from "@/components/common/fileDownloadButton";
 import { Button } from "@/components/ui/button";
 
 //hooks
-import { useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks";
+import { useDELETECompanyDataHooks, useGETCompanyDataHooks } from "@/hooks/company/companyDataHooks";
 
 //interface
 import { IRoles } from "@/common/types/company/companyDetails.interface";
@@ -49,12 +50,18 @@ export default function NewContractForm({ user, roles }: NewContractFormProps) {
             enabled: isOpen
         }
     })
-    
+
+    const {
+        deleteCompanyData: deleteFile
+    } = useDELETECompanyDataHooks({
+        query: 'FILES',
+        toRefetch: refetchFiles
+    })
+
     const onOpenChange = () => {
         setIsOpen(prev => !prev)
         setIsHireFormOpen(false)
     }
-
 
     return (
         <Dialog
@@ -85,11 +92,25 @@ export default function NewContractForm({ user, roles }: NewContractFormProps) {
                             {files?.data?.length === 0 && 'No contracts'}
                             {files?.data?.map(file => {
                                 return (
-                                    <FileDownload
-                                        file={file}
+                                    <div
                                         key={file.id}
-                                        onDelete={refetchFiles}
-                                    />
+                                        className='flex-container justify-between border-2 p-2 rounded-xl cursor-pointer hover:bg-background-soft'>
+                                        <div className='flex-col-container gap-1'>
+                                            <strong>{file?.title}</strong>
+                                        </div>
+                                        <div className='flex-container items-center'>
+                                            <FileDownloadButton
+                                                file={file}
+                                            />
+                                            <DeleteDialogButton
+                                                onDelete={async () => deleteFile({
+                                                    file: {
+                                                        id: file?.id
+                                                    }
+                                                })}
+                                            />
+                                        </div>
+                                    </div>
                                 )
                             })}
                         </>
